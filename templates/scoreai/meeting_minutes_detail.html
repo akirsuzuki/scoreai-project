@@ -1,0 +1,50 @@
+{% extends "scoreai/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0 text-end">ミーティング日：{{ meeting_minutes.meeting_date|date:"Y-m-d" }}</h5>
+            </div>
+            <div class="card-body" style="min-height: 500px; overflow-y: auto;">
+                <pre>{{ meeting_minutes.notes }}</pre>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'meeting_minutes_update' company_id meeting_minutes.pk %}" class="btn btn-warning">編集</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h5 class="card-title mb-0">info</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>ミーティング日:</strong> {{ meeting_minutes.meeting_date }}</p>
+                <p><strong>作成日:</strong> {{ meeting_minutes.created_at }}</p>
+                <p><strong>作成ユーザー:</strong> {{ meeting_minutes.created_by }}</p>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">最近５件のノート</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for meeting in recent_meetings %}
+                        <li class="list-group-item">
+                            <a href="{% url 'meeting_minutes_detail' company_id meeting.pk %}">
+                                {{ meeting.meeting_date|date:"Y-m-d" }} - {{ meeting.notes|truncatechars:30 }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">最近の会議はありません。</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

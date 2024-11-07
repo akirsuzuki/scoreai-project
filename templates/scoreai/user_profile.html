@@ -1,0 +1,104 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+Profile | Score
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row g-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title fw-semibold mb-4">{{ user.username }}のProfile</h5>
+                <p class="mb-0">ユーザプロファイルのページ。 </p>
+                This company =>
+                {{ this_company }}
+                <br>
+                Selected Company =>
+                {{ selected_company.company_id }}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">ユーザー名</h5>
+                                <p class="card-text">{{ user.username }}</p>
+                                <h5 class="card-title">メールアドレス</h5>
+                                <p class="card-text">{{ user.email }}</p>
+                                <h5 class="card-title">コンサルタント</h5>
+                                <p class="card-text">{{ user.is_financial_consultant }}</p>
+                                <a href="{% url 'user_profile_update' %}" class="btn btn-primary">編集</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-8 d-flex align-items-stretch">
+                        <div class="card w-100">
+                            <div class="card-body p-4">
+                                <h5 class="card-title">所属会社</h5>
+                                <div class="table-responsive">
+                                    <table class="table text-nowrap mb-0 align-middle">
+                                        <thead class="text-dark fs-4">
+                                            <tr>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">会社名</h6>
+                                                </th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">オーナー</h6>
+                                                </th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">決算月</h6>
+                                                </th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0"></h6>
+                                                </th>
+                                                <th class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0"></h6>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for data in user_companies %}
+                                            <tr>
+                                                <td class="border-bottom-0">
+                                                    <h6 class="fw-semibold mb-0">{{ data.company }}</h6>
+                                                </td>
+                                                <td class="border-bottom-0">
+                                                    <p class="card-text">
+                                                        {{ data.is_owner }}
+                                                    </p>
+                                                </td>
+                                                <td class="border-bottom-0">
+                                                    <p class="card-text">{{ data.company.fiscal_month }}</p>
+                                                </td>
+                                                <td class="border-bottom-0">
+                                                    {% if data.is_selected %}
+                                                    <text class="btn btn-success">選択中</text>
+                                                    {% else %}
+                                                    <a href="{% url 'select_company' data.company.id %}" class="btn btn-outline-success">選択する</a>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="border-bottom-0">
+                                                    <a href="{% url 'company_detail' data.company.id %}" class="btn btn-primary">詳細</a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

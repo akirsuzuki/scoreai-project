@@ -1,0 +1,875 @@
+{% extends "scoreai/base.html" %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+{% load widget_tweaks %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block head %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Bootstrap Datepicker CSS -->
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<!-- Bootstrap Datepicker Japanese language file -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<script>
+  $(document).ready(function () {
+    $('#auto-calc-other-current-assets').click(function () {
+      var totalCurrentAssets = parseFloat($('#{{ form.total_current_assets.id_for_label }}').val()) || 0;
+      var cashAndDeposits = parseFloat($('#{{ form.cash_and_deposits.id_for_label }}').val()) || 0;
+      var accountsReceivable = parseFloat($('#{{ form.accounts_receivable.id_for_label }}').val()) || 0;
+      var inventory = parseFloat($('#{{ form.inventory.id_for_label }}').val()) || 0;
+      var shortTermLoansReceivable = parseFloat($('#{{ form.short_term_loans_receivable.id_for_label }}').val()) || 0;
+
+      var otherCurrentAssets = totalCurrentAssets - cashAndDeposits - accountsReceivable - inventory - shortTermLoansReceivable;
+      $('#{{ form.other_current_assets.id_for_label }}').val(otherCurrentAssets.toFixed(0));
+    });
+
+    $('#auto-calc-other-tangible-fixed-assets').click(function () {
+      var totalTangibleFixedAssets = parseFloat($('#{{ form.total_tangible_fixed_assets.id_for_label }}').val()) || 0;
+      var land = parseFloat($('#{{ form.land.id_for_label }}').val()) || 0;
+      var buildings = parseFloat($('#{{ form.buildings.id_for_label }}').val()) || 0;
+      var machineryEquipment = parseFloat($('#{{ form.machinery_equipment.id_for_label }}').val()) || 0;
+      var vehicles = parseFloat($('#{{ form.vehicles.id_for_label }}').val()) || 0;
+      var accumulatedDepreciation = parseFloat($('#{{ form.accumulated_depreciation.id_for_label }}').val()) || 0;
+
+      var otherTangibleFixedAssets = totalTangibleFixedAssets - land - buildings - machineryEquipment - vehicles - accumulatedDepreciation;
+      $('#{{ form.other_tangible_fixed_assets.id_for_label }}').val(otherTangibleFixedAssets.toFixed(0));
+    });
+
+    $('#auto-calc-other-intangible-assets').click(function () {
+      var totalIntangibleAssets = parseFloat($('#{{ form.total_intangible_assets.id_for_label }}').val()) || 0;
+      var goodwill = parseFloat($('#{{ form.goodwill.id_for_label }}').val()) || 0;
+
+      var otherIntangibleAssets = totalIntangibleAssets - goodwill;
+      $('#{{ form.other_intangible_assets.id_for_label }}').val(otherIntangibleAssets.toFixed(0));
+    });
+
+    $('#auto-calc-total-fixed-assets').click(function () {
+      var totalTangibleFixedAssets = parseFloat($('#{{ form.total_tangible_fixed_assets.id_for_label }}').val()) || 0;
+      var totalIntangibleAssets = parseFloat($('#{{ form.total_intangible_assets.id_for_label }}').val()) || 0;
+      var investmentOtherAssets = parseFloat($('#{{ form.investment_other_assets.id_for_label }}').val()) || 0;
+
+      var totalFixedAssets = totalTangibleFixedAssets + totalIntangibleAssets + investmentOtherAssets;
+      $('#{{ form.total_fixed_assets.id_for_label }}').val(totalFixedAssets.toFixed(0));
+    });
+
+    $('#auto-calc-total-assets').click(function () {
+      var totalCurrentAssets = parseFloat($('#{{ form.total_current_assets.id_for_label }}').val()) || 0;
+      var totalFixedAssets = parseFloat($('#{{ form.total_fixed_assets.id_for_label }}').val()) || 0;
+      var deferredAssets = parseFloat($('#{{ form.deferred_assets.id_for_label }}').val()) || 0;
+
+      var totalAssets = totalCurrentAssets + totalFixedAssets + deferredAssets;
+      $('#{{ form.total_assets.id_for_label }}').val(totalAssets.toFixed(0));
+    });
+
+    // その他流動負債の自動計算
+    $('#auto-calc-other-current-liabilities').click(function () {
+      var totalCurrentLiabilities = parseFloat($('#{{ form.total_current_liabilities.id_for_label }}').val()) || 0;
+      var accountsPayable = parseFloat($('#{{ form.accounts_payable.id_for_label }}').val()) || 0;
+      var shortTermLoansPayable = parseFloat($('#{{ form.short_term_loans_payable.id_for_label }}').val()) || 0;
+
+      var otherCurrentLiabilities = totalCurrentLiabilities - accountsPayable - shortTermLoansPayable;
+      $('#{{ form.other_current_liabilities.id_for_label }}').val(otherCurrentLiabilities.toFixed(0));
+    });
+
+    // その他の固定負債の自動計算
+    $('#auto-calc-other-long-term-liabilities').click(function () {
+      var totalLongTermLiabilities = parseFloat($('#{{ form.total_long_term_liabilities.id_for_label }}').val()) || 0;
+      var longTermLoansPayable = parseFloat($('#{{ form.long_term_loans_payable.id_for_label }}').val()) || 0;
+
+      var otherLongTermLiabilities = totalLongTermLiabilities - longTermLoansPayable;
+      $('#{{ form.other_long_term_liabilities.id_for_label }}').val(otherLongTermLiabilities.toFixed(0));
+    });
+
+    // 負債合計の自動計算
+    $('#auto-calc-total-liabilities').click(function () {
+      var totalCurrentLiabilities = parseFloat($('#{{ form.total_current_liabilities.id_for_label }}').val()) || 0;
+      var totalLongTermLiabilities = parseFloat($('#{{ form.total_long_term_liabilities.id_for_label }}').val()) || 0;
+
+      var totalLiabilities = totalCurrentLiabilities + totalLongTermLiabilities;
+      $('#{{ form.total_liabilities.id_for_label }}').val(totalLiabilities.toFixed(0));
+    });
+    // 株主資本合計の自動計算
+    $('#auto-calc-total-stakeholder-equity').click(function () {
+      var capitalStock = parseFloat($('#{{ form.capital_stock.id_for_label }}').val()) || 0;
+      var capitalSurplus = parseFloat($('#{{ form.capital_surplus.id_for_label }}').val()) || 0;
+      var retainedEarnings = parseFloat($('#{{ form.retained_earnings.id_for_label }}').val()) || 0;
+
+      var totalStakeholderEquity = capitalStock + capitalSurplus + retainedEarnings;
+      $('#{{ form.total_stakeholder_equity.id_for_label }}').val(totalStakeholderEquity.toFixed(0));
+    });
+
+    // 純資産の部合計の自動計算
+    $('#auto-calc-total-net-assets').click(function () {
+      var totalStakeholderEquity = parseFloat($('#{{ form.total_stakeholder_equity.id_for_label }}').val()) || 0;
+      var valuationAndTranslationAdjustment = parseFloat($('#{{ form.valuation_and_translation_adjustment.id_for_label }}').val()) || 0;
+      var newSharesReserve = parseFloat($('#{{ form.new_shares_reserve.id_for_label }}').val()) || 0;
+
+      var totalNetAssets = totalStakeholderEquity + valuationAndTranslationAdjustment + newSharesReserve;
+      $('#{{ form.total_net_assets.id_for_label }}').val(totalNetAssets.toFixed(0));
+    });
+
+
+
+    // ツールチップの初期化
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+  });
+
+  });
+</script>
+
+
+
+{% endblock %}
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <form method="post">
+        {% csrf_token %}
+
+      <div class="card-header">
+        <h5 class="card-title mb-0">決算情報編集</h5>
+      </div>
+      <div class="card-body">
+
+        <!-- ナビゲーションリンク -->
+        <nav class="mb-4">
+          <ul class="nav nav-pills">
+            <li class="nav-item">
+              <a class="nav-link" href="#bs-info">貸借対照表情報</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#pl-info">損益計算書情報</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#tax-info">税務申告情報</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#notes-info">決算留意事項</a>
+          </ul>
+        </nav>
+
+
+
+          <!-- Year editing section -->
+          <div class="mb-3 row align-items-center">
+            <label for="{{ form.year.id_for_label }}" class="col-sm-2 col-form-label">{{ form.year.label }}</label>
+            <div class="col-sm-3">
+              {{ form.year|add_class:"form-control" }}
+            </div>
+            <div class="col-sm-4">
+              <div class="form-check">
+                {{ form.is_draft|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.is_draft.id_for_label }}">
+                  {{ form.is_draft.label }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <!-- BS information -->
+          <h3 id="bs-info">貸借対照表情報</h3>
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6 border-end">
+                  <h4 class="mb-3">資産の部</h4>
+
+                  <!-- 流動資産 -->
+                  <div class="card mb-3 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title border-bottom pb-2">I. 流動資産</h5>
+                      <div class="ms-3">
+                        <!-- 流動資産の各項目 -->
+                        <div class="mb-2 row">
+                          <label for="{{ form.cash_and_deposits.id_for_label }}"
+                            class="col-sm-6 col-form-label">現金預金</label>
+                          <div class="col-sm-6">
+                            {{ form.cash_and_deposits|add_class:"form-control" }}
+                          </div>
+                        </div>
+                        {{ form.cash_and_deposits.errors }}
+
+                        <div class="mb-2 row">
+                          <label for="{{ form.accounts_receivable.id_for_label }}"
+                            class="col-sm-6 col-form-label">売掛金</label>
+                          <div class="col-sm-6">
+                            {{ form.accounts_receivable|add_class:"form-control" }}
+                          </div>
+                        </div>
+                        {{ form.accounts_receivable.errors }}
+
+                        <div class="mb-2 row">
+                          <label for="{{ form.inventory.id_for_label }}" class="col-sm-6 col-form-label">棚卸資産</label>
+                          <div class="col-sm-6">
+                            {{ form.inventory|add_class:"form-control" }}
+                          </div>
+                        </div>
+                        {{ form.inventory.errors }}
+                        <div class="mb-2 row">
+                          <label for="{{ form.short_term_loans_receivable.id_for_label }}"
+                            class="col-sm-6 col-form-label">短期貸付金</label>
+                          <div class="col-sm-6">
+                            {{ form.short_term_loans_receivable|add_class:"form-control" }}
+                          </div>
+                        </div>
+                        {{ form.short_term_loans_receivable.errors }}
+                        <div class="mb-2 row">
+                          <label for="{{ form.other_current_assets.id_for_label }}"
+                            class="col-sm-6 col-form-label">その他流動資産</label>
+                          <div class="col-sm-6 d-flex">
+                            {{ form.other_current_assets|add_class:"form-control" }}
+                            <button type="button" id="auto-calc-other-current-assets"
+                              class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                          </div>
+                        </div>
+                        {{ form.other_current_assets.errors }}
+                      </div>
+                      <div class="mb-2 row mt-3">
+                        <label for="{{ form.total_current_assets.id_for_label }}"
+                          class="col-sm-6 col-form-label fw-bold">流動資産合計</label>
+                        <div class="col-sm-6">
+                          {{ form.total_current_assets|add_class:"form-control fw-bold" }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 固定資産 -->
+                  <div class="card mb-3">
+                    <div class="card-body">
+                      <h5 class="card-title border-bottom pb-2">II. 固定資産</h5>
+                      
+                      <!-- 有形固定資産 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h6 class="card-title">
+                            [ 有形固定資産 ]
+                          </h6>
+                          <div class="ms-4">
+                            <!-- 有形固定資産の項目 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.land.id_for_label }}" class="col-sm-6 col-form-label">土地</label>
+                              <div class="col-sm-6">
+                                {{ form.land|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.land.errors }}
+
+                            <div class="mb-2 row">
+                              <label for="{{ form.buildings.id_for_label }}" class="col-sm-6 col-form-label">建物</label>
+                              <div class="col-sm-6">
+                                {{ form.buildings|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.buildings.errors }}
+
+                            <div class="mb-2 row">
+                              <label for="{{ form.machinery_equipment.id_for_label }}"
+                                class="col-sm-6 col-form-label">機械装置</label>
+                              <div class="col-sm-6">
+                                {{ form.machinery_equipment|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.machinery_equipment.errors }}
+
+                            <div class="mb-2 row">
+                              <label for="{{ form.vehicles.id_for_label }}" class="col-sm-6 col-form-label">車両運搬具</label>
+                              <div class="col-sm-6">
+                                {{ form.vehicles|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.vehicles.errors }}
+
+                            <div class="mb-2 row">
+                              <label for="{{ form.accumulated_depreciation.id_for_label }}"
+                                class="col-sm-6 col-form-label">減価償却累計額</label>
+                              <div class="col-sm-6">
+                                {{ form.accumulated_depreciation|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.accumulated_depreciation.errors }}
+                            <div class="mb-2 row">
+                              <label for="{{ form.other_tangible_fixed_assets.id_for_label }}"
+                                class="col-sm-6 col-form-label">その他有形固定資産</label>
+                              <div class="col-sm-6 d-flex">
+                                {{ form.other_tangible_fixed_assets|add_class:"form-control" }}
+                                <button type="button" id="auto-calc-other-tangible-fixed-assets"
+                                  class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                              </div>
+                            </div>
+                            {{ form.other_tangible_fixed_assets.errors }}
+                          </div>
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.total_tangible_fixed_assets.id_for_label }}" 
+                                   class="col-sm-6 col-form-label fw-bold">有形固定資産合計</label>
+                            <div class="col-sm-6">
+                              {{ form.total_tangible_fixed_assets|add_class:"form-control fw-bold" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 無形固定資産 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h6 class="card-title">
+                            [ 無形固定資産 ]
+                          </h6>
+                          <div class="ms-4">
+                            <!-- 無形固定資産の項目 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.goodwill.id_for_label }}" class="col-sm-6 col-form-label">のれん</label>
+                              <div class="col-sm-6">
+                                {{ form.goodwill|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.goodwill.errors }}
+
+                            <div class="mb-2 row">
+                              <label for="{{ form.other_intangible_assets.id_for_label }}"
+                                class="col-sm-6 col-form-label">その他無形固定資産</label>
+                              <div class="col-sm-6 d-flex">
+                                {{ form.other_intangible_assets|add_class:"form-control" }}
+                                <button type="button" id="auto-calc-other-intangible-assets"
+                                  class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                              </div>
+                            </div>
+                            {{ form.other_intangible_assets.errors }}
+                          </div>
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.total_intangible_assets.id_for_label }}" 
+                                   class="col-sm-6 col-form-label fw-bold">無形固定資産合計</label>
+                            <div class="col-sm-6">
+                              {{ form.total_intangible_assets|add_class:"form-control fw-bold" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 投資その他の資産 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h6 class="card-title">
+                            [ 投資その他の資産 ]
+                          </h6>
+                          <div class="ms-4">
+                            <!-- 投資その他の資産の項目 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.long_term_loans_receivable.id_for_label }}" class="col-sm-6 col-form-label">長期貸付金</label>
+                              <div class="col-sm-6">
+                                {{ form.long_term_loans_receivable|add_class:"form-control" }}
+                              </div>
+                            </div>
+                            {{ form.long_term_loans_receivable.errors }}
+                          </div>
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.investment_other_assets.id_for_label }}" 
+                                   class="col-sm-6 col-form-label fw-bold">投資その他の資産合計</label>
+                            <div class="col-sm-6">
+                              {{ form.investment_other_assets|add_class:"form-control fw-bold" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 固定資産合計 -->
+                      <div class="mb-2 row mt-3">
+                        <label for="{{ form.total_fixed_assets.id_for_label }}" 
+                               class="col-sm-6 col-form-label fw-bold">固定資産合計</label>
+                        <div class="col-sm-6 d-flex">
+                          {{ form.total_fixed_assets|add_class:"form-control fw-bold" }}
+                          <button type="button" id="auto-calc-total-fixed-assets"
+                            class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 繰延資産 -->
+                  <div class="card mb-3 bg-light">
+                    <div class="card-body">
+                      <h5 class="card-title border-bottom pb-2">III. 繰延資産</h5>
+                      <div class="ms-3">
+                        <div class="mb-2 row">
+                          <label for="{{ form.deferred_assets.id_for_label }}" class="col-sm-6 col-form-label">繰延資産合計</label>
+                          <div class="col-sm-6">
+                            {{ form.deferred_assets|add_class:"form-control" }}
+                          </div>
+                        </div>
+                        {{ form.deferred_assets.errors }}
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 資産合計 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.total_assets.id_for_label }}" class="col-sm-6 col-form-label fw-bold">資産の部合計</label>
+                    <div class="col-sm-6 d-flex">
+                      {{ form.total_assets|add_class:"form-control fw-bold" }}
+                      <button type="button" id="auto-calc-total-assets"
+                        class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <h4 class="mb-3">負債の部</h4>
+                  
+                  <!-- 負債の部 -->
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <!-- I. 流動負債 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h5 class="card-title border-bottom pb-2">I. 流動負債</h5>
+                          <div class="ms-3">
+                            <!-- 買掛金・未払金・未払費用 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.accounts_payable.id_for_label }}" class="col-sm-6 col-form-label">買掛金・未払金・未払費用</label>
+                              <div class="col-sm-6">
+                                {{ form.accounts_payable|add_class:"form-control" }}
+                              </div>
+                            </div>
+
+                            <!-- 短期借入金 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.short_term_loans_payable.id_for_label }}" class="col-sm-6 col-form-label">短期借入金</label>
+                              <div class="col-sm-6">
+                                {{ form.short_term_loans_payable|add_class:"form-control" }}
+                              </div>
+                            </div>
+
+                            <!-- その他流動負債 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.other_current_liabilities.id_for_label }}" class="col-sm-6 col-form-label">その他流動負債</label>
+                              <div class="col-sm-6 d-flex">
+                                {{ form.other_current_liabilities|add_class:"form-control" }}
+                                <button type="button" id="auto-calc-other-current-liabilities" class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- 流動負債合計 -->
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.total_current_liabilities.id_for_label }}" class="col-sm-6 col-form-label fw-bold">流動負債合計</label>
+                            <div class="col-sm-6 d-flex">
+                              {{ form.total_current_liabilities|add_class:"form-control fw-bold" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- II. 固定負債 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h5 class="card-title border-bottom pb-2">II. 固定負債</h5>
+                          <div class="ms-3">
+                            <!-- 長期借入金 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.long_term_loans_payable.id_for_label }}" class="col-sm-6 col-form-label">長期借入金</label>
+                              <div class="col-sm-6">
+                                {{ form.long_term_loans_payable|add_class:"form-control" }}
+                              </div>
+                            </div>
+
+                            <!-- その他の固定負債 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.other_long_term_liabilities.id_for_label }}" class="col-sm-6 col-form-label">その他の固定負債</label>
+                              <div class="col-sm-6 d-flex">
+                                {{ form.other_long_term_liabilities|add_class:"form-control" }}
+                                <button type="button" id="auto-calc-other-long-term-liabilities" class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- 固定負債合計 -->
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.total_long_term_liabilities.id_for_label }}" class="col-sm-6 col-form-label fw-bold">固定負債合計</label>
+                            <div class="col-sm-6 d-flex">
+                              {{ form.total_long_term_liabilities|add_class:"form-control fw-bold" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- 負債合計 -->
+                      <div class="mb-2 row">
+                        <label for="{{ form.total_liabilities.id_for_label }}" class="col-sm-6 col-form-label fw-bold">負債の部合計</label>
+                        <div class="col-sm-6 d-flex">
+                          {{ form.total_liabilities|add_class:"form-control fw-bold" }}
+                          <button type="button" id="auto-calc-total-liabilities" class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 純資産の部 -->
+                  <h4 class="mb-3">純資産の部</h4>
+                  <div class="card mb-4">
+                    <div class="card-body">
+                      <!-- I. 株主資本 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h5 class="card-title border-bottom pb-2">I. 株主資本</h5>
+                          <div class="ms-3">
+                            <!-- 資本金 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.capital_stock.id_for_label }}" class="col-sm-6 col-form-label">資本金</label>
+                              <div class="col-sm-6">
+                                {{ form.capital_stock|add_class:"form-control" }}
+                              </div>
+                            </div>
+
+                            <!-- 資本剰余金 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.capital_surplus.id_for_label }}" class="col-sm-6 col-form-label">資本剰余金</label>
+                              <div class="col-sm-6">
+                                {{ form.capital_surplus|add_class:"form-control" }}
+                              </div>
+                            </div>
+
+                            <!-- 利益剰余金 -->
+                            <div class="mb-2 row">
+                              <label for="{{ form.retained_earnings.id_for_label }}" class="col-sm-6 col-form-label">利益剰余金</label>
+                              <div class="col-sm-6">
+                                {{ form.retained_earnings|add_class:"form-control" }}
+                              </div>
+                            </div>
+                          </div>
+                          <!-- 株主資本合計 -->
+                          <div class="mb-2 row mt-3">
+                            <label for="{{ form.total_stakeholder_equity.id_for_label }}" class="col-sm-6 col-form-label fw-bold">株主資本合計</label>
+                            <div class="col-sm-6 d-flex">
+                              {{ form.total_stakeholder_equity|add_class:"form-control fw-bold" }}
+                              <button type="button" id="auto-calc-total-stakeholder-equity" class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- II. 評価換算差額 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h5 class="card-title border-bottom pb-2">II. 評価換算差額</h5>
+                          <div class="mb-2 row">
+                            <label for="{{ form.valuation_and_translation_adjustment.id_for_label }}" class="col-sm-6 col-form-label">評価換算差額</label>
+                            <div class="col-sm-6">
+                              {{ form.valuation_and_translation_adjustment|add_class:"form-control" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- III. 新株予約権 -->
+                      <div class="card mb-3 bg-light">
+                        <div class="card-body">
+                          <h5 class="card-title border-bottom pb-2">III. 新株予約権</h5>
+                          <div class="mb-2 row">
+                            <label for="{{ form.new_shares_reserve.id_for_label }}" class="col-sm-6 col-form-label">新株予約権</label>
+                            <div class="col-sm-6">
+                              {{ form.new_shares_reserve|add_class:"form-control" }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <!-- 純資産の部合計 -->
+                      <div class="mb-2 row">
+                        <label for="{{ form.total_net_assets.id_for_label }}" class="col-sm-6 col-form-label fw-bold">純資産の部合計</label>
+                        <div class="col-sm-6 d-flex">
+                          {{ form.total_net_assets|add_class:"form-control fw-bold" }}
+                          <button type="button" id="auto-calc-total-net-assets" class="btn btn-secondary btn-sm ms-2"><i class="fas fa-calculator"></i></button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PL information -->
+          <h3 id="pl-info">損益計算書情報</h3>
+          <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading">損益計算書情報の入力についての注意事項</h5>
+            <p>月次の売上高、売上総利益などを入力している場合でも、こちらでは別途年度の合計値を入力してください。</p>
+            <p>現仕様では月次の値と年次の値に自動反映や相互チェックなどの機能はありません。</p>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <!-- I. 売上総利益 -->
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">I. 売上総利益</h5>
+                  <!-- 売上高 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.sales.id_for_label }}" class="col-sm-6 col-form-label">売上高</label>
+                    <div class="col-sm-6">
+                      {{ form.sales|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 売上原価 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.cost_of_sales.id_for_label }}" class="col-sm-6 col-form-label">売上原価</label>
+                    <div class="col-sm-6">
+                      {{ form.cost_of_sales|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 減価償却費（売上原価） -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.depreciation_cogs.id_for_label }}" class="col-sm-6 col-form-label ps-5">売上原価に含まれる減価償却費
+                      <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" 
+                         title="製造業の場合のみ。製造業原価報告書の値を入力してください。"></i>
+                    </label>
+                    <div class="col-sm-6">
+                      {{ form.depreciation_cogs|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 売上総利益 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.gross_profit.id_for_label }}" class="col-sm-6 col-form-label fw-bold">売上総利益</label>
+                    <div class="col-sm-6">
+                      {{ form.gross_profit|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- II. 営業利益 -->
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">II. 営業利益</h5>
+                  <!-- 販売費及び一般管理費 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.selling_general_admin_expenses.id_for_label }}" class="col-sm-6 col-form-label">販売費及び一般管理費</label>
+                    <div class="col-sm-6">
+                      {{ form.selling_general_admin_expenses|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 役員報酬 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.directors_compensation.id_for_label }}" class="col-sm-6 col-form-label ps-5">役員報酬</label>
+                    <div class="col-sm-6">
+                      {{ form.directors_compensation|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 給与・雑給 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.payroll_expense.id_for_label }}" class="col-sm-6 col-form-label ps-5">給与・雑給</label>
+                    <div class="col-sm-6">
+                      {{ form.payroll_expense|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 減価償却費（販管費） -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.depreciation_expense.id_for_label }}" class="col-sm-6 col-form-label ps-5">減価償却費</label>
+                    <div class="col-sm-6">
+                      {{ form.depreciation_expense|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- その他の償却額（販管費） -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.other_amortization_expense.id_for_label }}" class="col-sm-6 col-form-label ps-5">その他の償却額</label>
+                    <div class="col-sm-6">
+                      {{ form.other_amortization_expense|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 営業利益 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.operating_profit.id_for_label }}" class="col-sm-6 col-form-label fw-bold">営業利益</label>
+                    <div class="col-sm-6">
+                      {{ form.operating_profit|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <!-- III. 経常利益 -->
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">III. 経常利益</h5>
+                  <!-- 営業外で計上された償却費 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.non_operating_amortization_expense.id_for_label }}" class="col-sm-6 col-form-label">営業外で計上された償却費</label>
+                    <div class="col-sm-6">
+                      {{ form.non_operating_amortization_expense|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 支払利息 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.interest_expense.id_for_label }}" class="col-sm-6 col-form-label">支払利息</label>
+                    <div class="col-sm-6">
+                      {{ form.interest_expense|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 雑収入 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.other_income.id_for_label }}" class="col-sm-6 col-form-label">雑収入</label>
+                    <div class="col-sm-6">
+                      {{ form.other_income|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 雑損失 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.other_loss.id_for_label }}" class="col-sm-6 col-form-label">雑損失</label>
+                    <div class="col-sm-6">
+                      {{ form.other_loss|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 経常利益 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.ordinary_profit.id_for_label }}" class="col-sm-6 col-form-label fw-bold">経常利益</label>
+                    <div class="col-sm-6">
+                      {{ form.ordinary_profit|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- IV. 当期純利益 -->
+              <div class="card mb-4">
+                <div class="card-body">
+                  <h5 class="card-title">IV. 当期純利益</h5>
+                  <!-- 特別利益 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.extraordinary_income.id_for_label }}" class="col-sm-6 col-form-label">特別利益</label>
+                    <div class="col-sm-6">
+                      {{ form.extraordinary_income|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 特別損失 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.extraordinary_loss.id_for_label }}" class="col-sm-6 col-form-label">特別損失</label>
+                    <div class="col-sm-6">
+                      {{ form.extraordinary_loss|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 法人税等 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.income_taxes.id_for_label }}" class="col-sm-6 col-form-label">法人税等</label>
+                    <div class="col-sm-6">
+                      {{ form.income_taxes|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 当期純利益 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.net_profit.id_for_label }}" class="col-sm-6 col-form-label fw-bold">当期純利益</label>
+                    <div class="col-sm-6">
+                      {{ form.net_profit|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 税務申告情報 -->
+          <h3 id="tax-info" class="mt-4">税務申告情報</h3>
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- 繰越欠損金 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.tax_loss_carryforward.id_for_label }}" class="col-sm-6 col-form-label">
+                      繰越欠損金
+                      <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top" 
+                         title="欠損金額は絶対値（プラスの値）で保持されます。"></i>
+                    </label>
+                    <div class="col-sm-6">
+                      {{ form.tax_loss_carryforward|add_class:"form-control" }}
+                    </div>
+                  </div>
+                  <!-- 期末従業員数 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.number_of_employees_EOY.id_for_label }}" class="col-sm-6 col-form-label">期末従業員数</label>
+                    <div class="col-sm-6">
+                      {{ form.number_of_employees_EOY|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <!-- 期末発行済み株式数 -->
+                  <div class="mb-3 row">
+                    <label for="{{ form.issued_shares_EOY.id_for_label }}" class="col-sm-6 col-form-label">期末発行済み株式数</label>
+                    <div class="col-sm-6">
+                      {{ form.issued_shares_EOY|add_class:"form-control" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 決算留意事項 -->
+          <h3 id="notes-info" class="mt-4">決算留意事項</h3>
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="{{ form.financial_statement_notes.id_for_label }}" class="form-label">留意事項</label>
+                {{ form.financial_statement_notes|add_class:"form-control" }}
+              </div>
+            </div>
+          </div>
+
+          <!-- 役員借入金 -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="{{ form.directors_loan.id_for_label }}" class="form-label">役員貸付金/借入金（千円）</label>
+                    {{ form.directors_loan|add_class:"form-control" }}
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="alert alert-info" role="alert">
+                    <h5 class="alert-heading">役員貸付金/借入金についての注意事項</h5>
+                    <p>役員貸付金と役員借入金を相殺し、役員貸付金に残高が残ればその額をプラスの値で、役員借入金に残高が残ればその額をマイナスの金額で入れてください。</p>
+                    <p>長期短期の分類は不要です。また、基本的には代表者に対する貸付金/借入金のみを入力し、複数年度で比較できるようにしてください。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>          
+      </div>
+      <div class="card-footer text-end">
+        <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
+        <button type="submit" class="btn btn-primary">保存</button>        
+        {% if form.instance.pk %}
+        <a href="{% url 'fiscal_summary_year_delete' form.instance.pk %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+        {% endif %}
+      </div>
+    </form>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

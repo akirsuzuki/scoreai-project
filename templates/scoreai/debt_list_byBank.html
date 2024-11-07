@@ -1,0 +1,153 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#byBank">金融機関別一覧</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#share_chart12">シェア推移</a>
+    </li>
+  </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">金融機関別</h5>
+      </div>
+      <div class="card-body">
+
+        <p id="byBank"></p>
+        <table class="table table-striped" id="debt_list_byBank_table">
+          <thead class="table-light">
+            <tr>
+              <th>銀行名</th>
+              <th>合計元本(千円)</th>
+              <th>合計月返済額</th>
+              <th>合計現在残高<br>シェア</th>
+              <th>合計今期末残高<br>シェア</th>
+            </tr>
+          </thead>
+          <tbody class="table-group-divider">
+            {% for debt in debt_list_byBank %}
+            <tr>
+              <td>{{ debt.financial_institution }}</td>
+              <td>{{ debt.principal|to_thousands|intcomma }}</td>
+              <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+              <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}
+                <br>{{debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
+              <td>{{ debt.balance_fy1|to_thousands|intcomma}}
+                <br>{{debt.balance_fy1|percentage:debt_list_totals.total_balance_fy1 }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">金融機関別　残高シェア12ヶ月推移</h5>
+      </div>
+      <div class="card-body">
+        <p id="share_chart12"></p>
+        <canvas id="chart_debtByBank"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('chart_debtByBank').getContext('2d');
+    const labels = Array.from({ length: 12 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + i + 1);
+      return `${date.getMonth() + 1}月`;
+    });
+    const datasets = [
+      {% for debt in debt_list_byBank %}
+      {
+      label: '{{ debt.financial_institution }}',
+      data: [
+        {{ debt.balances_monthly.0| to_thousands }},
+        {{ debt.balances_monthly.1| to_thousands }},
+        {{ debt.balances_monthly.2| to_thousands }},
+        {{ debt.balances_monthly.3| to_thousands }},
+        {{ debt.balances_monthly.4| to_thousands }},
+        {{ debt.balances_monthly.5| to_thousands }},
+        {{ debt.balances_monthly.6| to_thousands }},
+        {{ debt.balances_monthly.7| to_thousands }},
+        {{ debt.balances_monthly.8| to_thousands }},
+        {{ debt.balances_monthly.9| to_thousands }},
+        {{ debt.balances_monthly.10| to_thousands }},
+        {{ debt.balances_monthly.11| to_thousands }}
+        ],
+    borderColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
+    backgroundColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
+    borderWidth: 1,
+    fill: false
+      },
+    {% endfor %}
+    ];
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const debt = debtListByBank[context.datasetIndex];
+              const balance = debt.balances_monthly[context.dataIndex];
+              const totalBalance = debtListTotals.total_balances_monthly[context.dataIndex];
+              const percentage = ((balance / totalBalance) * 100).toFixed(2);
+              return `${context.dataset.label}: ${context.raw}千円 (${percentage}%)`;
+            }
+          }
+        }
+      }
+    }
+  });
+  });
+</script>
+
+
+{% endblock %}

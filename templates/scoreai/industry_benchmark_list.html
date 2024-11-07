@@ -1,0 +1,39 @@
+{% extends "scoreai/base.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12">
+      <div class="card w-100">
+        <div class="card-header">
+            <h5 class="card-title mb-0">業界別ベンチマーク一覧</h5>
+        </div>
+        <div class="card-body">
+            <div class="d-flex justify-content-end mb-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>年度</th>
+                            <th>業界分類</th>
+                            <th>業界小分類</th>
+                            <th>企業規模</th>
+                            <th>指標名</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for benchmark in industry_benchmarks %}
+                        <tr>
+                            <td>{{ benchmark.year }}</td>
+                            <td>{{ benchmark.industry_classification }}</td>
+                            <td>{{ benchmark.industry_subclassification }}</td>
+                            <td>{{ benchmark.company_size }}</td>
+                            <td>{{ benchmark.indicator.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block head %}
+ <!-- DataTables CSS -->
+ <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+ <!-- jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <!-- DataTables JS -->
+ <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#detail">当期のデータ</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#others">過年度データ</a>
+    </li>
+  </ol>
+</nav>    
+
+{% endblock %}
+
+
+{% block content %}
+<div class="container">
+  <div class="row g-3">
+    <p id="detail"></p>
+    <h5 class="mb-0 fs-5">当期のデータ</h5>
+
+
+    {% include 'scoreai/index-row_yearlyPL.html' %}
+
+    <p></p>
+
+    <div class="col-md-6">
+      <table class="table table-bordered">
+        <tr>
+          <td class="table-light">年月</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light">売上高</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light">粗利益</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light">営業利益</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light">経常利益</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="col-md-6">
+      <table class="table table-bordered">
+        <tr>
+          <td class="table-light"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light"></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="table-light"></td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <p></p>
+
+    <div class="row g-3">
+      <div class="col-12">
+        <a href="#" class="btn btn-secondary">編集</a>
+        <a href="#" class="btn btn-danger">削除</a>
+      </div>
+    </div>
+  
+  </div>
+  <hr>
+  <div class="row g-3">
+    <p id="others"></p>
+    <h5 class="mb-0 fs-5">過年度データ</h5>
+    <p></p>
+  </div>
+</div>
+{% endblock %}
+

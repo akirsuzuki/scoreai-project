@@ -1,0 +1,75 @@
+{% load humanize %}
+{% load custom_filters %}
+
+<!-- JavaScriptの内容が長いため、このファイルだけ他のHTMLに記述する。 -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const ctx = document.getElementById('chart_debtAll').getContext('2d');
+    const labels = Array.from({ length: 12 }, (_, i) => {
+      const date = new Date();
+      date.setMonth(date.getMonth() + i + 1);
+      return `${date.getMonth() + 1}月`;
+    });
+    const datasets = [
+      {% for debt in debt_list %}
+        {
+        label: '{{ debt.financial_institution }} - {{ debt.principal|to_thousands|intcomma }} ({{ debt.issue_date|date:"Y年n月" }})',
+        data: [
+          {{ debt.balances_monthly.0| to_thousands }},
+          {{ debt.balances_monthly.1| to_thousands }},
+          {{ debt.balances_monthly.2| to_thousands }},
+          {{ debt.balances_monthly.3| to_thousands }},
+          {{ debt.balances_monthly.4| to_thousands }},
+          {{ debt.balances_monthly.5| to_thousands }},
+          {{ debt.balances_monthly.6| to_thousands }},
+          {{ debt.balances_monthly.7| to_thousands }},
+          {{ debt.balances_monthly.8| to_thousands }},
+          {{ debt.balances_monthly.9| to_thousands }},
+          {{ debt.balances_monthly.10| to_thousands }},
+          {{ debt.balances_monthly.11| to_thousands }}
+          ],
+        borderColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
+        backgroundColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
+        borderWidth: 1,
+        fill: false
+        },
+      {% endfor %}
+    ];
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: datasets
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const debt = debtListByBank[context.datasetIndex];
+              const balance = debt.balances_monthly[context.dataIndex];
+              const totalBalance = debtListTotals.total_balances_monthly[context.dataIndex];
+              const percentage = ((balance / totalBalance) * 100).toFixed(2);
+              return `${context.dataset.label}: ${context.raw}千円 (${percentage}%)`;
+            }
+          }
+        }
+      },
+      hover: {
+        mode: 'nearest',
+        intersect: true
+      }
+    }
+  });
+  });
+</script>
+
+<br>

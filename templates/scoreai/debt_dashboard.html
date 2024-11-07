@@ -1,0 +1,14 @@
+{% load humanize %}
+{% load custom_filters %}
+
+<div class="row align-items-stretch">
+    <div class="col-md-4 w-flex">
+        {% include 'scoreai/part_debt_summary.html' %}
+    </div>
+    <div class="col-md-4">
+        {% include 'scoreai/part_debt_byBank.html' %}
+    </div>
+    <div class="col-md-4 d-flex">
+        {% include 'scoreai/part_debt_bySecuredType.html' %}
+    </div>
+</div>

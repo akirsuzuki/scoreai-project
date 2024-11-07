@@ -1,0 +1,30 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">月次財務サマリーの削除確認</h5>
+        </div>
+        <div class="card-body">
+          <p>{{ object.fiscal_summary_year.year }}年度 {{ object.period }}月の月次財務サマリーを削除しようとしています。この操作は取り消せません。</p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <button type="submit" class="btn btn-danger">削除する</button>
+              <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-outline-secondary">キャンセル</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

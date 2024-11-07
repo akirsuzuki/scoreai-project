@@ -1,0 +1,255 @@
+{% load humanize %}
+{% load custom_filters %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<div class="tab-pane fade" id="analysis-info" role="tabpanel" aria-labelledby="analysis-tab">
+  <h3>サマリー</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <h4>主要指標</h4>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead class="bg-light">
+            <tr">
+              <th rowspan="2">指標</th>
+              <th colspan="2">{{ fiscal_summary_year.year }}年度</th>
+              <th colspan="2">{{ previous_year_data.year }}年度</th>
+            </tr>
+            <tr>
+              <th>値</th>
+              <th>スコア</th>
+              <th>値</th>
+              <th>スコア</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>売上増加率</td>
+              <td>{{ fiscal_summary_year.sales_growth_rate|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_sales_growth_rate }}</td>
+              <td>{{ previous_year_data.sales_growth_rate|intcomma }}</td>
+              <td>{{ previous_year_data.score_sales_growth_rate }}</td>
+            </tr>
+            <tr>
+              <td>営業利益率</td>
+              <td>{{ fiscal_summary_year.operating_profit_margin|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_operating_profit_margin }}</td>
+              <td>{{ previous_year_data.operating_profit_margin|intcomma }}</td>
+              <td>{{ previous_year_data.score_operating_profit_margin }}</td>
+            </tr>
+            <tr>
+              <td>労働生産性</td>
+              <td>{{ fiscal_summary_year.labor_productivity|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_labor_productivity }}</td>
+              <td>{{ previous_year_data.labor_productivity|intcomma }}</td>
+              <td>{{ previous_year_data.score_labor_productivity }}</td>
+            </tr>
+            <tr>
+              <td>EBITDA有利子負債倍率</td>
+              <td>{{ fiscal_summary_year.EBITDA_interest_bearing_debt_ratio|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio }}</td>
+              <td>{{ previous_year_data.EBITDA_interest_bearing_debt_ratio|intcomma }}</td>
+              <td>{{ previous_year_data.score_EBITDA_interest_bearing_debt_ratio }}</td>
+            </tr>
+            <tr>
+              <td>自己資本比率</td>
+              <td>{{ fiscal_summary_year.equity_ratio|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_equity_ratio }}</td>
+              <td>{{ previous_year_data.equity_ratio|intcomma }}</td>
+              <td>{{ previous_year_data.score_equity_ratio }}</td>
+            </tr>
+            <tr>
+              <td>営業運転資本回転期間</td>
+              <td>{{ fiscal_summary_year.operating_working_capital_turnover_period|intcomma }}</td>
+              <td>{{ fiscal_summary_year.score_operating_working_capital_turnover_period }}</td>
+              <td>{{ previous_year_data.operating_working_capital_turnover_period|intcomma }}</td>
+              <td>{{ previous_year_data.score_operating_working_capital_turnover_period }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h4>チャート</h4>
+      <div class="chart-container">
+        <div class="card mb-4">
+          <canvas id="scoreRadarChart"></canvas>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="col-md-8">
+      <h4>基準値</h4>
+      <p>上の主要指標のスコアは、以下の基準値をもとに算定しています。</p>
+      <table class="table table-bordered">
+        <tr>
+          <th class="bg-light">業種</th>
+          <td>{{ benchmark_index.0.industry_classification.name }}</td>
+          <th class="bg-light">業種 小分類</th>
+          <td>{{ benchmark_index.0.industry_subclassification.name }}</td>
+          <th class="bg-light">規模</th>
+          <td>{{ benchmark_index.0.get_company_size_display }}</td>
+          <th class="bg-light">年度</th>
+          <td>{{ benchmark_index.0.year }}</td>
+        </tr>
+      </table>
+      <br>
+      <table class="table table-bordered">
+        <thead class="bg-light">
+          <tr></tr>
+            <th>指標</th>
+            <th>中央値</th>
+            <th>iv</th>
+            <th>iii</th>
+            <th>ii</th>
+            <th>i</th>
+          </tr>
+        </thead>
+        {% for benchmark in benchmark_index %}
+        <tr>
+          <td>{{ benchmark.indicator.label }}</td>
+          <td>{{ benchmark.median }}</td>
+          <td>{{ benchmark.range_iv }}</td>
+          <td>{{ benchmark.range_iii }}</td>
+          <td>{{ benchmark.range_ii }}</td>
+          <td>{{ benchmark.range_i }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+
+    </div>
+    <div class="col-md-4">
+      <h6>高ければ高いほど良い指標</h6>
+      <p>i の値以上：５</p>
+      <p>ii 〜 i の値：４</p>
+      <p>iii 〜 ii の値：３</p>
+      <p>iv 〜 iii の値：２</p>
+      <p>〜ivの値：1</p>
+      <h6>低ければ低いほど良い指標</h6>
+      <p>i の値より小さい：5</p>
+      <p>ii 〜 i の値より小さい＝4</p>
+      <p>iii の値より以下＝３</p>
+      <p>iv の値より以下＝2</p>
+      <h6>有利子負債倍率について</h6>
+      <p>         優先①：（借入金－現金・預金）が0以下の場合は、「5点」を付与 
+        優先②：（営業利益＋減価償却費）が0以下の場合は、「1点」を付与  
+        優先③：（借入金－現金・預金）が0超の時及び（営業利益＋減価償却費）が0超の時、本式にて算出された結果に基づき点数を付与</p>
+    </div>
+  </div>
+
+  <hr>
+  <h3>財務分析</h3>
+  <div class="row">
+    <div class="col-md-6">
+      <!-- 収益性 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">収益性</h5>
+          <div class="mb-3 row">
+            <label class="col-sm-6 col-form-label">総資本経常利益率（ROA）</label>
+            <div class="col-sm-6">
+              <p class="form-control-plaintext">{{ fiscal_summary_year.ROA|intcomma }}</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-info small" role="alert">
+                {{ technical_terms.roa.0 }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 安定性 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">安定性</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <!-- 生産性 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">生産性</h5>
+        </div>
+      </div>
+
+      <!-- 成長性 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">成長性</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var ctx = document.getElementById('scoreRadarChart').getContext('2d');
+  var scoreRadarChart = new Chart(ctx, {
+      type: 'radar',
+      data: {
+          labels: [
+              '売上増加率',
+              '営業利益率',
+              '労働生産性',
+              'EBITDA有利子負債倍率',
+              '自己資本比率',
+              '営業運転資本回転期間'
+          ],
+          datasets: [
+              {
+                  label: '{{ fiscal_summary_year.year }}年度',
+                  data: [
+                      {{ fiscal_summary_year.score_sales_growth_rate }},
+                      {{ fiscal_summary_year.score_operating_profit_margin }},
+                      {{ fiscal_summary_year.score_labor_productivity }},
+                      {{ fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio }},
+                      {{ fiscal_summary_year.score_equity_ratio }},
+                      {{ fiscal_summary_year.score_operating_working_capital_turnover_period }}
+                  ],
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  pointBackgroundColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1
+              },
+              {
+                  label: '{{ previous_year_data.year }}年度',
+                  data: [
+                      {{ previous_year_data.score_sales_growth_rate }},
+                      {{ previous_year_data.score_operating_profit_margin }},
+                      {{ previous_year_data.score_labor_productivity }},
+                      {{ previous_year_data.score_EBITDA_interest_bearing_debt_ratio }},
+                      {{ previous_year_data.score_equity_ratio }},
+                      {{ previous_year_data.score_operating_working_capital_turnover_period }}
+                  ],
+                  backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                  borderColor: 'rgba(255, 99, 132, 1)',
+                  pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                  borderWidth: 1
+              }
+          ]
+      },
+      options: {
+          scales: {
+              r: {
+                  min: 0,
+                  max: 5,
+                  ticks: {
+                      stepSize: 1
+                  },
+                  pointLabels: {
+                      font: {
+                          size: 12
+                      }
+                  }
+              }
+          },
+          plugins: {
+              legend: {
+                  position: 'top'
+              }
+          }
+      }
+  });
+</script>

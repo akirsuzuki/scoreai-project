@@ -1,0 +1,122 @@
+{% load humanize %}
+{% load custom_filters %}
+<!-- 改ページ -->
+<div class="page-break"></div>
+
+<div class="row mt-4">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">返済完了</h5>
+      </div>
+      <div class="card-body">
+        <table id="finished_debt_list" class="display nowrap" style="width:100%">
+          <thead>
+            <tr>
+              <th>金融機関</th>
+              <th>元本(千円)</th>
+              <th>保証</th>
+              <th>利息</th>
+              <th>実行日</th>
+              <th>返済開始日</th>
+              <th>月返済額</th>
+              <th>代表者保証</th>
+              <th>担保</th>
+              <th>メモ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for debt in debt_list_finished %}
+            <tr data-href="{% url 'debt_detail' debt.id %}">
+              <td>{{ debt.financial_institution.short_name }}</td>
+              <td>{{ debt.principal|to_thousands|intcomma}}</td>
+              <td>{{ debt.secured_type }}</td>
+              <td>{{ debt.interest_rate }}%</td>
+              <td>{{ debt.issue_date|date:"y年n月" }}</td>
+              <td>{{ debt.start_date|date:"y年n月" }}</td>
+              <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+              <td>{% if debt.is_securedby_management %}あり{% else %}{% endif %}</td>
+              <td>{{ debt.is_collateraled }}</td>
+              <td>{{ debt.memo_short }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colspan="4" style="text-align:right">合計：</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  // Add a new DataTable for the completed debt list
+  new DataTable('#finished_debt_list', {
+    scrollX: true,
+    footerCallback: function (row, data, start, end, display) {
+      let api = this.api();
+      // Remove the formatting to get integer data for summation
+      let intVal = function (i) {
+        return typeof i === 'string'
+          ? i.replace(/[\$,]/g, '') * 1
+          : typeof i === 'number'
+            ? i
+            : 0;
+      };
+      // Total over all pages
+      total = api
+        .column(1)
+        .data()
+        .reduce((a, b) => intVal(a) + intVal(b), 0);
+      // Total over this page
+      pageTotal = api
+        .column(1, { page: 'current' })
+        .data()
+        .reduce((a, b) => intVal(a) + intVal(b), 0);
+      // Update footer
+      api.column(1).footer().innerHTML =
+        '表示合計 :' + pageTotal + '千円 ( 総合計 :' + total + ' 千円)';
+    }
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Update the selector to include all three tables
+    const tables = ['finished_debt_list'];
+    
+    tables.forEach(tableId => {
+      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+      rows.forEach(row => {
+        row.addEventListener('click', function () {
+          const href = this.getAttribute('data-href');
+          if (href) {
+            window.location.href = href;
+          }
+        });
+      });
+    });
+  });
+</script>
+
+<style>
+  /* Update the selector to include all three tables */
+  #active_debt_list tbody tr,
+  #rescheduled_debt_list tbody tr,
+  #finished_debt_list tbody tr {
+    cursor: pointer;
+  }
+
+  div.dt-container {
+    width: 100%;
+    margin: 0 auto;
+  }
+</style>

@@ -1,0 +1,37 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+  {% block head %}
+  {% endblock %}
+  <link rel="shortcut icon" type="image/png"
+    href="{% static 'Modernize-1.0.0/src/assets/images/logos/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+</head>
+
+<body>
+
+{% block content %}
+{% endblock %}
+
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/js/sidebarmenu.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/js/app.min.js' %}"></script>
+  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script> -->
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/js/dashboard.js' %}"></script>
+
+</body>
+{% block foot %}
+{% endblock %}
+</html>

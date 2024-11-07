@@ -1,0 +1,25 @@
+{% extends 'scoreai/base.html' %}
+
+{% block content %}
+  <h1>業界小分類一覧</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>業界分類</th>
+        <th>小分類名</th>
+        <th>コード</th>
+        <th>備考</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for subclass in industry_subclassifications %}
+      <tr>
+        <td>{{ subclass.industry_classification.name }}</td>
+        <td>{{ subclass.name }}</td>
+        <td>{{ subclass.code }}</td>
+        <td>{{ subclass.memo }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

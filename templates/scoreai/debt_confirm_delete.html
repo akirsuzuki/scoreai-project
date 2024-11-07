@@ -1,0 +1,100 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block breadcrumb %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">【{{ debt.financial_institution }}】 【借入日：{{ debt.issue_date }}】 【元本：{{ debt.principal|to_thousands|intcomma }}千円】の借入金削除確認</h5>
+      </div>
+      <div class="card-body">
+        <h4 class="mb-4">以下の借入金を削除しますか？</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">金融機関</td>
+                <td>{{ debt.financial_institution }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">元本</td>
+                <td>{{ debt.principal|to_thousands|intcomma }}千円</td>
+              </tr>
+              <tr>
+                <td class="table-light">利息</td>
+                <td>{{ debt.interest_rate }}%</td>
+              </tr>
+              <tr>
+                <td class="table-light">協会</td>
+                <td>{{ debt.secured_type }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">代表者保証</td>
+                <td>{{ debt.is_securedby_management }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">担保</td>
+                <td>{{ debt.is_collateraled }}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">実行日</td>
+                <td>{{ debt.issue_date }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">返済開始</td>
+                <td>{{ debt.start_date }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">月返済額</td>
+                <td>{{ debt.monthly_repayment|to_thousands|intcomma }}千円</td>
+              </tr>
+              <tr>
+                <td class="table-light">回数</td>
+                <td>{{ debt.payment_terms }}回</td>
+              </tr>
+              <tr>
+                <td class="table-light">初月調整金額</td>
+                <td>{{ debt.adjusted_amount_first|to_thousands|intcomma }}千円</td>
+              </tr>
+              <tr>
+                <td class="table-light">最終月調整金額</td>
+                <td>{{ debt.adjusted_amount_last|to_thousands|intcomma }}千円</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        </div>
+      <div class="card-footer text-end">
+        <form method="post" class="mt-4">
+          {% csrf_token %}
+          <div class="d-flex justify-content-end">
+            <button type="button" onclick="history.back()" class="btn btn-outline-secondary me-2">キャンセル</button>
+            <button type="submit" class="btn btn-danger">削除する</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'scoreai/base.html' %}
+
+{% block content %}
+  <h1>業界小分類のCSVファイルをインポート</h1>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">インポート</button>
+  </form>
+{% endblock %}

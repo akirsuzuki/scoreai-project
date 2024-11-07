@@ -1,0 +1,28 @@
+.bg-light-red {
+  background-color: #f8d7da !important;
+}
+
+/* Index.HTMLのDebtのRowで使用 */
+#debt_table tbody tr {
+  cursor: pointer;
+}
+
+
+/* Debts_listのテーブルで使用 */
+#active_debt_list tbody tr,
+#rescheduled_debt_list tbody tr,
+#completed_debt_list tbody tr {
+  cursor: pointer;
+}
+
+div.dt-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media print {
+  .page-break {
+    page-break-before: always;
+  }
+}
+

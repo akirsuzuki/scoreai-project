@@ -1,0 +1,158 @@
+{% load static %}
+{% load humanize %}
+
+<div class="row" id="chart">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="card-title mb-0">年次推移チャート</h5>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-end mb-3">
+          <div id="profitSelector">
+            <input type="checkbox" id="showGrossProfit" checked>
+            <label for="showGrossProfit">粗利益を表示</label>
+            <input type="checkbox" id="showOperatingProfit" checked>
+            <label for="showOperatingProfit">営業利益を表示</label>
+            <input type="checkbox" id="showOrdinaryProfit" checked>
+            <label for="showOrdinaryProfit">経常利益を表示</label>
+          </div>
+
+        </div>
+        <div>
+          <p>単位は千円です。</p>
+        </div>
+        
+        <!-- チャート記述 start -->
+        <canvas id="financialChart" width="400" height="200"></canvas>
+        <!-- チャート記述 end -->
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if fiscal_summary_years.has_previous %}
+        <a href="?page={{ fiscal_summary_years.previous_page_number }}">前へ</a>
+    {% endif %}
+    <span>ページ {{ fiscal_summary_years.number }} / {{ fiscal_summary_years.paginator.num_pages }}</span>
+    {% if fiscal_summary_years.has_next %}
+        <a href="?page={{ fiscal_summary_years.next_page_number }}">次へ</a>
+    {% endif %}
+</div>
+{% endif %}
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const ctx = document.getElementById('financialChart').getContext('2d');
+    const fiscalSummaries = [
+      {% for summary in fiscal_summary_years %}
+        {
+          year: {{ summary.year }},
+          sales: {{ summary.sales|default:0 }},
+          grossProfit: {{ summary.gross_profit|default:0 }},
+          operatingProfit: {{ summary.operating_profit|default:0 }},
+          ordinaryProfit: {{ summary.ordinary_profit|default:0 }}
+        },
+      {% endfor %}
+    ];
+
+    // データを準備
+    const years = fiscalSummaries.map(summary => summary.year);
+    const sales = fiscalSummaries.map(summary => summary.sales);
+    const grossProfits = fiscalSummaries.map(summary => summary.grossProfit);
+    const operatingProfits = fiscalSummaries.map(summary => summary.operatingProfit);
+    const ordinaryProfits = fiscalSummaries.map(summary => summary.ordinaryProfit);
+
+    const chart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: years,
+        datasets: [
+          {
+            label: '売上高',
+            data: sales,
+            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1,
+            yAxisID: 'y'
+          },
+          {
+            label: '粗利益',
+            data: grossProfits,
+            type: 'line',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            borderWidth: 2,
+            fill: false,
+            yAxisID: 'y1'
+          },
+          {
+            label: '営業利益',
+            data: operatingProfits,
+            type: 'line',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderWidth: 2,
+            fill: false,
+            yAxisID: 'y1'
+          },
+          {
+            label: '経常利益',
+            data: ordinaryProfits,
+            type: 'line',
+            borderColor: 'rgba(153, 102, 255, 1)',
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            borderWidth: 2,
+            fill: false,
+            yAxisID: 'y1'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: {
+              display: true,
+              text: '売上高'
+            }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            title: {
+              display: true,
+              text: '利益'
+            },
+            grid: {
+              drawOnChartArea: false
+            }
+          }
+        }
+      }
+    });
+
+    function updateChart() {
+      chart.data.datasets[1].hidden = !document.getElementById('showGrossProfit').checked;
+      chart.data.datasets[2].hidden = !document.getElementById('showOperatingProfit').checked;
+      chart.data.datasets[3].hidden = !document.getElementById('showOrdinaryProfit').checked;
+      chart.update();
+    }
+
+    document.getElementById('showGrossProfit').addEventListener('change', updateChart);
+    document.getElementById('showOperatingProfit').addEventListener('change', updateChart);
+    document.getElementById('showOrdinaryProfit').addEventListener('change', updateChart);
+
+    updateChart();
+  });
+</script>

@@ -1,0 +1,22 @@
+{% extends "scoreai/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">株主名削除確認</h5>
+      </div>
+      <div class="card-body">
+        <p>以下の株主名を削除してもよろしいですか？</p>
+        <p><strong>{{ object.name }}</strong></p>
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">削除</button>
+          <a href="{% url 'stakeholder_name_list' %}" class="btn btn-secondary">キャンセル</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,414 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次PL推移表</h5>
+      </div>
+      <div class="card-body">
+        {% for summary in monthly_summaries %}
+        <div class="table-responsive">
+          <h5 class="table-title">{{ summary.year }}年度</h5>
+          <table class="table table-hover" id="fiscal-summary-table-{{ forloop.counter }}">
+            <thead class="table-light">
+              <tr>
+                <th></th>
+                {% for month in months_label %}
+                <th class="text-center">{{ month }}月</th>
+                {% endfor %}
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <td style="writing-mode: vertical-rl; text-orientation: center;">売上高</td>
+                {% for amount in summary.data %}
+                <td class="text-end equal-width">{{ amount.sales|floatformat:0|intcomma }}</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.sum_sales|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.gross_profit|floatformat:0|intcomma }}</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.sum_gross_profit|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.gross_profit_rate|floatformat:1 }}%</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.average_gross_profit_rate|floatformat:1 }}%</td>
+              </tr>
+
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.operating_profit|floatformat:0|intcomma }}</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.sum_operating_profit|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.operating_profit_rate|floatformat:1 }}%</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.average_operating_profit_rate|floatformat:1 }}%</td>
+              </tr>
+
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.ordinary_profit|floatformat:0|intcomma }}</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.sum_ordinary_profit|floatformat:1|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for amount in summary.data %}
+                <td class="text-end">{{ amount.ordinary_profit_rate|floatformat:1 }}%</td>
+                {% endfor %}
+                <td class="text-end">{{ monthly_summaries_total.average_ordinary_profit_rate|floatformat:1 }}%</td>
+              </tr>
+            </tbody>
+            <tfoot class="table-group-divider">
+              <tr>
+                <td>操作</td>
+                {% for record in summary.data %}
+                <td class="text-end"><a class="btn btn-primary btn-sm"
+                    href="{% url 'fiscal_summary_month_update' record.id %}">編集</a></td>
+                {% endfor %}
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% endfor %}
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
+        <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次推移PLチャート</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="fiscalSummaryChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.equal-width {
+    width: 100px; /* Set your desired width */
+}
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cells = document.querySelectorAll('#fiscal-summary-table td');
+    const labels = [];
+    const salesData = [];
+    const grossProfitData = [];
+    const operatingProfitData = [];
+    const ordinaryProfitData = [];
+    const grossProfitRateData = [];
+    const operatingProfitRateData = [];
+    const ordinaryProfitRateData = [];
+
+    // Extracting data from the table
+    const headerCells = document.querySelectorAll('#fiscal-summary-table th');
+    for (let i = 1; i < headerCells.length - 1; i++) { // Skip Data Type and Total
+      labels.push(headerCells[i].textContent.trim());
+    }
+
+    const salesRow = document.querySelectorAll('#fiscal-summary-table tr')[1]; // Assuming sales data is in the second row
+    salesRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < salesRow.cells.length - 1) { // Skip Data Type and Total
+        salesData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
+      }
+    });
+
+    // Extracting other data
+    const grossProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[2]; // Assuming gross profit data is in the third row
+    grossProfitRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < grossProfitRow.cells.length - 1) {
+        grossProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
+      }
+    });
+
+    const operatingProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[4]; // Assuming operating profit data is in the fifth row
+    operatingProfitRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < operatingProfitRow.cells.length - 1) {
+        operatingProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
+      }
+    });
+
+    const ordinaryProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[6]; // Assuming ordinary profit data is in the seventh row
+    ordinaryProfitRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < ordinaryProfitRow.cells.length - 1) {
+        ordinaryProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
+      }
+    });
+
+    // Extracting rates
+    const grossProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[3]; // Assuming gross profit rate data is in the fourth row
+    grossProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < grossProfitRateRow.cells.length - 1) {
+        grossProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
+      }
+    });
+
+    const operatingProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[5]; // Assuming operating profit rate data is in the sixth row
+    operatingProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < operatingProfitRateRow.cells.length - 1) {
+        operatingProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
+      }
+    });
+
+    const ordinaryProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[7]; // Assuming ordinary profit rate data is in the eighth row
+    ordinaryProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
+      if (index > 0 && index < ordinaryProfitRateRow.cells.length - 1) {
+        ordinaryProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
+      }
+    });
+
+    // Create the chart
+    const ctx = document.getElementById('fiscalSummaryChart').getContext('2d');
+    const fiscalSummaryChart = new Chart(ctx, {
+      type: 'bar', // Change to bar chart for profits
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: '売上高',
+            data: salesData,
+            borderColor: 'rgba(75, 192, 192, 1)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            fill: true,
+          },
+          {
+            label: '粗利益',
+            data: grossProfitData,
+            borderColor: 'rgba(255, 99, 132, 1)',
+            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+            fill: true,
+          },
+          {
+            label: '営業利益',
+            data: operatingProfitData,
+            borderColor: 'rgba(54, 162, 235, 1)',
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+            fill: true,
+          },
+          {
+            label: '経常利益',
+            data: ordinaryProfitData,
+            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            fill: true,
+          },
+          {
+            label: '粗利益率',
+            data: grossProfitRateData,
+            type: 'line', // Change to line chart for rates
+            borderColor: 'rgba(255, 159, 64, 1)',
+            backgroundColor: 'rgba(255, 159, 64, 0.2)',
+            fill: false,
+            yAxisID: 'y1', // Use the right Y-axis for rates
+          },
+          {
+            label: '営業利益率',
+            data: operatingProfitRateData,
+            type: 'line', // Change to line chart for rates
+            borderColor: 'rgba(153, 102, 255, 1)',
+            backgroundColor: 'rgba(153, 102, 255, 0.2)',
+            fill: false,
+            yAxisID: 'y1', // Use the right Y-axis for rates
+          },
+          {
+            label: '経常利益率',
+            data: ordinaryProfitRateData,
+            type: 'line', // Change to line chart for rates
+            borderColor: 'rgba(255, 206, 86, 1)',
+            backgroundColor: 'rgba(255, 206, 86, 0.2)',
+            fill: false,
+            yAxisID: 'y1', // Use the right Y-axis for rates
+          },
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            position: 'left',
+            grid: {
+              drawOnChartArea: true, // グリッド線を有効にする
+            },
+            afterDraw: function (chart) {
+              const ctx = chart.ctx;
+              const yAxis = chart.scales.y;
+              const yValue = yAxis.getPixelForValue(0);
+              ctx.save();
+              ctx.strokeStyle = 'red'; // Color for left Y-axis
+              ctx.lineWidth = 2; // Thicker line
+              ctx.beginPath();
+              ctx.moveTo(yAxis.left, yValue);
+              ctx.lineTo(yAxis.right, yValue);
+              ctx.stroke();
+              ctx.restore();
+            }
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            beginAtZero: true,
+            grid: {
+              drawOnChartArea: true, // グリッド線を有効にする
+            },
+            afterDraw: function (chart) {
+              const ctx = chart.ctx;
+              const yAxis = chart.scales.y1;
+              const yValue = yAxis.getPixelForValue(0);
+              ctx.save();
+              ctx.strokeStyle = 'blue'; // Color for right Y-axis
+              ctx.lineWidth = 2; // Thicker line
+              ctx.setLineDash([5, 5]);
+              ctx.beginPath();
+              ctx.moveTo(yAxis.left, yValue);
+              ctx.lineTo(yAxis.right, yValue);
+              ctx.stroke();
+              ctx.restore();
+            }
+          }
+        },
+      }
+    });
+  });
+</script>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cells = document.querySelectorAll('#fiscal-summary-table td');
+    cells.forEach(cell => {
+      if (cell.textContent.trim() === '0' || cell.textContent.trim() === '0.0%') {
+        cell.textContent = '';  // ゼロの場合は何も表示しない
+      }
+    });
+  });
+</script>
+{% endblock %}
+
+
+
+<table class="table table-hover" id="fiscal-summary-table">
+  <thead class="table-light">
+    <tr>
+      <th></th>
+      {% for month in months_label %}
+      <th class="text-center">{{ month }}月</th>
+      {% endfor %}
+      <th>Total</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    <tr>
+      <td>売上高</td>
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.sales|floatformat:0|intcomma }}</td>
+      {% endfor %}
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.sum_sales|floatformat:0|intcomma }}</td>
+    </tr>
+    <tr>
+      <td rowspan="2">粗利益</td>
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.gross_profit|floatformat:0|intcomma }}</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.sum_gross_profit|floatformat:0|intcomma }}</td>
+      <!-- Use the total_gross_profit calculated in the view -->
+      {% endfor %}
+    </tr>
+    <tr class="bg-light">
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.gross_profit_rate|floatformat:1 }}%</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.average_gross_profit_rate|floatformat:1 }}%</td>
+      <!-- Use the total_gross_profit calculated in the view -->
+      {% endfor %}
+    </tr>
+
+    <tr>
+      <td rowspan="2">営業利益</td>
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.operating_profit|floatformat:0|intcomma }}</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.sum_operating_profit|floatformat:0|intcomma }}</td>
+      <!-- Use the total_operating_profit calculated in the view -->
+      {% endfor %}
+    </tr>
+    <tr class="bg-light">
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.operating_profit_rate|floatformat:1 }}%</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.average_operating_profit_rate|floatformat:1 }}%</td>
+      <!-- Use the total_operating_profit calculated in the view -->
+      {% endfor %}
+    </tr>
+
+    <tr>
+      <td rowspan="2">経常利益</td>
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.ordinary_profit|floatformat:0|intcomma }}</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.sum_ordinary_profit|floatformat:1|intcomma }}</td>
+      <!-- Use the total_ordinary_profit calculated in the view -->
+      {% endfor %}
+    </tr>
+    <tr class="bg-light"> <!-- Added row for 経常利益率 -->
+      {% for summary in monthly_summaries %}
+      {% for amount in summary.data %}
+      <td class="text-end">{{ amount.ordinary_profit_rate|floatformat:1 }}%</td>
+      {% endfor %}
+      <td class="text-end">{{ monthly_summaries_total.average_ordinary_profit_rate|floatformat:1 }}%</td>
+      {% endfor %}
+    </tr>
+  </tbody>
+  <tfoot class="table-group-divider">
+    <tr>
+      <td>操作</td>
+      {% for item in monthly_summaries %}
+      {% for record in item.data %}
+      <td class="text-end"><a class="btn btn-primary btn-sm"
+          href="{% url 'fiscal_summary_month_update' record.id %}">編集</a></td>
+      {% endfor %}
+      {% endfor %}
+    </tr>
+  </tfoot>
+</table>

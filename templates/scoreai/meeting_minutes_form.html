@@ -1,0 +1,42 @@
+{% extends "scoreai/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12">
+        <form method="post" novalidate>
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        {% if form.instance.pk %}
+                        ミーティングノート編集
+                        {% else %}
+                        新規ミーティングノート作成
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="card-body">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                    </div>
+                </div>
+                <div class="card-footer text-end">
+                    <button type="submit" class="btn btn-primary">
+                        {% if form.instance.pk %}
+                        更新
+                        {% else %}
+                        作成
+                        {% endif %}
+                    </button>
+                    {% if form.instance.pk %}
+                    <a href="{% url 'meeting_minutes_delete' this_company form.instance.pk %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+                    {% endif %}
+    
+                    <button type="button" class="btn btn-outline-secondary" onclick="history.back()">キャンセル</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

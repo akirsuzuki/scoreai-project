@@ -1,0 +1,101 @@
+{% load humanize %}
+{% load custom_filters %}
+
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">年次推移表</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-end mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="showDrafts" onchange="toggleDrafts(this)" {% if is_draft %}checked{% endif %}>
+            <label class="form-check-label" for="showDrafts">
+              下書きデータも表示
+            </label>
+            <p class="small">下のチャートも同時に反映します。</p>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered" id="fiscal_summary_table">
+            <thead class="table-light">
+              <tr>
+                <th>項目</th>
+                {% for summary in fiscal_summary_years %}
+                <th class="text-center">{{ summary.year }}年度
+                {% if summary.is_draft %}<i class="fas fa-pencil-alt text-danger" title="下書き"></i>{% endif %}
+                </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <td>売上高</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.sales|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>売上総利益</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.gross_profit|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>営業利益</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.operating_profit|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>経常利益</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.ordinary_profit|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>繰越欠損金</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.tax_loss_carryforward|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td></td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-center">
+                  <a href="{% url 'fiscal_summary_year_detail' summary.id %}" class="btn btn-sm btn-info">詳細</a>
+                  <a href="{% url 'fiscal_summary_year_update' summary.id %}" class="btn btn-sm btn-warning">編集</a>
+                </td>
+                {% endfor %}
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="{{ fiscal_summary_years|length|add:1 }}">
+                  <p>単位は千円です。</p>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% if is_paginated %}
+        <!-- ページネーションコントロール -->
+        {% if fiscal_summary_years.has_previous %}
+            <a href="?page={{ fiscal_summary_years.previous_page_number }}">Previous</a>
+        {% endif %}
+    
+          <span>Page {{ fiscal_summary_years.number }} of {{ fiscal_summary_years.paginator.num_pages }}</span>
+    
+            {% if fiscal_summary_years.has_next %}
+                <a href="?page={{ fiscal_summary_years.next_page_number }}">Next</a>
+            {% endif %}
+        {% endif %}
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'fiscal_summary_year_create' %}" class="btn btn-primary">新規決算データ作成</a>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,44 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">決算データの削除確認</h5>
+        </div>
+        <div class="card-body">
+          <p>{{ object.year }}年度の決算データを削除しようとしています。この操作は取り消せません。</p>
+          <p>削除する前にデータをCSVでダウンロードしますか？</p>
+          削除しようとしているデータだけダウンロード
+          自社のデータ全てダウンロード
+          
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <a href="{% url 'download_fiscal_summary_year_csv_param' object.id %}" class="btn btn-secondary">CSVダウンロード</a>
+            </div>
+            <div class="mb-3">
+              <button type="submit" class="btn btn-danger">削除する</button>
+              <a href="{% url 'fiscal_summary_year_list' %}" class="btn btn-secondary">キャンセル</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

@@ -1,0 +1,26 @@
+{% extends "scoreai/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <form method="post">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">{% if form.instance.pk %}株主名編集{% else %}新規株主名登録{% endif %}</h5>
+      </div>
+      <div class="card-body">
+          {% csrf_token %}
+          {{ form|crispy }}
+      </div>
+      <div class="card-footer text-end">
+        <button type="submit" class="btn btn-primary me-2">保存</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">キャンセル</button>        {% if form.instance.pk %}
+        <a href="{% url 'stakeholder_name_delete' form.instance.pk %}" class="btn btn-danger">削除</a>
+        {% endif %}
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

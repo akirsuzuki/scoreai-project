@@ -1,0 +1,13 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>業界別ベンチーマークのCSVインポート</h1>
+<p>year,industry_classification_code,industry_subclassification_code,company_size,indicator_name,median,standard_deviation,range_iv,range_iii,range_ii,range_i,memo</p>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">インポート</button>
+</form>
+{% endblock %}

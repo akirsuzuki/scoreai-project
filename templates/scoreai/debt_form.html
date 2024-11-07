@@ -1,0 +1,248 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+ <!-- Select2  -->
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ 
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+ {{ form.media }}
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card w-100">
+    <form method="post" class="needs-validation" novalidate>
+      {% csrf_token %}
+
+    <div class="card-header">
+      {% if debt %}
+      <h5 class="card-title mb-0">{{ debt.financial_institution }}/{{ debt.principal|to_thousands|intcomma }}千円</h5>
+      {% else %}
+      <h5 class="card-title mb-0">新規借入登録</h5>
+      {% endif %}
+    </div>
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.financial_institution.id_for_label }}" class="form-label">{{ form.financial_institution.label }}</label>
+              {{ form.financial_institution }}
+              {% if form.financial_institution.help_text %}
+                <small class="form-text text-muted">{{ form.financial_institution.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.principal.id_for_label }}" class="form-label">{{ form.principal.label }}</label>
+              {{ form.principal }}
+              {% if form.principal.help_text %}
+                <small class="form-text text-muted">{{ form.principal.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.issue_date.id_for_label }}" class="form-label">{{ form.issue_date.label }}</label>
+              {{ form.issue_date }}
+              {% if form.issue_date.help_text %}
+                <small class="form-text text-muted">{{ form.issue_date.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.start_date.id_for_label }}" class="form-label">{{ form.start_date.label }}</label>
+              {{ form.start_date }}
+              {% if form.start_date.help_text %}
+                <small class="form-text text-muted">{{ form.start_date.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.interest_rate.id_for_label }}" class="form-label">{{ form.interest_rate.label }}</label>
+              {{ form.interest_rate }}
+              {% if form.interest_rate.help_text %}
+                <small class="form-text text-muted">{{ form.interest_rate.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.monthly_repayment.id_for_label }}" class="form-label">{{ form.monthly_repayment.label }}</label>
+              {{ form.monthly_repayment }}
+              {% if form.monthly_repayment.help_text %}
+                <small class="form-text text-muted">{{ form.monthly_repayment.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.secured_type.id_for_label }}" class="form-label">{{ form.secured_type.label }}</label>
+              {{ form.secured_type }}
+              {% if form.secured_type.help_text %}
+                <small class="form-text text-muted">{{ form.secured_type.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.adjusted_amount_first.id_for_label }}" class="form-label">{{ form.adjusted_amount_first.label }}</label>
+              {{ form.adjusted_amount_first }}
+              {% if form.adjusted_amount_first.help_text %}
+                <small class="form-text text-muted">{{ form.adjusted_amount_first.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.adjusted_amount_last.id_for_label }}" class="form-label">{{ form.adjusted_amount_last.label }}</label>
+              {{ form.adjusted_amount_last }}
+              {% if form.adjusted_amount_last.help_text %}
+                <small class="form-text text-muted">{{ form.adjusted_amount_last.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group mb-3">
+              <label for="{{ form.memo_short.id_for_label }}" class="form-label">{{ form.memo_short.label }}</label>
+              {{ form.memo_short }}
+              {% if form.memo_short.help_text %}
+                <small class="form-text text-muted">{{ form.memo_short.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-12">
+            <div class="form-group mb-3">
+              <label for="{{ form.memo_long.id_for_label }}" class="form-label">{{ form.memo_long.label }}</label>
+              {{ form.memo_long }}
+              {% if form.memo_long.help_text %}
+                <small class="form-text text-muted">{{ form.memo_long.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <hr>
+        <div class="col-md-12">
+          <div class="alert alert-warning" role="alert">
+            <h5 class="alert-heading">リスケをした場合の更新方法</h5>
+            <p>リスケをした場合は、まず「リスケ」のチェックボックスをONにしてください。<br>
+            リスケ日とリスケ時点の残高を入力してください。<br>
+            リスケ時点の残高を元本として、新しい借入を登録してください。その借入では、実行日は元の借入のリスケ日となります。</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+            <label for="{{ form.is_rescheduled.id_for_label }}" class="form-label">{{ form.is_rescheduled.label }}</label>
+            <br>{{ form.is_rescheduled }}<br>
+            {% if form.is_rescheduled.help_text %}
+              <small class="form-text text-muted">{{ form.is_rescheduled.help_text }}</small>
+            {% endif %}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="{{ form.reschedule_date.id_for_label }}" class="form-label">{{ form.reschedule_date.label }}</label>
+              {{ form.reschedule_date }}
+              {% if form.reschedule_date.help_text %}
+                <small class="form-text text-muted">{{ form.reschedule_date.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+              <label for="{{ form.reschedule_balance.id_for_label }}" class="form-label">{{ form.reschedule_balance.label }}</label>
+              {{ form.reschedule_balance }}
+              {% if form.reschedule_balance.help_text %}
+                <small class="form-text text-muted">{{ form.reschedule_balance.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <hr>
+        <div class="col-md-12">
+          <div class="alert alert-info" role="alert">
+            <h5 class="alert-heading">アーカイブ</h5>
+            <p>すでに返済を完了した場合など、表示する必要がない場合は以下のチェックボックスをONにしてください。<br>
+              チェックされた借入は、一覧表には表示されず、合計の計算などでも対象外となります。（アーカイブ一覧にのみ表示されます。）</p>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-group mb-3">
+            <label for="{{ form.is_nodisplay.id_for_label }}" class="form-label">{{ form.is_nodisplay.label }}</label>
+            <br>{{ form.is_nodisplay }}<br>
+            {% if form.is_nodisplay.help_text %}
+              <small class="form-text text-muted">{{ form.is_nodisplay.help_text }}</small>
+            {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
+      <button type="submit" class="btn btn-primary me-2">保存</button>
+    </div>
+  </form>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap Datepicker JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.ja.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    console.log("Document ready");
+    
+    // Select2の初期化
+    $('#{{ form.financial_institution.id_for_label }}').select2({
+        theme: 'bootstrap-5'
+    });
+    console.log("Select2 initialized for financial institution");
+});
+</script>
+
+{% endblock %}

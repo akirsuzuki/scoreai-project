@@ -1,0 +1,604 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0"><strong>{{ fiscal_summary_year.year }}</strong> 年度 決算情報詳細</h5>
+      </div>
+      <div class="card-body">
+        <!-- タブナビゲーション -->
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="bs-tab" data-bs-toggle="tab" data-bs-target="#bs-info" type="button"
+              role="tab" aria-controls="bs-info" aria-selected="true">貸借対照表情報</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pl-tab" data-bs-toggle="tab" data-bs-target="#pl-info" type="button" role="tab"
+              aria-controls="pl-info" aria-selected="false">損益計算書情報</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="tax-tab" data-bs-toggle="tab" data-bs-target="#tax-info" type="button"
+              role="tab" aria-controls="tax-info" aria-selected="false">税務申告情報</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes-info" type="button"
+              role="tab" aria-controls="notes-info" aria-selected="false">決算留意事項</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai-info" type="button"
+              role="tab" aria-controls="ai-info" aria-selected="false"><i class="fas fa-robot me-2"></i>AI診断</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="analysis-tab" data-bs-toggle="tab" data-bs-target="#analysis-info" type="button"
+              role="tab" aria-controls="analysis-info" aria-selected="false"><i class="fas fa-chart-pie me-2"></i>分析チャート</button>
+          </li>
+        </ul>
+
+        <!-- タブコンテンツ -->
+        <div class="tab-content" id="myTabContent">
+          <div class="tab-pane fade show active" id="bs-info" role="tabpanel" aria-labelledby="bs-tab">
+            <!-- 貸借対照表情報の内容 -->
+            <h3>貸借対照表情報</h3>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-6 border-end">
+                    <h4 class="mb-3">資産の部</h4>
+                    <!-- 流動資産 -->
+                    <div class="card mb-3 bg-light">
+                      <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2">I. 流動資産</h5>
+                        <div class="ms-3">
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">現金預金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.cash_and_deposits|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">売掛金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.accounts_receivable|intcomma }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">棚卸資産</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.inventory|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">短期貸付金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{fiscal_summary_year.short_term_loans_receivable|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">その他流動資産</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.other_current_assets|intcomma }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-2 row mt-3">
+                          <label class="col-sm-6 col-form-label fw-bold">流動資産合計</label>
+                          <div class="col-sm-6">
+                            <p class="form-control-plaintext fw-bold">{{fiscal_summary_year.total_current_assets|intcomma }}</p>
+                          </div>
+                        </div>
+                        <div class="mt-2 small text-muted">
+                          <i class="fas fa-info-circle me-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="{{ technical_terms.current_ratio.0 }}"></i>
+                          流動比率：<span class="fw-bold">{{ fiscal_summary_year.current_ratio|floatformat:2 }}%</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 固定資産 -->
+                    <div class="card mb-3">
+                      <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2">II. 固定資産</h5>
+
+                        <!-- 有形固定資産 -->
+                        <div class="card mb-3 bg-light">
+                          <div class="card-body">
+                            <h6 class="card-title">
+                              [ 有形固定資産 ]
+                            </h6>
+                            <div class="ms-4">
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">土地</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.land|intcomma }}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">建物</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.buildings|intcomma }}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">機械装置</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.machinery_equipment|intcomma}}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">車両運搬具</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.vehicles|intcomma }}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">減価償却累計額</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{fiscal_summary_year.accumulated_depreciation|intcomma }}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">その他有形固定資産</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{fiscal_summary_year.other_tangible_fixed_assets|intcomma }}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-2 row mt-3">
+                              <label class="col-sm-6 col-form-label fw-bold">有形固定資産合計</label>
+                              <div class="col-sm-6">
+                                <p class="form-control-plaintext fw-bold">{{fiscal_summary_year.total_tangible_fixed_assets|intcomma }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- 無形固定資産 -->
+                        <div class="card mb-3 bg-light">
+                          <div class="card-body">
+                            <h6 class="card-title">
+                              [ 無形固定資産 ]
+                            </h6>
+                            <div class="ms-4">
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">のれん</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.goodwill|intcomma }}</p>
+                                </div>
+                              </div>
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">その他無形固定資産</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{ fiscal_summary_year.other_intangible_assets|intcomma }}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-2 row mt-3">
+                              <label class="col-sm-6 col-form-label fw-bold">無形固定資産合計</label>
+                              <div class="col-sm-6">
+                                <p class="form-control-plaintext fw-bold">{{fiscal_summary_year.total_intangible_assets|intcomma }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- 投資その他の資産 -->
+                        <div class="card mb-3 bg-light">
+                          <div class="card-body">
+                            <h6 class="card-title">
+                              [ 投資その他の資産 ]
+                            </h6>
+                            <div class="ms-4">
+                              <div class="mb-2 row">
+                                <label class="col-sm-6 col-form-label">長期貸付金</label>
+                                <div class="col-sm-6">
+                                  <p class="form-control-plaintext">{{fiscal_summary_year.long_term_loans_receivable|intcomma }}</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-2 row mt-3">
+                              <label class="col-sm-6 col-form-label fw-bold">投資その他の資産合計</label>
+                              <div class="col-sm-6">
+                                <p class="form-control-plaintext fw-bold">{{fiscal_summary_year.investment_other_assets|intcomma }}</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- 固定資産合計 -->
+                        <div class="mb-2 row mt-3">
+                          <label class="col-sm-6 col-form-label fw-bold">固定資産合計</label>
+                          <div class="col-sm-6">
+                            <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.total_fixed_assets|intcomma }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 資産合計 -->
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">資産の部合計</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.total_assets|intcomma }}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <h4 class="mb-3">負債の部</h4>
+
+                    <!-- 流動負債 -->
+                    <div class="card mb-3 bg-light">
+                      <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2">I. 流動負債</h5>
+                        <div class="ms-3">
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">買掛金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.accounts_payable|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">短期借入金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.short_term_loans_payable|intcomma}}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">その他流動負債</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{fiscal_summary_year.other_current_liabilities|intcomma }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-2 row mt-3">
+                          <label class="col-sm-6 col-form-label fw-bold">流動負債合計</label>
+                          <div class="col-sm-6">
+                            <p class="form-control-plaintext fw-bold">{{fiscal_summary_year.total_current_liabilities|intcomma }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 固定負債 -->
+                    <div class="card mb-3 bg-light">
+                      <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2">II. 固定負債</h5>
+                        <div class="ms-3">
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">長期借入金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.long_term_loans_payable|intcomma}}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">その他固定負債</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.other_long_term_liabilities|intcomma }}</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-2 row mt-3">
+                          <label class="col-sm-6 col-form-label fw-bold">固定負債合計</label>
+                          <div class="col-sm-6">
+                            <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.total_long_term_liabilities|intcomma }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- 負債合計 -->
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">負債の部合計</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.total_liabilities|intcomma }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <!-- 純資産の部 -->
+                    <h4 class="mb-3">純資産の部</h4>
+                    <div class="card mb-3 bg-light">
+                      <div class="card-body">
+                        <h5 class="card-title border-bottom pb-2">純資産</h5>
+                        <div class="ms-3">
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">資本金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.capital_stock|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">資本剰余金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.capital_surplus|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">利益剰余金</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.retained_earnings|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">株主資本合計</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.total_stakeholder_equity|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">評価・換算差額等</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{fiscal_summary_year.valuation_and_translation_adjustment|intcomma }}</p>
+                            </div>
+                          </div>
+                          <div class="mb-2 row">
+                            <label class="col-sm-6 col-form-label">新株予約権</label>
+                            <div class="col-sm-6">
+                              <p class="form-control-plaintext">{{ fiscal_summary_year.new_shares_reserve|intcomma }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="mb-2 row mt-3">
+                          <label class="col-sm-6 col-form-label fw-bold">純資産の部合計</label>
+                          <div class="col-sm-6">
+                            <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.total_net_assets|intcomma }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- 役員借入金 -->
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label class="form-label">役員貸付金/借入金（千円）</label>
+                      <p class="form-control-plaintext">{{ fiscal_summary_year.directors_loan|intcomma }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="alert alert-info" role="alert">
+                      <h5 class="alert-heading">役員貸付金/借入金についての注意事項</h5>
+                      <p>役員貸付金と役員借入金を相殺し、役員貸付金に残高が残ればその額をプラスの値で、役員借入金に残高が残ればその額をマイナスの金額で入れてください。</p>
+                      <p>長期短期の分類は不要です。また、基本的には代表者に対する貸付金/借入金のみを入力し、複数年度で比較できるようにしてください。</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="tab-pane fade" id="pl-info" role="tabpanel" aria-labelledby="pl-tab">
+            <!-- 損益計算書情報の内容 -->
+            <h3>損益計算書情報</h3>
+            <div class="row">
+              <div class="col-md-6">
+                <!-- I. 売上総利益 -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title">I. 売上総利益</h5>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">売上高</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.sales|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">売上原価</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.cost_of_sales|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label ps-5">売上原価に含まれる減価償却費</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.depreciation_cogs|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">売上総利益</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.gross_profit|intcomma }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- II. 営業利益 -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title">II. 営業利益</h5>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">販売費及び一般管理費</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.selling_general_admin_expenses|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label ps-5">役員報酬</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.directors_compensation|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label ps-5">給与・雑給</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.payroll_expense|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label ps-5">減価償却費</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.depreciation_expense|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label ps-5">その他の償却額</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.other_amortization_expense|intcomma }}
+                        </p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">営業利益</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.operating_profit|intcomma }}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <!-- III. 経常利益 -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title">III. 経常利益</h5>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">営業外で計上された償却費</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{fiscal_summary_year.non_operating_amortization_expense|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">支払利息</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.interest_expense|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">雑収入</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.other_income|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">雑損失</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.other_loss|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">経常利益</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.ordinary_profit|intcomma }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- IV. 当期純利益 -->
+                <div class="card mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title">IV. 当期純利益</h5>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">特別利益</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.extraordinary_income|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">特別損失</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.extraordinary_loss|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">法人税等</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.income_taxes|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label fw-bold">当期純利益</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext fw-bold">{{ fiscal_summary_year.net_profit|intcomma }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="tax-info" role="tabpanel" aria-labelledby="tax-tab">
+            <!-- 税務申告情報の内容 -->
+            <h3>税務申告情報</h3>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">繰越欠損金</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.tax_loss_carryforward|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">期末従業員数</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.number_of_employees_EOY }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">期末発行済み株式数</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.issued_shares_EOY|intcomma }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="notes-info" role="tabpanel" aria-labelledby="notes-tab">
+            <!-- 決算留意事項の内容 -->
+            <h3>決算留意事項</h3>
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="mb-3">
+                  <label class="form-label">留意事項</label>
+                  <p>{{ fiscal_summary_year.financial_statement_notes|linebreaks }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% include 'scoreai/fiscal_summary_year_detail_analysis.html' %}
+
+        </div>
+
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'fiscal_summary_year_update' fiscal_summary_year.id %}" class="btn btn-primary">編集</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

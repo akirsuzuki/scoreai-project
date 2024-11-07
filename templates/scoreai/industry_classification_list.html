@@ -1,0 +1,22 @@
+{% extends "scoreai/base.html" %}
+{% block content %}
+<h1>業界分類一覧</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>分類コード</th>
+            <th>業界名</th>
+            <th>備考</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for classification in industry_classifications %}
+        <tr>
+            <td>{{ classification.code }}</td>
+            <td>{{ classification.name }}</td>
+            <td>{{ classification.memo }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

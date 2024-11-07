@@ -1,0 +1,209 @@
+{% load static %}
+
+<div class="row">
+  <div class="col-lg-8 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-body">
+        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+          <div class="mb-3 mb-sm-0">
+            <h5 class="card-title fw-semibold">Sales Overview</h5>
+          </div>
+        </div>
+        <!-- チャート記述 start -->
+        <canvas id="chart_montly_revenue"></canvas>
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            var months_label = {{ months_label| safe }};
+            var sales = {{ sales| safe }};
+            var grossProfit = {{ gross_profit| safe }};
+            var operatingProfit = {{ operating_profit| safe }};
+            var ordinaryProfit = {{ ordinary_profit| safe }};
+            var rateGrossProfit = grossProfit.map((gp, index) => sales[index] ? gp / sales[index] : 0);
+            var rateOperatingProfit = operatingProfit.map((op, index) => sales[index] ? op / sales[index] : 0);
+            var rateOrdinaryProfit = ordinaryProfit.map((op, index) => sales[index] ? op / sales[index] : 0);
+
+            // 月データが12ヶ月分ない場合、不足分を補う
+            while (months_label.length < 12) {
+              months_label.push(months_label.length + 1);
+            }
+
+            // 月ごとにデータがない場合は0を設定
+            var defaultData = Array(months_label.length).fill(0);
+            sales = sales.length ? sales : defaultData;
+            grossProfit = grossProfit.length ? grossProfit : defaultData;
+            operatingProfit = operatingProfit.length ? operatingProfit : defaultData;
+            ordinaryProfit = ordinaryProfit.length ? ordinaryProfit : defaultData;
+
+            var ctx = document.getElementById('chart_montly_revenue').getContext('2d');
+            var chart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: months_label.map(m => m + '月'),
+                datasets: [{
+                  label: '売上高',
+                  data: sales,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1,
+                  yAxisID: 'y'
+                }, {
+                  label: '売上総利益',
+                  data: grossProfit,
+                  backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  borderWidth: 1,
+                  yAxisID: 'y'
+                }, {
+                  label: '営業利益',
+                  data: operatingProfit,
+                  backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                  borderColor: 'rgba(255, 206, 86, 1)',
+                  borderWidth: 1,
+                  yAxisID: 'y'
+                }, {
+                  label: '経常利益',
+                  data: ordinaryProfit,
+                  backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                  borderColor: 'rgba(153, 102, 255, 1)',
+                  borderWidth: 1,
+                  yAxisID: 'y'
+                }, {
+                  label: '売上総利益率',
+                  data: rateGrossProfit.map(rate => rate * 100),
+                  borderColor: 'rgba(54, 162, 235, 1)',
+                  backgroundColor: 'rgba(54, 162, 235, 0)',
+                  borderWidth: 2,
+                  type: 'line',
+                  yAxisID: 'y1'
+                }, {
+                  label: '営業利益率',
+                  data: rateOperatingProfit.map(rate => rate * 100),
+                  borderColor: 'rgba(255, 206, 86, 1)',
+                  backgroundColor: 'rgba(255, 206, 86, 0)',
+                  borderWidth: 2,
+                  type: 'line',
+                  yAxisID: 'y1'
+                }, {
+                  label: '経常利益率',
+                  data: rateOrdinaryProfit.map(rate => rate * 100),
+                  borderColor: 'rgba(153, 102, 255, 1)',
+                  backgroundColor: 'rgba(153, 102, 255, 0)',
+                  borderWidth: 2,
+                  type: 'line',
+                  yAxisID: 'y1'
+                }]
+              },
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                    position: 'left',
+                    ticks: {
+                      callback: function(value) {
+                        return value.toLocaleString(); // y軸の値をカンマ区切りにする
+                      }
+                    }
+                  },
+                  y1: {
+                    beginAtZero: true,
+                    position: 'right',
+                    ticks: {
+                      callback: function(value) {
+                        return value + '%'; // y1軸の値にパーセントを追加
+                      }
+                    }
+                  }
+                }
+              }
+            });
+
+            // 合計値を計算
+            var totalSales = sales.reduce((acc, curr) => acc + curr, 0);
+            var totalOperating = operatingProfit.reduce((acc, curr) => acc + curr, 0);
+
+            // 合計値を表示
+            var totalDiv = document.createElement('div');
+            totalDiv.style.textAlign = 'right';
+            totalDiv.style.marginRight = '20px';
+            totalDiv.innerHTML = `<strong>売上高合計: ${totalSales.toLocaleString()}</strong> | <strong>営業利益合計: ${totalOperating.toLocaleString()}</strong>`;
+            document.querySelector("#chart_montly_revenue").after(totalDiv);
+          });
+        </script>
+      <div class="d-flex justify-content-end">
+        <a href="{% url 'debts_all' %}" class="btn btn-primary m-1">売上データの入力・編集</a>
+      </div>
+    </div>
+
+      <!-- チャート記述 end -->
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card overflow-hidden">
+          <div class="card-body p-4">
+            <h5 class="card-title mb-9 fw-semibold">現時点合計</h5>
+            <div class="row align-items-center">
+              <div class="col-8">
+                <h4 class="fw-semibold mb-3">$36,358</h4>
+                <div class="d-flex align-items-center mb-3">
+                  <span
+                    class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
+                    <i class="ti ti-arrow-up-left text-success"></i>
+                  </span>
+                  <p class="text-dark me-1 fs-3 mb-0">+9%</p>
+                  <p class="fs-3 mb-0">last year</p>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="me-4">
+                    <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
+                    <span class="fs-2">2023</span>
+                  </div>
+                  <div>
+                    <span class="round-8 bg-light-primary rounded-circle me-2 d-inline-block"></span>
+                    <span class="fs-2">2023</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="d-flex justify-content-center">
+                  <div id="breakup"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <!-- Monthly Earnings -->
+        <div class="card">
+          <div class="card-body">
+            <div class="row alig n-items-start">
+              <div class="col-8">
+                <h5 class="card-title mb-9 fw-semibold"> Monthly Earnings </h5>
+                <h4 class="fw-semibold mb-3">$6,820</h4>
+                <div class="d-flex align-items-center pb-1">
+                  <span
+                    class="me-2 rounded-circle bg-light-danger round-20 d-flex align-items-center justify-content-center">
+                    <i class="ti ti-arrow-down-right text-danger"></i>
+                  </span>
+                  <p class="text-dark me-1 fs-3 mb-0">+9%</p>
+                  <p class="fs-3 mb-0">last year</p>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="d-flex justify-content-end">
+                  <div
+                    class="text-white bg-secondary rounded-circle p-6 d-flex align-items-center justify-content-center">
+                    <i class="ti ti-currency-dollar fs-6"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="earning"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

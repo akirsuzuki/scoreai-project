@@ -1,0 +1,53 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次財務サマリー詳細</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th>年度</th>
+              <td>{{ fiscal_summary_month.fiscal_summary_year.year }}</td>
+            </tr>
+            <tr>
+              <th>月</th>
+              <td>{{ fiscal_summary_month.period }}</td>
+            </tr>
+            <tr>
+              <th>売上高</th>
+              <td>{{ fiscal_summary_month.sales|intcomma }} 千円</td>
+            </tr>
+            <tr>
+              <th>粗利益</th>
+              <td>{{ fiscal_summary_month.gross_profit|intcomma }} 千円</td>
+            </tr>
+            <tr>
+              <th>営業利益</th>
+              <td>{{ fiscal_summary_month.operating_profit|intcomma }} 千円</td>
+            </tr>
+            <tr>
+              <th>経常利益</th>
+              <td>{{ fiscal_summary_month.ordinary_profit|intcomma }} 千円</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'fiscal_summary_month_update' fiscal_summary_month.id %}" class="btn btn-primary">編集</a>
+        <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-secondary">戻る</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

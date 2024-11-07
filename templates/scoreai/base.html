@@ -1,0 +1,92 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>
+    {% block title %}
+    {% endblock %}
+  </title>
+  {% block head %}
+  {% endblock %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="shortcut icon" type="image/png"
+    href="{% static 'Modernize-1.0.0/src/assets/images/logos/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <!-- <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/src/simplebar.css' %}" /> -->
+  <script src="https://kit.fontawesome.com/c0e97851db.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="{% static 'scoreai/css/custom.css' %}" />
+  
+</head>
+
+<body>
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar -->
+    {% include 'scoreai/base-sidebar.html' %}
+    <!--  Main wrapper -->
+    <div class="body-wrapper">
+      <!--  Body Header -->
+      {% include 'scoreai/base-header.html' %}
+
+      <div class="container-fluid">        
+        <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
+          <div class="card-body px-4 py-3">
+            <div class="row align-items-center">
+              <div class="col-9">
+                <h4 class="fw-semibold mb-8">{{ title }}</h4>
+                {% block breadcrumb %}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% if messages or form.errors %}
+          <div class="alert {% if form.errors %}alert-danger{% else %}alert-info{% endif %}" role="alert">
+            <h4 class="alert-heading">
+              {% if form.errors %}エラーが発生しました{% endif %}
+            </h4>
+            <ul>
+              {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+              {% endfor %}
+              {% if form.errors %}
+                {% for field in form %}
+                  {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                  {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              {% endif %}
+            </ul>
+          </div>
+        {% endif %}
+
+      {% block content %}
+
+      {% endblock %}
+      </div>
+      {% include 'scoreai/base-footer.html' %}
+
+    </div>
+  </div>
+
+  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script> -->
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/js/sidebarmenu.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/js/app.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js' %}"></script>
+  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/js/dashboard.js' %}"></script> -->
+  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/src/simplebar.js' %}"></script> -->
+
+</body>
+{% block foot %}
+{% endblock %}
+</html>

@@ -1,0 +1,69 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+
+{% block head %}
+ <!-- DataTables CSS -->
+ <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+ <!-- jQuery -->
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <!-- DataTables JS -->
+ <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">会社情報編集</h5>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary">更新</button>
+          <a href="{% url 'company_detail' id=object.id %}" class="btn btn-secondary">キャンセル</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+  $(function () {
+    $('#id_industry_classification').change(function () {
+      var url = '{% url "ajax_load_industry_subclassifications" %}';  // URL to fetch sub classifications
+      var industryClassificationId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'industry_classification': industryClassificationId
+        },
+        success: function (data) {
+          var $subclassification = $('#id_industry_subclassification');
+          $subclassification.empty();
+          $subclassification.append('<option value="">---------</option>');
+          $.each(data, function (key, value) {
+            $subclassification.append('<option value="' + value.id + '">' + value.name + '</option>');
+          });
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
+

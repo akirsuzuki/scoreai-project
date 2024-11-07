@@ -1,0 +1,31 @@
+{% extends "scoreai/base.html" %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-12 d-flex align-items-strech">
+        <div class="card w-100">
+            <form method="post">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    {% if object %}株式イベント明細の編集
+                    {% else %}株式イベント明細の追加
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                {{ form.as_p }}
+            </div>
+            <div class="card-footer text-end">
+                <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

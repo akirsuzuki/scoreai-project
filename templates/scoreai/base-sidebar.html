@@ -1,0 +1,263 @@
+{% load static %}
+
+<!-- Sidebar Start -->
+<aside class="left-sidebar">
+  <!-- Sidebar scroll-->
+  <div>
+    <div class="brand-logo d-flex align-items-center justify-content-between">
+      <a href="{% url 'index' %}" class="text-nowrap logo-img">
+        <img src="{% static 'Modernize-1.0.0/src/assets/images/logos/dark-logo.svg' %}" width="180" alt="" />
+      </a>
+      <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+        <i class="ti ti-x fs-8"></i>
+      </div>
+    </div>
+    <!-- Sidebar navigation-->
+    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+      <ul id="sidebarnav">
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Home</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
+            <span class="hide-menu">Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Management</span>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">借入管理</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'debts_all' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">借入一覧</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'debts_byBank' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">金融機関別</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'debts_bySecuredType' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">保証別</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'debts_archived' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">アーカイブ済み</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'debt_create' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">新規借入</span>
+              </a>
+            </li>
+
+          </ul>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">月次PL</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">3期比較の月次推移</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">直近年度の月次推移</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">決算数値</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_year_list_recent' %}?is_draft=false" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">直近5年間の年次推移</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">株主情報</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'stakeholder_name_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">株主名一覧</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'stock_event_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">株式発行一覧</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">ローカルベンチマーク</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'industry_benchmark_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">業界別ベンチマーク一覧</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="" aria-expanded="false">
+            <span class="hide-menu">AIに相談</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'meeting_minutes_list' %}" aria-expanded="false">
+            <span class="hide-menu">ノート</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_create' %}" aria-expanded="false">
+            <span class="hide-menu">ユーザー登録</span>
+          </a>
+        </li>
+
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
+            <span class="hide-menu">CSV Import</span><i class="fa-solid fa-angles-right"></i>
+          </a>
+          <ul aria-expanded="false" class="collapse first-level">
+            <li class="sidebar-item">
+              <a href="{% url 'import_fiscal_summary_month' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">月次PL</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'import_fiscal_summary_year' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">年次決算</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+
+        <!-- コンサルタントの場合のみ表示 -->
+        {% if user.is_financial_consultant %}
+
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Consultant Menu</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
+            <span class="hide-menu">クライアント一覧</span>
+          </a>
+        </li>
+
+        {% endif %}
+
+
+
+
+
+
+        <!-- <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
+            <span>
+              <i class="ti ti-file-description"></i>
+            </span>
+            <span class="hide-menu">TBD</span>
+          </a>
+        </li> -->
+
+        <!-- <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">EXTRA</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
+            <span>
+              <i class="ti ti-mood-happy"></i>
+            </span>
+            <span class="hide-menu">TBD</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
+            <span>
+              <i class="ti ti-aperture"></i>
+            </span>
+            <span class="hide-menu">Sample</span>
+          </a>
+        </li>
+      </ul> -->
+    </nav>
+    <!-- End Sidebar navigation -->
+  </div>
+  <!-- End Sidebar scroll-->
+</aside>
+<!--  Sidebar End -->
+

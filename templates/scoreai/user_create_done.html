@@ -1,0 +1,27 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<h1>登録完了</h1>
+<p>確認メールを送信しました。メールを確認して、アカウントをアクティブにしてください。</p>
+
+
+{% endblock %}
+

@@ -1,0 +1,29 @@
+# 開発中のトピック
+
+
+## ローカルの確認方法
+
+"コマンド"
+python3 manage.py runserver 0.0.0.0:8000
+
+gunicornの確認
+docker-compose exec django bashで仮想環境に入ってから
+gunicorn --bind 0.0.0.0:8000 score.wsgi:application
+
+これで立ち上がる。
+http://127.0.0.1:8000/
+で確認
+
+## ログイン開発環境
+
+adminでログイン
+
+# デプロイ
+
+## デプロイ手順
+
+
+## 注意点
+
+
+

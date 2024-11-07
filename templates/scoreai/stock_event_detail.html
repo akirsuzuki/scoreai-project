@@ -1,0 +1,67 @@
+{% extends "scoreai/base.html" %}
+
+{% block title %}
+{{title}}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 d-flex align-items-strech">
+        <div class="card w-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">{{ stock_event.fiscal_summary_year.year }}年度の詳細</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>発行日:</strong> {{ stock_event.event_date }}</p>
+                <p><strong>発行種別:</strong> {{ stock_event.event_type }}</p>
+                <p><strong>備考:</strong> {{ stock_event.memo }}</p>
+            </div>
+            <div class="card-footer text-end">
+                <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
+                <a href="{% url 'stock_event_update' stock_event.pk %}" class="btn btn-warning">編集</a>
+                <a href="{% url 'stock_event_delete' stock_event.pk %}" class="btn btn-danger">削除</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8 d-flex align-items-strech">
+        <div class="card w-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">明細</h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>出資者</th>
+                            <th>株式数</th>
+                            <th>株式種別</th>
+                            <th>取得価額</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for line in stock_event_line %}
+                        <tr>
+                            <td>{{ line.stakeholder }}</td>
+                            <td>{{ line.share_quantity }}</td>
+                            <td>{{ line.share_type }}</td>
+                            <td>{{ line.acquisition_price }}</td>
+                            <td>
+                                <a href="{% url 'stockeventline_update' line.pk %}" class="btn btn-warning">編集</a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4" class="text-center">明細がありません。</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'stockeventline_create' stock_event.pk %}" class="btn btn-primary">発行明細の追加</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

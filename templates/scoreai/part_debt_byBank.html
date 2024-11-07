@@ -1,0 +1,56 @@
+<div class="card overflow-hidden">
+    <div class="card-header">
+      <h5 class="card-title fw-semibold"> 金融機関別残高</h5>
+    </div>
+    <div class="card-body p-4">
+      <div class="row align-items-center">
+        <div class="row align-items-center">
+          <div class="d-flex justify-content-center">
+            <canvas id="chart_share" style="width: 100%; height: auto;"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- 金融機関別残高 -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const ctx = document.getElementById('chart_share').getContext('2d');
+      const data = {
+        labels: [
+          {% for debt in debt_list_byBank %}
+      '{{ debt.financial_institution }}'{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+        ],
+      datasets: [{
+        data: [
+          {% for debt in debt_list_byBank %}
+              {{ debt.balances_monthly.0 }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+          ],
+    backgroundColor: [
+      'rgb(255, 99, 132)',
+      'rgb(54, 162, 235)',
+      'rgb(255, 205, 86)',
+      'rgb(75, 192, 192)',
+      'rgb(153, 102, 255)',
+      'rgb(201, 203, 207)'
+    ],
+      hoverOffset: 4
+        }]
+      };
+    const config = {
+      type: 'doughnut',
+      data: data,
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          },
+        }
+      },
+    };
+    new Chart(ctx, config);
+    });
+  </script>

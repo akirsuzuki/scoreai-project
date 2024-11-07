@@ -1,0 +1,51 @@
+{% extends "scoreai/base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">株主名一覧</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>株主名</th>
+                <th>代表取締役</th>
+                <th>取締役</th>
+                <th>代表者の家族</th>
+                <th>従業員</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              {% for stakeholder_name in stakeholder_names %}
+              <tr>
+                <td>{{ stakeholder_name.name }}</td>
+                <td>{% if stakeholder_name.is_representative %}はい{% else %}いいえ{% endif %}</td>
+                <td>{% if stakeholder_name.is_board_member %}はい{% else %}いいえ{% endif %}</td>
+                <td>{% if stakeholder_name.is_related_person %}はい{% else %}いいえ{% endif %}</td>
+                <td>{% if stakeholder_name.is_employee %}はい{% else %}いいえ{% endif %}</td>
+                <td>
+                  <a href="{% url 'stakeholder_name_detail' stakeholder_name.pk %}" class="btn btn-sm btn-info">詳細</a>
+                  <a href="{% url 'stakeholder_name_update' stakeholder_name.pk %}" class="btn btn-sm btn-warning">編集</a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="6">株主名が登録されていません。</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'stakeholder_name_create' %}" class="btn btn-primary">新規株主名登録</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

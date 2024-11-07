@@ -1,0 +1,248 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#detail">借入条件</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#others">{{ debt.financial_institution }}からの借入一覧</a>
+    </li>
+  </ol>
+</nav>
+
+{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+  {% if debt.is_rescheduled %}
+  <div class="alert alert-warning" role="alert">
+    <h5 class="alert-heading">リスケ情報について</h5>
+    <p>リスケのチェックボックスをONにした借り入れのみ、この情報が表示されています。</p>
+    <p>リスケをONにすることよって表示されている借入情報は合計などには加算されません。</p>
+    <p>新しい条件での借入（据え置きのある借入）は、新規借入登録を行なってください。</p>
+  </div>
+  {% elif debt.is_nodisplay %}
+  <div class="alert alert-warning" role="alert">
+    <h5 class="alert-heading">アーカイブ済み</h5>
+    <p>この借入はアーカイブされました。<br>元に戻したい場合は、編集をクリックし、「非表示」のチェックを外してください。</p>
+    <p>アーカイブ済みの借り入れは、アーカイブ済みの借り入れ一覧から確認できます。</p>
+  </div>
+  {% elif debt.remaining_balance <= 0 %}
+  <div class="alert alert-success" role="alert">
+    <h5 class="alert-heading">返済済み</h5>
+    <p>返済済みの借り入れのみ、この情報が表示されています。</p>
+    <p>返済済みの借り入れは、返済済みの借り入れ一覧から確認できます。</p>
+  </div>
+  {% endif %}
+
+
+  <div class="col-lg-6 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">借入基本条件</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tr>
+            <td class="table-light">金融機関</td>
+            <td>{{ debt.financial_institution }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">元本</td>
+            <td>{{ debt.principal|to_thousands|intcomma }}千円</td>
+          </tr>
+          <tr>
+            <td class="table-light">利息</td>
+            <td>{{ debt.interest_rate }}%</td>
+          </tr>
+          <tr>
+            <td class="table-light">協会</td>
+            <td>{{ debt.secured_type }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">代表者保証</td>
+            <td>{% if debt.is_securedby_management %}あり{% else %}なし{% endif %}</td>
+          </tr>
+          <tr>
+            <td class="table-light">担保</td>
+            <td>{% if debt.is_collateraled %}あり{% else %}なし{% endif %}</td>
+          </tr>
+          <tr>
+            <td class="table-light">実行日</td>
+            <td>{{ debt.issue_date }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">返済開始</td>
+            <td>{{ debt.start_date }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">月返済額</td>
+            <td>{{ debt.monthly_repayment|to_thousands|intcomma }}千円</td>
+          </tr>
+          <tr>
+            <td class="table-light">回数</td>
+            <td>{{ debt.payment_terms }}回</td>
+          </tr>
+          <tr>
+            <td class="table-light">初月調整金額</td>
+            <td>{{ debt.adjusted_amount_first|to_thousands|intcomma }}千円</td>
+          </tr>
+          <tr>
+            <td class="table-light">最終月調整金額</td>
+            <td>{{ debt.adjusted_amount_last|to_thousands|intcomma }}千円</td>
+          </tr>
+        </table>
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'debt_update' debt.id %}" class="btn btn-secondary">編集</a>
+        <a href="{% url 'debt_delete' debt.id %}" class="btn btn-danger">削除</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6 d-flex align-items-stretch">
+    <div class="card w-100">
+      {% if debt.is_rescheduled %}
+      <div class="card-header bg-light-red">
+        <h5 class="card-title mb-0">ステータス</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <tr>
+            <td class="table-light">リスケ日</td>
+            <td>{{ debt.reschedule_date }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">リスケ金額</td>
+            <td>{{ debt.reschedule_balance|to_thousands|intcomma }}千円</td>
+          </tr>
+        </table>
+        <div class="alert alert-warning" role="alert">
+          <h5 class="alert-heading">リスケ情報について</h5>
+          <p>この借入はリスケジュールされました。</p>
+          <p>リスケをONにすることよって表示されている借入情報は合計などには加算されません。</p>
+          <p>新しい条件での借入（据え置きのある借入）は、新規借入登録を行なってください。</p>
+        </div>
+      </div>
+      {% elif debt.is_nodisplay %}
+      <div class="card-header bg-light-red">
+        <h5 class="card-title mb-0">ステータス</h5>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning" role="alert">
+          <h5 class="alert-heading">アーカイブ済み</h5>
+          <p>この借入はアーカイブされました。</p>
+        </div>
+      </div>
+      {% else %}
+      <div class="card-header">
+        <h5 class="card-title mb-0">返済状況</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th> </th>
+              <th>金額</th>
+              <th>シェア*</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="table-light">現在残高</td>
+              <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
+            </tr>
+            <tr>
+              <td class="table-light">決算時残高</td>
+              <td>{{ debt.balance_fy1|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balance_fy1|percentage:debt_list_totals.total_balance_fy1 }}</td>
+            </tr>
+            <tr>
+              <td class="table-light">2期後残高</td>
+              <td>{{ debt.balance_fy2|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balance_fy2|percentage:debt_list_totals.total_balance_fy2 }}</td>
+            </tr>
+            <tr>
+              <td class="table-light">3期後残高</td>
+              <td>{{ debt.balance_fy3|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balance_fy3|percentage:debt_list_totals.total_balance_fy3 }}</td>
+            </tr>
+            <tr>
+              <td class="table-light">4期後残高</td>
+              <td>{{ debt.balance_fy4|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balance_fy4|percentage:debt_list_totals.total_balance_fy4 }}</td>
+            </tr>
+            <tr>
+              <td class="table-light">5期後残高</td>
+              <td>{{ debt.balance_fy5|to_thousands|intcomma }}千円</td>
+              <td>{{ debt.balance_fy5|percentage:debt_list_totals.total_balance_fy5 }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>* シェアは、全借入に占めるシェアを表しています。</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- メモ -->
+<div class="row g-3 mt-3">
+  <div class="col-lg-6 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">短文メモ</h5>
+      </div>
+      <div class="card-body">
+        <p>{{ debt.memo_short|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">長文メモ</h5>
+      </div>
+      <div class="card-body">
+        <p>{{ debt.memo_long|linebreaksbr }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row g-3 mt-3" id="others">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">{{ debt.financial_institution }}からの借入一覧</h5>
+      </div>
+      <div class="card-body">
+        {% include 'scoreai/debt_list_active.html' %}
+        {% include 'scoreai/debt_list_chart.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

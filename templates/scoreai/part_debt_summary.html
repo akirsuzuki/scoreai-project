@@ -1,0 +1,39 @@
+{% load humanize %}
+{% load custom_filters %}
+
+<div class="card">
+  <div class="card-header">
+    <h5 class="card-title fw-semibold"> 借入全体概要 </h5>
+  </div>
+  <div class="card-body">
+    <div class="py-2 px-3 text-bg-light rounded-4 d-flex align-items-center">
+      <div class="ms-2 text-start">
+        <h6 class="fw-normal text-muted mb-0">現在残高</h6>
+        <h4 class="mb-0 fs-5">{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }}千円</h4>
+      </div>
+    </div>
+    <br>
+    <div class="py-2 px-3 text-bg-light rounded-4 d-flex align-items-center">
+      <div class="ms-2 text-start">
+        <h6 class="fw-normal text-muted mb-0">決算時残高</h6>
+        <h4 class="mb-0 fs-5">{{ debt_list_totals.total_balance_fy1|to_thousands|intcomma }}千円</h4>
+      </div>
+    </div>
+    <br>
+    <div class="py-2 px-3 text-bg-light rounded-4 d-flex align-items-center">
+      <div class="ms-2 text-start">
+        <h6 class="fw-normal text-muted mb-0">月返済額</h6>
+        <h4 class="mb-0 fs-5">{{ debt_list_totals.total_monthly_repayment|to_thousands|intcomma }}千円</h4>
+      </div>
+    </div>
+    <br>
+    <div class="py-2 px-3 text-bg-light rounded-4 d-flex align-items-center">
+      <div class="ms-2 text-start">
+        <h6 class="fw-normal text-muted mb-0">加重平均金利</h6>
+        <h4 class="mb-0 fs-5">{{ weighted_average_interest.0|floatformat:2 }}%</h4>
+      </div>
+    </div>
+
+
+  </div>
+</div>

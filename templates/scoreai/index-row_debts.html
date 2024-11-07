@@ -1,0 +1,87 @@
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+<div class="row">
+  <div class="col-lg-8 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold">借入分析</h5>
+      </div>
+      <div class="card-body">
+        <p>借入合計額</p>
+        <table id="debt_table" class="display table" >
+          <thead>
+            <tr>
+              <th>金融機関 / 元本(千円)<br>ステータス</th>
+              <th>保証<br>利息</th>
+              <th>返済開始日<br>月返済額</th>
+              <th>残高シェア<br>残り回数</th>
+              <th>今月末残高<br>決算時残高</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for debt in debt_list %}
+              {% if debt.remaining_months > 0 %}
+              <tr data-href="{% url 'debt_detail' debt.id %}">
+                <td>{{ debt.financial_institution_short_name }} / {{ debt.principal|to_thousands|intcomma }}
+                  <br>{% if debt.start_date < today %}返済中{% else %}<span class="text-danger">【 返済前 】</span>{% endif %}
+                </td>
+                <td>{{ debt.secured_type }}<br>{{ debt.interest_rate }}%</td>
+                <td>{{ debt.start_date|date:"y年n月" }}<br>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+                <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}<br>{{ debt.remaining_months }}/{{ debt.payment_terms }}</td>
+                <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}<br>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+              </tr>
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="d-flex justify-content-end">
+          <h5>合計：{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }} 千円</h5>
+          <br>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-end">
+          <a href="{% url 'debts_all' %}" class="btn btn-primary m-1">全ての借入を見る</a>
+          <span class="mx-2"></span>
+          <a href="{% url 'debt_create' %}" class="btn btn-primary m-1">新規借入登録</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="row">
+      <div class="col-lg-12">
+        {% include "scoreai/part_debt_byBank.html" %}
+      </div>
+
+      <div class="col-lg-12">
+        {% include "scoreai/part_debt_bySecuredType.html" %}
+      </div>
+
+      <div class="col-lg-12">
+        {% include "scoreai/part_debt_weighted.html" %}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  new DataTable('#debt_table', {
+    paging: false,
+    scrollY: 600
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const rows = document.querySelectorAll('#debt_table tbody tr');
+    rows.forEach(row => {
+      row.addEventListener('click', function () {
+        window.location.href = this.dataset.href;
+      });
+    });
+  });
+</script>
+
+

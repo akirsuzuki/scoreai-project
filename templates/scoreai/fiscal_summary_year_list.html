@@ -1,0 +1,59 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+ <!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#table">年次推移表</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a class="text-muted text-decoration-none" href="#chart">年次推移チャート</a>
+    </li>
+  </ol>
+</nav>    
+{% endblock %}
+
+{% block content %}
+
+{% include 'scoreai/fiscal_summary_year_list_table.html' %}
+
+{% include 'scoreai/fiscal_summary_year_list_chart.html' %}
+
+
+<!-- カード本体の終了タグの直前に JavaScript を追加 -->
+<script>
+  function toggleDrafts(checkbox) {
+      if (checkbox.checked) {
+          window.location.href = "{% url 'fiscal_summary_year_list_recent' %}?is_draft=true";
+      } else {
+          window.location.href = "{% url 'fiscal_summary_year_list_recent' %}";
+      }
+  }
+  
+  // ページ読み込み時に下書きデータの表示状態を設定
+  document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isDraft = urlParams.get('is_draft');
+      document.getElementById('showDrafts').checked = isDraft === 'true';
+  });
+</script>
+{% endblock %}
