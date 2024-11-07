@@ -5,7 +5,7 @@ FROM python:3.12-slim
 RUN mkdir -p /djangoapp
 
 # 依存関係のファイルをコピー
-COPY containers/requirements.txt /djangoapp
+COPY requirements.txt /djangoapp
 
 # 作業ディレクトリを設定
 WORKDIR /djangoapp
