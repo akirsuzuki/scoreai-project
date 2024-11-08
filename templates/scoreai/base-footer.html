@@ -1,6 +1,47 @@
 {% load static %}
 
 <div class="py-6 px-6 text-center">
-  <p class="mb-0 fs-4">Score_AI. Design and Developed by <a href="https://adminmart.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">VanCreworth</a></p>
+  <p class="mb-0 fs-4"><a href="https://vancreworth.com/" target="_blank" class="pe-1 text-primary text-decoration-underline">SCore_Ai</a></p>
 </div>
 <p></p>
+
+<footer class="bg-light py-6 px-6">
+  <div class="container">
+    <div class="row">
+
+      <!-- Company Section -->
+      <div class="col-md-4">
+        <h5>Company</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'about' %}">SCore_Aiについて</a></li>
+          <li><a href="{% url 'news_list' %}">お知らせ</a></li>
+          <li><a href="{% url 'company_profile' %}">会社概要</a></li>
+        </ul>
+      </div>
+
+      <!-- Support Section -->
+      <div class="col-md-4">
+        <h5>Support</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'help' %}">ヘルプ</a></li>
+          <li><a href="{% url 'manual' %}">マニュアル</a></li>
+        </ul>
+      </div>
+
+      <!-- Legal Section -->
+      <div class="col-md-4">
+        <h5>Legal</h5>
+        <ul class="list-unstyled">
+          <li><a href="{% url 'terms_of_service' %}">利用規約</a></li>
+          <li><a href="{% url 'privacy_policy' %}">プライバシーポリシー</a></li>
+          <li><a href="{% url 'legal_notice' %}">特商法に基づく表示</a></li>
+          <li><a href="{% url 'security_policy' %}">セキュリティポリシー</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="text-center mt-4">
+      <p class="mb-0 fs-6">© 2024<a href="https://vancreworth.com/" target="_blank" class="text-primary text-decoration-underline">VanCreworth CO.,LTD.</a></p>
+    </div>
+  </div>
+</footer>

@@ -1890,6 +1890,70 @@ class AboutView(generic.TemplateView):
         context['title'] = 'About'
         return context
 
+class NewsListView(generic.TemplateView):
+    template_name = 'scoreai/news_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'お知らせ'
+        return context
+
+class CompanyProfileView(generic.TemplateView):
+    template_name = 'scoreai/company_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '会社概要'
+        return context
+
+class HelpView(generic.TemplateView):
+    template_name = 'scoreai/help.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ヘルプ'
+        return context
+
+class ManualView(generic.TemplateView):
+    template_name = 'scoreai/manual.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'マニュアル'
+        return context
+
+class TermsOfServiceView(generic.TemplateView):
+    template_name = 'scoreai/terms_of_service.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '利用規約'
+        return context
+
+class PrivacyPolicyView(generic.TemplateView):
+    template_name = 'scoreai/privacy_policy.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'プライバシーポリシー'
+        return context
+
+class LegalNoticeView(generic.TemplateView):
+    template_name = 'scoreai/legal_notice.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '特定商取引法に基づく表示'
+        return context
+
+class SecurityPolicyView(generic.TemplateView):
+    template_name = 'scoreai/security_policy.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'セキュリティポリシー'
+        return context
+
 
 class SampleView(generic.TemplateView):
     template_name = 'scoreai/ui-forms.html'
