@@ -68,6 +68,7 @@ urlpatterns = [
     path('terms_of_service/', TermsOfServiceView.as_view(), name='terms_of_service'),
     path('privacy_policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
     path('legal_notice/', LegalNoticeView.as_view(), name='legal_notice'),
+    path('security_policy/', SecurityPolicyView.as_view(), name='security_policy'),
     path('firm_clientslist/', ClientsList.as_view(), name='firm_clientslist'),
     path('import-financial-institution/', ImportFinancialInstitutionView.as_view(), name='import_financial_institution'),
     path('download/financial_institutions/', views.download_financial_institutions_csv, name='download_financial_institutions_csv'),
