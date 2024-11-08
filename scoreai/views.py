@@ -945,7 +945,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
             messages.error(self.request, 'アップロードされたファイルはCSV形式ではありません。')
             return super().form_invalid(form)
 
-        this_company = selected_company.company
+        # this_company = selected_company.company
         
         try:
             file = TextIOWrapper(csv_file.file, encoding='shift-jis')
@@ -964,7 +964,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
                 period = int(row['月度'])
                 
                 fiscal_summary_year, created = FiscalSummary_Year.objects.get_or_create(
-                    company=this_company,
+                    company=self.this_company,
                     year=fiscal_year
                 )
                 
@@ -1675,7 +1675,7 @@ def download_financial_institutions_csv(request):
         ])
 
     return response
-    
+
 
 class ImportIndustryClassificationView(LoginRequiredMixin, FormView):
     template_name = 'scoreai/import_industry_classification.html'
