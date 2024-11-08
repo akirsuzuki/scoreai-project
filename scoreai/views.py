@@ -945,7 +945,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
             messages.error(self.request, 'アップロードされたファイルはCSV形式ではありません。')
             return super().form_invalid(form)
 
-        this_company = self.get_selected_company().company
+        this_company = selected_company.company
         
         try:
             file = TextIOWrapper(csv_file.file, encoding='shift-jis')
@@ -1865,18 +1865,7 @@ class AboutView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        this_company = get_selected_company(self).company
-        debt_list, debt_list_totals = get_debt_list(this_company)
-        debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
-        debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
-
-        context.update({
-            'title': 'About',
-            'debt_list': debt_list,
-            'debt_list_totals': debt_list_totals,
-            'debt_list_byBank': debt_list_byBank,
-            'debt_list_bySecuredType': debt_list_bySecuredType,
-        })
+        context['title'] = 'About'
         return context
 
 
