@@ -8,7 +8,7 @@
       <!-- Company Section -->
       <div class="col-md-3">
         <h5>Company</h5>
-        <ul class="list-unstyled">
+        <ul class="list-unstyled fs-6"">
           <li><a href="{% url 'about' %}">SCore_Aiについて</a></li>
           <li><a href="{% url 'news_list' %}">お知らせ</a></li>
           <li><a href="{% url 'company_profile' %}">会社概要</a></li>
@@ -18,7 +18,7 @@
       <!-- Support Section -->
       <div class="col-md-3">
         <h5>Support</h5>
-        <ul class="list-unstyled">
+        <ul class="list-unstyled fs-6"">
           <li><a href="{% url 'help' %}">ヘルプ</a></li>
           <li><a href="{% url 'manual' %}">マニュアル</a></li>
         </ul>
@@ -27,7 +27,7 @@
       <!-- Legal Section -->
       <div class="col-md-3">
         <h5>Legal</h5>
-        <ul class="list-unstyled">
+        <ul class="list-unstyled fs-6"">
           <li><a href="{% url 'terms_of_service' %}">利用規約</a></li>
           <li><a href="{% url 'privacy_policy' %}">プライバシーポリシー</a></li>
           <li><a href="{% url 'legal_notice' %}">特商法に基づく表示</a></li>
@@ -38,16 +38,19 @@
       <!-- social Section -->
       <div class="col-md-3">
         <h5>Social</h5>
-        <ul class="list-unstyled">
-          <i class="fa-brands fa-square-facebook"></i>
-          <i class="fa-brands fa-square-x-twitter"></i>
-          <i class="fa-brands fa-linkedin"></i>
+        <ul class="list-unstyled fs-6"">
+          <li>
+            <img src="{% static 'scoreai/img/LogoSCore_Ai.png' %}" alt="SCore_Ai Logo" style="width:100px; height:auto;">
+          </li>
+          <li><i class="fa-brands fa-square-facebook"></i></li>
+          <li><i class="fa-brands fa-square-x-twitter"></i></li>
+          <li><i class="fa-brands fa-linkedin"></i></li>
         </ul>
       </div>
 
     </div>
     <div class="text-center mt-4">
-      <p class="mb-0 fs-4">© 2024<a href="https://vancreworth.com/" target="_blank" class="text-primary text-decoration-underline">VanCreworth CO.,LTD.</a></p>
+      <p class="mb-0 fs-4">© 2024<a href="https://vancreworth.com/" target="_blank" class="text-primary text-decoration-none">VanCreworth CO.,LTD.</a></p>
     </div>
   </div>
 </footer>

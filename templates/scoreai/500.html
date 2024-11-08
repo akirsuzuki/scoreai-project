@@ -1,0 +1,32 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+Server Error
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-lg-12 d-flex align-items-strech">
+        <div class="card w-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Server Error</h5>
+            </div>
+            <div class="card-body">
+                <p>サーバーエラーが発生しました。(500)</p>
+                <p></p>
+                <h5>考えられる原因</h5>
+                <p>表示すべきデータがない場合は、まず会社データ、年次決算データ、月次データなどを作る必要があります。</p>
+                <p>こちら（準備中）よりお問い合わせください。</p>
+            </div>
+            <div class="card-footer text-end">
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
