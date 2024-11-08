@@ -1655,6 +1655,28 @@ class ImportFinancialInstitutionView(LoginRequiredMixin, DetailView):
         return redirect('import_financial_institution')
 
 
+@login_required
+def download_financial_institutions_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response.charset = 'utf-8-sig'  # Excelでの文字化けを防ぐためにBOM付きUTF-8を使用
+    response['Content-Disposition'] = 'attachment; filename="financial_institutions.csv"'
+
+    writer = csv.writer(response)
+    headers = ['name', 'short_name', 'JBAcode', 'bank_category']
+    writer.writerow(headers)
+
+    institutions = FinancialInstitution.objects.all()
+    for institution in institutions:
+        writer.writerow([
+            institution.name,
+            institution.short_name,
+            institution.JBAcode,
+            institution.bank_category
+        ])
+
+    return response
+    
+
 class ImportIndustryClassificationView(LoginRequiredMixin, FormView):
     template_name = 'scoreai/import_industry_classification.html'
     form_class = IndustryClassificationImportForm

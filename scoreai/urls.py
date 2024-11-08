@@ -63,6 +63,7 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('firm_clientslist/', ClientsList.as_view(), name='firm_clientslist'),
     path('import-financial-institution/', ImportFinancialInstitutionView.as_view(), name='import_financial_institution'),
+    path('download/financial_institutions/', views.download_financial_institutions_csv, name='download_financial_institutions_csv'),
     path('sample/', SampleView.as_view(), name='sample'),
     path('import_industry_classification/', ImportIndustryClassificationView.as_view(), name='import_industry_classification'),
     path('industry_classification_list/', IndustryClassificationListView.as_view(), name='industry_classification_list'),
