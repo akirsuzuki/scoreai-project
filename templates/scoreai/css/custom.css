@@ -26,3 +26,16 @@ div.dt-container {
   }
 }
 
+/* カスタムCSSファイルやstyleタグ内 */
+.text-small {
+    font-size: 0.875rem; /* 約14px */
+}
+
+/* カスタムCSSファイルやstyleタグ内 */
+.text-xsmall {
+  font-size: 0.75rem; /* 約12px */
+}
+
+.text-xxsmall {
+  font-size: 0.625rem; /* 約10px */
+}
