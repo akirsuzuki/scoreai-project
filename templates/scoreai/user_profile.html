@@ -11,18 +11,6 @@ Profile | Score
     <div class="row g-3">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title fw-semibold mb-4">{{ user.username }}のProfile</h5>
-                <p class="mb-0">ユーザプロファイルのページ。 </p>
-                This company =>
-                {{ this_company }}
-                <br>
-                Selected Company =>
-                {{ selected_company.company_id }}
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">
@@ -31,8 +19,9 @@ Profile | Score
                                 <p class="card-text">{{ user.username }}</p>
                                 <h5 class="card-title">メールアドレス</h5>
                                 <p class="card-text">{{ user.email }}</p>
-                                <h5 class="card-title">コンサルタント</h5>
-                                <p class="card-text">{{ user.is_financial_consultant }}</p>
+                                {% if user.is_financial_consultant %}
+                                <p class="card-text">コンサルタントとして登録</p>
+                                {% endif %}
                                 <a href="{% url 'user_profile_update' %}" class="btn btn-primary">編集</a>
                             </div>
                         </div>
