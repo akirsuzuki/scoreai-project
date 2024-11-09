@@ -21,7 +21,8 @@ Server Error
                 <p></p>
                 <h5>考えられる原因</h5>
                 <p>表示すべきデータがない場合は、まず会社データ、年次決算データ、月次データなどを作る必要があります。</p>
-                <p>こちら（準備中）よりお問い合わせください。</p>
+                <a href="{% url 'import_fiscal_summary_year' %}">年次データのインポート</a>
+                <a href="{% url 'import_fiscal_summary_month' %}">月次データのインポート</a>
             </div>
             <div class="card-footer text-end">
             </div>
