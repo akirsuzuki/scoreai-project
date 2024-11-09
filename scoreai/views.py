@@ -1845,10 +1845,40 @@ class IndustryBenchmarkListView(LoginRequiredMixin, ListView):
     model = IndustryBenchmark
     template_name = 'scoreai/industry_benchmark_list.html'
     context_object_name = 'industry_benchmarks'
+    paginate_by = 10  # 1ページに表示するオブジェクト数
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        # GETパラメータの取得
+        year = self.request.GET.get('year')
+        industry_classification_id = self.request.GET.get('industry_classification')
+        industry_subclassification_id = self.request.GET.get('industry_subclassification')
+        company_size = self.request.GET.get('company_size')
+        indicator_id = self.request.GET.get('indicator')
+
+        # フィルタリング
+        if year:
+            queryset = queryset.filter(year=year)
+        if industry_classification_id:
+            queryset = queryset.filter(industry_classification_id=industry_classification_id)
+        if industry_subclassification_id:
+            queryset = queryset.filter(industry_subclassification_id=industry_subclassification_id)
+        if company_size:
+            queryset = queryset.filter(company_size=company_size)
+        if indicator_id:
+            queryset = queryset.filter(indicator_id=indicator_id)
+
+        return queryset.order_by('year', 'industry_classification', 'industry_subclassification')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '業界別経営指標一覧'
+        # フォームの選択肢に必要な情報を取得
+        context['industry_classifications'] = IndustryClassification.objects.all()
+        context['industry_subclassifications'] = IndustrySubClassification.objects.all()
+        context['indicators'] = IndustryIndicator.objects.all()
+        context['company_size_choices'] = dict(IndustryBenchmark.COMPANY_SIZE_CHOICES).items()
+        context['title'] = '業界別ベンチマーク一覧'
         return context
 
 

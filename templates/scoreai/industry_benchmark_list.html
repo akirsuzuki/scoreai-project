@@ -8,7 +8,59 @@
             <h5 class="card-title mb-0">業界別ベンチマーク一覧</h5>
         </div>
         <div class="card-body">
-            <div class="d-flex justify-content-end mb-3">
+
+            <!-- ここから検索フォームを追加 -->
+            <form method="get" class="mb-4">
+                <div class="row g-3">
+                    <div class="col-md-2">
+                        <label for="year" class="form-label">年度</label>
+                        <input type="number" class="form-control" id="year" name="year" value="{{ request.GET.year }}">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="industry_classification" class="form-label">業界分類</label>
+                        <select class="form-control" id="industry_classification" name="industry_classification">
+                            <option value="">すべて</option>
+                            {% for ic in industry_classifications %}
+                            <option value="{{ ic.id }}" {% if request.GET.industry_classification == ic.id|stringformat:"s" %}selected{% endif %}>{{ ic.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="industry_subclassification" class="form-label">業界小分類</label>
+                        <select class="form-control" id="industry_subclassification" name="industry_subclassification">
+                            <option value="">すべて</option>
+                            {% for isc in industry_subclassifications %}
+                            <option value="{{ isc.id }}" {% if request.GET.industry_subclassification == isc.id|stringformat:"s" %}selected{% endif %}>{{ isc.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="company_size" class="form-label">企業規模</label>
+                        <select class="form-control" id="company_size" name="company_size">
+                            <option value="">すべて</option>
+                            {% for key, value in company_size_choices %}
+                            <option value="{{ key }}" {% if request.GET.company_size == key %}selected{% endif %}>{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="indicator" class="form-label">指標名</label>
+                        <select class="form-control" id="indicator" name="indicator">
+                            <option value="">すべて</option>
+                            {% for ind in indicators %}
+                            <option value="{{ ind.id }}" {% if request.GET.indicator == ind.id|stringformat:"s" %}selected{% endif %}>{{ ind.label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-primary">検索</button>
+                        <a href="{% url 'industry_benchmark_list' %}" class="btn btn-secondary ms-2">リセット</a>
+                    </div>
+                </div>
+            </form>
+            <!-- 検索フォームここまで -->
+
+            <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
@@ -23,15 +75,46 @@
                         {% for benchmark in industry_benchmarks %}
                         <tr>
                             <td>{{ benchmark.year }}</td>
-                            <td>{{ benchmark.industry_classification }}</td>
-                            <td>{{ benchmark.industry_subclassification }}</td>
+                            <td>{{ benchmark.industry_classification.name }}</td>
+                            <td>{{ benchmark.industry_subclassification.name }}</td>
                             <td>{{ benchmark.get_company_size_display }}</td>
                             <td>{{ benchmark.indicator.label }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5">該当するデータがありません。</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
+
+            <!-- ページネーション -->
+            {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page=1">&laquo; 最初</a></li>
+                        <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">前へ</a></li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active"><a class="page-link" href="#">{{ num }}</a></li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ num }}">{{ num }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">次へ</a></li>
+                        <li class="page-item"><a class="page-link" href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.paginator.num_pages }}">最後 &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            <!-- ページネーションここまで -->
+
         </div>
       </div>
     </div>
