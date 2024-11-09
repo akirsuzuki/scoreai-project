@@ -1121,6 +1121,7 @@ class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
         debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
         debt_list_bySecuredByManagement = get_debt_list_byAny('is_securedby_management', debt_list)
+        debt_list_byCollateraled = get_debt_list_byAny('is_collateraled', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
         # Calculate weighted_average_interest for each month
         weighted_average_interest = [
@@ -1136,6 +1137,7 @@ class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
             'debt_list_byBankAndSecuredType': debt_list_byBankAndSecuredType,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'debt_list_bySecuredByManagement': debt_list_bySecuredByManagement,
+            'debt_list_byCollateraled': debt_list_byCollateraled,
             'debt_list_rescheduled': debt_list_rescheduled,
             'debt_list_finished': debt_list_finished,
             'debt_list_nodisplay': debt_list_nodisplay,

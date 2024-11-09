@@ -20,8 +20,8 @@
     const data = {
       labels: [
         {% for debt in debt_list_byBankAndSecuredType %}
-    '{{ debt.financial_institution }}'{% if not forloop.last %}, {% endif %}
-    {% endfor %}
+'{{ debt.financial_institution }} - {{ debt.secured_type }}'{% if not forloop.last %}, {% endif %}
+        {% endfor %}
       ],
     datasets: [{
       data: [
