@@ -1133,6 +1133,7 @@ class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
             'debt_list': debt_list,
             'debt_list_totals': debt_list_totals,
             'debt_list_byBank': debt_list_byBank,
+            'debt_list_byBankAndSecuredType': debt_list_byBankAndSecuredType,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'debt_list_bySecuredByManagement': debt_list_bySecuredByManagement,
             'debt_list_rescheduled': debt_list_rescheduled,
