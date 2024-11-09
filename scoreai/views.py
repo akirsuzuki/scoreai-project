@@ -275,6 +275,10 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cre
         messages.success(self.request, f'{form.instance.year}年の決算データが正常に登録されました。' )
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '年次財務サマリー作成'
+        return context
 
 class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
     model = FiscalSummary_Year
@@ -466,16 +470,16 @@ def download_fiscal_summary_year_csv(request, param=None):
         '流動資産合計（千円）', '土地（千円）', '建物及び附属設備（千円）', '機械及び装置（千円）',
         '車両運搬具（千円）', '有形固定資産の減価償却累計額（千円）', '有形固定資産合計（千円）',
         'のれん（千円）', '無形固定資産合計（千円）', '長期貸付金（千円）', '投資その他の資産（千円）',
-        '繰延資産（千円）', '固定資産合計（千円）', '資産の部合計（千円）', '買掛金・未払金・未払費用（千円）',
+        '固定資産合計（千円）', '繰延資産（千円）', '資産の部合計（千円）', '買掛金・未払金・未払費用（千円）',
         '短期借入金（千円）', '流動負債合計（千円）', '長期借入金（千円）', '固定負債合計（千円）',
-        '負債の部合計（千円）', '株主資本合計（千円）', '資本金（千円）', '資本剰余金（千円）',
-        '利益剰余金（千円）', '評価・換算差額（千円）', '新株予約権（千円）', '純資産の部合計（千円）',
+        '負債の部合計（千円）', '資本金（千円）', '資本剰余金（千円）', '利益剰余金（千円）',
+        '株主資本合計（千円）', '評価・換算差額（千円）', '新株予約権（千円）', '純資産の部合計（千円）',
         '役員貸付金または借入金（千円）', '売上高（千円）', '粗利益（千円）', '売上原価内の減価償却費（千円）',
-        '販管費内の減価償却費（千円）', '販管費内のその他の償却費（千円）', '役員報酬（千円）',
-        '給与・雑給（千円）', '営業利益（千円）', '営業外の償却費（千円）', '支払利息（千円）',
-        '雑収入（千円）', '雑損失（千円）', '経常利益（千円）', '特別利益（千円）', '特別損失（千円）',
+        '役員報酬（千円）', '給与・雑給（千円）', '販管費内の減価償却費（千円）', '販管費内のその他の償却費（千円）',
+        '営業利益（千円）', '雑収入（千円）', '営業外の償却費（千円）', '支払利息（千円）',
+        '雑損失（千円）', '経常利益（千円）', '特別利益（千円）', '特別損失（千円）',
         '法人税等（千円）', '当期純利益（千円）', '税務-繰越欠損金（千円）', '期末従業員数（人）',
-        '期末発行済株式数（千円）', '注意事項'
+        '期末発行済株式数（株）', '注意事項'
     ]
     writer.writerow(headers)
 
@@ -604,6 +608,7 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
         # ベンチマーク指数を取得
         benchmark_index = get_benchmark_index(self.this_company.industry_classification, self.this_company.industry_subclassification, self.this_company.company_size, self.object.year)
         context['benchmark_index'] = benchmark_index
+        context['title'] = '年次決算情報'
 
         return context
 
@@ -672,8 +677,8 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'total_intangible_assets': safe_value('total_intangible_assets', row['無形固定資産合計（千円）']),
                     'long_term_loans_receivable': safe_value('long_term_loans_receivable', row['長期貸付金（千円）']),
                     'investment_other_assets': safe_value('investment_other_assets', row['投資その他の資産（千円）']),
-                    'deferred_assets': safe_value('deferred_assets', row['繰延資産（千円）']),
                     'total_fixed_assets': safe_value('total_fixed_assets', row['固定資産合計（千円）']),
+                    'deferred_assets': safe_value('deferred_assets', row['繰延資産（千円）']),
                     'total_assets': safe_value('total_assets', row['資産の部合計（千円）']),
                     'accounts_payable': safe_value('accounts_payable', row['買掛金・未払金・未払費用（千円）']),
                     'short_term_loans_payable': safe_value('short_term_loans_payable', row['短期借入金（千円）']),
@@ -681,10 +686,10 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'long_term_loans_payable': safe_value('long_term_loans_payable', row['長期借入金（千円）']),
                     'total_long_term_liabilities': safe_value('total_long_term_liabilities', row['固定負債合計（千円）']),
                     'total_liabilities': safe_value('total_liabilities', row['負債の部合計（千円）']),
-                    'total_stakeholder_equity': safe_value('total_stakeholder_equity', row['株主資本合計（千円）']),
                     'capital_stock': safe_value('capital_stock', row['資本金（千円）']),
                     'capital_surplus': safe_value('capital_surplus', row['資本剰余金（千円）']),
                     'retained_earnings': safe_value('retained_earnings', row['利益剰余金（千円）']),
+                    'total_stakeholder_equity': safe_value('total_stakeholder_equity', row['株主資本合計（千円）']),
                     'valuation_and_translation_adjustment': safe_value('valuation_and_translation_adjustment', row['評価・換算差額（千円）']),
                     'new_shares_reserve': safe_value('new_shares_reserve', row['新株予約権（千円）']),
                     'total_net_assets': safe_value('total_net_assets', row['純資産の部合計（千円）']),
@@ -692,14 +697,14 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'sales': safe_value('sales', row['売上高（千円）']),
                     'gross_profit': safe_value('gross_profit', row['粗利益（千円）']),
                     'depreciation_cogs': safe_value('depreciation_cogs', row['売上原価内の減価償却費（千円）']),
-                    'depreciation_expense': safe_value('depreciation_expense', row['販管費内の減価償却費（千円）']),
-                    'other_amortization_expense': safe_value('other_amortization_expense', row['販管費内のその他の償却費（千円）']),
                     'directors_compensation': safe_value('directors_compensation', row['役員報酬（千円）']),
                     'payroll_expense': safe_value('payroll_expense', row['給与・雑給（千円）']),
+                    'depreciation_expense': safe_value('depreciation_expense', row['販管費内の減価償却費（千円）']),
+                    'other_amortization_expense': safe_value('other_amortization_expense', row['販管費内のその他の償却費（千円）']),
                     'operating_profit': safe_value('operating_profit', row['営業利益（千円）']),
+                    'other_income': safe_value('other_income', row['雑収入（千円）']),
                     'non_operating_amortization_expense': safe_value('non_operating_amortization_expense', row['営業外の償却費（千円）']),
                     'interest_expense': safe_value('interest_expense', row['支払利息（千円）']),
-                    'other_income': safe_value('other_income', row['雑収入（千円）']),
                     'other_loss': safe_value('other_loss', row['雑損失（千円）']),
                     'ordinary_profit': safe_value('ordinary_profit', row['経常利益（千円）']),
                     'extraordinary_income': safe_value('extraordinary_income', row['特別利益（千円）']),
@@ -708,7 +713,7 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'net_profit': safe_value('net_profit', row['当期純利益（千円）']),
                     'tax_loss_carryforward': safe_value('tax_loss_carryforward', row['税務-繰越欠損金（千円）']),
                     'number_of_employees_EOY': safe_value('number_of_employees_EOY', row['期末従業員数（人）']),
-                    'issued_shares_EOY': safe_value('issued_shares_EOY', row['期末発行済株式数（千円）']),
+                    'issued_shares_EOY': safe_value('issued_shares_EOY', row['期末発行済株式数（株）']),
                     'financial_statement_notes': row['注意事項'],
                 }                
                 
