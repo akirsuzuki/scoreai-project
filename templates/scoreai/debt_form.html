@@ -126,7 +126,8 @@
         <div class="row">
           <div class="col-md-6">
             <div class="form-group mb-3">
-              {{ form.is_securedby_management }}
+              <label for="{{ form.is_securedby_management.id_for_label }}" class="form-label">{{ form.is_securedby_management.label }}</label>
+              <br>{{ form.is_securedby_management }}<br>
               {% if form.is_securedby_management.help_text %}
                 <small class="form-text text-muted">{{ form.is_securedby_management.help_text }}</small>
               {% endif %}
@@ -134,7 +135,8 @@
           </div>
           <div class="col-md-6">
             <div class="form-group mb-3">
-              {{ form.is_collateraled }}
+              <label for="{{ form.is_collateraled.id_for_label }}" class="form-label">{{ form.is_collateraled.label }}</label>
+              <br>{{ form.is_collateraled }}<br>
               {% if form.is_collateraled.help_text %}
                 <small class="form-text text-muted">{{ form.is_collateraled.help_text }}</small>
               {% endif %}

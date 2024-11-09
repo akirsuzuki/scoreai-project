@@ -191,6 +191,8 @@ class DebtForm(forms.ModelForm):
             'financial_institution': Select2Widget,
             'is_rescheduled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_nodisplay': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_securedby_management': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_collateraled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
     def __init__(self, *args, **kwargs):
