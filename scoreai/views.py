@@ -1899,7 +1899,7 @@ class NewsListView(generic.TemplateView):
         return context
 
 class CompanyProfileView(generic.TemplateView):
-    template_name = 'scoreai/company_profile.html'
+    template_name = 'scoreai/score_company_profile.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
