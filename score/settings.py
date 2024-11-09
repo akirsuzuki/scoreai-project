@@ -154,7 +154,7 @@ except ImportError:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
     DEBUG = False
-    ALLOWED_HOSTS = ['.herokuapp.com', ,'s-core.work', '0.0.0.0', '127.0.0.1']
+    ALLOWED_HOSTS = ['.herokuapp.com', 'www.score-ai.net', 'score-ai.net', '0.0.0.0', '127.0.0.1']
     # EMAIL_HOST_USER = 'sth' or os.environ['EMAIL_HOST_USER']
     # EMAIL_HOST_PASSWORD = 'sth' or os.environ['EMAIL_HOST_PASSWORD']
     # STRIPE_PUBLIC_KEY = 'sth' or os.environ['STRIPE_PUBLIC_KEY']
