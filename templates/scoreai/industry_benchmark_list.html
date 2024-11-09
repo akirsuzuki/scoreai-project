@@ -25,8 +25,8 @@
                             <td>{{ benchmark.year }}</td>
                             <td>{{ benchmark.industry_classification }}</td>
                             <td>{{ benchmark.industry_subclassification }}</td>
-                            <td>{{ benchmark.company_size }}</td>
-                            <td>{{ benchmark.indicator.name }}</td>
+                            <td>{{ benchmark.get_company_size_display }}</td>
+                            <td>{{ benchmark.indicator.label }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
