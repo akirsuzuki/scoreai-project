@@ -31,11 +31,35 @@ div.dt-container {
     font-size: 0.875rem; /* 約14px */
 }
 
+.text-small a {
+  text-decoration: none;
+}
+
+.text-small a:hover {
+  text-decoration: underline;
+}
+
 /* カスタムCSSファイルやstyleタグ内 */
 .text-xsmall {
   font-size: 0.75rem; /* 約12px */
 }
 
+.text-xsmall a {
+  text-decoration: none;
+}
+
+.text-xsmall a:hover {
+  text-decoration: underline;
+}
+
 .text-xxsmall {
   font-size: 0.625rem; /* 約10px */
+}
+
+.text-xxsmall a {
+  text-decoration: none;
+}
+
+.text-xxsmall a:hover {
+  text-decoration: underline;
 }
