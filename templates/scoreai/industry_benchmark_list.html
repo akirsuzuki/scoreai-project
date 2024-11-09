@@ -69,6 +69,12 @@
                             <th>業界小分類</th>
                             <th>企業規模</th>
                             <th>指標名</th>
+                            <th>中央値</th>
+                            <th>標準偏差</th>
+                            <th>iv</th>
+                            <th>iii</th>
+                            <th>ii</th>
+                            <th>i</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,6 +85,12 @@
                             <td>{{ benchmark.industry_subclassification.name }}</td>
                             <td>{{ benchmark.get_company_size_display }}</td>
                             <td>{{ benchmark.indicator.label }}</td>
+                            <td>{{ benchmark.median }}</td>
+                            <td>{{ benchmark.standard_deviation }}</td>
+                            <td>{{ benchmark.range_iv }}</td>
+                            <td>{{ benchmark.range_iii }}</td>
+                            <td>{{ benchmark.range_ii }}</td>
+                            <td>{{ benchmark.range_i }}</td>
                         </tr>
                         {% empty %}
                         <tr>
