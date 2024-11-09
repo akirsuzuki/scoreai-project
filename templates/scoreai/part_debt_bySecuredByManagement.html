@@ -20,7 +20,7 @@
     const data = {
       labels: [
         {% for debt in debt_list_bySecuredByManagement %}
-            '{{ "保証あり" if debt.is_securedby_management else "保証なし" }}'{% if not forloop.last %}, {% endif %}
+            {% if debt.is_securedby_management %}'保証あり'{% else %}'保証なし'{% endif %}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       ],
     datasets: [{

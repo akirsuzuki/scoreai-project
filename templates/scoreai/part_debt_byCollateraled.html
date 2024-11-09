@@ -20,7 +20,7 @@
     const data = {
       labels: [
         {% for debt in debt_list_byCollateraled %}
-            '{{ "担保あり" if debt.is_collateraled else "担保なし" }}'{% if not forloop.last %}, {% endif %}
+            {% if debt.is_collateraled %}'担保あり'{% else %}'担保なし'{% endif %}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       ],
     datasets: [{
@@ -37,7 +37,7 @@
     'rgb(153, 102, 255)',
     'rgb(201, 203, 207)'
   ],
-    hoverOffset: 4
+    hoverOffset: 5
       }]
     };
   const config = {
