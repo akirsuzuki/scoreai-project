@@ -1,7 +1,7 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<div class="row align-items-stretch">
+<div class="row align-items-stretch row-eq-height">
     <div class="col-lg-4">
         {% include 'scoreai/part_debt_summary.html' %}
     </div>
@@ -12,7 +12,7 @@
         {% include 'scoreai/part_debt_bySecuredType.html' %}
     </div>
 </div>
-<div class="row">
+<div class="row row-eq-height">
     <div class="col-lg-4">
         {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
     </div>
