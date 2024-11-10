@@ -15,13 +15,13 @@
 
 <div class="card">
   <div class="card-header">
-    <h5 class="card-title fw-semibold"> 金融機関別保証別残高 </h5>
+    <h5 class="card-title fw-semibold"> 担保有無別残高 </h5>
   </div>
   <div class="card-body">
     <div class="row alig n-items-start">
       <div class="col-12">
         <div class="d-flex justify-content-center">
-          <canvas id="chart_byBankAndSecuredType" style="width: 100%; height: auto;"></canvas>
+          <canvas id="chart_byCollateraled" style="width: 100%; height: auto;"></canvas>
         </div>
       </div>
     </div>
@@ -73,16 +73,16 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const ctx = document.getElementById('chart_byBankAndSecuredType').getContext('2d');
+    const ctx = document.getElementById('chart_byCollateraled').getContext('2d');
     const data = {
       labels: [
-        {% for debt in debt_list_byBankAndSecuredType %}
-'{{ debt.financial_institution }} - {{ debt.secured_type }}'{% if not forloop.last %}, {% endif %}
+        {% for debt in debt_list_byCollateraled %}
+            {% if debt.is_collateraled %}'担保あり'{% else %}'担保なし'{% endif %}{% if not forloop.last %}, {% endif %}
         {% endfor %}
       ],
     datasets: [{
       data: [
-        {% for debt in debt_list_byBankAndSecuredType %}
+        {% for debt in debt_list_byCollateraled %}
             {{ debt.balances_monthly.0 }}{% if not forloop.last %}, {% endif %}
   {% endfor %}
         ],
@@ -94,14 +94,13 @@
     'rgb(153, 102, 255)',
     'rgb(201, 203, 207)'
   ],
-    hoverOffset: 8
+    hoverOffset: 5
       }]
     };
   const config = {
     type: 'bar',
     data: data,
     options: {
-      indexAxis: 'y',
       responsive: true,
       plugins: {
         legend: {
