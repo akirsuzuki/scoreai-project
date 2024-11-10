@@ -12,22 +12,11 @@
         {% include 'scoreai/part_debt_bySecuredType.html' %}
     </div>
 </div>
-<div class="container">
-    <div class="row">
-        <div class="col-lg-4">
-            <div class="row">
-                <div class="col-sm-12">
-                    {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
-                </div>
-            </div>
-            <div class="row bottom-left">
-                <div class="col-sm-12">
-                    {% include 'scoreai/part_debt_byCollateraled.html' %}
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8 align-items-strech">
-            {% include 'scoreai/part_debt_byBankAndSecuredType.html' %}
-        </div>
+<div class="row">
+    <div class="col-lg-4">
+        {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
+    </div>
+    <div class="col-lg-8">
+        {% include 'scoreai/part_debt_byBankAndSecuredType.html' %}
     </div>
 </div>
