@@ -37,13 +37,14 @@
     'rgb(153, 102, 255)',
     'rgb(201, 203, 207)'
   ],
-    hoverOffset: 4
+    hoverOffset: 8
       }]
     };
   const config = {
     type: 'bar',
     data: data,
     options: {
+      indexAxis: 'y',
       responsive: true,
       plugins: {
         legend: {
