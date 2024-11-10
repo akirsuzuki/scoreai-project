@@ -4,59 +4,68 @@
   </div>
   <div class="card-body">
     <div class="d-flex justify-content-center">
-      <canvas id="chart_byBankAndSecuredType" style="width: 100%; height: auto;"></canvas>
+      <canvas id="chart_byBankAndSecuredType" style="width: 100%;"></canvas>
     </div>
   </div>
 </div>
 
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const ctx = document.getElementById('chart_byBankAndSecuredType').getContext('2d');
+    const canvas = document.getElementById('chart_byBankAndSecuredType');
+    const ctx = canvas.getContext('2d');
+
+    const labels = [
+      {% for debt in debt_list_byBankAndSecuredType %}
+        '{{ debt.financial_institution }} - {{ debt.secured_type }}'{% if not forloop.last %}, {% endif %}
+      {% endfor %}
+    ];
+
+    // 項目数に応じてキャンバスの高さを設定（1項目あたり30px）
+    const chartHeight = labels.length * 30; // 必要に応じて倍率を調整
+    canvas.height = chartHeight;
+
     const data = {
-      labels: [
-        {% for debt in debt_list_byBankAndSecuredType %}
-'{{ debt.financial_institution }} - {{ debt.secured_type }}'{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      ],
-    datasets: [{
-      data: [
-        {% for debt in debt_list_byBankAndSecuredType %}
+      labels: labels,
+      datasets: [{
+        data: [
+          {% for debt in debt_list_byBankAndSecuredType %}
             {{ debt.balances_monthly.0 }}{% if not forloop.last %}, {% endif %}
-  {% endfor %}
+          {% endfor %}
         ],
-  backgroundColor: [
-    'rgb(255, 99, 132)',
-    'rgb(54, 162, 235)',
-    'rgb(255, 205, 86)',
-    'rgb(75, 192, 192)',
-    'rgb(153, 102, 255)',
-    'rgb(201, 203, 207)'
-  ],
-    hoverOffset: 8
+        backgroundColor: [
+          'rgb(255, 99, 132)',
+          'rgb(54, 162, 235)',
+          'rgb(255, 205, 86)',
+          'rgb(75, 192, 192)',
+          'rgb(153, 102, 255)',
+          'rgb(201, 203, 207)'
+        ],
+        hoverOffset: 8
       }]
     };
-  const config = {
-    type: 'bar',
-    data: data,
-    options: {
-      indexAxis: 'y',
-      responsive: true,
-      scales: {
-        y: {
-          ticks: {
-            autoSkip: false, // すべてのラベルを表示
+
+    const config = {
+      type: 'bar',
+      data: data,
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false, // キャンバスの高さをチャートに反映
+        scales: {
+          y: {
+            ticks: {
+              autoSkip: false, // すべてのラベルを表示
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
           },
         },
       },
-      plugins: {
-        legend: {
-          display: false,
-        },
-      }
-    },
+    };
 
-  };
-  new Chart(ctx, config);
+    new Chart(ctx, config);
   });
 </script>
