@@ -42,6 +42,13 @@
     options: {
       indexAxis: 'y',
       responsive: true,
+      scales: {
+        y: {
+          ticks: {
+            autoSkip: false, // すべてのラベルを表示
+          },
+        },
+      },
       plugins: {
         legend: {
           display: false,
