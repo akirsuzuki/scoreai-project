@@ -1223,12 +1223,12 @@ class MeetingMinutesCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateV
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
-        form.instance.company = self.get_selected_company().company
+        form.instance.company = self.this_company
         return super().form_valid(form)
 
     def get_initial(self):
         initial = super().get_initial()
-        initial['company'] = self.get_selected_company().company
+        initial['company'] = self.this_company
         initial['created_by'] = self.request.user
         initial['meeting_date'] = timezone.now().date()
         return initial
