@@ -173,6 +173,11 @@ class UserCreateView(CreateView):
         messages.error(self.request, 'アカウントの作成に失敗しました。入力内容を確認してください。')
         return super().form_invalid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ユーザー登録'
+        return context
+
 class UserProfileView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
     template_name = 'scoreai/user_profile.html'
 
