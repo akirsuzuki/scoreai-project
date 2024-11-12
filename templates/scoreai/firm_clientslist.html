@@ -23,9 +23,11 @@
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
-      <div class="card-body p-4">
+      <div class="card-header">
         <h5 class="card-title fw-semibold mb-4">契約中クライアント</h5>
-        <div class="table-responsive">
+      </div>
+      <div class="card-body p-4">
+        <div class="table table-hover">
           <table class="table text-nowrap mb-0 align-middle">
             <thead class="text-dark fs-4">
               <tr>
@@ -67,23 +69,12 @@
           </table>
         </div>
       </div>
+      <div class="card-footer">
+        <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
+      </div>
     </div>
   </div>
 </div>
-
-
-
-
-
-<h1>{{ title }}</h1>
-<ul>
-  {% for client in clients %}
-    <li>{{ client.company.name }} (開始日: {{ client.start_date }})</li>
-  {% empty %}
-    <li>クライアントがありません。</li>
-  {% endfor %}
-</ul>
-
 
 
 
