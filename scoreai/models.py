@@ -249,8 +249,8 @@ class Debt(models.Model):
         return (now.year - start_date.year) * 12 + (now.month - start_date.month)
 
     def balance_after_months(self, months):
-        # Hypothetical calculation that should return a concrete number
-        projected_balance = self.principal - (self.monthly_repayment * months)  # Ensure this method returns a number
+        # 指定した月が経過した時点の残高（最終回は考慮せず）
+        projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
         projected_interest_amount = projected_balance * self.interest_rate / 12 / 100
         return max(0, projected_balance), max(0,projected_interest_amount)
 
@@ -316,6 +316,27 @@ class Debt(models.Model):
         super().clean()
         if self.issue_date and self.start_date and self.issue_date > self.start_date:
             raise ValidationError("実行日は返済開始日以前でなければなりません。")
+        if self.monthly_repayment <= 0:
+            raise ValidationError({
+                'monthly_repayment': "月返済額は正の数でなければなりません。"
+            })
+        if self.principal <= 0:
+            raise ValidationError({
+                'principal': "借入元本は正の数でなければなりません。"
+            })
+        # 初月の返済額（adjusted_amount_first + monthly_repayment）が正の数か確認
+        total_first_repayment = self.adjusted_amount_first + self.monthly_repayment
+        if total_first_repayment <= 0:
+            raise ValidationError({
+                'adjusted_amount_first': "初月調整額と月返済額の合計は正の数でなければなりません。"
+            })
+        # 最終月の返済額（adjusted_amount_last + monthly_repayment）が正の数か確認
+        total_last_repayment = self.adjusted_amount_last + self.monthly_repayment
+        if total_last_repayment <= 0:
+            raise ValidationError({
+                'adjusted_amount_last': "最終月調整額と月返済額の合計は正の数でなければなりません。"
+            })
+
 
     def save(self, *args, **kwargs):
         self.clean()
