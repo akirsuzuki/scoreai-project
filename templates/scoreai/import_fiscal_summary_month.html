@@ -57,6 +57,11 @@
                 <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
                 <button type="submit" class="btn btn-primary">アップロード</button>
               </div>
+              <div class="form-group">
+                {{ form.override_flag.label_tag }}
+                {{ form.override_flag|add_class:"form-check-input" }}
+              </div>
+
               <p></p>
               <strong>エンコードはShift-JISでお願いします。</strong>
               <p></p>
