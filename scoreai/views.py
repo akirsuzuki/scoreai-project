@@ -54,9 +54,13 @@ class IndexView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
     template_name = 'scoreai/index.html'
 
     def get(self, request, *args, **kwargs):
-        context = self.get_context_data()
-        context['form'] = ChatForm()
-        return render(request, self.template_name, context)
+        try:
+            context = self.get_context_data()
+            context['form'] = ChatForm()
+            return render(request, self.template_name, context)
+        except Exception as e:
+            # データを取得できない場合は help.html に遷移
+            return render(request, 'scoreai/help.html')
 
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
@@ -752,7 +756,7 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
             return self.form_invalid(form)
 
         return super().form_valid(form)
-        
+
 ##########################################################################
 ###                   FiscalSummary Monthの View                        ###
 ##########################################################################
