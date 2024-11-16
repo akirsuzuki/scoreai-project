@@ -1011,7 +1011,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
+        form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
         return form
 
     def get_context_data(self, **kwargs):
