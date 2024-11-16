@@ -12,9 +12,6 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- DataTables JS -->
-<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -22,16 +19,22 @@
     <div class="col-lg-12 d-flex align-items-strech">
       <div class="card w-100">
         <div class="card-header">
-          <h5 class="card-title mb-0">サンプルフォーマット</h5>
+          <h5 class="card-title mb-0">フォーマットのダウンロード</h5>
         </div>
         <div class="card-body">
-            <p>CSVテンプレートをダウンロード</p>
+          <h6>空のサンプルフォーマットをダウンロード</h6>
           <a href="{% url 'download_fiscal_summary_month_csv_param' 'sample' %}" class="btn btn-primary">ダウンロード</a>
           <p class="mt-3">
             １列目に項目名が入力されたフォーマットがダウンロードされます。<br>
             アップロードする際は、1列目はそのまま残し、2列目以降に対応するデータを入れてください。<br>
             <br>
             <strong>※ 項目名は、ダウンロードしたフォーマットの項目名をそのまま使用してください。
+          </p>
+          <hr>
+          <h6>現在登録されているデータのダウンロード</h6>
+          <a href="{% url 'download_fiscal_summary_month_csv_param' 'all' %}" class="btn btn-primary">ダウンロード</a>
+          <p class="mt-3">
+            現在選択中の会社のデータがすべてダウンロードされます。<br>
           </p>
         </div>
       </div>
@@ -59,6 +62,10 @@
                 </div>
               </form>
               <div class="alert alert-info" role="alert">
+                <p>【月度について】<br>
+                  CSVファイルの1列目にある月度（month）は、各期首時点の月度を表します。</p>
+                  <p>例えば、3月決算の会社の場合は4月＝月度1となります。</p>
+  
                 <p>【複数の会社で利用している場合の注意点】<br>
                 CSVファイルで会社コードを指定することはできません。現在選択中の会社のデータがインポートされます。</p>
               </div>
@@ -72,6 +79,10 @@
                 {% endfor %}
               </div>
               {% endif %}
+            </div>
+            <div class="col-md-6">
+              <p>マネーフォワード 月次推移表からのCSVインポートを行う場合は以下をご利用ください。</p>
+              <a href="{% url 'import_fiscal_summary_month_MF' %}" class="btn btn-primary">マネーフォワード 月次推移表からのCSVインポート</a>
             </div>
           </div>
         </div>

@@ -937,8 +937,12 @@ def download_fiscal_summary_month_csv(request, param=None):
         ])
 
     return response
-### CSVアップロード機能　###
 
+##########################################################################
+### CSVアップロード機能　###
+##########################################################################
+
+# CSVを編集してからアップロードする
 class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month.html"
     form_class = CsvUploadForm
@@ -991,6 +995,74 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
                     defaults=defaults
                 )
             
+            messages.success(self.request, 'CSVファイルが正常にインポートされました。')
+        except Exception as e:
+            messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')
+            return super().form_invalid(form)
+
+        return super().form_valid(form)
+
+
+# Moneyfowardの月次推移表をアップしたらそのまま変換してインポートする
+class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+    template_name = "scoreai/import_fiscal_summary_month_MF.html"
+    form_class = MoneyForwardCsvUploadForm
+    # form_class = CsvUploadForm
+    success_url = reverse_lazy('fiscal_summary_month_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # Limit the fiscal_year choices to the selected company
+        form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '月次財務サマリーのインポート（MoneyForwardから）'
+        context['fiscal_years'] = FiscalSummary_Year.objects.filter(company=self.this_company)
+        return context
+
+    def form_valid(self, form):
+        fiscal_year = form.cleaned_data['fiscal_year']
+        csv_file = form.cleaned_data['csv_file']
+
+        try:
+            # CSV解析
+            file_data = csv_file.read().decode('utf-8')
+            csv_reader = csv.reader(file_data.splitlines())
+            header = next(csv_reader)  # ヘッダー行を読み飛ばす
+
+            # 必要なデータを取得
+            periods = []
+            sales_data = []
+            gross_profit_data = []
+            operating_profit_data = []
+            ordinary_profit_data = []
+            
+            for row in csv_reader:
+                if row[0] == "売上高合計":
+                    sales_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
+                elif row[0] == "売上総利益":
+                    gross_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
+                elif row[0] == "営業利益":
+                    operating_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
+                elif row[0] == "経常利益":
+                    ordinary_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
+                elif row[0] == "決算整理":
+                    break
+
+            # 月度データを生成
+            for month, (sales, gross_profit, operating_profit, ordinary_profit) in enumerate(
+                    zip(sales_data, gross_profit_data, operating_profit_data, ordinary_profit_data), start=1):
+                FiscalSummary_Month.objects.create(
+                    fiscal_summary_year=fiscal_year,
+                    period=month,
+                    sales=sales,
+                    gross_profit=gross_profit,
+                    operating_profit=operating_profit,
+                    ordinary_profit=ordinary_profit
+                )
+
             messages.success(self.request, 'CSVファイルが正常にインポートされました。')
         except Exception as e:
             messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')

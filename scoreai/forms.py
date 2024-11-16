@@ -180,6 +180,25 @@ class FiscalSummary_MonthForm(forms.ModelForm):
 
         return cleaned_data
 
+
+class MoneyForwardCsvUploadForm(forms.Form):
+    fiscal_year = forms.ModelChoiceField(
+        queryset=FiscalSummary_Year.objects.none(),
+        label='年度',
+        required=True
+    )
+    csv_file = forms.FileField(
+        label='CSVファイル',
+        required=True
+    )
+
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super(MoneyForwardCsvUploadForm, self).__init__(*args, **kwargs)
+        if company:
+            self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
+
+
 class DebtForm(forms.ModelForm):
     issue_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='実行日')
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='返済開始')

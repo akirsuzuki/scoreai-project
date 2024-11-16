@@ -1,0 +1,65 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+{{ block.super }}
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block content %}
+  <div class="row mt-4">
+    <div class="col-lg-12 d-flex align-items-strech">
+      <div class="card w-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0">マネーフォワード 月次推移表CSVインポート</h5>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="fiscal_year">年度を選択:</label>
+                <select name="fiscal_year" id="fiscal_year" required>
+                    {% for year in fiscal_years %}
+                        <option value="{{ year.id }}">{{ year.name }}</option>
+                    {% endfor %}
+                </select>
+                <br><br>
+                <label for="csv_file" class="form-label">CSVファイルを選択:</label>
+                <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv" required>
+                <br><br>
+                <button type="submit" class="btn btn-primary">アップロード</button>
+            </form>
+
+            <p></p>
+            <div class="alert alert-info" role="alert">
+            <p>【月度について】<br>
+                CSVファイルの1列目にある月度（month）は、各期首時点の月度を表します。</p>
+                <p>例えば、3月決算の会社の場合は4月＝月度1となります。</p>  
+            </div>
+
+            {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-secondary">一覧に戻る</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+{% endblock %}
