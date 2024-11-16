@@ -281,7 +281,11 @@ class StockEventLineForm(forms.ModelForm):
 
 class CsvUploadForm(forms.Form):
     csv_file = forms.FileField(label='Select a CSV file')
-
+    override_flag = forms.BooleanField(
+        required=False,
+        label='既存データを上書きする',
+        initial=False
+    )
 
 
 ##########################################################################

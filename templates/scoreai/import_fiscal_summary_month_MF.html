@@ -20,7 +20,7 @@
     <div class="col-lg-12 d-flex align-items-strech">
       <div class="card w-100">
         <div class="card-header">
-          <h5 class="card-title mb-0">マネーフォワード 月次推移表CSVインポート</h5>
+          <h5 class="card-title mb-0">マネーフォワード 月次推移表CSVアップロード</h5>
         </div>
         <div class="card-body">
             <form method="post" enctype="multipart/form-data">
@@ -41,7 +41,7 @@
                     {{ form.override_flag|add_class:"form-check-input" }}
                 </div>
                 <p></p>
-                <button type="submit" class="btn btn-primary">インポート</button>
+                <button type="submit" class="btn btn-primary">アップロード</button>
                 <p></p>
                 <strong>エンコードはShift-JISでお願いします。</strong>
                 <p></p>
@@ -65,7 +65,7 @@
             {% endif %}
         </div>
         <div class="card-footer text-end">
-            <button type="button" onclick="history.back()" class="btn btn-outline-secondary"></button>キャンセル</button>
+            <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
         </div>
       </div>
     </div>

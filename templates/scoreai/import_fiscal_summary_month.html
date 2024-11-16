@@ -23,7 +23,7 @@
         </div>
         <div class="card-body">
           <h6>空のサンプルフォーマットをダウンロード</h6>
-          <a href="{% url 'download_fiscal_summary_month_csv_param' 'sample' %}" class="btn btn-primary">ダウンロード</a>
+          <a href="{% url 'download_fiscal_summary_month_csv_param' 'sample' %}" class="btn btn-secondary">ダウンロード</a>
           <p class="mt-3">
             １列目に項目名が入力されたフォーマットがダウンロードされます。<br>
             アップロードする際は、1列目はそのまま残し、2列目以降に対応するデータを入れてください。<br>
@@ -32,7 +32,7 @@
           </p>
           <hr>
           <h6>現在登録されているデータのダウンロード</h6>
-          <a href="{% url 'download_fiscal_summary_month_csv_param' 'all' %}" class="btn btn-primary">ダウンロード</a>
+          <a href="{% url 'download_fiscal_summary_month_csv_param' 'all' %}" class="btn btn-secondary">ダウンロード</a>
           <p class="mt-3">
             現在選択中の会社のデータがすべてダウンロードされます。<br>
           </p>
@@ -56,9 +56,10 @@
               <div class="input-group">
                 <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
                 <button type="submit" class="btn btn-primary">アップロード</button>
-                <p></p>
-                <strong>エンコードはShift-JISでお願いします。</strong>
               </div>
+              <p></p>
+              <strong>エンコードはShift-JISでお願いします。</strong>
+              <p></p>
             </div>
           </form>
           <div class="alert alert-info" role="alert">
@@ -83,7 +84,7 @@
           <hr>
           <p>マネーフォワード 月次推移表からのCSVインポートを行う場合は以下をご利用ください。</p>
           <br>
-          <a href="{% url 'import_fiscal_summary_month_MF' %}" class="btn btn-primary">マネーフォワード 月次推移表からのCSVインポート</a>
+          <a href="{% url 'import_fiscal_summary_month_MF' %}" class="btn btn-outline-primary">マネーフォワード 月次推移表からのCSVインポート</a>
           <br>
           <br>
         </div>
