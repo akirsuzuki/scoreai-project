@@ -58,7 +58,7 @@
                   <div class="input-group">
                     <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
                     <button type="submit" class="btn btn-primary">アップロード</button>
-                    <br>
+                    <p></p>
                     <strong>エンコードはShift-JISでお願いします。</strong>
                   </div>
                 </div>
@@ -88,30 +88,10 @@
             </div>
           </div>
         </div>
+        <div class="card-footer text-end">
+          <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
+        </div>
       </div>
     </div>
   </div>
-
-  
 {% endblock %}
-
-<div class="alert alert-info" role="alert">
-    現在選択中の会社のデータがインポートされます。
-</div>
-
-<form method="post" enctype="multipart/form-data" class="mb-4">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary">Upload CSV</button>
-</form>
-
-{% if messages %}
-<div class="messages">
-    {% for message in messages %}
-    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-</div>

@@ -650,7 +650,7 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
             return super().form_invalid(form)
         
         try:
-            file = TextIOWrapper(csv_file.file, encoding='shift_jis')
+            file = TextIOWrapper(csv_file.file, encoding='shift-jis')
             reader = csv.DictReader(file)
             
             def safe_value(field_name, value):
@@ -1025,6 +1025,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
     def form_valid(self, form):
         fiscal_year = form.cleaned_data['fiscal_year']
         csv_file = form.cleaned_data['csv_file']
+        override_flag = form.cleaned_data.get('override_flag', False)
 
         try:
             # CSV解析
@@ -1054,19 +1055,31 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
             # 月度データを生成
             for month, (sales, gross_profit, operating_profit, ordinary_profit) in enumerate(
                     zip(sales_data, gross_profit_data, operating_profit_data, ordinary_profit_data), start=1):
-                FiscalSummary_Month.objects.create(
+
+                existing_data = FiscalSummary_Month.objects.filter(
                     fiscal_summary_year=fiscal_year,
-                    period=month,
-                    sales=sales,
-                    gross_profit=gross_profit,
-                    operating_profit=operating_profit,
-                    ordinary_profit=ordinary_profit
-                )
+                    period=month
+                ).exists()
+
+                if existing_data and not override_flag:
+                    messages.error(self.request, f'{fiscal_year.year}年の{month}月のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。')
+                    return self.form_invalid(form)
+                else:
+                    FiscalSummary_Month.objects.update_or_create(
+                        fiscal_summary_year=fiscal_year,
+                        period=month,
+                        defaults={
+                            'sales': sales,
+                            'gross_profit': gross_profit,
+                            'operating_profit': operating_profit,
+                            'ordinary_profit': ordinary_profit
+                        }
+                    )
 
             messages.success(self.request, 'CSVファイルが正常にインポートされました。')
         except Exception as e:
             messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')
-            return super().form_invalid(form)
+            return self.form_invalid(form)
 
         return super().form_valid(form)
 

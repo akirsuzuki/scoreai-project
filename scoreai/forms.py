@@ -191,6 +191,10 @@ class MoneyForwardCsvUploadForm(forms.Form):
         label='CSVファイル',
         required=True
     )
+    override_flag = forms.BooleanField(
+        required=False,
+        label='既存データを上書きする',
+        initial=False)
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
