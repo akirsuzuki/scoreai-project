@@ -1028,7 +1028,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
 
         try:
             # CSV解析
-            file_data = csv_file.read().decode('utf-8')
+            file_data = csv_file.read().decode('shift-jis')
             csv_reader = csv.reader(file_data.splitlines())
             header = next(csv_reader)  # ヘッダー行を読み飛ばす
 

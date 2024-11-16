@@ -27,7 +27,7 @@
                 <label for="fiscal_year">年度を選択:</label>
                 <select name="fiscal_year" id="fiscal_year" required>
                     {% for year in fiscal_years %}
-                        <option value="{{ year.id }}">{{ year.name }}</option>
+                        <option value="{{ year.id }}">{{ year.year }}</option>
                     {% endfor %}
                 </select>
                 <br><br>
@@ -35,6 +35,7 @@
                 <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv" required>
                 <br><br>
                 <button type="submit" class="btn btn-primary">アップロード</button>
+                <strong>エンコードはShift-JISでお願いします。</strong>
             </form>
 
             <p></p>
