@@ -28,18 +28,23 @@
                 {{ form.non_field_errors }}
                 <div class="form-group">
                     {{ form.fiscal_year.label_tag }}
-                    {{ form.fiscal_year.year|add_class:"form-control" }}
+                    {{ form.fiscal_year|add_class:"form-control" }}
                 </div>
+                <p></p>
                 <div class="form-group">
                     {{ form.csv_file.label_tag }}
                     {{ form.csv_file|add_class:"form-control" }}
                 </div>
+                <p></p>
                 <div class="form-group">
                     {{ form.override_flag.label_tag }}
                     {{ form.override_flag|add_class:"form-check-input" }}
                 </div>
+                <p></p>
                 <button type="submit" class="btn btn-primary">インポート</button>
+                <p></p>
                 <strong>エンコードはShift-JISでお願いします。</strong>
+                <p></p>
             </form>
 
             <p></p>
