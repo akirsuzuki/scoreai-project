@@ -257,13 +257,14 @@ class Stakeholder_nameForm(forms.ModelForm):
 class StockEventForm(forms.ModelForm):
     class Meta:
         model = StockEvent
-        fields = ['fiscal_summary_year', 'event_date', 'event_type', 'memo']
+        fields = ['fiscal_summary_year', 'name', 'event_date', 'event_type', 'memo']
         widgets = {
             'fiscal_summary_year': forms.Select(attrs={'class': 'form-control'}),
             'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
         labels = {
             'fiscal_summary_year': '年度',
+            'name': 'イベント名',
             'event_date': '発行日',
             'event_type': '発行種別',
             'memo': '備考',

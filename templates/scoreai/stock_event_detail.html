@@ -12,9 +12,23 @@
                 <h5 class="card-title mb-0">{{ stock_event.fiscal_summary_year.year }}年度の詳細</h5>
             </div>
             <div class="card-body">
-                <p><strong>発行日:</strong> {{ stock_event.event_date }}</p>
-                <p><strong>発行種別:</strong> {{ stock_event.event_type }}</p>
-                <p><strong>備考:</strong> {{ stock_event.memo }}</p>
+                <h6>イベント</h6>
+                <p>{{ stock_event.name }}</p>
+                <table class="table table-bordered">
+                    <tr>
+                        <th>発行日</th>
+                        <td>{{ stock_event.event_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>発行種別</th>
+                        <td>{{ stock_event.event_type }}</td>
+                    </tr>
+                    <tr>
+                        <th>備考</th>
+                        <td>{{ stock_event.memo }}</td>
+                    </tr>
+                </table>
+
             </div>
             <div class="card-footer text-end">
                 <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>

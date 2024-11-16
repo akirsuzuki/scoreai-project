@@ -526,7 +526,8 @@ class FiscalSummary_Year(models.Model):
         """EBITDA有利子負債倍率 = 有利子負債 ÷ EBITDA"""
         interest_bearing_debt = self.short_term_loans_payable + self.long_term_loans_payable
         ebitda = self.EBITDA
-        if ebitda != 0:
+        # EBITDAが0以上の場合のみ計算する
+        if ebitda > 0:
             ratio = interest_bearing_debt / ebitda
             return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         return None
@@ -535,7 +536,8 @@ class FiscalSummary_Year(models.Model):
     def operating_working_capital_turnover_period(self):
         """営業運転資本回転期間（月）= 営業運転資本 ÷ 売上高 × 12 (ヶ月)"""
         operating_working_capital = self.accounts_receivable + self.inventory - self.accounts_payable
-        if self.sales != 0:
+        # 営業運転資本が正のマイナスの場合はマイナス値を返す
+        if self.sales > 0:
             period = (operating_working_capital / self.sales) * 12
             return Decimal(period).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         return None
@@ -543,7 +545,8 @@ class FiscalSummary_Year(models.Model):
     @property
     def equity_ratio(self):
         """自己資本比率 = 純資産 ÷ 総資産 × 100 (%)"""
-        if self.total_assets != 0:
+        # 純資産がマイナスの場合はマイナス値を返す
+        if self.total_assets > 0:
             ratio = (self.total_net_assets / self.total_assets) * 100
             return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         return Decimal('0.00')
@@ -748,4 +751,9 @@ class TechnicalTerm(models.Model):
     def __str__(self):
         return self.name
 
+class Help(models.Model):
+    title = models.CharField("タイトル", max_length=255)
+    content = models.TextField("内容")
 
+    def __str__(self):
+        return self.title

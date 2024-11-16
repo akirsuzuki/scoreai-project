@@ -412,6 +412,15 @@ def get_finance_score(year, industry_classification, industry_subclassification,
     ii = Decimal(benchmark.range_ii)
     i = Decimal(benchmark.range_i)
 
+    #  EBITDA有利子負債倍率はEBITDAが0以下の場合は1とする
+    if indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+        if value is None:
+            # models.pyで、0より小さい場合はNoneとしているので、ここでは1とする
+            return 1
+        elif value == 0:
+            # 0の場合は1とする
+            return 1
+
     # Ensure value is a Decimal for accurate comparison
     value = Decimal(value)
 
