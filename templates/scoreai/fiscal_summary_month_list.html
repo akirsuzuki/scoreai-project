@@ -405,8 +405,7 @@
       <td>操作</td>
       {% for item in monthly_summaries %}
       {% for record in item.data %}
-      <td class="text-end"><a class="btn btn-primary btn-sm"
-          href="{% url 'fiscal_summary_month_update' record.id %}">編集</a></td>
+      <td class="text-center"><a href="{% url 'fiscal_summary_month_update' record.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
       {% endfor %}
       {% endfor %}
     </tr>

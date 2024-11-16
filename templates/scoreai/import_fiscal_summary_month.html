@@ -1,6 +1,7 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block title %}
 {{ title }}
@@ -56,12 +57,11 @@
               <div class="input-group">
                 <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
                 <button type="submit" class="btn btn-primary">アップロード</button>
-              </div>
+              </div>  
               <div class="form-group">
                 {{ form.override_flag.label_tag }}
-                {{ form.override_flag|add_class:"form-check-input" }}
+                {{ form.override_flag }}
               </div>
-
               <p></p>
               <strong>エンコードはShift-JISでお願いします。</strong>
               <p></p>
