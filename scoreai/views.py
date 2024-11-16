@@ -1007,12 +1007,10 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
 class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month_MF.html"
     form_class = MoneyForwardCsvUploadForm
-    # form_class = CsvUploadForm
     success_url = reverse_lazy('fiscal_summary_month_list')
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        # Limit the fiscal_year choices to the selected company
         form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
         return form
 
@@ -1033,36 +1031,73 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
             csv_reader = csv.reader(file_data.splitlines())
             header = next(csv_reader)  # ヘッダー行を読み飛ばす
 
-            # 必要なデータを取得
-            periods = []
-            sales_data = []
-            gross_profit_data = []
-            operating_profit_data = []
-            ordinary_profit_data = []
-            
+            # ヘッダーから月度情報を取得
+            # 最初の2列をスキップ ("科目", "行")
+            header_columns = header[2:]
+            months = []
+            current_month = 1
+
+            for h in header_columns:
+                if h == "決算整理":
+                    months.append(13)
+                elif h == "合計":
+                    # "合計"が出てきたら、その列の処理をせずに終了
+                    break
+                else:
+                    months.append(current_month)
+                    current_month += 1
+                    # 最大13ヶ月まで処理
+                    if current_month > 13:
+                        break
+
+            # 読み込むデータの列数に合わせて、データ格納用リストの初期化
+            num_columns = len(months)
+            sales_data = [0] * num_columns
+            gross_profit_data = [0] * num_columns
+            operating_profit_data = [0] * num_columns
+            ordinary_profit_data = [0] * num_columns
+
             for row in csv_reader:
-                if row[0] == "売上高合計":
-                    sales_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
-                elif row[0] == "売上総利益":
-                    gross_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
-                elif row[0] == "営業利益":
-                    operating_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
-                elif row[0] == "経常利益":
-                    ordinary_profit_data = [int(Decimal(col) // 1000) for col in row[2:] if col and row[header.index("合計")] != col]
-                elif row[0] == "決算整理":
+                label = row[0]  # ラベルは最初の列にある
+
+                if label == "売上高合計":
+                    sales_data = [
+                        int(Decimal(col.replace(',', '')) // 1000) if col else 0
+                        for col in row[2:2+num_columns]
+                    ]
+                elif label == "売上総利益":
+                    gross_profit_data = [
+                        int(Decimal(col.replace(',', '')) // 1000) if col else 0
+                        for col in row[2:2+num_columns]
+                    ]
+                elif label == "営業利益":
+                    operating_profit_data = [
+                        int(Decimal(col.replace(',', '')) // 1000) if col else 0
+                        for col in row[2:2+num_columns]
+                    ]
+                elif label == "経常利益":
+                    ordinary_profit_data = [
+                        int(Decimal(col.replace(',', '')) // 1000) if col else 0
+                        for col in row[2:2+num_columns]
+                    ]
+                elif label == "当期純利益":
+                    # "当期純利益"が出てきたら読み込み終了
                     break
 
             # 月度データを生成
-            for month, (sales, gross_profit, operating_profit, ordinary_profit) in enumerate(
-                    zip(sales_data, gross_profit_data, operating_profit_data, ordinary_profit_data), start=1):
-
+            for month, sales, gross_profit, operating_profit, ordinary_profit in zip(
+                months, sales_data, gross_profit_data, operating_profit_data, ordinary_profit_data
+            ):
                 existing_data = FiscalSummary_Month.objects.filter(
                     fiscal_summary_year=fiscal_year,
                     period=month
                 ).exists()
 
                 if existing_data and not override_flag:
-                    messages.error(self.request, f'{fiscal_year.year}年の{month}月のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。')
+                    messages.error(
+                        self.request,
+                        f'{fiscal_year.year}年の{month}月のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                    )
                     return self.form_invalid(form)
                 else:
                     FiscalSummary_Month.objects.update_or_create(
@@ -1082,7 +1117,6 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
             return self.form_invalid(form)
 
         return super().form_valid(form)
-
 
 ##########################################################################
 ###                    Debt の View                                    ###
