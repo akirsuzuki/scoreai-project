@@ -18,6 +18,16 @@
             <label for="showOperatingProfit">営業利益を表示</label>
             <input type="checkbox" id="showOrdinaryProfit" checked>
             <label for="showOrdinaryProfit">経常利益を表示</label>
+            <input type="checkbox" id="showEbitda" checked>
+            <label for="showEbitda">EBITDAを表示</label>
+            <input type="checkbox" id="showCashAndDeposits" checked>
+            <label for="showCashAndDeposits">現預金を表示</label>
+            <input type="checkbox" id="showLongTermLoansPayable" checked>
+            <label for="showLongTermLoansPayable">長期借入金を表示</label>
+            <input type="checkbox" id="showTotalNetAssets" checked>
+            <label for="showTotalNetAssets">純資産合計を表示</label>
+            <input type="checkbox" id="showTotalAssets" checked>
+            <label for="showTotalAssets">総資産を表示</label>
           </div>
 
         </div>
@@ -47,6 +57,8 @@
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('financialChart').getContext('2d');
@@ -57,7 +69,12 @@
           sales: {{ summary.sales|default:0 }},
           grossProfit: {{ summary.gross_profit|default:0 }},
           operatingProfit: {{ summary.operating_profit|default:0 }},
-          ordinaryProfit: {{ summary.ordinary_profit|default:0 }}
+          ordinaryProfit: {{ summary.ordinary_profit|default:0 }},
+          ebitda: {{ summary.ebitda|default:0 }},
+          cash_and_deposits: {{ summary.cash_and_deposits|default:0 }},
+          long_term_loans_payable: {{ summary.long_term_loans_payable|default:0 }},
+          total_net_assets: {{ summary.total_net_assets|default:0 }},
+          total_assets: {{ summary.total_assets|default:0 }}
         },
       {% endfor %}
     ];
@@ -68,6 +85,11 @@
     const grossProfits = fiscalSummaries.map(summary => summary.grossProfit);
     const operatingProfits = fiscalSummaries.map(summary => summary.operatingProfit);
     const ordinaryProfits = fiscalSummaries.map(summary => summary.ordinaryProfit);
+    const ebitdas = fiscalSummaries.map(summary => summary.ebitda);
+    const cash_and_deposits = fiscalSummaries.map(summary => summary.cash_and_deposits);
+    const long_term_loans_payables = fiscalSummaries.map(summary => summary.long_term_loans_payable);
+    const total_net_assets = fiscalSummaries.map(summary => summary.total_net_assets);
+    const total_assets = fiscalSummaries.map(summary => summary.total_assets);
 
     const chart = new Chart(ctx, {
       type: 'bar',
@@ -77,40 +99,75 @@
           {
             label: '売上高',
             data: sales,
-            backgroundColor: 'rgba(54, 162, 235, 0.5)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1,
-            yAxisID: 'y'
+            type: 'line',
+            backgroundColor: chartColors.backgroundColor[0],
+            borderColor: chartColors.borderColor[0],
+            borderWidth: 2,
+            yAxisID: 'y1'
           },
           {
             label: '粗利益',
             data: grossProfits,
             type: 'line',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderWidth: 2,
-            fill: false,
+            backgroundColor: chartColors.backgroundColor[1],
+            borderColor: chartColors.borderColor[1],
+            borderWidth: 1,
             yAxisID: 'y1'
           },
           {
             label: '営業利益',
             data: operatingProfits,
             type: 'line',
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderWidth: 2,
-            fill: false,
+            backgroundColor: chartColors.backgroundColor[2],
+            borderColor: chartColors.borderColor[2],
+            borderWidth: 1,
             yAxisID: 'y1'
           },
           {
             label: '経常利益',
             data: ordinaryProfits,
             type: 'line',
-            borderColor: 'rgba(153, 102, 255, 1)',
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            borderWidth: 2,
-            fill: false,
+            backgroundColor: chartColors.backgroundColor[3],
+            borderColor: chartColors.borderColor[3],
+            borderWidth: 1,
             yAxisID: 'y1'
+          },
+          {
+            label: 'EBITDA',
+            data: ebitdas,
+            type: 'line',
+            backgroundColor: chartColors.backgroundColor[4],
+            borderColor: chartColors.borderColor[4],
+            borderWidth: 1,
+            yAxisID: 'y1'
+          },
+          {
+            label: '現預金',
+            data: cash_and_deposits,
+            backgroundColor: chartColors.backgroundColor[5],
+            borderColor: chartColors.borderColor[5],
+            yAxisID: 'y'
+          },
+          {
+            label: '長期借入金',
+            data: long_term_loans_payables,
+            backgroundColor: chartColors.backgroundColor[6],
+            borderColor: chartColors.borderColor[6],
+            yAxisID: 'y'
+          },
+          {
+            label: '純資産合計',
+            data: total_net_assets,
+            backgroundColor: chartColors.backgroundColor[7],
+            borderColor: chartColors.borderColor[7],
+            yAxisID: 'y'
+          },
+          {
+            label: '総資産',
+            data: total_assets,
+            backgroundColor: chartColors.backgroundColor[8],
+            borderColor: chartColors.borderColor[8],
+            yAxisID: 'y'
           }
         ]
       },
@@ -123,7 +180,7 @@
             position: 'left',
             title: {
               display: true,
-              text: '売上高'
+              text: 'BS項目'
             }
           },
           y1: {
@@ -132,7 +189,7 @@
             position: 'right',
             title: {
               display: true,
-              text: '利益'
+              text: 'PL項目'
             },
             grid: {
               drawOnChartArea: false
@@ -146,13 +203,22 @@
       chart.data.datasets[1].hidden = !document.getElementById('showGrossProfit').checked;
       chart.data.datasets[2].hidden = !document.getElementById('showOperatingProfit').checked;
       chart.data.datasets[3].hidden = !document.getElementById('showOrdinaryProfit').checked;
+      chart.data.datasets[4].hidden = !document.getElementById('showEbitda').checked;
+      chart.data.datasets[6].hidden = !document.getElementById('showCashAndDeposits').checked;
+      chart.data.datasets[7].hidden = !document.getElementById('showLongTermLoansPayable').checked;
+      chart.data.datasets[8].hidden = !document.getElementById('showTotalNetAssets').checked;
+      chart.data.datasets[9].hidden = !document.getElementById('showTotalAssets').checked;
       chart.update();
     }
 
     document.getElementById('showGrossProfit').addEventListener('change', updateChart);
     document.getElementById('showOperatingProfit').addEventListener('change', updateChart);
     document.getElementById('showOrdinaryProfit').addEventListener('change', updateChart);
-
+    document.getElementById('showEbitda').addEventListener('change', updateChart);
+    document.getElementById('showCashAndDeposits').addEventListener('change', updateChart);
+    document.getElementById('showLongTermLoansPayable').addEventListener('change', updateChart);
+    document.getElementById('showTotalNetAssets').addEventListener('change', updateChart);
+    document.getElementById('showTotalAssets').addEventListener('change', updateChart);
     updateChart();
   });
 </script>

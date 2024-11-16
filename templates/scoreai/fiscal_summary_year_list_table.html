@@ -31,6 +31,39 @@
             </thead>
             <tbody class="table-group-divider">
               <tr>
+                <td>現預金</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.cash_and_deposits|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>固定資産合計</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.total_fixed_assets|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>長期借入金</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.long_term_loans_payable|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>純資産合計</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.total_net_assets|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>総資産</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.total_assets|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td colspan="{{ fiscal_summary_years|length|add:1 }}" style="border-bottom: 2px solid black;"></td>
+              </tr>              
+              <tr>
                 <td>売上高</td>
                 {% for summary in fiscal_summary_years %}
                 <td class="text-end">{{ summary.sales|intcomma }}</td>
@@ -52,6 +85,12 @@
                 <td>経常利益</td>
                 {% for summary in fiscal_summary_years %}
                 <td class="text-end">{{ summary.ordinary_profit|intcomma }}</td>
+                {% endfor %}
+              </tr>
+              <tr>
+                <td>EBITDA</td>
+                {% for summary in fiscal_summary_years %}
+                <td class="text-end">{{ summary.ebitda|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
