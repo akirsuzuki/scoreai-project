@@ -36,7 +36,7 @@
         </div>
         <div class="card-body">
           <div class="row justify-content-left">
-            <div class="col-md-6">
+            <div class="col-md-12">
               <form method="post" enctype="multipart/form-data" class="mb-4">
                 {% csrf_token %}
                 <div class="mb-3">
@@ -45,11 +45,16 @@
                     <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
                     <button type="submit" class="btn btn-primary">アップロード</button>
                   </div>
+                  <p></p>
+                  <div class="form-group">
+                    {{ form.override_flag.label_tag }}
+                    {{ form.override_flag }}
+                  </div>
+                  <p></p>
+                  <strong>エンコードはShift-JISでお願いします。</strong>
+                  <p></p>
                 </div>
               </form>
-              <div class="alert alert-warning" role="alert">
-                <p>同じデータがある場合は上書きされます。<br>
-              </div>
 
               <div class="alert alert-info" role="alert">
                 <p>【注意点】<br>

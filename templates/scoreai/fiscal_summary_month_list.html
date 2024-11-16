@@ -85,8 +85,7 @@
               <tr>
                 <td>操作</td>
                 {% for record in summary.data %}
-                <td class="text-end"><a class="btn btn-primary btn-sm"
-                    href="{% url 'fiscal_summary_month_update' record.id %}">編集</a></td>
+                <td class="text-end"><a href="{% url 'fiscal_summary_month_update' record.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
                 {% endfor %}
               </tr>
             </tfoot>
@@ -318,96 +317,3 @@
   });
 </script>
 {% endblock %}
-
-
-
-<table class="table table-hover" id="fiscal-summary-table">
-  <thead class="table-light">
-    <tr>
-      <th></th>
-      {% for month in months_label %}
-      <th class="text-center">{{ month }}月</th>
-      {% endfor %}
-      <th>Total</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    <tr>
-      <td>売上高</td>
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.sales|floatformat:0|intcomma }}</td>
-      {% endfor %}
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.sum_sales|floatformat:0|intcomma }}</td>
-    </tr>
-    <tr>
-      <td rowspan="2">粗利益</td>
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.gross_profit|floatformat:0|intcomma }}</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.sum_gross_profit|floatformat:0|intcomma }}</td>
-      <!-- Use the total_gross_profit calculated in the view -->
-      {% endfor %}
-    </tr>
-    <tr class="bg-light">
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.gross_profit_rate|floatformat:1 }}%</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.average_gross_profit_rate|floatformat:1 }}%</td>
-      <!-- Use the total_gross_profit calculated in the view -->
-      {% endfor %}
-    </tr>
-
-    <tr>
-      <td rowspan="2">営業利益</td>
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.operating_profit|floatformat:0|intcomma }}</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.sum_operating_profit|floatformat:0|intcomma }}</td>
-      <!-- Use the total_operating_profit calculated in the view -->
-      {% endfor %}
-    </tr>
-    <tr class="bg-light">
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.operating_profit_rate|floatformat:1 }}%</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.average_operating_profit_rate|floatformat:1 }}%</td>
-      <!-- Use the total_operating_profit calculated in the view -->
-      {% endfor %}
-    </tr>
-
-    <tr>
-      <td rowspan="2">経常利益</td>
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.ordinary_profit|floatformat:0|intcomma }}</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.sum_ordinary_profit|floatformat:1|intcomma }}</td>
-      <!-- Use the total_ordinary_profit calculated in the view -->
-      {% endfor %}
-    </tr>
-    <tr class="bg-light"> <!-- Added row for 経常利益率 -->
-      {% for summary in monthly_summaries %}
-      {% for amount in summary.data %}
-      <td class="text-end">{{ amount.ordinary_profit_rate|floatformat:1 }}%</td>
-      {% endfor %}
-      <td class="text-end">{{ monthly_summaries_total.average_ordinary_profit_rate|floatformat:1 }}%</td>
-      {% endfor %}
-    </tr>
-  </tbody>
-  <tfoot class="table-group-divider">
-    <tr>
-      <td>操作</td>
-      {% for item in monthly_summaries %}
-      {% for record in item.data %}
-      <td class="text-center"><a href="{% url 'fiscal_summary_month_update' record.id %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
-      {% endfor %}
-      {% endfor %}
-    </tr>
-  </tfoot>
-</table>

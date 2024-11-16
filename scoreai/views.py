@@ -645,6 +645,7 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
 
     def form_valid(self, form):
         csv_file = form.cleaned_data['csv_file']
+        override_flag = form.cleaned_data.get('override_flag', False)
         if not csv_file.name.endswith('.csv'):
             messages.error(self.request, 'アップロードされたファイルはCSV形式ではありません。')
             return super().form_invalid(form)
@@ -723,22 +724,35 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                 }                
                 
                 if year is not None:
-                    fiscal_summary_year, created = FiscalSummary_Year.objects.update_or_create(
+                    existing_data = FiscalSummary_Year.objects.filter(
                         company=self.this_company,
                         year=year,
                         version='1',
-                        defaults=defaults
-                    )
+                    ).exists()
+
+                    if existing_data and not override_flag:
+                        messages.error(
+                            self.request,
+                            f'{year}年の決算データは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                        )
+                        return self.form_invalid(form)
+                    else:
+                        FiscalSummary_Year.objects.update_or_create(
+                            company=self.this_company,
+                            year=year,
+                            version='1',
+                            defaults=defaults
+                        )
                 else:
-                    messages.warning(self.request, f'年度が指定されていない行をスキップしました。')
+                    messages.warning(self.request, '年度が指定されていない行をスキップしました。')
             
             messages.success(self.request, 'CSVファイルが正常にインポートされました。')
         except Exception as e:
             messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')
-            return super().form_invalid(form)
+            return self.form_invalid(form)
 
         return super().form_valid(form)
-
+        
 ##########################################################################
 ###                   FiscalSummary Monthの View                        ###
 ##########################################################################
