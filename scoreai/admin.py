@@ -184,3 +184,8 @@ class TechnicalTermAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
     ordering = ('name',)
 
+@admin.register(Help)
+class HelpAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at')
+    list_display_links = ('title',)
+    ordering = ('-created_at',)

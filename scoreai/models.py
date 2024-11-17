@@ -753,6 +753,15 @@ class TechnicalTerm(models.Model):
 
 class Help(models.Model):
     title = models.CharField("タイトル", max_length=255)
+    category =  models.CharField(
+        max_length=50,
+        choices=(
+            ('login', 'ログインについて'),
+            ('others', 'その他'),
+        ),
+        default = 'others',
+    )
+
     content = models.TextField("内容")
 
     def __str__(self):

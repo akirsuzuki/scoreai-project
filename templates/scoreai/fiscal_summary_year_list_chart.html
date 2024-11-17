@@ -20,6 +20,7 @@
             <label for="showOrdinaryProfit">経常利益を表示</label>
             <input type="checkbox" id="showEbitda" checked>
             <label for="showEbitda">EBITDAを表示</label>
+            <br>
             <input type="checkbox" id="showCashAndDeposits" checked>
             <label for="showCashAndDeposits">現預金を表示</label>
             <input type="checkbox" id="showLongTermLoansPayable" checked>
@@ -204,10 +205,10 @@
       chart.data.datasets[2].hidden = !document.getElementById('showOperatingProfit').checked;
       chart.data.datasets[3].hidden = !document.getElementById('showOrdinaryProfit').checked;
       chart.data.datasets[4].hidden = !document.getElementById('showEbitda').checked;
-      chart.data.datasets[6].hidden = !document.getElementById('showCashAndDeposits').checked;
-      chart.data.datasets[7].hidden = !document.getElementById('showLongTermLoansPayable').checked;
-      chart.data.datasets[8].hidden = !document.getElementById('showTotalNetAssets').checked;
-      chart.data.datasets[9].hidden = !document.getElementById('showTotalAssets').checked;
+      chart.data.datasets[5].hidden = !document.getElementById('showCashAndDeposits').checked;
+      chart.data.datasets[6].hidden = !document.getElementById('showLongTermLoansPayable').checked;
+      chart.data.datasets[7].hidden = !document.getElementById('showTotalNetAssets').checked;
+      chart.data.datasets[8].hidden = !document.getElementById('showTotalAssets').checked;
       chart.update();
     }
 
