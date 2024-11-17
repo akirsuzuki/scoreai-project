@@ -3,3 +3,7 @@
 .dockerignore
 __pycache__/
 *.pyc
+start.sh
+migrations.sh
+migrate.sh
+build.sh

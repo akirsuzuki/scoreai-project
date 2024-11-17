@@ -186,6 +186,6 @@ class TechnicalTermAdmin(admin.ModelAdmin):
 
 @admin.register(Help)
 class HelpAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at')
-    list_display_links = ('title',)
-    ordering = ('-created_at',)
+    list_display = ('title', 'category')
+    list_display_links = ('title', 'category')
+    ordering = ('category', 'title')

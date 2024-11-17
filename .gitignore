@@ -6,3 +6,7 @@ db.sqlite3
 *.py[co]
 memo.txt
 .DS_Store
+start.sh
+migrations.sh
+migrate.sh
+build.sh
