@@ -71,7 +71,7 @@
           grossProfit: {{ summary.gross_profit|default:0 }},
           operatingProfit: {{ summary.operating_profit|default:0 }},
           ordinaryProfit: {{ summary.ordinary_profit|default:0 }},
-          ebitda: {{ summary.ebitda|default:0 }},
+          EBITDA: {{ summary.EBITDA|default:0 }},
           cash_and_deposits: {{ summary.cash_and_deposits|default:0 }},
           long_term_loans_payable: {{ summary.long_term_loans_payable|default:0 }},
           total_net_assets: {{ summary.total_net_assets|default:0 }},
@@ -86,7 +86,7 @@
     const grossProfits = fiscalSummaries.map(summary => summary.grossProfit);
     const operatingProfits = fiscalSummaries.map(summary => summary.operatingProfit);
     const ordinaryProfits = fiscalSummaries.map(summary => summary.ordinaryProfit);
-    const ebitdas = fiscalSummaries.map(summary => summary.ebitda);
+    const EBITDAs = fiscalSummaries.map(summary => summary.EBITDA);
     const cash_and_deposits = fiscalSummaries.map(summary => summary.cash_and_deposits);
     const long_term_loans_payables = fiscalSummaries.map(summary => summary.long_term_loans_payable);
     const total_net_assets = fiscalSummaries.map(summary => summary.total_net_assets);
@@ -135,7 +135,7 @@
           },
           {
             label: 'EBITDA',
-            data: ebitdas,
+            data: EBITDAs,
             type: 'line',
             backgroundColor: chartColors.backgroundColor[4],
             borderColor: chartColors.borderColor[4],
