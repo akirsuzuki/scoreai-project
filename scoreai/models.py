@@ -246,6 +246,8 @@ class Debt(models.Model):
     def elapsed_months(self):
         start_date = self.start_date
         now = datetime.now()
+        if start_date > now:
+            return 0
         return (now.year - start_date.year) * 12 + (now.month - start_date.month)
 
     def balance_after_months(self, months):
