@@ -244,7 +244,7 @@ class Debt(models.Model):
 
     @property
     def elapsed_months(self):
-        start_date = self.start_date
+        start_date = datetime.combine(self.start_date, datetime.min.time())
         now = datetime.now()
         if start_date > now:
             return 0
