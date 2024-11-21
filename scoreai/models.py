@@ -252,9 +252,12 @@ class Debt(models.Model):
 
     def balance_after_months(self, months):
         # 指定した月が経過した時点の残高（最終回は考慮せず）
-        projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
+        if months <= 0:
+            projected_balance = self.principal
+        else:
+            projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
         projected_interest_amount = projected_balance * self.interest_rate / 12 / 100
-        return max(0, projected_balance), max(0,projected_interest_amount)
+        return max(0, projected_balance), max(0, projected_interest_amount)
 
     @property
     def balances_monthly(self):
