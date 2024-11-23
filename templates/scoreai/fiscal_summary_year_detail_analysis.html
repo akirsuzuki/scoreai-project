@@ -155,6 +155,18 @@
               </div>
             </div>
           </div>
+          <p></p>
+          <div class="mb-3 row">
+            <label class="col-sm-6 col-form-label">営業利益率</label>
+            <div class="col-sm-6">
+              <p class="form-control-plaintext">{{ fiscal_summary_year.operating_profit_margin|intcomma }}</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-info small" role="alert">
+                {{ technical_terms.operating_profit_margin.0 }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -165,14 +177,26 @@
           <div class="mb-3 row">
             <label class="col-sm-6 col-form-label">流動比率</label>
             <div class="col-sm-6">
-              <p class="form-control-plaintext"></p>
+              <p class="form-control-plaintext">{{ fiscal_summary_year.current_ratio|intcomma }}</p>
             </div>
             <div class="col-sm-12">
               <div class="alert alert-info small" role="alert">
-                
+                {{ technical_terms.current_ratio.0 }}
               </div>
             </div>
-
+          </div>
+          <p></p>
+          <div class="mb-3 row">
+            <label class="col-sm-6 col-form-label">EBITDA有利子負債倍率</label>
+            <div class="col-sm-6">
+              <p class="form-control-plaintext">{{ fiscal_summary_year.EBITDA_interest_bearing_debt_ratio|intcomma }}</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-info small" role="alert">
+                {{ technical_terms.EBITDA_interest_bearing_debt_ratio.0 }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -182,6 +206,17 @@
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">生産性</h5>
+          <div class="mb-3 row">
+            <label class="col-sm-6 col-form-label">労働生産性</label>
+            <div class="col-sm-6">
+              <p class="form-control-plaintext">{{ fiscal_summary_year.labor_productivity|intcomma }}</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-info small" role="alert">
+                {{ technical_terms.labor_productivity.0 }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -189,6 +224,17 @@
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">成長性</h5>
+          <div class="mb-3 row">
+            <label class="col-sm-6 col-form-label">売上高増加率</label>
+            <div class="col-sm-6">
+              <p class="form-control-plaintext">{{ fiscal_summary_year.sales_growth_rate|intcomma }}</p>
+            </div>
+            <div class="col-sm-12">
+              <div class="alert alert-info small" role="alert">
+                {{ technical_terms.sales_growth_rate.0 }}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
