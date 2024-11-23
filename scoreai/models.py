@@ -211,7 +211,7 @@ class Debt(models.Model):
     principal = models.IntegerField("借入元本", help_text="単位：円")
     issue_date = models.DateField("実行日")
     start_date = models.DateField("返済開始日")
-    interest_rate = models.DecimalField("利息", max_digits=4, decimal_places=4, help_text="単位：%")
+    interest_rate = models.DecimalField("利息", max_digits=6, decimal_places=4, help_text="単位：%")
     monthly_repayment = models.IntegerField("月返済額", help_text="単位：円")
     adjusted_amount_first = models.IntegerField("初月調整額", default=0, help_text="単位：円。初月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
     adjusted_amount_last = models.IntegerField("最終月調整額", default=0, help_text="単位：円。最終月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
