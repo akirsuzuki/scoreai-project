@@ -8,7 +8,7 @@ RUN mkdir -p /app
 COPY requirements.txt /app
 
 # 作業ディレクトリを設定
-WORKDIR /djangoapp
+WORKDIR /app
 
 # システム依存関係をインストール
 RUN apt-get update && apt-get install -y --no-install-recommends \
