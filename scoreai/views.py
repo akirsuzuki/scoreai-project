@@ -2506,20 +2506,7 @@ def get_debt_list(this_company):
     total_balance_fy3 = 0
     total_balance_fy4 = 0
     total_balance_fy5 = 0
-
-    # Calculate totals before the loop
-    # 合計算出は常にアクティブ（残高がありリスケしていない）借入だけが対象
-    # for debt in debts:
-    #     total_monthly_repayment += debt.monthly_repayment
-    #     total_balance_fy1 += debt.balance_fy1
-    #     total_balance_fy2 += debt.balance_fy2
-    #     total_balance_fy3 += debt.balance_fy3
-    #     total_balance_fy4 += debt.balance_fy4
-    #     total_balance_fy5 += debt.balance_fy5
-    #     for i in range(12):
-    #         total_balances_monthly[i] += debt.balances_monthly[i]
-    #         total_interest_amount_monthly[i] += debt.interest_amount_monthly[i]
-    
+    # 返済開始している or していないで処理を分ける
     for debt in debts:
         if debt.is_nodisplay == True:
             debt_list_nodisplay.append(debt)
@@ -2528,6 +2515,7 @@ def get_debt_list(this_company):
         elif debt.remaining_months < 1:
             debt_list_finished.append(debt)
         else:
+
             total_monthly_repayment += debt.monthly_repayment
             total_balance_fy1 += debt.balance_fy1
             total_balance_fy2 += debt.balance_fy2
@@ -2547,7 +2535,7 @@ def get_debt_list(this_company):
                 'start_date': debt.start_date,
                 'interest_rate': debt.interest_rate,
                 'monthly_repayment': debt.monthly_repayment,
-                'payment_terms': debt.payment_terms,
+                # 'payment_terms': debt.payment_terms,
                 'secured_type': debt.secured_type,
                 'remaining_months': debt.remaining_months,
                 'adjusted_amount_first': debt.adjusted_amount_first,
