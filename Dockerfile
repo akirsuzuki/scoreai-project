@@ -2,10 +2,10 @@
 FROM python:3.12-slim
 
 # 作業ディレクトリを作成
-RUN mkdir -p /djangoapp
+RUN mkdir -p /app
 
 # 依存関係のファイルをコピー
-COPY requirements.txt /djangoapp
+COPY requirements.txt /app
 
 # 作業ディレクトリを設定
 WORKDIR /djangoapp
@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN pip install --no-cache-dir -r ./requirements.txt
 
 # アプリケーションコードをコピー
-COPY . /djangoapp
+COPY . /app
 
 # 環境変数を設定（必要に応じて）
 ENV PYTHONUNBUFFERED=1
