@@ -226,11 +226,16 @@ class Debt(models.Model):
     secured_type = models.ForeignKey(SecuredType, on_delete=models.CASCADE, verbose_name="保証協会")
 
     @property
+    def payment_terms(self):
+        total_amount = self.principal + self.adjusted_amount_first + self.adjusted_amount_last
+        months_difference = (self.start_date.year - self.issue_date.year) * 12 + (self.start_date.month - self.issue_date.month)
+        return int(total_amount / self.monthly_repayment + months_difference)
+
+    @property
     def remaining_months(self):
-        return 0
-        # payment_terms = self.payment_terms
-        # elapsed_months = self.elapsed_months
-        # return max(0, payment_terms - elapsed_months)
+        payment_terms = self.payment_terms
+        elapsed_months = self.elapsed_months
+        return max(0, payment_terms - elapsed_months)
 
     @property
     def months_suspended(self):

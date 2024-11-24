@@ -2535,7 +2535,7 @@ def get_debt_list(this_company):
                 'start_date': debt.start_date,
                 'interest_rate': debt.interest_rate,
                 'monthly_repayment': debt.monthly_repayment,
-                # 'payment_terms': debt.payment_terms,
+                'payment_terms': debt.payment_terms,
                 'secured_type': debt.secured_type,
                 'remaining_months': debt.remaining_months,
                 'adjusted_amount_first': debt.adjusted_amount_first,
