@@ -7,8 +7,3 @@ start.sh
 migrations.sh
 migrate.sh
 build.sh
-# ただし、migrations ディレクトリ内の __pycache__/ は含める
-!migrations/__pycache__/
-!migrations/__pycache__/**
-!*/migrations/__pycache__/
-!*/migrations/__pycache__/**
