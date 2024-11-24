@@ -215,11 +215,6 @@ class Debt(models.Model):
     monthly_repayment = models.IntegerField("月返済額", help_text="単位：円")
     adjusted_amount_first = models.IntegerField("初月調整額", default=0, help_text="単位：円。初月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
     adjusted_amount_last = models.IntegerField("最終月調整額", default=0, help_text="単位：円。最終月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
-    payment_terms = GeneratedField(
-        expression=(F('principal') - F('adjusted_amount_first') - F('adjusted_amount_last')) / F('monthly_repayment'),
-        output_field=IntegerField(),
-        db_persist=True
-    )
     is_securedby_management = models.BooleanField("経営者保証", default=False)
     is_collateraled = models.BooleanField("担保", default=False)
     is_rescheduled = models.BooleanField("リスケ", default=False, help_text="リスケした場合はチェックし、リスケ日とリスケ時点の残高を入力してください。")
@@ -232,9 +227,10 @@ class Debt(models.Model):
 
     @property
     def remaining_months(self):
-        payment_terms = self.payment_terms
-        elapsed_months = self.elapsed_months
-        return max(0, payment_terms - elapsed_months)
+        return 0
+        # payment_terms = self.payment_terms
+        # elapsed_months = self.elapsed_months
+        # return max(0, payment_terms - elapsed_months)
 
     @property
     def months_suspended(self):
@@ -242,23 +238,28 @@ class Debt(models.Model):
         issue_date = self.issue_date
         return (start_date.year - issue_date.year) * 12 + (start_date.month - issue_date.month)
 
+    # 返済開始してからの月数
+    # 返済が開始していない場合はマイナスの値を返す。
     @property
     def elapsed_months(self):
         start_date = datetime.combine(self.start_date, datetime.min.time())
         now = datetime.now()
-        if start_date > now:
-            return 0
+        # if start_date > now:
+        #     return 0
         return (now.year - start_date.year) * 12 + (now.month - start_date.month)
 
+    # 指定した月が経過した時点の残高（最終回は考慮せず）
+    # 返済開始前の場合はmonthがマイナスの値となるが、projected_balanceは元本となる。
     def balance_after_months(self, months):
-        # 指定した月が経過した時点の残高（最終回は考慮せず）
-        if months <= 0:
+        if months == 0:
             projected_balance = self.principal
         else:
             projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
+        projected_balance = min(self.principal, max(0, projected_balance))
         projected_interest_amount = projected_balance * self.interest_rate / 12 / 100
-        return max(0, projected_balance), max(0, projected_interest_amount)
+        return projected_balance, projected_interest_amount
 
+    # 月々の残高
     @property
     def balances_monthly(self):
         start_month = self.elapsed_months
