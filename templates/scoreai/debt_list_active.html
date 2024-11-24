@@ -94,52 +94,47 @@
 
 
 <script>
-  // Update the selector for the active debt table
-  new DataTable('#active_debt_list', {
-    scrollX: true,
-    footerCallback: function (row, data, start, end, display) {
-      let api = this.api();
-      // Remove the formatting to get integer data for summation
-      let intVal = function (i) {
-        return typeof i === 'string'
-          ? i.replace(/[\$,]/g, '') * 1
-          : typeof i === 'number'
-            ? i
-            : 0;
-      };
-      // Total over all pages
-      total = api
-        .column(2)
-        .data()
-        .reduce((a, b) => intVal(a) + intVal(b), 0);
-      // Total over this page
-      pageTotal = api
-        .column(2, { page: 'current' })
-        .data()
-        .reduce((a, b) => intVal(a) + intVal(b), 0);
-      // Update footer
-      api.column(2).footer().innerHTML =
-        '表示合計 :' + pageTotal + '千円 ( 総合計 :' + total + ' 千円)';
-    }
-  });
-</script>
-
-<script>
   document.addEventListener('DOMContentLoaded', function () {
-    // Update the selector to include all three tables
     const tables = ['active_debt_list'];
-    
+
     tables.forEach(tableId => {
-      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-      rows.forEach(row => {
-        row.addEventListener('click', function () {
-          const href = this.getAttribute('data-href');
-          if (href) {
-            window.location.href = href;
-          }
+      const table = new DataTable(`#${tableId}`, {
+        scrollX: true,
+        pageLength: 20,
+        footerCallback: function (row, data, start, end, display) {
+          let api = this.api();
+          let intVal = function (i) {
+            return typeof i === 'string'
+              ? i.replace(/[\$,]/g, '') * 1
+              : typeof i === 'number'
+                ? i
+                : 0;
+          };
+          total = api
+            .column(2)
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+          pageTotal = api
+            .column(2, { page: 'current' })
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+          api.column(2).footer().innerHTML =
+            '表示合計 :' + pageTotal + '千円 ( 総合計 :' + total + ' 千円)';
+        }
+      });
+
+      // Attach click event listener on table draw
+      table.on('draw', function () {
+        const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+        rows.forEach(row => {
+          row.addEventListener('click', function () {
+            const href = this.getAttribute('data-href');
+            if (href) {
+              window.location.href = href;
+            }
+          });
         });
       });
     });
   });
 </script>
-
