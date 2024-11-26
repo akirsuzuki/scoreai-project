@@ -224,6 +224,7 @@ class Debt(models.Model):
     memo_short = models.CharField("短文メモ", max_length=126, blank=True)
     is_nodisplay = models.BooleanField("非表示", default=False)
     secured_type = models.ForeignKey(SecuredType, on_delete=models.CASCADE, verbose_name="保証協会")
+    document_url = models.URLField("クラウドストレージへのリンク", max_length=300, blank=True, null=True)
 
     @property
     def payment_terms(self):
@@ -454,6 +455,7 @@ class FiscalSummary_Year(models.Model):
     
     # 決算留意事項
     financial_statement_notes = models.TextField("決算留意事項", blank=True)
+    document_url = models.URLField("クラウドストレージへのリンク", max_length=300, blank=True, null=True)
 
     # 財務スコア情報
     score_sales_growth_rate = models.IntegerField("売上高増加率", validators=[MinValueValidator(0), MaxValueValidator(5)], default=0, null=True, blank=True)
