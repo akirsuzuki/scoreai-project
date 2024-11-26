@@ -899,20 +899,36 @@ class FiscalSummary_MonthListView(LoginRequiredMixin, SelectedCompanyMixin, List
             num_years = 5  # 数値に変換できない場合はデフォルト値を使用
         
         # 月次サマリーデータを取得
-        monthly_summaries = get_monthly_summaries(self.this_company, num_years)
-        monthly_summaries_total = calculate_total_monthly_summaries(monthly_summaries, year_index=0)
+        monthly_data = get_monthly_summaries(self.this_company, num_years)
+        
+        # 各年度の合計値を計算
+        summary_data = [
+            calculate_total_monthly_summaries(monthly_data, year_index=i)
+            for i in range(num_years)
+        ]
+        
+        # Calculate totals for each metric
+        for summary in monthly_data:
+            summary['total_sales'] = sum(item['sales'] for item in summary['data'])
+            summary['total_gross_profit'] = sum(item['gross_profit'] for item in summary['data'])
+            summary['total_operating_profit'] = sum(item['operating_profit'] for item in summary['data'])
+            summary['total_ordinary_profit'] = sum(item['ordinary_profit'] for item in summary['data'])
+
+        # monthly_summaries_with_summaryにデータを格納
+        monthly_summaries_with_summary = {
+            'monthly_data': monthly_data,
+            'summary_data': summary_data
+        }
         
         # ラベル情報
         fiscal_month = self.this_company.fiscal_month
-        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1,13)]
+        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
 
-        
         context.update({
             'title': '月次財務サマリー一覧',
-            'monthly_summaries': monthly_summaries,
+            'monthly_summaries_with_summary': monthly_summaries_with_summary,
             'months_label': months_label,
             'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
-            'monthly_summaries_total': monthly_summaries_total,
         })
         return context
 
