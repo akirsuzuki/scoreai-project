@@ -18,7 +18,7 @@
         <h5 class="card-title mb-0">月次PL推移表</h5>
       </div>
       <div class="card-body">
-        {% for summary in monthly_summaries %}
+        {% for summary in monthly_summaries_with_summary.monthly_data %}
         <div class="table-responsive">
           <h5 class="table-title">{{ summary.year }}年度</h5>
           <table class="table table-hover" id="fiscal-summary-table-{{ forloop.counter }}">
@@ -37,48 +37,46 @@
                 {% for amount in summary.data %}
                 <td class="text-end equal-width">{{ amount.sales|floatformat:0|intcomma }}</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.sum_sales|floatformat:0|intcomma }}</td>
+                <td class="text-end">{{ summary.total_sales|floatformat:0|intcomma }}</td>
               </tr>
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.gross_profit|floatformat:0|intcomma }}</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.sum_gross_profit|floatformat:0|intcomma }}</td>
+                <td class="text-end">{{ summary.total_gross_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.gross_profit_rate|floatformat:1 }}%</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.average_gross_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{{ summary_data.forloop.counter0.average_gross_profit_rate|floatformat:1 }}%</td>
               </tr>
-
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.operating_profit|floatformat:0|intcomma }}</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.sum_operating_profit|floatformat:0|intcomma }}</td>
+                <td class="text-end">{{ summary.total_operating_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.operating_profit_rate|floatformat:1 }}%</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.average_operating_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{{ summary_data.forloop.counter0.average_operating_profit_rate|floatformat:1 }}%</td>
               </tr>
-
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.ordinary_profit|floatformat:0|intcomma }}</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.sum_ordinary_profit|floatformat:1|intcomma }}</td>
+                <td class="text-end">{{ summary.total_ordinary_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
                 <td class="text-end">{{ amount.ordinary_profit_rate|floatformat:1 }}%</td>
                 {% endfor %}
-                <td class="text-end">{{ monthly_summaries_total.average_ordinary_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{{ summary_data.forloop.counter0.average_ordinary_profit_rate|floatformat:1 }}%</td>
               </tr>
             </tbody>
             <tfoot class="table-group-divider">
