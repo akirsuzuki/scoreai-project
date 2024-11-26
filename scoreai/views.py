@@ -907,12 +907,22 @@ class FiscalSummary_MonthListView(LoginRequiredMixin, SelectedCompanyMixin, List
             for i in range(num_years)
         ]
         
-        # Calculate totals for each metric
+        # Calculate totals and rates for each metric
         for summary in monthly_data:
-            summary['total_sales'] = sum(item['sales'] for item in summary['data'])
-            summary['total_gross_profit'] = sum(item['gross_profit'] for item in summary['data'])
-            summary['total_operating_profit'] = sum(item['operating_profit'] for item in summary['data'])
-            summary['total_ordinary_profit'] = sum(item['ordinary_profit'] for item in summary['data'])
+            total_sales = sum(item['sales'] for item in summary['data'])
+            total_gross_profit = sum(item['gross_profit'] for item in summary['data'])
+            total_operating_profit = sum(item['operating_profit'] for item in summary['data'])
+            total_ordinary_profit = sum(item['ordinary_profit'] for item in summary['data'])
+
+            summary['total_sales'] = total_sales
+            summary['total_gross_profit'] = total_gross_profit
+            summary['total_operating_profit'] = total_operating_profit
+            summary['total_ordinary_profit'] = total_ordinary_profit
+
+            # Calculate rates
+            summary['total_gross_profit_rate'] = (total_gross_profit / total_sales * 100) if total_sales > 0 else 0
+            summary['total_operating_profit_rate'] = (total_operating_profit / total_sales * 100) if total_sales > 0 else 0
+            summary['total_ordinary_profit_rate'] = (total_ordinary_profit / total_sales * 100) if total_sales > 0 else 0
 
         # monthly_summaries_with_summaryにデータを格納
         monthly_summaries_with_summary = {
