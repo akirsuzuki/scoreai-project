@@ -107,7 +107,7 @@ class IndustryBenchmarkImportForm(forms.Form):
 class FiscalSummary_YearForm(forms.ModelForm):
     class Meta:
         model = FiscalSummary_Year
-        exclude = ['id', 'company', 'version', 'score_sales_growth_rate', 'score_operating_profit_margin', 'score_labor_productivity', 'score_EBITDA_interest_bearing_debt_ratio', 'score_operating_working_capital_turnover_period', 'score_equity_ratio']
+        exclude = ['id', 'company', 'version', 'score_sales_growth_rate', 'score_operating_profit_margin', 'score_labor_productivity', 'score_EBITDA_interest_bearing_debt_ratio', 'score_operating_working_capital_turnover_period', 'score_equity_ratio', 'document_url']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -209,7 +209,7 @@ class DebtForm(forms.ModelForm):
     reschedule_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='リスケ日', required=False)
     class Meta:
         model = Debt
-        fields = ['financial_institution', 'principal', 'issue_date', 'start_date', 'interest_rate', 'monthly_repayment', 'secured_type', 'is_securedby_management', 'adjusted_amount_first', 'is_collateraled', 'adjusted_amount_last','is_rescheduled', 'reschedule_date', 'reschedule_balance', 'memo_short', 'memo_long', 'is_nodisplay']
+        fields = ['financial_institution', 'principal', 'issue_date', 'start_date', 'interest_rate', 'monthly_repayment', 'secured_type', 'is_securedby_management', 'adjusted_amount_first', 'is_collateraled', 'adjusted_amount_last','is_rescheduled', 'reschedule_date', 'reschedule_balance', 'memo_short', 'memo_long', 'is_nodisplay', 'document_url']
         widgets = {
             'financial_institution': Select2Widget,
             'is_rescheduled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
