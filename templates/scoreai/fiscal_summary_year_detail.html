@@ -585,6 +585,11 @@
                   <label class="form-label">留意事項</label>
                   <p>{{ fiscal_summary_year.financial_statement_notes|linebreaks }}</p>
                 </div>
+                <p></p>
+                <div class="mb-3">
+                  <label class="form-label">クラウドストレージへのリンク</label>
+                  <a href="{{ fiscal_summary_year.document_url }}" target="_blank">{{ fiscal_summary_year.document_url }}</a>
+                </div>
               </div>
             </div>
           </div>
