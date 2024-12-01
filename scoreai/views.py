@@ -370,6 +370,10 @@ def get_finance_score(year, industry_classification, industry_subclassification,
 
     try:
         indicator_instance = IndustryIndicator.objects.get(name=indicator_name)
+
+        # Check for negative EBITDA
+        if indicator_name == 'EBITDA_interest_bearing_debt_ratio' and (value is not None or value < 0):
+            return 1
         
         # 最初の検索
         benchmark = IndustryBenchmark.objects.filter(
@@ -411,15 +415,6 @@ def get_finance_score(year, industry_classification, industry_subclassification,
     iii = Decimal(benchmark.range_iii)
     ii = Decimal(benchmark.range_ii)
     i = Decimal(benchmark.range_i)
-
-    #  EBITDA有利子負債倍率はEBITDAが0以下の場合は1とする
-    if indicator_name == 'EBITDA_interest_bearing_debt_ratio':
-        if value is None:
-            # models.pyで、0より小さい場合はNoneとしているので、ここでは1とする
-            return 1
-        elif value == 0:
-            # 0の場合は1とする
-            return 1
 
     # Ensure value is a Decimal for accurate comparison
     value = Decimal(value)
