@@ -252,7 +252,7 @@ class Debt(models.Model):
         now = datetime.now()
         # if start_date > now:
         #     return 0
-        return (now.year - start_date.year) * 12 + (now.month - start_date.month)
+        return (now.year - start_date.year) * 12 + (now.month - start_date.month) + 1
 
     # 指定した月が経過した時点の残高（最終回は考慮せず）
     # 返済開始前の場合はmonthがマイナスの値となるが、projected_balanceは元本となる。
@@ -549,7 +549,7 @@ class FiscalSummary_Year(models.Model):
     def operating_working_capital_turnover_period(self):
         """営業運転資本回転期間（月）= 営業運転資本 ÷ 売上高 × 12 (ヶ月)"""
         operating_working_capital = self.accounts_receivable + self.inventory - self.accounts_payable
-        # 営業運転資本が正のマイナスの場合はマイナス値を返す
+
         if self.sales > 0:
             period = (operating_working_capital / self.sales) * 12
             return Decimal(period).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)

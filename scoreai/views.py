@@ -999,7 +999,7 @@ def download_fiscal_summary_month_csv(request, param=None):
 class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month.html"
     form_class = CsvUploadForm
-    success_url = reverse_lazy('fiscal_summary_month_list')  # 適切なURLに変更してください
+    success_url = reverse_lazy('fiscal_summary_month_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1013,8 +1013,6 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
             messages.error(self.request, 'アップロードされたファイルはCSV形式ではありません。')
             return super().form_invalid(form)
 
-        # this_company = selected_company.company
-        
         try:
             file = TextIOWrapper(csv_file.file, encoding='shift-jis')
             reader = csv.DictReader(file)
