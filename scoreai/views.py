@@ -583,10 +583,9 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'        
         queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
         
-        if not is_draft:
-            queryset = queryset.filter(is_draft=False)
+        queryset = queryset.order_by('-year')
         
-        return get_fiscal_summary_years(self.this_company, sequence='asc', queryset=queryset)
+        return queryset
 
 
     def get_context_data(self, **kwargs):
