@@ -3,6 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -592,6 +593,11 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         context = super().get_context_data(**kwargs)
         context['company_id'] = self.this_company.id
         context['title'] = '決算年次推移'
+        paginator = Paginator(self.get_queryset(), self.paginate_by)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['page_obj'] = page_obj
+
         return context
 
 class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
