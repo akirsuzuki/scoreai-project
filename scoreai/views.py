@@ -591,12 +591,13 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        queryset = self.get_queryset()
         context['company_id'] = self.this_company.id
         context['title'] = '決算年次推移'
-        paginator = Paginator(self.get_queryset(), self.paginate_by)
+        paginator = Paginator(queryset, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context['page_obj'] = page_obj
+        context['page_obj']
 
         return context
 
