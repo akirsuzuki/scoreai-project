@@ -578,28 +578,34 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_list.html'
     context_object_name = 'fiscal_summary_years'
-    paginate_by = 5
+    paginate_by = 5  # Number of years per page
 
     def get_queryset(self):
-        is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'        
+        is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
         queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
-        
-        queryset = queryset.order_by('-year')
-        
-        return queryset
 
+        if not is_draft:
+            queryset = queryset.filter(is_draft=False)
+
+        # Order by year in descending order
+        queryset = queryset.order_by('-year')
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = self.get_queryset()
-        context['company_id'] = self.this_company.id
-        context['title'] = '決算年次推移'
         paginator = Paginator(queryset, self.paginate_by)
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
-        context['page_obj']
-
+        
+        # Reverse the order of years within the current page for display
+        context['years'] = sorted(page_obj.object_list, key=lambda x: x.year)
+        context['page_obj'] = page_obj
+        context['company_id'] = self.this_company.id
+        context['title'] = '決算年次推移'
         return context
+
 
 class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
     model = FiscalSummary_Year
@@ -636,14 +642,28 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
 class FiscalSummary_YearListRecentView(FiscalSummary_YearListView):
     def get_queryset(self):
         is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
-        queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
+        page_param = int(self.request.GET.get('page_param', 1))  # Get the page parameter from the request, default to 1
+        queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
+        
         if not is_draft:
             queryset = queryset.filter(is_draft=False)
 
-        return get_fiscal_summary_years(self.this_company, sequence='asc', num_years=5, queryset=queryset)
+        # Calculate the start and end indices for slicing the queryset
+        start_index = (page_param - 1) * 5
+        end_index = start_index + 5
+
+        return queryset[start_index:end_index]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # Calculate total pages
+        total_records = FiscalSummary_Year.objects.filter(company=self.this_company).count()
+        context['total_pages'] = (total_records + 4) // 5  # Calculate total pages, rounding up
+
+        # Add page_param to the contextデフォルトは最終ページ
+        context['page_param'] = self.request.GET.get('page_param', 'total_pages')
+
         context['title'] = '直近5年間の決算年次推移'
         return context
 
@@ -2200,37 +2220,6 @@ class SampleView(generic.TemplateView):
 ###                           汎用関数                                  ###
 ##########################################################################
 ##########################################################################
-
-
-##########################################################################
-###             指定された会社の財務サマリー年次データを取得する                  ###
-##########################################################################
-def get_fiscal_summary_years(company, sequence='asc', num_years=None, queryset=None):
-    """
-    :param company: 対象の会社
-    :param sequence: 'asc' または 'desc' で並び順を指定
-    :param num_years: 取得する年数（指定がない場合は全件）
-    :param queryset: is_draft=Falseの条件を追加したqueryset
-    :return: 財務サマリー年次データのリスト
-    """
-    # まず、最新の年度から降順で全てのデータを取得
-    queryset = queryset.order_by('-year')
-    
-    # num_yearsが指定されている場合、最新のnum_years分のデータを取得
-    if num_years is not None:
-        queryset = queryset[:num_years]
-    
-    # クエリセットをリストに変換
-    fiscal_summary_list = list(queryset)
-    
-    # 指定された順序でソート
-    if sequence == 'asc':
-        fiscal_summary_list.sort(key=lambda x: x.year)
-    else:  # 'desc'の場合
-        fiscal_summary_list.sort(key=lambda x: x.year, reverse=True)
-    
-    return fiscal_summary_list
-
 
 def calculate_total_monthly_summaries(monthly_summaries, year_index=0, period_count=13):
     # 引数が空でないか確認
