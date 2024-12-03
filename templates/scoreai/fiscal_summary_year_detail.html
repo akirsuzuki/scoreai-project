@@ -600,7 +600,14 @@
 
       </div>
       <div class="card-footer text-end">
+        {% if previous_year_data %}
+        <a href="{% url 'fiscal_summary_year_detail' previous_year_data.id %}" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-angles-left"></i> 前の年度</a>
+        {% endif %}
+        {% if next_year_data %}
+        <a href="{% url 'fiscal_summary_year_detail' next_year_data.id %}" class="btn btn-outline-secondary me-2">次の年度 <i class="fa-solid fa-angles-right"></i></a>
+        {% endif %}
         <a href="{% url 'fiscal_summary_year_update' fiscal_summary_year.id %}" class="btn btn-primary">編集</a>
+        <a href="{% url 'fiscal_summary_year_delete' fiscal_summary_year.id %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
       </div>
     </div>
   </div>

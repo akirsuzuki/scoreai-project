@@ -266,7 +266,7 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cre
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
-    success_url = reverse_lazy('fiscal_summary_year_list_recent')
+    success_url = reverse_lazy('fiscal_summary_year')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -294,7 +294,7 @@ class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Upd
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
-    success_url = reverse_lazy('fiscal_summary_year_list_recent')
+    success_url = reverse_lazy('fiscal_summary_year_list')
 
     def form_valid(self, form):
         response = super().form_valid(form)
@@ -451,7 +451,7 @@ def get_finance_score(year, industry_classification, industry_subclassification,
 class FiscalSummary_YearDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_confirm_delete.html'
-    success_url = reverse_lazy('fiscal_summary_year_list_recent')
+    success_url = reverse_lazy('fiscal_summary_year_list')
 
     def form_valid(self, form):
         fiscal_summary_year = self.get_object()  # 削除するオブジェクトを取得
@@ -574,39 +574,6 @@ def download_fiscal_summary_year_csv(request, param=None):
     return response
 
 
-class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
-    model = FiscalSummary_Year
-    template_name = 'scoreai/fiscal_summary_year_list.html'
-    context_object_name = 'fiscal_summary_years'
-    paginate_by = 5  # Number of years per page
-
-    def get_queryset(self):
-        is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
-        queryset = FiscalSummary_Year.objects.filter(company=self.this_company)
-
-        if not is_draft:
-            queryset = queryset.filter(is_draft=False)
-
-        # Order by year in descending order
-        queryset = queryset.order_by('-year')
-
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        queryset = self.get_queryset()
-        paginator = Paginator(queryset, self.paginate_by)
-        page_number = self.request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
-        # Reverse the order of years within the current page for display
-        context['years'] = sorted(page_obj.object_list, key=lambda x: x.year)
-        context['page_obj'] = page_obj
-        context['company_id'] = self.this_company.id
-        context['title'] = '決算年次推移'
-        return context
-
-
 class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_detail.html'
@@ -615,12 +582,11 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # 前年のデータを取得してcontextに追加
-        previous_year = self.object.year - 1
-        previous_data = FiscalSummary_Year.objects.filter(
-            company=self.object.company,
-            year=previous_year
-        ).first()
+        # previous_year = self.object.year - 1
+        previous_data = FiscalSummary_Year.objects.filter(year__lt=self.object.year).order_by('-year').first()
+        next_data = FiscalSummary_Year.objects.filter(year__gt=self.object.year).order_by('year').first()
         context['previous_year_data'] = previous_data
+        context['next_year_data'] = next_data
 
         # TechnicalTermの全データを取得し、nameをキーにして辞書を作成
         technical_terms = TechnicalTerm.objects.all()
@@ -637,20 +603,41 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
 
         return context
 
+class LatestFiscalSummaryYearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+    def get(self, request, *args, **kwargs):
+        # Get the most recent FiscalSummary_Year for the selected company
+        latest_fiscal_summary_year = FiscalSummary_Year.objects.filter(
+            company=self.this_company, 
+            is_draft=False
+        ).order_by('-year').first()
+        
+        if not latest_fiscal_summary_year:
+            messages.error(request, "No fiscal summary year data available.")
+            return redirect('fiscal_summary_year_list')  # Redirect to list view if no data is found
 
-# 直近5年分のみを表示するビュー
-class FiscalSummary_YearListRecentView(FiscalSummary_YearListView):
+        # Redirect to the existing detail view with the latest fiscal summary year's ID
+        return redirect('fiscal_summary_year_detail', pk=latest_fiscal_summary_year.pk)
+
+
+# 決算年次推移
+class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+    model = FiscalSummary_Year
+    template_name = 'scoreai/fiscal_summary_year_list.html'
+    context_object_name = 'fiscal_summary_years'
+
     def get_queryset(self):
         is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
-        page_param = int(self.request.GET.get('page_param', 1))  # Get the page parameter from the request, default to 1
+        page_param = int(self.request.GET.get('page_param', 1))
+        years_in_page = int(self.request.GET.get('years_in_page', 5))  # Default to 5 if not specified
+
         queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
         
         if not is_draft:
             queryset = queryset.filter(is_draft=False)
 
         # Calculate the start and end indices for slicing the queryset
-        start_index = (page_param - 1) * 5
-        end_index = start_index + 5
+        start_index = (page_param - 1) * years_in_page
+        end_index = start_index + years_in_page
 
         return queryset[start_index:end_index]
 
@@ -659,13 +646,16 @@ class FiscalSummary_YearListRecentView(FiscalSummary_YearListView):
         
         # Calculate total pages
         total_records = FiscalSummary_Year.objects.filter(company=self.this_company).count()
-        context['total_pages'] = (total_records + 4) // 5  # Calculate total pages, rounding up
+        years_in_page = int(self.request.GET.get('years_in_page', 5))
+        context['total_pages'] = (total_records + years_in_page - 1) // years_in_page  # Calculate total pages, rounding up
 
-        # Add page_param to the contextデフォルトは最終ページ
-        context['page_param'] = self.request.GET.get('page_param', 'total_pages')
+        # Add page_param and years_in_page to the context
+        context['page_param'] = self.request.GET.get('page_param', 1)
+        context['years_in_page'] = years_in_page
 
-        context['title'] = '直近5年間の決算年次推移'
+        context['title'] = '決算年次推移'
         return context
+
 
 class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year.html"
