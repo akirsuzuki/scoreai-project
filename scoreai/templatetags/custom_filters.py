@@ -1,5 +1,6 @@
 from django import template
 from django.forms.widgets import Select
+from urllib.parse import urlencode
 
 register = template.Library()
 
@@ -75,3 +76,19 @@ def multiply(value, arg):
 @register.filter(name='get_by_name')
 def get_by_name(queryset, name):
     return queryset.filter(name=name).first()
+
+@register.filter
+def to(value, arg):
+    return range(value, arg + 1)
+
+
+@register.simple_tag
+def update_query_params(request, **kwargs):
+    """
+    Update the query parameters of the current URL.
+    Usage: {% update_query_params request page_param=2 %}
+    """
+    query_params = request.GET.copy()
+    for key, value in kwargs.items():
+        query_params[key] = value
+    return '?' + urlencode(query_params)

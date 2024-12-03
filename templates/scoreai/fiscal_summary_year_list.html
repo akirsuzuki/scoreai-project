@@ -55,5 +55,12 @@
       const isDraft = urlParams.get('is_draft');
       document.getElementById('showDrafts').checked = isDraft === 'true';
   });
+
+  // ページパラメータを更新する関数（年次決算推移で利用）
+  function updatePageParam(page) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('page_param', page);
+    window.location.href = url.toString();
+  }
 </script>
 {% endblock %}
