@@ -43,9 +43,9 @@
 <script>
   function toggleDrafts(checkbox) {
       if (checkbox.checked) {
-          window.location.href = "{% url 'fiscal_summary_year_list_recent' %}?is_draft=true";
+          window.location.href = "{% url 'fiscal_summary_year_list' %}?is_draft=true";
       } else {
-          window.location.href = "{% url 'fiscal_summary_year_list_recent' %}";
+          window.location.href = "{% url 'fiscal_summary_year_list' %}";
       }
   }
   
@@ -60,6 +60,13 @@
   function updatePageParam(page) {
     const url = new URL(window.location.href);
     url.searchParams.set('page_param', page);
+    window.location.href = url.toString();
+  }
+
+  function updateYearsInPage(years) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('years_in_page', years);
+    url.searchParams.set('page_param', 1); // Reset to first page
     window.location.href = url.toString();
   }
 </script>

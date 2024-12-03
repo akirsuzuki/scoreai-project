@@ -103,19 +103,25 @@
           </ul>
         </li>
 
-
-
         <li class="sidebar-item">
           <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">決算数値</span><i class="fa-solid fa-angles-right"></i>
+            <span class="hide-menu">年次財務諸表</span><i class="fa-solid fa-angles-right"></i>
           </a>
           <ul aria-expanded="false" class="collapse first-level">
             <li class="sidebar-item">
-              <a href="{% url 'fiscal_summary_year_list_recent' %}?is_draft=false" class="sidebar-link">
+              <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">直近5年間の年次推移</span>
+                <span class="hide-menu">決算年次推移</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">直近決算詳細</span>
               </a>
             </li>
           </ul>
