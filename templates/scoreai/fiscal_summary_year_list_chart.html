@@ -44,19 +44,6 @@
   </div>
 </div>
 
-{% if is_paginated %}
-<div class="pagination">
-    {% if fiscal_summary_years.has_previous %}
-        <a href="?page={{ fiscal_summary_years.previous_page_number }}">前へ</a>
-    {% endif %}
-    <span>ページ {{ fiscal_summary_years.number }} / {{ fiscal_summary_years.paginator.num_pages }}</span>
-    {% if fiscal_summary_years.has_next %}
-        <a href="?page={{ fiscal_summary_years.next_page_number }}">次へ</a>
-    {% endif %}
-</div>
-{% endif %}
-
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
 
@@ -64,7 +51,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('financialChart').getContext('2d');
     const fiscalSummaries = [
-      {% for summary in fiscal_summary_years %}
+      {% for summary in fiscal_summary_years reversed %}
         {
           year: {{ summary.year }},
           sales: {{ summary.sales|default:0 }},
