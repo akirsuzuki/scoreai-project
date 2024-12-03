@@ -22,7 +22,7 @@
             <thead class="table-light">
               <tr>
                 <th>項目</th>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <th class="text-center">{{ summary.year }}年度
                 {% if summary.is_draft %}<i class="fas fa-pencil-alt text-danger" title="下書き"></i>{% endif %}
                 </th>
@@ -32,31 +32,31 @@
             <tbody class="table-group-divider">
               <tr>
                 <td>現預金</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.cash_and_deposits|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>固定資産合計</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.total_fixed_assets|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>長期借入金</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.long_term_loans_payable|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>純資産合計</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.total_net_assets|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>総資産</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.total_assets|intcomma }}</td>
                 {% endfor %}
               </tr>
@@ -65,43 +65,43 @@
               </tr>              
               <tr>
                 <td>売上高</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.sales|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>売上総利益</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.gross_profit|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>営業利益</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.operating_profit|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>経常利益</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.ordinary_profit|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>EBITDA</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.EBITDA|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td>繰越欠損金</td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.tax_loss_carryforward|intcomma }}</td>
                 {% endfor %}
               </tr>
               <tr>
                 <td></td>
-                {% for summary in fiscal_summary_years %}
+                {% for summary in fiscal_summary_years reversed %}
                 <td class="text-center">
                   <a href="{% url 'fiscal_summary_year_detail' summary.id %}" class="btn btn-sm btn-info">詳細</a>
                   <a href="{% url 'fiscal_summary_year_update' summary.id %}" class="btn btn-sm btn-warning">編集</a>
