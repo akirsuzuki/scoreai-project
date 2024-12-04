@@ -8,76 +8,88 @@
 {% endblock %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-lg-12 d-flex align-items-strech">
-      <div class="card w-100">
-        <div class="card-header">
-          <h5 class="card-title mb-0">サンプルフォーマット</h5>
-        </div>
-        <div class="card-body">
-            <p>CSVテンプレートをダウンロード</p>
-          <a href="{% url 'download_fiscal_summary_year_csv_param' 'sample' %}" class="btn btn-primary">ダウンロード</a>
-          <p class="mt-3">
-            １列目に項目名が入力されたフォーマットがダウンロードされます。<br>
-            アップロードする際は、1列目はそのまま残し、2列目以降に対応するデータを入れてください。<br>
-            <br>
-            <strong>※ 項目名は、ダウンロードしたフォーマットの項目名をそのまま使用してください。
-          </p>
-        </div>
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-body">
+        <a href="{% url 'import_fiscal_summary_year_MF' %}" style="font-weight: bold; font-size: 1.2em;">
+          <i class="fa-solid fa-angles-right"></i><i class="fa-solid fa-angles-right"></i>
+          マネーフォワードから残高試算表（貸借対照表・損益計算書）をダウンロードしてそのままインポートする場合はこちら
+        </a>
       </div>
     </div>
   </div>
+  <p></p>
 
-  <div class="row mt-4">
-    <div class="col-lg-12 d-flex align-items-strech">
-      <div class="card w-100">
-        <div class="card-header">
-          <h5 class="card-title mb-0">CSVインポート</h5>
-        </div>
-        <div class="card-body">
-          <div class="row justify-content-left">
-            <div class="col-md-12">
-              <form method="post" enctype="multipart/form-data" class="mb-4">
-                {% csrf_token %}
-                <div class="mb-3">
-                  <label for="{{ form.csv_file.id_for_label }}" class="form-label">CSVファイルを選択</label>
-                  <div class="input-group">
-                    <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
-                    <button type="submit" class="btn btn-primary">アップロード</button>
-                  </div>
-                  <p></p>
-                  <div class="form-group">
-                    {{ form.override_flag.label_tag }}
-                    {{ form.override_flag }}
-                  </div>
-                  <p></p>
-                  <strong>エンコードはShift-JISでお願いします。</strong>
-                  <p></p>
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">サンプルフォーマット</h5>
+      </div>
+      <div class="card-body">
+          <p>CSVテンプレートをダウンロード</p>
+        <a href="{% url 'download_fiscal_summary_year_csv_param' 'sample' %}" class="btn btn-primary">ダウンロード</a>
+        <p class="mt-3">
+          １列目に項目名が入力されたフォーマットがダウンロードされます。<br>
+          アップロードする際は、1列目はそのまま残し、2列目以降に対応するデータを入れてください。<br>
+          <br>
+          <strong>※ 項目名は、ダウンロードしたフォーマットの項目名をそのまま使用してください。</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">CSVインポート</h5>
+      </div>
+      <div class="card-body">
+        <div class="row justify-content-left">
+          <div class="col-md-12">
+            <form method="post" enctype="multipart/form-data" class="mb-4">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="{{ form.csv_file.id_for_label }}" class="form-label">CSVファイルを選択</label>
+                <div class="input-group">
+                  <input type="file" class="form-control" id="{{ form.csv_file.id_for_label }}" name="{{ form.csv_file.name }}" accept=".csv">
+                  <button type="submit" class="btn btn-primary">アップロード</button>
                 </div>
-              </form>
-
-              <div class="alert alert-info" role="alert">
-                <p>【注意点】<br>
-                  <p style="font-weight: bold;">1. 複数の会社で利用している場合</p>
-                  <p>CSVファイルで会社コードを指定することはできません。現在選択中の会社のデータがインポートされます。</p>
-                  <p style="font-weight: bold;">2. 年度（year）について</p>
-                  <p>CSVファイルの1列目にある年度（year）は、各期首時点の年度を表します。</p>
-                  <p>例えば、2024年3月決算の場合は2023（2023年4月が期首であるため2023年度と考えます）を入力します。</p>
-              </div>
-
-              {% if messages %}
-              <div class="messages">
-                {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
-                  {{ message }}
+                <p></p>
+                <div class="form-group">
+                  {{ form.override_flag.label_tag }}
+                  {{ form.override_flag }}
                 </div>
-                {% endfor %}
+                <p></p>
+                <strong>エンコードはShift-JISでお願いします。</strong>
+                <p></p>
               </div>
-              {% endif %}
+            </form>
+
+            <div class="alert alert-info" role="alert">
+              <p>【注意点】<br>
+                <p style="font-weight: bold;">1. 複数の会社で利用している場合</p>
+                <p>CSVファイルで会社コードを指定することはできません。現在選択中の会社のデータがインポートされます。</p>
+                <p style="font-weight: bold;">2. 年度（year）について</p>
+                <p>CSVファイルの1列目にある年度（year）は、各期首時点の年度を表します。</p>
+                <p>例えば、2024年3月決算の場合は2023（2023年4月が期首であるため2023年度と考えます）を入力します。</p>
             </div>
+
+            {% if messages %}
+            <div class="messages">
+              {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                {{ message }}
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 {% endblock %}

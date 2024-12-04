@@ -480,18 +480,18 @@ def download_fiscal_summary_year_csv(request, param=None):
 
     writer = csv.writer(response)
     headers = [
-        'year', '現金及び預金（千円）', '売掛金（千円）', '棚卸資産（千円）', '短期貸付金（千円）',
+        'year', '現金及び預金合計（千円）', '売上債権合計（千円）', '棚卸資産合計（千円）', '短期貸付金（千円）',
         '流動資産合計（千円）', '土地（千円）', '建物及び附属設備（千円）', '機械及び装置（千円）',
         '車両運搬具（千円）', '有形固定資産の減価償却累計額（千円）', '有形固定資産合計（千円）',
         'のれん（千円）', '無形固定資産合計（千円）', '長期貸付金（千円）', '投資その他の資産（千円）',
-        '固定資産合計（千円）', '繰延資産（千円）', '資産の部合計（千円）', '買掛金・未払金・未払費用（千円）',
+        '固定資産合計（千円）', '繰延資産合計（千円）', '資産の部合計（千円）', '仕入債務合計（千円）',
         '短期借入金（千円）', '流動負債合計（千円）', '長期借入金（千円）', '固定負債合計（千円）',
-        '負債の部合計（千円）', '資本金（千円）', '資本剰余金（千円）', '利益剰余金（千円）',
-        '株主資本合計（千円）', '評価・換算差額（千円）', '新株予約権（千円）', '純資産の部合計（千円）',
+        '負債の部合計（千円）', '資本金合計（千円）', '資本剰余金合計（千円）', '利益剰余金合計（千円）',
+        '株主資本合計（千円）', '評価・換算差額合計（千円）', '新株予約権合計（千円）', '純資産の部合計（千円）',
         '役員貸付金または借入金（千円）', '売上高（千円）', '粗利益（千円）', '売上原価内の減価償却費（千円）',
         '役員報酬（千円）', '給与・雑給（千円）', '販管費内の減価償却費（千円）', '販管費内のその他の償却費（千円）',
-        '営業利益（千円）', '雑収入（千円）', '営業外の償却費（千円）', '支払利息（千円）',
-        '雑損失（千円）', '経常利益（千円）', '特別利益（千円）', '特別損失（千円）',
+        '営業利益（千円）', '営業外収益合計（千円）', '営業外の償却費（千円）', '支払利息（千円）',
+        '営業外収益合計（千円）', '経常利益（千円）', '特別利益合計（千円）', '特別損失合計（千円）',
         '法人税等（千円）', '当期純利益（千円）', '税務-繰越欠損金（千円）', '期末従業員数（人）',
         '期末発行済株式数（株）', '注意事項'
     ]
@@ -692,9 +692,9 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
             for row in reader:
                 year = safe_value('year', row['year'])
                 defaults = {
-                    'cash_and_deposits': safe_value('cash_and_deposits', row['現金及び預金（千円）']),
-                    'accounts_receivable': safe_value('accounts_receivable', row['売掛金（千円）']),
-                    'inventory': safe_value('inventory', row['棚卸資産（千円）']),
+                    'cash_and_deposits': safe_value('cash_and_deposits', row['現金及び預金合計（千円）']),
+                    'accounts_receivable': safe_value('accounts_receivable', row['売上債権合計（千円）']),
+                    'inventory': safe_value('inventory', row['棚卸資産合計（千円）']),
                     'short_term_loans_receivable': safe_value('short_term_loans_receivable', row['短期貸付金（千円）']),
                     'total_current_assets': safe_value('total_current_assets', row['流動資産合計（千円）']),
                     'land': safe_value('land', row['土地（千円）']),
@@ -708,20 +708,20 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'long_term_loans_receivable': safe_value('long_term_loans_receivable', row['長期貸付金（千円）']),
                     'investment_other_assets': safe_value('investment_other_assets', row['投資その他の資産（千円）']),
                     'total_fixed_assets': safe_value('total_fixed_assets', row['固定資産合計（千円）']),
-                    'deferred_assets': safe_value('deferred_assets', row['繰延資産（千円）']),
+                    'deferred_assets': safe_value('deferred_assets', row['繰延資産合計（千円）']),
                     'total_assets': safe_value('total_assets', row['資産の部合計（千円）']),
-                    'accounts_payable': safe_value('accounts_payable', row['買掛金・未払金・未払費用（千円）']),
+                    'accounts_payable': safe_value('accounts_payable', row['仕入債務合計（千円）']),
                     'short_term_loans_payable': safe_value('short_term_loans_payable', row['短期借入金（千円）']),
                     'total_current_liabilities': safe_value('total_current_liabilities', row['流動負債合計（千円）']),
                     'long_term_loans_payable': safe_value('long_term_loans_payable', row['長期借入金（千円）']),
                     'total_long_term_liabilities': safe_value('total_long_term_liabilities', row['固定負債合計（千円）']),
                     'total_liabilities': safe_value('total_liabilities', row['負債の部合計（千円）']),
-                    'capital_stock': safe_value('capital_stock', row['資本金（千円）']),
-                    'capital_surplus': safe_value('capital_surplus', row['資本剰余金（千円）']),
-                    'retained_earnings': safe_value('retained_earnings', row['利益剰余金（千円）']),
+                    'capital_stock': safe_value('capital_stock', row['資本金合計（千円）']),
+                    'capital_surplus': safe_value('capital_surplus', row['資本剰余金合計（千円）']),
+                    'retained_earnings': safe_value('retained_earnings', row['利益剰余金合計（千円）']),
                     'total_stakeholder_equity': safe_value('total_stakeholder_equity', row['株主資本合計（千円）']),
-                    'valuation_and_translation_adjustment': safe_value('valuation_and_translation_adjustment', row['評価・換算差額（千円）']),
-                    'new_shares_reserve': safe_value('new_shares_reserve', row['新株予約権（千円）']),
+                    'valuation_and_translation_adjustment': safe_value('valuation_and_translation_adjustment', row['評価・換算差額合計（千円）']),
+                    'new_shares_reserve': safe_value('new_shares_reserve', row['新株予約権合計（千円）']),
                     'total_net_assets': safe_value('total_net_assets', row['純資産の部合計（千円）']),
                     'directors_loan': safe_value('directors_loan', row['役員貸付金または借入金（千円）']),
                     'sales': safe_value('sales', row['売上高（千円）']),
@@ -732,13 +732,13 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormVie
                     'depreciation_expense': safe_value('depreciation_expense', row['販管費内の減価償却費（千円）']),
                     'other_amortization_expense': safe_value('other_amortization_expense', row['販管費内のその他の償却費（千円）']),
                     'operating_profit': safe_value('operating_profit', row['営業利益（千円）']),
-                    'other_income': safe_value('other_income', row['雑収入（千円）']),
+                    'other_income': safe_value('other_income', row['営業外収益合計（千円）']),
                     'non_operating_amortization_expense': safe_value('non_operating_amortization_expense', row['営業外の償却費（千円）']),
                     'interest_expense': safe_value('interest_expense', row['支払利息（千円）']),
-                    'other_loss': safe_value('other_loss', row['雑損失（千円）']),
+                    'other_loss': safe_value('other_loss', row['営業外費用合計（千円）']),
                     'ordinary_profit': safe_value('ordinary_profit', row['経常利益（千円）']),
-                    'extraordinary_income': safe_value('extraordinary_income', row['特別利益（千円）']),
-                    'extraordinary_loss': safe_value('extraordinary_loss', row['特別損失（千円）']),
+                    'extraordinary_income': safe_value('extraordinary_income', row['特別利益合計（千円）']),
+                    'extraordinary_loss': safe_value('extraordinary_loss', row['特別損失合計（千円）']),
                     'income_taxes': safe_value('income_taxes', row['法人税等（千円）']),
                     'net_profit': safe_value('net_profit', row['当期純利益（千円）']),
                     'tax_loss_carryforward': safe_value('tax_loss_carryforward', row['税務-繰越欠損金（千円）']),
@@ -1014,7 +1014,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務サマリーのインポート'
+        context['title'] = '月次推移PLのインポート'
         return context
 
     def form_valid(self, form):
@@ -1081,7 +1081,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
 # Moneyfowardの月次推移表をアップしたらそのまま変換してインポートする
 class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month_MF.html"
-    form_class = MoneyForwardCsvUploadForm
+    form_class = MoneyForwardCsvUploadForm_Month
     success_url = reverse_lazy('fiscal_summary_month_list')
 
     def get_form(self, form_class=None):
@@ -1091,7 +1091,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務サマリーのインポート（MoneyForwardから）'
+        context['title'] = '月次推移PLのインポート（MoneyForwardから）'
         context['fiscal_years'] = FiscalSummary_Year.objects.filter(company=self.this_company)
         return context
 
@@ -1192,6 +1192,182 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
             return self.form_invalid(form)
 
         return super().form_valid(form)
+
+
+
+# Moneyfowardの試算表（貸借対照表と損益計算書）をアップしたらそのまま変換してインポートする
+class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+    template_name = "scoreai/import_fiscal_summary_year_MF.html"
+    form_class = MoneyForwardCsvUploadForm_Year
+    success_url = reverse_lazy('fiscal_summary_year_list')
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        return form
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '残高試算表のインポート（MoneyForwardから）'
+        return context
+
+    def form_valid(self, form):
+        csv_file = form.cleaned_data['csv_file']
+        override_flag = form.cleaned_data.get('override_flag', False)
+
+        try:
+            # CSV解析
+            file_data = csv_file.read().decode('shift-jis')
+            csv_reader = csv.reader(file_data.splitlines())
+
+            # 1行目の3列目から年度を取得
+            first_row = next(csv_reader)
+            fiscal_year = first_row[2][4:8]
+            current_line = 0 # 行数を取得するための変数
+
+            for row in csv_reader:
+                current_line += 1
+                label_1 = row[0] # 1列目に項目名があるものから処理（勘定科目グループ）
+                label_2 = row[1] # 2列目に項目名があるものから処理（勘定科目）
+
+                # 資産の部
+                if label_1 == "現金及び預金合計":
+                    cash_and_deposits = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "売上債権合計":
+                    accounts_receivable = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "棚卸資産合計":
+                    inventory = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "短期貸付金":
+                    short_term_loans_receivable = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "流動資産合計":
+                    total_current_assets = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "土地":
+                    land = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # elif ("建物" in label_2 or "附属設備" in label_2) and "償却" not in label_2:
+                #     buildings += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # elif ("機械及び装置" in label_2 or "機械および装置" in label_2 or "器具備品" in label_2) and "償却" not in label_2:
+                #     machinery_equipment += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif "車両" in label_2 and "償却" not in label_2:
+                    long_term_loans_receivable = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "有形固定資産合計":
+                    total_tangible_fixed_assets = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # elif "のれん" in label_2 and "償却" not in label_2:
+                #     goodwill += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "無形固定資産合計":
+                    total_intangible_fixed_assets = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "長期貸付金":
+                    long_term_loans_receivable += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # elif label_1 == "投資その他の資産合計":
+                #     investment_other_assets += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "固定資産合計":
+                    total_fixed_assets += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "繰延資産合計":
+                    deferred_assets += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "資産の部合計":
+                    total_assets += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # 負債の部
+                elif label_1 == "仕入債務合計":
+                    accounts_payable = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "短期借入金":
+                    short_term_loans_payable += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "流動負債合計":
+                    total_current_liabilities += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "長期借入金":
+                    long_term_loans_payable += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif "役員借入金" in label_2 or "役員等借入金" in label_2:
+                    long_term_loans_payable += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "固定負債合計":
+                    total_long_term_liabilities += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "負債の部合計":
+                    total_liabilities += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "資本金合計":
+                    capital_stock += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "資本剰余金合計":
+                    capital_surplus += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "利益剰余金合計":
+                    retained_earnings += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "株主資本合計":
+                    total_stakeholder_equity += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "評価・換算差額等合計":
+                    valuation_and_translation_adjustment += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "新株予約権合計":
+                    new_shares_reserve += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "純資産の部合計":
+                    total_net_assets += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # 損益計算書
+                elif label_1 == "売上高合計":
+                    sales = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    sales_line = current_line
+                elif label_1 == "売上総利益":
+                    gross_profit = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    gross_profit_line = current_line
+                elif "営業利益" in label_1 or "営業損失" in label_1:
+                    operating_profit = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    operating_profit_line = current_line
+                elif label_1 == "営業外収益合計":
+                    other_income += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "営業外費用合計":
+                    other_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif "経常利益" in label_1 or "経常損失" in label_1:
+                    ordinary_profit = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    ordinary_profit_line = current_line
+                elif label_1 == "特別利益合計":
+                    extraordinary_income += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_1 == "特別損失合計":
+                    extraordinary_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif "当期純利益" in label_1 or "当期純損失" in label_1:
+                    net_profit = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    net_profit_line = current_line
+                # 売上原価に含まれる減価償却
+                # elif "償却" in label_2 and (sales_line < current_line < gross_profit_line):
+                #     depreciation_cogs += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # # 販管費に含まれる減価償却
+                # elif "償却" in label_2 and (gross_profit_line < current_line < operating_profit_line):
+                #     depreciation_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                # # 営業外費用に含まれる償却
+                # elif "償却" in label_2 and (operating_profit_line < current_line < ordinary_profit_line):
+                #     non_operating_amortization_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif label_2 == "支払利息":
+                    interest_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                elif "法人税等" in label_2:
+                    tax_expense += int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+
+            # Use filter() to handle multiple results
+            fiscal_summary_years = FiscalSummary_Year.objects.filter(year=fiscal_year, company=self.this_company)
+            if fiscal_summary_years.exists():
+                if not override_flag:
+                    messages.error(
+                        self.request,
+                        f'{fiscal_year}年のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                    )
+                    return self.form_invalid(form)
+                else:
+                    # Update existing records
+                    for fiscal_summary_year in fiscal_summary_years:
+                        fiscal_summary_year.cash_and_deposits = cash_and_deposits
+                        fiscal_summary_year.save()
+            else:
+                # Create a new record if none exists
+                FiscalSummary_Year.objects.create(
+                    year=fiscal_year,
+                    company=self.this_company,
+                    is_draft=True,
+                    cash_and_deposits=cash_and_deposits,
+                    accounts_receivable=accounts_receivable,
+                )
+
+            messages.success(self.request, 'CSVファイルが正常にインポートされました。下書きデータとして保存されていますので、適宜必要な情報を追加してください。')
+        except Exception as e:
+            label_1 = row[0] if len(row) > 0 else 'N/A'
+            label_2 = row[1] if len(row) > 1 else 'N/A'
+            messages.error(
+                self.request, 
+                f'CSVファイルの処理中にエラーが発生しました: {str(e)} '
+                f'(行番号: {current_line}, 1列目: {label_1}, 2列目: {label_2})'
+            )
+            return self.form_invalid(form)
+
+        return super().form_valid(form)
+
 
 ##########################################################################
 ###                    Debt の View                                    ###
