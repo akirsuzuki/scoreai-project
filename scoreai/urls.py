@@ -33,6 +33,7 @@ urlpatterns = [
     path('import_fiscal_summary_month/', ImportFiscalSummary_Month.as_view(), name='import_fiscal_summary_month'),
     path('import_fiscal_summary_month_MF/', ImportFiscalSummary_Month_FromMoneyforward.as_view(), name='import_fiscal_summary_month_MF'),
     path('import_fiscal_summary_year/', ImportFiscalSummary_Year.as_view(), name='import_fiscal_summary_year'),
+    path('import_fiscal_summary_year_MF/', ImportFiscalSummary_Year_FromMoneyforward.as_view(), name='import_fiscal_summary_year_MF'),
     # 追加
     path('get-monthly-totals/', FiscalSummary_YearCreateView.as_view(http_method_names=['get']), name='get_monthly_totals'),
     path('debt/create/', DebtCreateView.as_view(), name='debt_create'),

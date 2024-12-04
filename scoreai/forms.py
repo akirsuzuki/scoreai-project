@@ -181,7 +181,7 @@ class FiscalSummary_MonthForm(forms.ModelForm):
         return cleaned_data
 
 
-class MoneyForwardCsvUploadForm(forms.Form):
+class MoneyForwardCsvUploadForm_Month(forms.Form):
     fiscal_year = forms.ModelChoiceField(
         queryset=FiscalSummary_Year.objects.none(),
         label='年度',
@@ -198,9 +198,27 @@ class MoneyForwardCsvUploadForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
-        super(MoneyForwardCsvUploadForm, self).__init__(*args, **kwargs)
+        super(MoneyForwardCsvUploadForm_Month, self).__init__(*args, **kwargs)
         if company:
             self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
+
+
+class MoneyForwardCsvUploadForm_Year(forms.Form):
+    csv_file = forms.FileField(
+        label='CSVファイル',
+        required=True
+    )
+    override_flag = forms.BooleanField(
+        required=False,
+        label='既存データを上書きする',
+        initial=False)
+
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super(MoneyForwardCsvUploadForm_Year, self).__init__(*args, **kwargs)
+        if company:
+            self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
+
 
 
 class DebtForm(forms.ModelForm):

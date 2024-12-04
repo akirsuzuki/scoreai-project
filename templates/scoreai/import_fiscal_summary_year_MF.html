@@ -27,10 +27,6 @@
               {% csrf_token %}
               {{ form.non_field_errors }}
               <div class="form-row">
-                <div class="form-group col-md-5 d-inline-block">
-                    {{ form.fiscal_year.label_tag }}
-                    {{ form.fiscal_year|add_class:"form-control" }}
-                </div>
                 <div class="form-group col-md-6 d-inline-block">
                     {{ form.csv_file.label_tag }}
                     {{ form.csv_file|add_class:"form-control" }}
@@ -47,16 +43,6 @@
               <strong>エンコードはShift-JISでお願いします。</strong>
               <p></p>
           </form>
-
-          {% if messages %}
-          <div class="messages">
-              {% for message in messages %}
-              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
-                  {{ message }}
-              </div>
-              {% endfor %}
-          </div>
-          {% endif %}
       </div>
       <div class="card-footer text-end">
           <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
@@ -69,28 +55,30 @@
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">
-        <h5 class="card-title mb-0">マネーフォワードからの月次推移表のダウンロード方法</h5>
+        <h5 class="card-title mb-0">マネーフォワードからの残高試算表のダウンロード方法</h5>
       </div>
       <div class="card-body">
         <ol>
-          <li>会計帳簿＝＞推移表 に進みます。</li>
+          <li>会計帳簿＝＞残高試算表 に進みます。</li>
           <br>
-          <li>以下の図のような形で推移表を表示します。</li>
+          <li>以下の図のような形で残高試算表を表示します。</li>
           <br>
           <ol>
-            <li>「損益計算書」を選択してください。</li>
+            <li>「貸借対照表」もしくは「損益計算書」を選択してください。（いずれを選択しても問題ありません）</li>
             <li>「補助科目を表示」のチェックを外してください。</li>
             <li>「選択期間」は任意の範囲を指定してください。</li>
             <li>「消費税」は普段お使いの方を選択してください。 SCoreにはここで表示されている値がそのまま取り込まれます。</li>
             <li>右の「検索」をクリックして画面をリフレッシュしてください。</li>
           </ol>
           <br>
-          <img src="{% static 'scoreai/img/MFimport_month.png' %}" class="img-fluid" alt="マネーフォワードの月次推移表" style="width: 80%;">
+          <img src="{% static 'scoreai/img/MFimport_year.png' %}" class="img-fluid" alt="マネーフォワードの残高試算表" style="width: 80%;">
           <br>
           <br>
-          <li>右上にあるエクスポートから、損益計算書（CSV）をクリックします。</li>
+          <li>右上にあるエクスポートから、貸借対照表（CSV）、損益計算書（CSV）を順番にクリック、もしくは一括出力（CSV）をクリックします。
+            <br>貸借対照表と損益計算書がそれぞれCSVでダウンロードされます。
+          </li>
           <br>
-          <img src="{% static 'scoreai/img/MFimport_month2.png' %}" class="img-fluid" alt="マネーフォワードの月次推移表のエクスポート" style="width: 20%;">
+          <img src="{% static 'scoreai/img/MFimport_year2.png' %}" class="img-fluid" alt="マネーフォワードの月次推移表のエクスポート" style="width: 20%;">
           <br>
           <br>
           <li>ダウンロードされたファイルを、CSVファイルとしてアップロードします。</li>
