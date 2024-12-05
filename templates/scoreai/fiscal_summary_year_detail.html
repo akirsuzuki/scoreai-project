@@ -249,7 +249,7 @@
                         <h5 class="card-title border-bottom pb-2">I. 流動負債</h5>
                         <div class="ms-3">
                           <div class="mb-2 row">
-                            <label class="col-sm-6 col-form-label">買掛金</label>
+                            <label class="col-sm-6 col-form-label">仕入債務</label>
                             <div class="col-sm-6">
                               <p class="form-control-plaintext">{{ fiscal_summary_year.accounts_payable|intcomma }}</p>
                             </div>
@@ -479,6 +479,12 @@
                   <div class="card-body">
                     <h5 class="card-title">III. 経常利益</h5>
                     <div class="mb-3 row">
+                      <label class="col-sm-6 col-form-label">営業外収益合計</label>
+                      <div class="col-sm-6">
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.other_income|intcomma }}</p>
+                      </div>
+                    </div>
+                    <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">営業外で計上された償却費</label>
                       <div class="col-sm-6">
                         <p class="form-control-plaintext">{{fiscal_summary_year.non_operating_amortization_expense|intcomma }}</p>
@@ -491,13 +497,7 @@
                       </div>
                     </div>
                     <div class="mb-3 row">
-                      <label class="col-sm-6 col-form-label">雑収入</label>
-                      <div class="col-sm-6">
-                        <p class="form-control-plaintext">{{ fiscal_summary_year.other_income|intcomma }}</p>
-                      </div>
-                    </div>
-                    <div class="mb-3 row">
-                      <label class="col-sm-6 col-form-label">雑損失</label>
+                      <label class="col-sm-6 col-form-label">営業外損失合計</label>
                       <div class="col-sm-6">
                         <p class="form-control-plaintext">{{ fiscal_summary_year.other_loss|intcomma }}</p>
                       </div>
