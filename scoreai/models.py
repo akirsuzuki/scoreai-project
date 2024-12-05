@@ -757,6 +757,18 @@ class IndustryBenchmark(models.Model):
 
 class TechnicalTerm(models.Model):
     name = models.CharField("用語名", max_length=255)
+    term_category =  models.CharField(
+        max_length=50,
+        choices=(
+            ('安全性', '安全性'),
+            ('収益性', '収益性'),
+            ('生産性', '生産性'),
+            ('成長性', '成長性'),
+            ('効率性', '効率性'),
+            ('その他', 'その他'),
+        ),
+        default = 'その他',
+    )
     description1 = models.TextField("説明", blank=True)
     description2 = models.TextField("目安", blank=True)
     description3 = models.TextField("計算式", blank=True)
