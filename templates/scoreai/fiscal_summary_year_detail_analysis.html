@@ -145,41 +145,19 @@
         <div class="card-body">
           <h5 class="card-title">収益性</h5>
           <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">総資本経常利益率（ROA）</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.ROA|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.roa.0 }}
+            {% for term in technical_terms %}
+            {% if term.term_category == '収益性' %}
+              <div class="term">
+                <h6>{{ term.name }}</h6>
+                <p>{{ term.description1 }}</p>
+                <p><strong>目安:</strong> {{ term.description2 }}</p>
+                <p><strong>計算式:</strong> {{ term.description3 }}</p>
               </div>
-            </div>
+            {% endif %}
+          {% empty %}
+            <p>収益性に関する用語がありません。</p>
+          {% endfor %}
           </div>
-          <p></p>
-          <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">営業利益率</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.operating_profit_margin|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.operating_profit_margin.0 }}
-              </div>
-            </div>
-          </div>
-          <p></p>
-          <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">EBITDA</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.EBITDA|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.EBITDA.0 }}
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
 
@@ -188,28 +166,18 @@
         <div class="card-body">
           <h5 class="card-title">安全性</h5>
           <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">流動比率</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.current_ratio|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                <strong>【定義】</strong>
-                {{ technical_terms.current_ratio.0 }}
+            {% for term in technical_terms %}
+            {% if term.term_category == '安全性' %}
+              <div class="term">
+                <h6>{{ term.name }}</h6>
+                <p>{{ term.description1 }}</p>
+                <p><strong>目安:</strong> {{ term.description2 }}</p>
+                <p><strong>計算式:</strong> {{ term.description3 }}</p>
               </div>
-            </div>
-          </div>
-          <p></p>
-          <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">EBITDA有利子負債倍率</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.EBITDA_interest_bearing_debt_ratio|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.EBITDA_interest_bearing_debt_ratio.0 }}
-              </div>
-            </div>
+            {% endif %}
+          {% empty %}
+            <p>安全性に関する用語がありません。</p>
+          {% endfor %}
           </div>
         </div>
       </div>
@@ -221,15 +189,18 @@
         <div class="card-body">
           <h5 class="card-title">生産性</h5>
           <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">労働生産性</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.labor_productivity|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.labor_productivity.0 }}
+            {% for term in technical_terms %}
+            {% if term.term_category == '生産性' %}
+              <div class="term">
+                <h6>{{ term.name }}</h6>
+                <p>{{ term.description1 }}</p>
+                <p><strong>目安:</strong> {{ term.description2 }}</p>
+                <p><strong>計算式:</strong> {{ term.description3 }}</p>
               </div>
-            </div>
+            {% endif %}
+          {% empty %}
+            <p>生産性に関する用語がありません。</p>
+          {% endfor %}
           </div>
         </div>
       </div>
@@ -239,15 +210,18 @@
         <div class="card-body">
           <h5 class="card-title">成長性</h5>
           <div class="mb-3 row">
-            <label class="col-sm-6 col-form-label">売上高増加率</label>
-            <div class="col-sm-6">
-              <p class="form-control-plaintext">{{ fiscal_summary_year.sales_growth_rate|intcomma }}</p>
-            </div>
-            <div class="col-sm-12">
-              <div class="alert alert-info small" role="alert">
-                {{ technical_terms.sales_growth_rate.0 }}
+            {% for term in technical_terms %}
+            {% if term.term_category == '成長性' %}
+              <div class="term">
+                <h6>{{ term.name }}</h6>
+                <p>{{ term.description1 }}</p>
+                <p><strong>目安:</strong> {{ term.description2 }}</p>
+                <p><strong>計算式:</strong> {{ term.description3 }}</p>
               </div>
-            </div>
+            {% endif %}
+          {% empty %}
+            <p>成長性に関する用語がありません。</p>
+          {% endfor %}
           </div>
         </div>
       </div>

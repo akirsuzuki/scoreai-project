@@ -590,11 +590,7 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
 
         # TechnicalTermの全データを取得し、nameをキーにして辞書を作成
         technical_terms = TechnicalTerm.objects.all()
-        technical_terms_dict = {
-            term.name: [term.description1, term.description2, term.description3]
-            for term in technical_terms
-        }
-        context['technical_terms'] = technical_terms_dict
+        context['technical_terms'] = technical_terms
 
         # ベンチマーク指数を取得
         benchmark_index = get_benchmark_index(self.this_company.industry_classification, self.this_company.industry_subclassification, self.this_company.company_size, self.object.year)

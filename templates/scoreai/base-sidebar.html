@@ -31,10 +31,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">借入管理</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseBorrowingManagement" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">借入管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseBorrowingManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'debts_all' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -75,14 +75,13 @@
                 <span class="hide-menu">新規借入</span>
               </a>
             </li>
-
           </ul>
         </li>
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">月次PL</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseMonthlyPL" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">月次PL</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseMonthlyPL" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -104,10 +103,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">年次財務諸表</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseAnnualFinancials" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">年次財務諸表</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseAnnualFinancials" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -128,10 +127,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">株主情報</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseShareholderInformation" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">株主情報</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseShareholderInformation" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'stakeholder_name_list' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -152,10 +151,10 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">ローカルベンチマーク</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseLocalBenchmark" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">ローカルベンチマーク</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseLocalBenchmark" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'industry_benchmark_list' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -168,16 +167,34 @@
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'meeting_minutes_list' %}" aria-expanded="false">
-            <span class="hide-menu">ノート</span>
+          <a class="sidebar-link" href="#collapseMeetingMinutes" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">ノート</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
+          <ul id="collapseMeetingMinutes" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'meeting_minutes_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">ノート一覧</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'meeting_minutes_create' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">新規ノート</span>
+              </a>
+            </li>
+          </ul>
         </li>
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="javascript:void(0)" aria-expanded="false">
-            <span class="hide-menu">CSV Import</span><i class="fa-solid fa-angles-right"></i>
+          <a class="sidebar-link" href="#collapseCSVImport" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">CSV Import</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul aria-expanded="false" class="collapse first-level">
+          <ul id="collapseCSVImport" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
               <a href="{% url 'import_fiscal_summary_month' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
@@ -212,46 +229,7 @@
         </li>
 
         {% endif %}
-
-
-
-
-
-
-        <!-- <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
-            <span>
-              <i class="ti ti-file-description"></i>
-            </span>
-            <span class="hide-menu">TBD</span>
-          </a>
-        </li> -->
-
-        <!-- <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">EXTRA</span>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
-            <span>
-              <i class="ti ti-mood-happy"></i>
-            </span>
-            <span class="hide-menu">TBD</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
-            <span>
-              <i class="ti ti-aperture"></i>
-            </span>
-            <span class="hide-menu">Sample</span>
-          </a>
-        </li>
-      </ul> -->
     </nav>
-    <!-- End Sidebar navigation -->
   </div>
-  <!-- End Sidebar scroll-->
 </aside>
-<!--  Sidebar End -->
 
