@@ -69,3 +69,13 @@ div.dt-container {
   display: flex;
   flex-wrap: wrap;
 }
+
+/* サイドバーの視覚効果 */
+
+.sidebar-link i {
+  transition: transform 0.3s ease;
+}
+
+.sidebar-link[aria-expanded="true"] i {
+  transform: rotate(90deg);
+}
