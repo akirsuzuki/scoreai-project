@@ -266,7 +266,7 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cre
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
-    success_url = reverse_lazy('fiscal_summary_year')
+    success_url = reverse_lazy('fiscal_summary_year_list')
 
     def get_initial(self):
         initial = super().get_initial()
@@ -484,14 +484,14 @@ def download_fiscal_summary_year_csv(request, param=None):
         '流動資産合計（千円）', '土地（千円）', '建物及び附属設備（千円）', '機械及び装置（千円）',
         '車両運搬具（千円）', '有形固定資産の減価償却累計額（千円）', '有形固定資産合計（千円）',
         'のれん（千円）', '無形固定資産合計（千円）', '長期貸付金（千円）', '投資その他の資産（千円）',
-        '固定資産合計（千円）', '繰延資産合計（千円）', '資産の部合計（千円）', '仕入債務合計（千円）',
+        '繰延資産合計（千円）', '固定資産合計（千円）', '資産の部合計（千円）', '仕入債務合計（千円）',
         '短期借入金（千円）', '流動負債合計（千円）', '長期借入金（千円）', '固定負債合計（千円）',
         '負債の部合計（千円）', '資本金合計（千円）', '資本剰余金合計（千円）', '利益剰余金合計（千円）',
         '株主資本合計（千円）', '評価・換算差額合計（千円）', '新株予約権合計（千円）', '純資産の部合計（千円）',
         '役員貸付金または借入金（千円）', '売上高（千円）', '粗利益（千円）', '売上原価内の減価償却費（千円）',
         '役員報酬（千円）', '給与・雑給（千円）', '販管費内の減価償却費（千円）', '販管費内のその他の償却費（千円）',
         '営業利益（千円）', '営業外収益合計（千円）', '営業外の償却費（千円）', '支払利息（千円）',
-        '営業外収益合計（千円）', '経常利益（千円）', '特別利益合計（千円）', '特別損失合計（千円）',
+        '営業外費用合計（千円）', '経常利益（千円）', '特別利益合計（千円）', '特別損失合計（千円）',
         '法人税等（千円）', '当期純利益（千円）', '税務-繰越欠損金（千円）', '期末従業員数（人）',
         '期末発行済株式数（株）', '注意事項'
     ]
@@ -2558,6 +2558,18 @@ def select_company(request, this_company):
         messages.error(request, '指定された会社が見つかりません。')
     
     return redirect('user_profile')  # Redirect to the user profile page
+
+
+@login_required
+def add_client(request, client_id):
+    client = Company.objects.get(id=client_id)
+    # 既に追加されているか確認（任意）
+    if UserCompany.objects.filter(user=request.user, company=client).exists():
+        messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
+    else:
+        UserCompany.objects.create(user=request.user, company=client)
+        messages.success(request, f'クライアント "{client.name}" を正常に追加しました。')
+    return redirect('firm_clientslist')
 
 
 ##########################################################################
