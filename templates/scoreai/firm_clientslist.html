@@ -43,6 +43,7 @@
                 <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">有効User数</h6>
                 </th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -61,6 +62,12 @@
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <form method="post" action="{% url 'add_client' client_id=client.company.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">追加</button>
+                  </form>
                 </td>
               </tr> 
               {% endfor %}
