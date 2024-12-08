@@ -2284,6 +2284,16 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context['title'] = 'クライアント一覧'
         return context
 
+@login_required
+def add_client(request, client_id):
+    client = Company.objects.get(id=client_id)
+    # 既に追加されているか確認（任意）
+    if UserCompany.objects.filter(user=request.user, company=client).exists():
+        messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
+    else:
+        UserCompany.objects.create(user=request.user, company=client)
+        messages.success(request, f'クライアント "{client.name}" を正常に追加しました。')
+    return redirect('firm_clientslist')
 
 ##########################################################################
 ###                 テキスト情報中心のシンプルなView                         ###
@@ -2558,18 +2568,6 @@ def select_company(request, this_company):
         messages.error(request, '指定された会社が見つかりません。')
     
     return redirect('user_profile')  # Redirect to the user profile page
-
-
-@login_required
-def add_client(request, client_id):
-    client = Company.objects.get(id=client_id)
-    # 既に追加されているか確認（任意）
-    if UserCompany.objects.filter(user=request.user, company=client).exists():
-        messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
-    else:
-        UserCompany.objects.create(user=request.user, company=client)
-        messages.success(request, f'クライアント "{client.name}" を正常に追加しました。')
-    return redirect('firm_clientslist')
 
 
 ##########################################################################

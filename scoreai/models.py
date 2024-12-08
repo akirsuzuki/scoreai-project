@@ -103,6 +103,7 @@ class UserCompany(models.Model):
     active = models.BooleanField(default=True)
     is_selected = models.BooleanField(default=True)
     is_owner = models.BooleanField(default=False)
+    as_consultant = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if self.is_selected:
