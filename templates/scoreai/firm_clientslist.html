@@ -17,9 +17,6 @@
 
 {% block content %}
 
-
-
-
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
@@ -48,7 +45,6 @@
             </thead>
             <tbody>
               {% for client in clients %}
-
               <tr>
                 <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
@@ -69,8 +65,7 @@
                   </form>
                 </td>
               </tr> 
-              {% endfor %}
-                 
+              {% endfor %}       
             </tbody>
           </table>
         </div>
@@ -82,6 +77,65 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-4">アサインされているクライアント</h5>
+      </div>
+      <div class="card-body p-4">
+        <div class="table table-hover">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">会社名</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">会計年度</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">開始日付</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">有効User数</h6>
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for client in clients_assigned %}
+              <tr>
+                <td class="border-bottom-0">
+                    <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ client.company.fiscal_month}}月</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ client.start_date }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <form method="post" action="{% url 'remove_client' client_id=client.company.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">削除</button>
+                  </form>
+                </td>
+              </tr> 
+              {% endfor %}       
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 {% endblock %}
