@@ -7,8 +7,10 @@ from django.utils.safestring import mark_safe
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email')
-
+    list_display = ('username', 'email', 'is_financial_consultant', 'is_company_user', 'is_manager')
+    list_display_links = ('username', 'email')
+    search_fields = ('username', 'email')
+    list_filter = ('is_financial_consultant', 'is_company_user', 'is_manager')
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
@@ -21,6 +23,8 @@ class CompanyAdmin(admin.ModelAdmin):
 class UserCompanyAdmin(admin.ModelAdmin):
     list_display = ('company', 'user', 'is_selected', 'active', 'is_owner', 'as_consultant')
     list_display_links = ('company', 'user')
+    search_fields = ('company__name', 'user__username', 'as_consultant')
+    list_filter = ('company', 'as_consultant')
     ordering = ('company',)
 
 
@@ -28,6 +32,8 @@ class UserCompanyAdmin(admin.ModelAdmin):
 class DebtAdmin(admin.ModelAdmin):
     list_display = ('company', 'financial_institution', 'principal', 'secured_type', 'remaining_months','reschedule_date')
     list_display_links = ('company',)
+    search_fields = ('company__name', 'financial_institution__name')
+    list_filter = ('company', 'start_date', 'issue_date')
     ordering = ('company',)
 
 
@@ -42,6 +48,8 @@ class FirmAdmin(admin.ModelAdmin):
 class UserFirmAdmin(admin.ModelAdmin):
     list_display = ('firm', 'user', 'is_selected', 'active', 'is_owner')
     list_display_links = ('firm', 'user')
+    search_fields = ('firm__name','user__username')
+    list_filter = ('firm__name',)
     ordering = ('firm',)
 
 
@@ -133,12 +141,16 @@ admin.site.register(SecuredType)
 class MeetingMinutesAdmin(admin.ModelAdmin):
     list_display = ('company', 'meeting_date', 'created_by')
     list_display_links = ('meeting_date',)
+    search_fields = ('company__name', 'created_by__username')
+    list_filter = ('company', 'meeting_date')
     ordering = ('meeting_date',)
 
 @admin.register(Stakeholder_name)
 class Stakeholder_nameAdmin(admin.ModelAdmin):
     list_display = ('name', 'company', 'is_representative', 'is_board_member', 'is_related_person', 'is_employee', 'memo')
     list_display_links = ('name',)
+    search_fields = ('name', 'company__name')
+    list_filter = ('company',)
     ordering = ('name',)
 
 @admin.register(StockEvent)
