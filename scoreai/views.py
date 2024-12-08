@@ -2578,7 +2578,7 @@ def select_company(request, this_company):
     else:
         messages.error(request, '指定された会社が見つかりません。')
     
-    return redirect('user_profile')  # Redirect to the user profile page
+    return redirect('index')  # Redirect to the user profile page
 
 
 ##########################################################################

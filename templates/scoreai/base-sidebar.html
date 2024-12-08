@@ -228,6 +228,13 @@
         </li>
 
         {% endif %}
+        {% if user.is_superuser %}
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
+            <span class="hide-menu">管理画面</span>
+          </a>
+        </li>
+        {% endif %}
     </nav>
   </div>
 </aside>
