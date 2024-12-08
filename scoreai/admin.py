@@ -19,7 +19,7 @@ class CompanyAdmin(admin.ModelAdmin):
 
 @admin.register(UserCompany)
 class UserCompanyAdmin(admin.ModelAdmin):
-    list_display = ('company', 'user', 'is_selected', 'active', 'is_owner')
+    list_display = ('company', 'user', 'is_selected', 'active', 'is_owner', 'as_consultant')
     list_display_links = ('company', 'user')
     ordering = ('company',)
 

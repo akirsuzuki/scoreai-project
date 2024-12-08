@@ -12,6 +12,7 @@ urlpatterns = [
     path('user_profile_update/', UserProfileUpdateView.as_view(), name='user_profile_update'),
     path('select_company/<str:this_company>/', views.select_company, name='select_company'),
     path('add_client/<str:client_id>/', views.add_client, name='add_client'),
+    path('remove_client/<str:client_id>/', views.remove_client, name='remove_client'),
     path('company/<str:id>/', CompanyDetailView.as_view(), name='company_detail'),
     path('company/<str:id>/update/', CompanyUpdateView.as_view(), name='company_update'),
     path('ajax/load-industry-subclassifications/', views.load_industry_subclassifications, name='ajax_load_industry_subclassifications'),

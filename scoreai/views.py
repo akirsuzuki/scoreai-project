@@ -2281,8 +2281,12 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        clients_assigned = UserCompany.objects.filter(user=self.request.user, as_consultant=True)
+        context['clients_assigned'] = clients_assigned
         context['title'] = 'クライアント一覧'
         return context
+
+
 
 @login_required
 def add_client(request, client_id):
@@ -2291,9 +2295,16 @@ def add_client(request, client_id):
     if UserCompany.objects.filter(user=request.user, company=client).exists():
         messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
     else:
-        UserCompany.objects.create(user=request.user, company=client)
+        UserCompany.objects.create(user=request.user, company=client, as_consultant=True)
         messages.success(request, f'クライアント "{client.name}" を正常に追加しました。')
     return redirect('firm_clientslist')
+
+@login_required
+def remove_client(request, client_id):
+    client = Company.objects.get(id=client_id)
+    UserCompany.objects.filter(user=request.user, company=client).delete()
+    return redirect('firm_clientslist')
+
 
 ##########################################################################
 ###                 テキスト情報中心のシンプルなView                         ###
