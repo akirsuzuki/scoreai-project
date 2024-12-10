@@ -72,7 +72,7 @@
                 <td colspan="{{ fiscal_summary_years|length|add:1 }}" style="border-bottom: 2px solid black;"></td>
               </tr>              
               <tr>
-                <td>売上高</td>
+                <td>売上高合計</td>
                 {% for summary in fiscal_summary_years reversed %}
                 <td class="text-end">{{ summary.sales|intcomma }}</td>
                 {% endfor %}
