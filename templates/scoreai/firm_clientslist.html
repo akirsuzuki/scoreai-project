@@ -121,10 +121,10 @@
                 <td class="border-bottom-0">
                   <form method="post" action="{% url 'remove_client' client_id=client.company.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">削除</button>
+                    <button type="submit" class="btn btn-danger">アサイン解除</button>
                   </form>
                 </td>
-              </tr> 
+              </tr>
               {% endfor %}       
             </tbody>
           </table>

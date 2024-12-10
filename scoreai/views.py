@@ -128,7 +128,7 @@ class IndexView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
         ]
 
         context.update({
-            'title': 'Dash Board',
+            'title': 'ダッシュボード',
             'today': timezone.now().date(),
             'months_label': months_label,
             'monthly_summaries': monthly_summaries,
@@ -1306,9 +1306,19 @@ class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedComp
 
             for row in csv_reader:
                 current_line += 1
-                label_1 = row[0] # 1列目に項目名があるものから処理（勘定科目グループ）
-                label_2 = row[1] # 2列目に項目名があるものから処理（勘定科目）
-                mapping_label=f'{label_1}{label_2}'
+                # 空行または不完全な行をスキップ
+                if not row or len(row) < 1:
+                    logger.warning(f"空行または不完全な行が検出されました（行番号: {current_line}）： {row}")
+                    continue
+
+                # 項目名の決定
+                if len(row) >= 5 and row[0] != '':
+                    mapping_label = row[0]
+                elif len(row) >= 2 and row[1] != '':
+                    mapping_label = row[1]
+                else:
+                    logger.warning(f"この行はスッキップします（行番号: {current_line}）： {row}")
+                    continue
 
                 value = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
                 
@@ -1351,11 +1361,10 @@ class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedComp
             messages.success(self.request, 'CSVファイルが正常にインポートされました。下書きデータとして保存されていますので、適宜必要な情報を追加してください。')
 
         except Exception as e:
-            errors_label = f'{label_1}{label_2}'
             messages.error(
                 self.request, 
                 f'CSVファイルの処理中にエラーが発生しました: {str(e)} '
-                f'(行番号: {current_line}, 項目名：{errors_label}、行データ：{row})'
+                f'(行番号: {current_line}, 項目名：{mapping_label}、行データ：{row})'
             )
             return self.form_invalid(form)
 
