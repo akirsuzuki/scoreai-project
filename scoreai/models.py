@@ -225,7 +225,13 @@ class Debt(models.Model):
     memo_short = models.CharField("短文メモ", max_length=126, blank=True)
     is_nodisplay = models.BooleanField("非表示", default=False)
     secured_type = models.ForeignKey(SecuredType, on_delete=models.CASCADE, verbose_name="保証協会")
-    document_url = models.URLField("クラウドストレージへのリンク", max_length=300, blank=True, null=True)
+    document_url = models.URLField("返済予定表へのリンク", max_length=300, blank=True, null=True)
+    document_url2 = models.URLField("金銭消費貸借契約書へのリンク", max_length=300, blank=True, null=True)
+    document_url3 = models.URLField("保証協会資料・担保契約書などへのリンク", max_length=300, blank=True, null=True)
+    document_url4 = models.URLField("その他資料へのリンク", max_length=300, blank=True, null=True)
+    document_url_c1 = models.URLField("コンサル用資料リンク１", max_length=300, blank=True, null=True)
+    document_url_c2 = models.URLField("コンサル用資料リンク２", max_length=300, blank=True, null=True)
+    document_url_c3 = models.URLField("コンサル用資料リンク３", max_length=300, blank=True, null=True)
 
     @property
     def payment_terms(self):
@@ -388,6 +394,7 @@ class FiscalSummary_Year(models.Model):
     year = models.IntegerField("年度", validators=[MinValueValidator(2000), MaxValueValidator(2100)])
     version = models.IntegerField("バージョン", default=1)
     is_draft = models.BooleanField("下書きモード", default=False)
+    is_budget = models.BooleanField("予算", default=False)
 
     # BS情報
     cash_and_deposits = models.IntegerField("現金及び預金合計（千円）", default=0)
@@ -624,6 +631,7 @@ class FiscalSummary_Month(models.Model):
     gross_profit = models.DecimalField("粗利益", max_digits=12, decimal_places=2)
     operating_profit = models.DecimalField("営業利益", max_digits=12, decimal_places=2)
     ordinary_profit = models.DecimalField("経常利益", max_digits=12, decimal_places=2)
+    is_budget = models.BooleanField("予算", default=False)
 
     @property
     def gross_profit_rate(self):
