@@ -39,6 +39,8 @@
       </div>
       <div class="card-body">
         <div class="row g-3">
+          <h3 class="card-title mb-0">【 基本情報 】</h3>
+          <p></p>
           <div class="row">
             <div class="col-md-6">
               <div class="form-group mb-3">
@@ -164,19 +166,6 @@
               </div>
             </div>
           </div>
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label for="{{ form.document_url.id_for_label }}" class="form-label">{{ form.document_url.label }}</label>
-                {{ form.document_url }}
-                {% if form.document_url.help_text %}
-                  <small class="form-text text-muted">{{ form.document_url.help_text }}</small>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-
           <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
@@ -190,16 +179,75 @@
           </div>
 
           <hr>
+          <h3 class="card-title mb-0">【 ドキュメントリンク 】</h3>
+          <p></p>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url.id_for_label }}" class="form-label">{{ form.document_url.label }}</label>
+                {{ form.document_url }}
+                {% if form.document_url.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url.help_text }}</small>
+                {% endif %}
+              </div>
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url2.id_for_label }}" class="form-label">{{ form.document_url2.label }}</label>
+                {{ form.document_url2 }}
+                {% if form.document_url2.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url2.help_text }}</small>
+                {% endif %}
+              </div>
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url3.id_for_label }}" class="form-label">{{ form.document_url3.label }}</label>
+                {{ form.document_url3 }}
+                {% if form.document_url3.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url3.help_text }}</small>
+                {% endif %}
+              </div>
+              <br><br>
+              {% if user.is_financial_consultant %}
+              <h3 class="card-title mb-0">【 コンサルタント用ドキュメントリンク 】</h3>
+              <p></p>
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url_c1.id_for_label }}" class="form-label">{{ form.document_url_c1.label }}</label>
+                {{ form.document_url_c1 }}
+                {% if form.document_url_c1.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url_c1.help_text }}</small>
+                {% endif %}
+              </div>
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url_c2.id_for_label }}" class="form-label">{{ form.document_url_c2.label }}</label>
+                {{ form.document_url_c2 }}
+                {% if form.document_url_c2.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url_c2.help_text }}</small>
+                {% endif %}
+              </div>
+              <div class="form-group mb-3">
+                <label for="{{ form.document_url_c3.id_for_label }}" class="form-label">{{ form.document_url_c3.label }}</label>
+                {{ form.document_url_c3 }}
+                {% if form.document_url_c3.help_text %}
+                  <small class="form-text text-muted">{{ form.document_url_c3.help_text }}</small>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+
+          <hr>
+          <h3 class="card-title mb-0">【 リスケ情報 】</h3>
           <div class="col-md-12">
             <div class="alert alert-warning" role="alert">
               <h5 class="alert-heading">リスケをした場合の更新方法</h5>
               <p>リスケをした場合は、まず「リスケ」のチェックボックスをONにしてください。<br>
               リスケ日とリスケ時点の残高を入力してください。<br>
-              リスケ時点の残高を元本として、新しい借入を登録してください。その借入では、実行日は元の借入のリスケ日となります。</p>
+              リスケ時点の残高を元本として、新しい借入を登録してください。その借入では、実行日は元の借入のリスケ日となります。
+            <br>新たに入れた借入（元本をリスケ時の残高としていらた借入）は、「リスケ」のチェックボックスをOFFにしてください。</p>
             </div>
           </div>
 
           <div class="row">
+
             <div class="col-md-4">
               <div class="form-group mb-3">
               <label for="{{ form.is_rescheduled.id_for_label }}" class="form-label">{{ form.is_rescheduled.label }}</label>
@@ -230,6 +278,7 @@
           </div>
 
           <hr>
+          <h3 class="card-title mb-0">【 アーカイブ 】</h3>
           <div class="col-md-12">
             <div class="alert alert-info" role="alert">
               <h5 class="alert-heading">アーカイブ</h5>
@@ -238,7 +287,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row">  
             <div class="col-md-4">
               <div class="form-group mb-3">
               <label for="{{ form.is_nodisplay.id_for_label }}" class="form-label">{{ form.is_nodisplay.label }}</label>
