@@ -15,13 +15,13 @@ from ..models import UserCompany
 from ..forms import CustomUserCreationForm, LoginForm, UserProfileUpdateForm
 
 
-class LoginView(LoginView):
+class LoginView(LoginView):  # LoginViewは認証不要なのでSelectedCompanyMixinは不要
     """ログインビュー"""
     form_class = LoginForm
     template_name = 'scoreai/login.html'
 
 
-class ScoreLogoutView(LoginRequiredMixin, LogoutView):
+class ScoreLogoutView(LogoutView):  # LogoutViewは認証済みユーザーのみなのでLoginRequiredMixinは不要
     """ログアウトビュー"""
     template_name = 'scoreai/logout.html'
 
@@ -76,7 +76,7 @@ class UserCreateView(CreateView):
         return context
 
 
-class UserProfileView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
+class UserProfileView(SelectedCompanyMixin, generic.TemplateView):
     """ユーザープロフィール表示ビュー"""
     template_name = 'scoreai/user_profile.html'
 
@@ -98,7 +98,7 @@ class UserProfileView(LoginRequiredMixin, SelectedCompanyMixin, generic.Template
         return context
 
 
-class UserProfileUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class UserProfileUpdateView(SelectedCompanyMixin, UpdateView):
     """ユーザープロフィール更新ビュー"""
     form_class = UserProfileUpdateForm
     template_name = 'scoreai/user_profile_update.html'

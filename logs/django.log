@@ -1,0 +1,54 @@
+INFO 2025-12-25 15:05:53,516 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:06:52,777 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2025-12-25 15:06:52,958 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:09:49,389 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2025-12-25 15:09:49,656 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:24:54,428 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:20,250 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-25 15:26:20,432 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:25,617 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2025-12-25 15:26:25,769 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:27,899 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2025-12-25 15:26:28,049 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:30,175 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2025-12-25 15:26:30,326 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:33,461 autoreload /app/scoreai/views/company_views.py changed, reloading.
+INFO 2025-12-25 15:26:33,624 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:26:51,023 autoreload /app/scoreai/views/company_views.py changed, reloading.
+INFO 2025-12-25 15:26:51,171 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:27:05,537 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-25 15:27:05,703 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:27:16,999 autoreload /app/scoreai/views/company_views.py changed, reloading.
+INFO 2025-12-25 15:27:17,154 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:29:46,173 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:30:28,092 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2025-12-25 15:30:28,311 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:31:19,343 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2025-12-25 15:31:19,557 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:35:33,830 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:36:11,793 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:36:12,151 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:36:18,392 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:36:18,633 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:37:35,659 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:37:56,151 autoreload /app/scoreai/views/helper_views.py changed, reloading.
+INFO 2025-12-25 15:37:56,490 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:38:25,228 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:38:25,565 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:38:34,901 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:38:35,208 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:40:30,300 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:41:02,145 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:41:02,430 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:41:13,867 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:41:14,228 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:42:01,652 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:53:51,853 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:58:16,115 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:58:38,716 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:58:38,932 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 15:58:47,204 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-25 15:58:47,384 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 17:46:34,747 basehttp "GET / HTTP/1.1" 200 43724
+INFO 2025-12-25 17:46:34,775 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 200 2749
+INFO 2025-12-25 17:46:34,878 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 200 4153

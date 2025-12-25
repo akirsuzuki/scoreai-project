@@ -75,6 +75,7 @@ def chat_view(request: HttpRequest) -> HttpResponse:
     """
     from django.conf import settings
     import requests
+    from ..models import Debt
     
     response_message = None
     debts = Debt.objects.all()

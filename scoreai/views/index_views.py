@@ -4,7 +4,6 @@
 from typing import Any, Dict
 from django.shortcuts import render
 from django.conf import settings
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.utils import timezone
 from django.views import generic
@@ -24,7 +23,7 @@ from .utils import (
 logger = logging.getLogger(__name__)
 
 
-class IndexView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
+class IndexView(SelectedCompanyMixin, generic.TemplateView):
     """ダッシュボードビュー
     
     財務サマリー、借入情報、AIチャット機能を提供するメインダッシュボードです。

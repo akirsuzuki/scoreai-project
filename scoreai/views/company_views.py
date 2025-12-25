@@ -8,12 +8,13 @@ from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from ..mixins import SelectedCompanyMixin
 from ..models import Company, UserCompany, IndustrySubClassification
 from ..forms import CompanyForm
 
 
-class CompanyDetailView(LoginRequiredMixin, DetailView):
+class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixinは不要（会社選択は不要）
     """会社詳細ビュー"""
     model = Company
     template_name = 'scoreai/company_detail.html'
@@ -40,7 +41,7 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
-class CompanyUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class CompanyUpdateView(SelectedCompanyMixin, UpdateView):
     """会社情報更新ビュー"""
     model = Company
     form_class = CompanyForm
