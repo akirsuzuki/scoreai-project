@@ -153,7 +153,7 @@ try:
 except ImportError:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-    DEBUG = False
+    DEBUG = os.environ.get('DEBUG', 'False') == 'True'
     ALLOWED_HOSTS = ['.herokuapp.com', 'www.score-ai.net', 'score-ai.net', '0.0.0.0', '127.0.0.1']
     # EMAIL_HOST_USER = 'sth' or os.environ['EMAIL_HOST_USER']
     # EMAIL_HOST_PASSWORD = 'sth' or os.environ['EMAIL_HOST_PASSWORD']
@@ -165,3 +165,128 @@ except ImportError:
     # DATABASES['default'] = dj_database_url.config()
     DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
     pass
+
+# セキュリティ設定の強化
+# DEBUGがFalseの場合のみセキュリティ設定を有効化
+if not DEBUG:
+    # HTTPSリダイレクト
+    SECURE_SSL_REDIRECT = True
+    # HSTS (HTTP Strict Transport Security)
+    SECURE_HSTS_SECONDS = 31536000  # 1年
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    # セキュアなCookie設定
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    # X-Frame-Options
+    X_FRAME_OPTIONS = 'DENY'
+    # Content Security Policy
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+else:
+    # 開発環境ではセキュリティ設定を緩和
+    SECURE_SSL_REDIRECT = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# パスワードバリデーションの強化
+AUTH_PASSWORD_VALIDATORS = [
+    {
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 12,  # より強力なパスワード
+        }
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+    },
+    {
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+    },
+]
+
+# ログ設定
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'security': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'formatter': 'verbose',
+        },
+        'security_file': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'security.log'),
+            'formatter': 'security',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security_file'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'scoreai': {
+            'handlers': ['file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+# ログディレクトリの作成（存在しない場合）
+import os
+log_dir = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(log_dir):
+    os.makedirs(log_dir)
+
+# キャッシング戦略の実装
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5分
+        'OPTIONS': {
+            'MAX_ENTRIES': 1000
+        }
+    }
+}
+
+# 本番環境ではRedisを使用（環境変数で設定可能）
+if not DEBUG and os.environ.get('REDIS_URL'):
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379/1'),
+            'OPTIONS': {
+                'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            },
+            'KEY_PREFIX': 'scoreai',
+            'TIMEOUT': 300,  # 5分
+        }
+    }

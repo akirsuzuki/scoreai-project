@@ -79,3 +79,130 @@ div.dt-container {
 .sidebar-link[aria-expanded="true"] i {
   transform: rotate(90deg);
 }
+
+/* レスポンシブデザインの改善 */
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+    /* カードのパディングを調整 */
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    /* テーブルのレスポンシブ対応 */
+    .table-responsive {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* ボタンのサイズ調整 */
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .btn-group {
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        flex: 1;
+    }
+    
+    /* フォームの調整 */
+    .form-control {
+        font-size: 16px; /* iOSのズームを防ぐ */
+    }
+    
+    /* サイドバーの調整 */
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    
+    /* ヘッダーの調整 */
+    .header {
+        padding: 0.5rem 1rem;
+    }
+    
+    /* コンテナのパディング調整 */
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+}
+
+/* タブレット対応 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* 大きな画面での最適化 */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}
+
+/* テーブルのレスポンシブ対応（DataTables使用時） */
+@media (max-width: 768px) {
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        text-align: left;
+        margin-bottom: 1rem;
+    }
+    
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+        text-align: center;
+        margin-top: 1rem;
+    }
+}
+
+/* カード型レイアウトの改善 */
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+/* アクセシビリティの改善 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* タッチデバイス対応 */
+@media (hover: none) and (pointer: coarse) {
+    .btn, a, button {
+        min-height: 44px; /* タッチターゲットの最小サイズ */
+        min-width: 44px;
+    }
+}

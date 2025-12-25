@@ -92,234 +92,56 @@ from django.core.exceptions import FieldDoesNotExist
 import logging
 logger = logging.getLogger(__name__)
 
+# 新しいビューファイルからインポート
+from .views.index_views import IndexView
+from .views.auth_views import (
+    LoginView,
+    ScoreLogoutView,
+    UserCreateView,
+    UserProfileView,
+    UserProfileUpdateView,
+)
+from .views.company_views import (
+    CompanyDetailView,
+    CompanyUpdateView,
+    load_industry_subclassifications,
+)
+from .views.helper_views import select_company, chat_view
+from .views.utils import (
+    get_finance_score,
+    calculate_total_monthly_summaries,
+    get_benchmark_index,
+    get_last_day_of_next_month,
+    get_monthly_summaries,
+    get_debt_list,
+    get_debt_list_byAny,
+    get_debt_list_byBankAndSecuredType,
+    get_YearlyFiscalSummary,
+    get_yearly_summaries,
+)
 
-class IndexView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
-    template_name = 'scoreai/index.html'
-
-    def get(self, request, *args, **kwargs):
-        try:
-            context = self.get_context_data()
-            context['form'] = ChatForm()
-            return render(request, self.template_name, context)
-        except Exception as e:
-            # データを取得できない場合は help.html に遷移
-            return render(request, 'scoreai/help.html')
-
-    def post(self, request, *args, **kwargs):
-        context = self.get_context_data()
-        form = ChatForm(request.POST)
-        if form.is_valid():
-            user_message = form.cleaned_data['message']
-            selected_company = self.get_selected_company()
-            debts = Debt.objects.filter(
-                company=self.this_company
-            ).select_related(
-                'financial_institution',
-                'secured_type',
-                'company'
-            )
-
-            # 債務情報を文字列にフォーマット
-            debt_info = "\n".join([f"債務{i+1}: {debt.principal}円 (金利: {debt.interest_rate}%)" for i, debt in enumerate(debts)])
-
-            # プロンプトを作成
-            prompt = f"""以下の債務情報に基づいて、最適な返済計画についてアドバイスしてください：
-            {debt_info}
-            ユーザーの質問: {user_message}
-            総債務額、平均金利、そして最も効果的な返済方法を提案してください。"""
-
-            # Prepare the API request to ChatGPT
-            headers = {
-                'Authorization': f'Bearer {settings.OPENAI_API_KEY}',
-                'Content-Type': 'application/json',
-            }
-            data = {
-                "model": "gpt-3.5-turbo",
-                "messages": [
-                    {"role": "system", "content": "あなたは財務アドバイザーです。与えられた債務情報に基づいて、最適な返済計画を提案してください。"},
-                    {"role": "user", "content": prompt}
-                ],
-            }
-
-            # requestsをrequestに変更するか
-            api_response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=data)
-
-            if api_response.status_code == 200:
-                context['response_message'] = api_response.json()['choices'][0]['message']['content']
-            else:
-                context['response_message'] = f"Error: {api_response.status_code} - {api_response.text}"
-
-        context['form'] = form
-        return render(request, self.template_name, context)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        monthly_summaries = get_monthly_summaries(self.this_company, 3)
-        monthly_summaries_total = calculate_total_monthly_summaries(monthly_summaries, year_index=0, period_count=13)
-        monthly_summaries_total_last_year = calculate_total_monthly_summaries(monthly_summaries, year_index=1, period_count=monthly_summaries[0]['actual_months_count'])
-
-        # ラベル情報
-        fiscal_month = self.this_company.fiscal_month
-        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1,13)]
-
-        # 借入情報の取得
-        debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
-        debt_list = sorted(debt_list, key=lambda x: x['balances_monthly'][0], reverse=True)
-        debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
-        debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
-
-        # Calculate weighted_average_interest for each month
-        weighted_average_interest = [
-            interest / balance if balance != 0 else 0
-            for interest, balance in zip(12*debt_list_totals['total_interest_amount_monthly'], debt_list_totals['total_balances_monthly'])
-        ]
-
-        context.update({
-            'title': 'ダッシュボード',
-            'today': timezone.now().date(),
-            'months_label': months_label,
-            'monthly_summaries': monthly_summaries,
-            'monthly_summaries_total': monthly_summaries_total,
-            'monthly_summaries_total_last_year': monthly_summaries_total_last_year,
-            'debt_list': debt_list,
-            'debt_list_totals': debt_list_totals,
-            'debt_list_byBank': debt_list_byBank,
-            'debt_list_bySecuredType': debt_list_bySecuredType,
-            'weighted_average_interest': weighted_average_interest,
-            'today': timezone.now().date(),
-        })
-        return context
-
-
-class LoginView(LoginView):
-    form_class = LoginForm
-    template_name = 'scoreai/login.html'
-
-
-class ScoreLogoutView(LoginRequiredMixin, LogoutView):
-    template_name = 'scoreai/logout.html'  # カスタムテンプレートを使用
-
+# 既存のIndexView、LoginView、ScoreLogoutView、UserCreateView、UserProfileView、UserProfileUpdateView、
+# CompanyDetailView、CompanyUpdateView、load_industry_subclassificationsは
+# 上記のインポートで取得済みのため、ここでは定義しない
 
 ##########################################################################
-###                    User の View                                 ###
-# 基本的な考え方
-# 初期登録こちらで行う
-# メール認証の後、VanCreworth側でCompanhyを登録し、その後Userに通知する
-# 既存ユーザーが自社の社員を登録できるようにする
+###                    FiscalSummary Yearの View                        ###
 ##########################################################################
 
-# ユーザー登録機能は作らない
-class UserCreateView(CreateView):
-    form_class = CustomUserCreationForm
-    template_name = 'scoreai/user_create_form.html'
-    success_url = reverse_lazy('')  # ユーザー作成後のリダイレクト先
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = form.save()
-        login(self.request, user)
-        messages.success(self.request, 'アカウントが正常に作成されました。')
-        return response
-
-    def form_invalid(self, form):
-        messages.error(self.request, 'アカウントの作成に失敗しました。入力内容を確認してください。')
-        return super().form_invalid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'ユーザー登録'
-        return context
-
-class UserProfileView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
-    template_name = 'scoreai/user_profile.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        username = self.request.user.username
-        context['title'] = f'{username}のユーザー情報'
-        context['user_companies'] = UserCompany.objects.filter(
-            user=self.request.user
-        ).select_related('company')
-        return context
-
-
-class UserProfileUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
-    form_class = UserProfileUpdateForm
-    template_name = 'scoreai/user_profile_update.html'
-    success_url = reverse_lazy('user_profile')
-
-    def get_object(self, queryset=None):
-        return self.request.user
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        messages.success(self.request, 'プロフィールが正常に更新されました。')
-        return response
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'プロフィール更新'
-        context['user_companies'] = UserCompany.objects.filter(
-            user=self.request.user
-        ).select_related('company')
-        return context
+# 既存のLoginView、ScoreLogoutView、UserCreateView、UserProfileView、UserProfileUpdateViewは
+# views.auth_viewsからインポート済みのため、ここでは定義しない
 ##########################################################################
 ###                    Company の View                                 ###
 ##########################################################################
 
-class CompanyDetailView(LoginRequiredMixin, DetailView):
-    model = Company
-    template_name = 'scoreai/company_detail.html'
-    context_object_name = 'company'
-    slug_field = 'id'
-    slug_url_kwarg = 'id'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = f'{self.object.name} の詳細'
-        context['user_count'] = self.object.user_count
-        context['users'] = UserCompany.objects.filter(
-            company=self.object,
-            active=True
-        ).select_related('user', 'company')
-        return context
-
-class CompanyUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
-    model = Company
-    form_class = CompanyForm
-    template_name = 'scoreai/company_form.html'
-    success_url = reverse_lazy('company_detail')
-
-    def get_object(self, queryset=None):
-        # SelectedCompanyMixin から選択された会社を取得
-        return self.this_company
-
-    def form_valid(self, form):
-        messages.success(self.request, '会社情報が正常に更新されました。')
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse_lazy('company_detail', kwargs={'id': self.object.id})
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = '会社情報編集'
-        return context
-
-# 会社情報編集時に業種分類の親子関係の入力制御を画面上で行うための処理
-def load_industry_subclassifications(request):
-    industry_classification_id = request.GET.get('industry_classification')
-    subclassifications = IndustrySubClassification.objects.filter(
-        industry_classification_id=industry_classification_id
-    ).select_related('industry_classification').order_by('name')
-    return JsonResponse(list(subclassifications.values('id', 'name')), safe=False)
+# 既存のCompanyDetailView、CompanyUpdateView、load_industry_subclassificationsは
+# views.company_viewsからインポート済みのため、ここでは定義しない
 
 ##########################################################################
 ###                   FiscalSummary Yearの View                        ###
 ##########################################################################
 
-class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, CreateView):
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
@@ -349,7 +171,7 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cre
         context['title'] = '年次財務サマリー作成'
         return context
 
-class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, UpdateView):
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
@@ -410,7 +232,8 @@ class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Upd
         return HttpResponseRedirect(self.get_success_url())
 
 
-def get_finance_score(year, industry_classification, industry_subclassification, company_size, indicator_name, value):
+# 既存のget_finance_scoreはviews.utilsからインポート済みのため、ここでは定義しない
+# def get_finance_score(year, industry_classification, industry_subclassification, company_size, indicator_name, value):
     """    
     Args:
         year (int): 対象の年度
@@ -737,7 +560,7 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         return context
 
 
-class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year.html"
     form_class = CsvUploadForm
     success_url = reverse_lazy('fiscal_summary_year_list')
@@ -1477,7 +1300,7 @@ class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedComp
 ###                    Debt の View                                    ###
 ##########################################################################
 
-class DebtCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class DebtCreateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, CreateView):
     model = Debt
     form_class = DebtForm
     template_name = 'scoreai/debt_form.html'
@@ -1535,7 +1358,7 @@ class DebtDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
         return context
 
 
-class DebtUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class DebtUpdateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, UpdateView):
     model = Debt
     form_class = DebtForm
     template_name = 'scoreai/debt_form.html'
@@ -1593,10 +1416,68 @@ class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
     model = Debt
     template_name = 'scoreai/debt_list_all.html'
     context_object_name = 'debt_list'
+    paginate_by = 20
+
+    def get_queryset(self):
+        """検索・フィルタリング機能付きクエリセット"""
+        queryset = Debt.objects.filter(
+            company=self.this_company
+        ).select_related(
+            'financial_institution',
+            'secured_type',
+            'company'
+        )
+        
+        # 検索機能
+        search_query = self.request.GET.get('search', '')
+        if search_query:
+            queryset = queryset.filter(
+                Q(financial_institution__name__icontains=search_query) |
+                Q(financial_institution__short_name__icontains=search_query) |
+                Q(secured_type__name__icontains=search_query)
+            )
+        
+        # フィルタリング機能
+        financial_institution_id = self.request.GET.get('financial_institution')
+        if financial_institution_id:
+            queryset = queryset.filter(financial_institution_id=financial_institution_id)
+        
+        secured_type_id = self.request.GET.get('secured_type')
+        if secured_type_id:
+            queryset = queryset.filter(secured_type_id=secured_type_id)
+        
+        is_rescheduled = self.request.GET.get('is_rescheduled')
+        if is_rescheduled == 'true':
+            queryset = queryset.filter(is_rescheduled=True)
+        elif is_rescheduled == 'false':
+            queryset = queryset.filter(is_rescheduled=False)
+        
+        is_nodisplay = self.request.GET.get('is_nodisplay')
+        if is_nodisplay == 'true':
+            queryset = queryset.filter(is_nodisplay=True)
+        elif is_nodisplay == 'false':
+            queryset = queryset.filter(is_nodisplay=False)
+        
+        # ソート機能
+        order_by = self.request.GET.get('order_by', '-issue_date')
+        if order_by:
+            queryset = queryset.order_by(order_by)
+        
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
+        
+        # 検索・フィルタリング用のコンテキスト
+        context['financial_institutions'] = FinancialInstitution.objects.all().order_by('name')
+        context['secured_types'] = SecuredType.objects.all().order_by('name')
+        context['search_query'] = self.request.GET.get('search', '')
+        context['selected_financial_institution'] = self.request.GET.get('financial_institution', '')
+        context['selected_secured_type'] = self.request.GET.get('secured_type', '')
+        context['selected_is_rescheduled'] = self.request.GET.get('is_rescheduled', '')
+        context['selected_is_nodisplay'] = self.request.GET.get('is_nodisplay', '')
+        context['order_by'] = self.request.GET.get('order_by', '-issue_date')
         debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
         debt_list_bySecuredByManagement = get_debt_list_byAny('is_securedby_management', debt_list)
@@ -2089,21 +1970,25 @@ class StockEventLineUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateV
 class ImportFinancialInstitutionView(LoginRequiredMixin, DetailView):
     template_name = 'scoreai/import_financial_institution.html'
 
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
+    # CSRF保護を有効化（csrf_exemptを削除）
+    # 認証済みユーザーのみがアクセス可能なため、CSRF保護は必要
+    # @method_decorator(csrf_exempt)
+    # def dispatch(self, *args, **kwargs):
+    #     return super().dispatch(*args, **kwargs)
 
     def get(self, request):
         return render(request, self.template_name)
 
+    @transaction.atomic
     def post(self, request):
+        """金融機関CSVインポート処理（トランザクション管理付き）"""
         csv_file = request.FILES.get('csv_file')
         if not csv_file:
-            messages.error(request, 'No file was uploaded.')
+            messages.error(request, 'ファイルがアップロードされていません。')
             return redirect('import_financial_institution')
 
         if not csv_file.name.endswith('.csv'):
-            messages.error(request, 'File is not CSV type.')
+            messages.error(request, 'CSV形式のファイルではありません。')
             return redirect('import_financial_institution')
 
         try:
@@ -2630,7 +2515,8 @@ def get_last_day_of_next_month(months):
 
 OPENAI_API_KEY = settings.OPENAI_API_KEY
 
-def chat_view(request):
+# 既存のchat_viewはviews.helper_viewsからインポート済みのため、ここでは定義しない
+# def chat_view(request):
     response_message = None
     debts = Debt.objects.all()
 

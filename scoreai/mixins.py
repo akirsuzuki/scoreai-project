@@ -1,39 +1,102 @@
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from .models import UserCompany, Company
+"""
+Mixin classes for views
+"""
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.contrib import messages
+from django.core.exceptions import ValidationError
+import logging
 
-class SelectedCompanyMixin:
-    # ログイン中であれば常にthis_companyを取得可能。classでself.this_companyとすればよい。
+logger = logging.getLogger(__name__)
+
+
+class ErrorHandlingMixin:
+    """Mixin to add consistent error handling to views"""
+    
     def dispatch(self, request, *args, **kwargs):
-        self.this_company = self.get_selected_company()
-        return super().dispatch(request, *args, **kwargs)
+        """Dispatch method with error handling"""
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except ValueError as e:
+            logger.warning(
+                f"ValueError in {self.__class__.__name__}.dispatch: {e}",
+                extra={'user': request.user.id if request.user.is_authenticated else None}
+            )
+            messages.warning(request, str(e))
+            from django.shortcuts import redirect
+            return redirect('index')
+        except PermissionError as e:
+            logger.warning(
+                f"PermissionError in {self.__class__.__name__}.dispatch: {e}",
+                extra={'user': request.user.id if request.user.is_authenticated else None}
+            )
+            messages.error(request, 'この操作を実行する権限がありません。')
+            from django.shortcuts import redirect
+            return redirect('index')
+        except Exception as e:
+            logger.error(
+                f"Unexpected error in {self.__class__.__name__}.dispatch: {e}",
+                exc_info=True,
+                extra={'user': request.user.id if request.user.is_authenticated else None}
+            )
+            messages.error(
+                request,
+                '予期しないエラーが発生しました。管理者にお問い合わせください。'
+            )
+            raise
 
-    def get_selected_company(self):
-        user = self.request.user
-        user_company = UserCompany.objects.filter(user=user, is_selected=True).first()
-        return user_company.company if user_company else None
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['this_company'] = self.this_company
-        return context
+class SelectedCompanyMixin(LoginRequiredMixin, ErrorHandlingMixin):
+    """Mixin to ensure views only operate on data related to the user's currently selected company."""
+    
+    @property
+    def this_company(self):
+        """Get the currently selected company for the user"""
+        from .models import UserCompany
+        
+        user_company = UserCompany.objects.filter(
+            user=self.request.user,
+            is_selected=True
+        ).select_related('company', 'user').first()
+        
+        if not user_company:
+            raise ValueError("選択された会社がありません。")
+        
+        return user_company.company
 
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return self.filter_by_selected_company(queryset)
 
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-        if not self.is_object_in_selected_company(obj):
-            raise PermissionDenied("このデータにアクセスする権限がありません。(mixins.py)")
-        return obj
+class TransactionMixin:
+    """Mixin to add transaction management to views"""
+    
+    @transaction.atomic
+    def form_valid(self, form):
+        """Wrap form_valid in a transaction"""
+        try:
+            return super().form_valid(form)
+        except ValidationError as e:
+            logger.error(
+                f"Validation error in {self.__class__.__name__}.form_valid: {e}",
+                exc_info=True,
+                extra={'user': self.request.user.id if self.request.user.is_authenticated else None}
+            )
+            messages.error(
+                self.request,
+                f'バリデーションエラー: {", ".join(e.messages) if hasattr(e, "messages") else str(e)}'
+            )
+            return self.form_invalid(form)
+        except Exception as e:
+            logger.error(
+                f"Error in {self.__class__.__name__}.form_valid: {e}",
+                exc_info=True,
+                extra={'user': self.request.user.id if self.request.user.is_authenticated else None}
+            )
+            messages.error(
+                self.request,
+                'データの保存中にエラーが発生しました。管理者にお問い合わせください。'
+            )
+            raise
 
-    def is_object_in_selected_company(self, obj):
-        if self.this_company and hasattr(obj, 'company'):
-            return obj.company == self.this_company
-        return False
 
-    def filter_by_selected_company(self, queryset):
-        if self.this_company:
-            return queryset.filter(company=self.this_company)
-        return queryset.none()
+class TransactionErrorHandlingMixin(TransactionMixin, ErrorHandlingMixin):
+    """Combined mixin for transaction management and error handling"""
+    pass
