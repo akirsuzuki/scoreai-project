@@ -39,89 +39,94 @@ from .utils import (
 # Helper views
 from .helper_views import select_company, chat_view
 
-# 既存のviews.pyから直接インポート（後で分割予定）
-# 注意: 循環インポートを避けるため、相対インポートを使用
-from .. import views as views_module
+# views.pyから必要な関数とビューを再エクスポート（循環インポートを避けるため、遅延インポート）
+# 注意: views.pyがviews/__init__.pyをインポートしないようにする必要がある
+def _import_views_py():
+    """views.pyから必要な関数とビューをインポート（遅延インポート）"""
+    import sys
+    import importlib.util
+    from pathlib import Path
+    
+    # views.pyのパスを取得
+    views_py_path = Path(__file__).parent.parent / 'views.py'
+    
+    # views.pyをモジュールとして読み込む
+    spec = importlib.util.spec_from_file_location("scoreai.views_py", views_py_path)
+    views_py_module = importlib.util.module_from_spec(spec)
+    sys.modules["scoreai.views_py"] = views_py_module
+    spec.loader.exec_module(views_py_module)
+    
+    return views_py_module
 
-# views.pyから必要なビューをインポート
-try:
-    from ..views import (
-    # FiscalSummary Year
-    FiscalSummary_YearCreateView,
-    FiscalSummary_YearUpdateView,
-    FiscalSummary_YearDeleteView,
-    FiscalSummary_YearDetailView,
-    LatestFiscalSummaryYearDetailView,
-    FiscalSummary_YearListView,
-    ImportFiscalSummary_Year,
-    ImportFiscalSummary_Year_FromMoneyforward,
-    download_fiscal_summary_year_csv,
-    # FiscalSummary Month
-    FiscalSummary_MonthCreateView,
-    FiscalSummary_MonthUpdateView,
-    FiscalSummary_MonthDeleteView,
-    FiscalSummary_MonthDetailView,
-    FiscalSummary_MonthListView,
-    ImportFiscalSummary_Month,
-    ImportFiscalSummary_Month_FromMoneyforward,
-    download_fiscal_summary_month_csv,
-    # Debt
-    DebtCreateView,
-    DebtDetailView,
-    DebtUpdateView,
-    DebtDeleteView,
-    DebtsAllListView,
-    DebtsByBankListView,
-    DebtsBySecuredTypeListView,
-    DebtsArchivedListView,
-    # MeetingMinutes
-    MeetingMinutesCreateView,
-    MeetingMinutesUpdateView,
-    MeetingMinutesListView,
-    MeetingMinutesDetailView,
-    MeetingMinutesDeleteView,
-    # Stakeholder_name
-    Stakeholder_nameCreateView,
-    Stakeholder_nameUpdateView,
-    Stakeholder_nameListView,
-    Stakeholder_nameDeleteView,
-    Stakeholder_nameDetailView,
-    # StockEvent
-    StockEventCreateView,
-    StockEventUpdateView,
-    StockEventListView,
-    StockEventDetailView,
-    StockEventDeleteView,
-    StockEventLineCreateView,
-    StockEventLineUpdateView,
-    # Import
-    ImportFinancialInstitutionView,
-    download_financial_institutions_csv,
-    ImportIndustryClassificationView,
-    IndustryClassificationListView,
-    ImportIndustrySubClassificationView,
-    IndustrySubClassificationListView,
-    ImportIndustryBenchmarkView,
-    IndustryBenchmarkListView,
-    # Firm
-    ClientsList,
-    add_client,
-    remove_client,
-    # Static
-    AboutView,
-    NewsListView,
-    CompanyProfileView,
-    HelpView,
-    ManualView,
-    TermsOfServiceView,
-    PrivacyPolicyView,
-    LegalNoticeView,
-    SecurityPolicyView,
-    SampleView,
-)
-except ImportError:
-    # 分割が完了していない場合は空のリスト
-    pass
+# 遅延インポートを実行
+_views_py = _import_views_py()
+
+# views.pyから必要な関数とビューを再エクスポート
+add_client = _views_py.add_client
+remove_client = _views_py.remove_client
+download_fiscal_summary_year_csv = _views_py.download_fiscal_summary_year_csv
+download_fiscal_summary_month_csv = _views_py.download_fiscal_summary_month_csv
+download_financial_institutions_csv = _views_py.download_financial_institutions_csv
+
+# views.pyから必要なビューを再エクスポート
+FiscalSummary_YearCreateView = _views_py.FiscalSummary_YearCreateView
+FiscalSummary_YearUpdateView = _views_py.FiscalSummary_YearUpdateView
+FiscalSummary_YearDeleteView = _views_py.FiscalSummary_YearDeleteView
+FiscalSummary_YearDetailView = _views_py.FiscalSummary_YearDetailView
+LatestFiscalSummaryYearDetailView = _views_py.LatestFiscalSummaryYearDetailView
+FiscalSummary_YearListView = _views_py.FiscalSummary_YearListView
+ImportFiscalSummary_Year = _views_py.ImportFiscalSummary_Year
+ImportFiscalSummary_Year_FromMoneyforward = _views_py.ImportFiscalSummary_Year_FromMoneyforward
+FiscalSummary_MonthCreateView = _views_py.FiscalSummary_MonthCreateView
+FiscalSummary_MonthUpdateView = _views_py.FiscalSummary_MonthUpdateView
+FiscalSummary_MonthDeleteView = _views_py.FiscalSummary_MonthDeleteView
+FiscalSummary_MonthDetailView = _views_py.FiscalSummary_MonthDetailView
+FiscalSummary_MonthListView = _views_py.FiscalSummary_MonthListView
+ImportFiscalSummary_Month = _views_py.ImportFiscalSummary_Month
+ImportFiscalSummary_Month_FromMoneyforward = _views_py.ImportFiscalSummary_Month_FromMoneyforward
+DebtCreateView = _views_py.DebtCreateView
+DebtsAllListView = _views_py.DebtsAllListView
+DebtsByBankListView = _views_py.DebtsByBankListView
+DebtsBySecuredTypeListView = _views_py.DebtsBySecuredTypeListView
+DebtsArchivedListView = _views_py.DebtsArchivedListView
+DebtDetailView = _views_py.DebtDetailView
+DebtUpdateView = _views_py.DebtUpdateView
+DebtDeleteView = _views_py.DebtDeleteView
+Stakeholder_nameCreateView = _views_py.Stakeholder_nameCreateView
+Stakeholder_nameUpdateView = _views_py.Stakeholder_nameUpdateView
+Stakeholder_nameListView = _views_py.Stakeholder_nameListView
+Stakeholder_nameDeleteView = _views_py.Stakeholder_nameDeleteView
+Stakeholder_nameDetailView = _views_py.Stakeholder_nameDetailView
+StockEventCreateView = _views_py.StockEventCreateView
+StockEventUpdateView = _views_py.StockEventUpdateView
+StockEventListView = _views_py.StockEventListView
+StockEventDetailView = _views_py.StockEventDetailView
+StockEventDeleteView = _views_py.StockEventDeleteView
+StockEventLineCreateView = _views_py.StockEventLineCreateView
+StockEventLineUpdateView = _views_py.StockEventLineUpdateView
+MeetingMinutesCreateView = _views_py.MeetingMinutesCreateView
+MeetingMinutesUpdateView = _views_py.MeetingMinutesUpdateView
+MeetingMinutesListView = _views_py.MeetingMinutesListView
+MeetingMinutesDetailView = _views_py.MeetingMinutesDetailView
+MeetingMinutesDeleteView = _views_py.MeetingMinutesDeleteView
+AboutView = _views_py.AboutView
+NewsListView = _views_py.NewsListView
+CompanyProfileView = _views_py.CompanyProfileView
+HelpView = _views_py.HelpView
+ManualView = _views_py.ManualView
+TermsOfServiceView = _views_py.TermsOfServiceView
+PrivacyPolicyView = _views_py.PrivacyPolicyView
+LegalNoticeView = _views_py.LegalNoticeView
+SecurityPolicyView = _views_py.SecurityPolicyView
+ClientsList = _views_py.ClientsList
+ImportFinancialInstitutionView = _views_py.ImportFinancialInstitutionView
+SampleView = _views_py.SampleView
+ImportIndustryClassificationView = _views_py.ImportIndustryClassificationView
+IndustryClassificationListView = _views_py.IndustryClassificationListView
+ImportIndustrySubClassificationView = _views_py.ImportIndustrySubClassificationView
+IndustrySubClassificationListView = _views_py.IndustrySubClassificationListView
+ImportIndustryBenchmarkView = _views_py.ImportIndustryBenchmarkView
+IndustryBenchmarkListView = _views_py.IndustryBenchmarkListView
 
 __all__ = [
     # Index

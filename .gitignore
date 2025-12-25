@@ -11,3 +11,5 @@ migrations.sh
 migrate.sh
 build.sh
 DOCKER_SETUP.md
+*.key
+server.pass.key

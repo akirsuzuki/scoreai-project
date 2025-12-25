@@ -9,8 +9,8 @@ from datetime import datetime
 import calendar
 import random
 
-from django.db.models import QuerySet
-from .models import (
+from django.db.models import QuerySet, Max
+from ..models import (
     Company,
     Debt,
     FiscalSummary_Year,

@@ -22,6 +22,7 @@ from django.utils.decorators import method_decorator
 
 from django.urls import reverse_lazy
 
+from django.db import transaction
 from django.db.models import Max, Sum, Q, ProtectedError
 from django.template.loader import render_to_string
 from django.views import generic
@@ -33,7 +34,7 @@ from itertools import groupby
 from operator import itemgetter
 from io import TextIOWrapper
 
-from .mixins import SelectedCompanyMixin
+from .mixins import SelectedCompanyMixin, TransactionMixin, ErrorHandlingMixin
 from .models import (
     User,
     Company,
@@ -92,21 +93,9 @@ from django.core.exceptions import FieldDoesNotExist
 import logging
 logger = logging.getLogger(__name__)
 
-# 新しいビューファイルからインポート
-from .views.index_views import IndexView
-from .views.auth_views import (
-    LoginView,
-    ScoreLogoutView,
-    UserCreateView,
-    UserProfileView,
-    UserProfileUpdateView,
-)
-from .views.company_views import (
-    CompanyDetailView,
-    CompanyUpdateView,
-    load_industry_subclassifications,
-)
-from .views.helper_views import select_company, chat_view
+# 注意: views/__init__.pyからインポートしない（循環インポートを避けるため）
+# urls.pyで直接views/__init__.pyからインポートする
+# ここでは、views.py内で必要な関数を直接インポート
 from .views.utils import (
     get_finance_score,
     calculate_total_monthly_summaries,
@@ -141,7 +130,7 @@ from .views.utils import (
 ###                   FiscalSummary Yearの View                        ###
 ##########################################################################
 
-class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, CreateView):
+class FiscalSummary_YearCreateView(SelectedCompanyMixin, TransactionMixin, CreateView):
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
@@ -171,7 +160,7 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Tra
         context['title'] = '年次財務サマリー作成'
         return context
 
-class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, UpdateView):
+class FiscalSummary_YearUpdateView(SelectedCompanyMixin, TransactionMixin, UpdateView):
     model = FiscalSummary_Year
     form_class = FiscalSummary_YearForm
     template_name = 'scoreai/fiscal_summary_year_form.html'
@@ -233,116 +222,9 @@ class FiscalSummary_YearUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Tra
 
 
 # 既存のget_finance_scoreはviews.utilsからインポート済みのため、ここでは定義しない
-# def get_finance_score(year, industry_classification, industry_subclassification, company_size, indicator_name, value):
-    """    
-    Args:
-        year (int): 対象の年度
-        industry_classification (IndustryClassification): The industry classification instance.
-        industry_subclassification (IndustrySubClassification): The industry subclassification instance.
-        company_size (str): Company size ('s', 'm', or 'l').
-        indicator_name: modelsで定義している指標を対応させる
-        value (Decimal): The value to be scored.
-
-    Returns:
-        int: Score from 1 to 5, or None if benchmark data is not found.
-    """
-    # Group A indicators (高ければ高いほど良い指標)
-    group_a_indicators = ["sales_growth_rate", "operating_profit_margin", "labor_productivity", "equity_ratio"]
-    # Group B indicators (低ければ低いほど良い指標)
-    group_b_indicators = ["operating_working_capital_turnover_period", "EBITDA_interest_bearing_debt_ratio"]
-
-    try:
-        indicator_instance = IndustryIndicator.objects.get(name=indicator_name)
-
-        # Check for negative EBITDA
-        if indicator_name == 'EBITDA_interest_bearing_debt_ratio' and (value is not None or value < 0):
-            return 1
-        
-        # 最初の検索（N+1問題を回避するため、関連オブジェクトを事前取得）
-        benchmark = IndustryBenchmark.objects.filter(
-            year=year,
-            industry_classification=industry_classification,
-            industry_subclassification=industry_subclassification,
-            company_size=company_size,
-            indicator=indicator_instance
-        ).select_related(
-            'industry_classification',
-            'industry_subclassification',
-            'indicator'
-        ).first()
-        # 見つからない場合は year-1 で再検索
-        if not benchmark:
-            benchmark = IndustryBenchmark.objects.filter(
-                year=year-1,
-                industry_classification=industry_classification,
-                industry_subclassification=industry_subclassification,
-                company_size=company_size,
-                indicator=indicator_instance
-            ).select_related(
-                'industry_classification',
-                'industry_subclassification',
-                'indicator'
-            ).first()
-
-        # それでも見つからない場合は year=2022 で再検索
-        if not benchmark:
-            benchmark = IndustryBenchmark.objects.filter(
-                year=2022,
-                industry_classification=industry_classification,
-                industry_subclassification=industry_subclassification,
-                company_size=company_size,
-                indicator=indicator_instance
-            ).select_related(
-                'industry_classification',
-                'industry_subclassification',
-                'indicator'
-            ).first()
-
-        # それでも見つからなければ None を返す
-        if not benchmark:
-            return None
-
-    except (IndustryBenchmark.DoesNotExist, IndustryIndicator.DoesNotExist):
-        return None
-
-    # Retrieve benchmark ranges
-    iv = Decimal(benchmark.range_iv)
-    iii = Decimal(benchmark.range_iii)
-    ii = Decimal(benchmark.range_ii)
-    i = Decimal(benchmark.range_i)
-
-    # Ensure value is a Decimal for accurate comparison
-    value = Decimal(value)
-
-    if indicator_instance.name in group_a_indicators:
-        # Higher is better
-        if value <= iv:
-            return 1
-        elif iv < value <= iii:
-            return 2
-        elif iii < value <= ii:
-            return 3
-        elif ii < value <= i:
-            return 4
-        elif value > i:
-            return 5
-    elif indicator_instance.name in group_b_indicators:
-        # Lower is better
-        if value >= iv:
-            return 1
-        elif iii <= value < iv:
-            return 2
-        elif ii <= value < iii:
-            return 3
-        elif i <= value < ii:
-            return 4
-        elif value < i:
-            return 5
-    else:
-        return None
 
 
-class FiscalSummary_YearDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class FiscalSummary_YearDeleteView(SelectedCompanyMixin, DeleteView):
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_confirm_delete.html'
     success_url = reverse_lazy('fiscal_summary_year_list')
@@ -473,7 +355,7 @@ def download_fiscal_summary_year_csv(request, param=None):
     return response
 
 
-class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_detail.html'
     context_object_name = 'fiscal_summary_year'
@@ -504,7 +386,7 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
 
         return context
 
-class LatestFiscalSummaryYearDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class LatestFiscalSummaryYearDetailView(SelectedCompanyMixin, DetailView):
     def get(self, request, *args, **kwargs):
         # Get the most recent FiscalSummary_Year for the selected company
         latest_fiscal_summary_year = FiscalSummary_Year.objects.filter(
@@ -521,7 +403,7 @@ class LatestFiscalSummaryYearDetailView(LoginRequiredMixin, SelectedCompanyMixin
 
 
 # 決算年次推移
-class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
     model = FiscalSummary_Year
     template_name = 'scoreai/fiscal_summary_year_list.html'
     context_object_name = 'fiscal_summary_years'
@@ -560,7 +442,7 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         return context
 
 
-class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, FormView):
+class ImportFiscalSummary_Year(SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year.html"
     form_class = CsvUploadForm
     success_url = reverse_lazy('fiscal_summary_year_list')
@@ -686,7 +568,7 @@ class ImportFiscalSummary_Year(LoginRequiredMixin, SelectedCompanyMixin, Transac
 from django.urls import reverse_lazy
 from django.contrib import messages
 
-class FiscalSummary_MonthCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class FiscalSummary_MonthCreateView(SelectedCompanyMixin, CreateView):
     model = FiscalSummary_Month
     form_class = FiscalSummary_MonthForm
     template_name = 'scoreai/fiscal_summary_month_form.html'
@@ -716,7 +598,7 @@ class FiscalSummary_MonthCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cr
         return context
 
 
-class FiscalSummary_MonthUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class FiscalSummary_MonthUpdateView(SelectedCompanyMixin, UpdateView):
     model = FiscalSummary_Month
     form_class = FiscalSummary_MonthForm
     template_name = 'scoreai/fiscal_summary_month_form.html'
@@ -750,7 +632,7 @@ class FiscalSummary_MonthUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Up
         return context
 
 
-class FiscalSummary_MonthDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class FiscalSummary_MonthDeleteView(SelectedCompanyMixin, DeleteView):
     model = FiscalSummary_Month
     template_name = 'scoreai/fiscal_summary_month_confirm_delete.html'
     success_url = reverse_lazy('fiscal_summary_month_list')
@@ -778,7 +660,7 @@ class FiscalSummary_MonthDeleteView(LoginRequiredMixin, SelectedCompanyMixin, De
         context['title'] = '月次財務サマリー削除確認'
         return context
 
-class FiscalSummary_MonthDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class FiscalSummary_MonthDetailView(SelectedCompanyMixin, DetailView):
     model = FiscalSummary_Month
     template_name = 'scoreai/fiscal_summary_month_detail.html'
     context_object_name = 'fiscal_summary_month'
@@ -803,7 +685,7 @@ class FiscalSummary_MonthDetailView(LoginRequiredMixin, SelectedCompanyMixin, De
         context['title'] = '月次財務詳細'
         return context
 
-class FiscalSummary_MonthListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
     model = FiscalSummary_Month
     template_name = 'scoreai/fiscal_summary_month_list.html'
     context_object_name = 'fiscal_summary_months'
@@ -928,7 +810,7 @@ def download_fiscal_summary_month_csv(request, param=None):
 ##########################################################################
 
 # CSVを編集してからアップロードする
-class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Month(SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month.html"
     form_class = CsvUploadForm
     success_url = reverse_lazy('fiscal_summary_month_list')
@@ -1000,7 +882,7 @@ class ImportFiscalSummary_Month(LoginRequiredMixin, SelectedCompanyMixin, FormVi
 
 
 # Moneyfowardの月次推移表をアップしたらそのまま変換してインポートする
-class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month_MF.html"
     form_class = MoneyForwardCsvUploadForm_Month
     success_url = reverse_lazy('fiscal_summary_month_list')
@@ -1117,7 +999,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(LoginRequiredMixin, SelectedCom
 
 
 # Moneyfowardの試算表（貸借対照表と損益計算書）をアップしたらそのまま変換してインポートする
-class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year_MF.html"
     form_class = MoneyForwardCsvUploadForm_Year
     success_url = reverse_lazy('fiscal_summary_year_list')
@@ -1300,7 +1182,7 @@ class ImportFiscalSummary_Year_FromMoneyforward(LoginRequiredMixin, SelectedComp
 ###                    Debt の View                                    ###
 ##########################################################################
 
-class DebtCreateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, CreateView):
+class DebtCreateView(SelectedCompanyMixin, TransactionMixin, CreateView):
     model = Debt
     form_class = DebtForm
     template_name = 'scoreai/debt_form.html'
@@ -1331,7 +1213,7 @@ class DebtCreateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin,
         return context
 
 
-class DebtDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class DebtDetailView(SelectedCompanyMixin, DetailView):
     model = Debt
     template_name = 'scoreai/debt_detail.html'
     context_object_name = 'debt'
@@ -1358,7 +1240,7 @@ class DebtDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
         return context
 
 
-class DebtUpdateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin, UpdateView):
+class DebtUpdateView(SelectedCompanyMixin, TransactionMixin, UpdateView):
     model = Debt
     form_class = DebtForm
     template_name = 'scoreai/debt_form.html'
@@ -1396,7 +1278,7 @@ class DebtUpdateView(LoginRequiredMixin, SelectedCompanyMixin, TransactionMixin,
         return context
 
 
-class DebtDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class DebtDeleteView(SelectedCompanyMixin, DeleteView):
     model = Debt
     template_name = 'scoreai/debt_confirm_delete.html'
     context_object_name = 'debt'
@@ -1412,7 +1294,7 @@ class DebtDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
         context['title'] = '借入削除確認'
         return context
 
-class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class DebtsAllListView(SelectedCompanyMixin, ListView):
     model = Debt
     template_name = 'scoreai/debt_list_all.html'
     context_object_name = 'debt_list'
@@ -1507,7 +1389,7 @@ class DebtsAllListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
         return context
 
 
-class DebtsByBankListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class DebtsByBankListView(SelectedCompanyMixin, ListView):
     model = Debt
     template_name = 'scoreai/debt_list_byBank.html'
     context_object_name = 'debt_list'
@@ -1528,7 +1410,7 @@ class DebtsByBankListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
         return context
 
 
-class DebtsBySecuredTypeListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class DebtsBySecuredTypeListView(SelectedCompanyMixin, ListView):
     model = Debt
     template_name = 'scoreai/debt_list_bySecuredType.html'
     context_object_name = 'debt_list'
@@ -1548,7 +1430,7 @@ class DebtsBySecuredTypeListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         return context
 
 
-class DebtsArchivedListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class DebtsArchivedListView(SelectedCompanyMixin, ListView):
     model = Debt
     template_name = 'scoreai/debt_list_archived.html'
     context_object_name = 'debt_list'
@@ -1566,7 +1448,7 @@ class DebtsArchivedListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
 ###                 MeetingMinutes の View                             ###
 ##########################################################################
 
-class MeetingMinutesCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class MeetingMinutesCreateView(SelectedCompanyMixin, CreateView):
     model = MeetingMinutes
     form_class = MeetingMinutesForm
     template_name = 'scoreai/meeting_minutes_form.html'
@@ -1593,7 +1475,7 @@ class MeetingMinutesCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateV
         initial['meeting_date'] = timezone.now().date()
         return initial
 
-class MeetingMinutesUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class MeetingMinutesUpdateView(SelectedCompanyMixin, UpdateView):
     model = MeetingMinutes
     form_class = MeetingMinutesForm
     template_name = 'scoreai/meeting_minutes_form.html'
@@ -1613,7 +1495,7 @@ class MeetingMinutesUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateV
         return super().form_valid(form)
 
 
-class MeetingMinutesListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class MeetingMinutesListView(SelectedCompanyMixin, ListView):
     model = MeetingMinutes
     template_name = 'scoreai/meeting_minutes_list.html'
     context_object_name = 'meeting_minutes'
@@ -1645,7 +1527,7 @@ class MeetingMinutesListView(LoginRequiredMixin, SelectedCompanyMixin, ListView)
         
 
 
-class MeetingMinutesDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class MeetingMinutesDetailView(SelectedCompanyMixin, DetailView):
     model = MeetingMinutes
     template_name = 'scoreai/meeting_minutes_detail.html'
     context_object_name = 'meeting_minutes'
@@ -1668,7 +1550,7 @@ class MeetingMinutesDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailV
         return context
 
 
-class MeetingMinutesDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class MeetingMinutesDeleteView(SelectedCompanyMixin, DeleteView):
     model = MeetingMinutes
     template_name = 'scoreai/meeting_minutes_confirm_delete.html'
     success_url = reverse_lazy('meeting_minutes_list')
@@ -1689,7 +1571,7 @@ class MeetingMinutesDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteV
 ###                 Stakeholder_name の View                         ###
 ##########################################################################
 
-class Stakeholder_nameCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class Stakeholder_nameCreateView(SelectedCompanyMixin, CreateView):
     model = Stakeholder_name
     form_class = Stakeholder_nameForm
     template_name = 'scoreai/stakeholder_name_form.html'
@@ -1704,7 +1586,7 @@ class Stakeholder_nameCreateView(LoginRequiredMixin, SelectedCompanyMixin, Creat
         context['title'] = '新規株主名登録'
         return context
 
-class Stakeholder_nameUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class Stakeholder_nameUpdateView(SelectedCompanyMixin, UpdateView):
     model = Stakeholder_name
     form_class = Stakeholder_nameForm
     template_name = 'scoreai/stakeholder_name_form.html'
@@ -1730,7 +1612,7 @@ class Stakeholder_nameUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Updat
         context['title'] = '株主情報編集'
         return context
 
-class Stakeholder_nameListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class Stakeholder_nameListView(SelectedCompanyMixin, ListView):
     model = Stakeholder_name
     template_name = 'scoreai/stakeholder_name_list.html'
     context_object_name = 'stakeholder_names'
@@ -1745,7 +1627,7 @@ class Stakeholder_nameListView(LoginRequiredMixin, SelectedCompanyMixin, ListVie
         context['title'] = '株主名一覧'
         return context
 
-class Stakeholder_nameDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class Stakeholder_nameDeleteView(SelectedCompanyMixin, DeleteView):
     model = Stakeholder_name
     template_name = 'scoreai/stakeholder_name_confirm_delete.html'
     success_url = reverse_lazy('stakeholder_name_list')
@@ -1756,7 +1638,7 @@ class Stakeholder_nameDeleteView(LoginRequiredMixin, SelectedCompanyMixin, Delet
         return response
 
 
-class Stakeholder_nameDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class Stakeholder_nameDetailView(SelectedCompanyMixin, DetailView):
     model = Stakeholder_name
     template_name = 'scoreai/stakeholder_name_detail.html'
     context_object_name = 'stakeholder_name'
@@ -1776,7 +1658,7 @@ class Stakeholder_nameDetailView(LoginRequiredMixin, SelectedCompanyMixin, Detai
 ##########################################################################
 ###                 StockEvent の View                               ###
 ##########################################################################
-class StockEventCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class StockEventCreateView(SelectedCompanyMixin, CreateView):
     model = StockEvent
     form_class = StockEventForm
     template_name = 'scoreai/stock_event_form.html'
@@ -1806,7 +1688,7 @@ class StockEventCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView)
         return context
 
 
-class StockEventUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class StockEventUpdateView(SelectedCompanyMixin, UpdateView):
     model = StockEvent
     form_class = StockEventForm
     template_name = 'scoreai/stock_event_form.html'
@@ -1835,7 +1717,7 @@ class StockEventUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView)
         return context
 
 
-class StockEventListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
+class StockEventListView(SelectedCompanyMixin, ListView):
     model = StockEvent
     template_name = 'scoreai/stock_event_list.html'
     context_object_name = 'stock_events'
@@ -1851,7 +1733,7 @@ class StockEventListView(LoginRequiredMixin, SelectedCompanyMixin, ListView):
         })
         return context
 
-class StockEventDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView):
+class StockEventDetailView(SelectedCompanyMixin, DetailView):
     model = StockEvent
     template_name = 'scoreai/stock_event_detail.html'
     context_object_name = 'stock_event'
@@ -1872,7 +1754,7 @@ class StockEventDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailView)
         context['stock_event_line'] = self.object.details.all()
         return context
 
-class StockEventDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView):
+class StockEventDeleteView(SelectedCompanyMixin, DeleteView):
     model = StockEvent
     template_name = 'scoreai/stock_event_confirm_delete.html'
     success_url = reverse_lazy('stock_event_list')
@@ -1905,7 +1787,7 @@ class StockEventDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteView)
 ##########################################################################
 # StockEventから登録編集ができるようにする。
 
-class StockEventLineCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateView):
+class StockEventLineCreateView(SelectedCompanyMixin, CreateView):
     model = StockEventLine
     form_class = StockEventLineForm
     template_name = 'scoreai/stock_event_line_form.html'
@@ -1934,7 +1816,7 @@ class StockEventLineCreateView(LoginRequiredMixin, SelectedCompanyMixin, CreateV
         return context
 
 
-class StockEventLineUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
+class StockEventLineUpdateView(SelectedCompanyMixin, UpdateView):
     model = StockEventLine
     form_class = StockEventLineForm
     template_name = 'scoreai/stock_event_line_form.html'
@@ -2516,36 +2398,6 @@ def get_last_day_of_next_month(months):
 OPENAI_API_KEY = settings.OPENAI_API_KEY
 
 # 既存のchat_viewはviews.helper_viewsからインポート済みのため、ここでは定義しない
-# def chat_view(request):
-    response_message = None
-    debts = Debt.objects.all()
-
-    if request.method == 'POST':
-        form = ChatForm(request.POST)
-        if form.is_valid():
-            user_message = form.cleaned_data['message']
-
-            # Prepare the API request to ChatGPT
-            headers = {
-                'Authorization': f'Bearer {OPENAI_API_KEY}',
-                'Content-Type': 'application/json',
-            }
-            data = {
-                "model": "gpt-3.5-turbo",
-                "messages": [{"role": "user", "content": user_message}],
-            }
-            # requestsをrequestに変更か
-            api_response = requests.post('https://api.openai.com/v1/chat/completions', headers=headers, json=data)
-
-            if api_response.status_code == 200:
-                response_message = api_response.json()['choices'][0]['message']['content']
-            else:
-                response_message = f"Error: {api_response.status_code} - {api_response.text}"
-
-    else:
-        form = ChatForm()
-
-    return render(request, 'scoreai/chat.html', {'form': form, 'response_message': response_message})
 
 
 
