@@ -1,2 +1,2 @@
 docker image prune -f
-docker-compose up -d --build
+docker compose up -d --build

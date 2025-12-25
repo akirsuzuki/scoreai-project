@@ -114,6 +114,7 @@
         </table>
       </div>
       <div class="card-footer text-end">
+        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary">一覧に戻る</a>
         <a href="{% url 'debt_update' debt.id %}" class="btn btn-secondary">編集</a>
         <a href="{% url 'debt_delete' debt.id %}" class="btn btn-danger">削除</a>
       </div>
@@ -203,57 +204,16 @@
         <p>* シェアは、全借入に占めるシェアを表しています。</p>
       </div>
       {% endif %}
+      <div class="card-footer text-end">
+        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary">一覧に戻る</a>
+        <a href="{% url 'debt_update' debt.id %}" class="btn btn-secondary">編集</a>
+        <a href="{% url 'debt_delete' debt.id %}" class="btn btn-danger">削除</a>
+      </div>
+
     </div>
   </div>
 </div>
 
-
-<!-- クラウドストレージへのリンク -->
-<div class="row g-3 mt-3">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0">ドキュメントリンク</h5>
-      </div>
-      <div class="card-body">
-        {% if debt.document_url %}
-        <p>返済予定表</p>
-        <a href="{{ debt.document_url }}" target="_blank">{{ debt.document_url }}</a>
-        <br>
-        {% endif %}
-        {% if debt.document_url2 %}
-        <p>金銭消費貸借契約書</p>
-        <a href="{{ debt.document_url2 }}" target="_blank">{{ debt.document_url2 }}</a>
-        <br>
-        {% endif %}
-        {% if debt.document_url3 %}
-        <p>保証協会資料・担保契約書など</p>
-        <a href="{{ debt.document_url3 }}" target="_blank">{{ debt.document_url3 }}</a>
-        {% endif %}
-        {% if user.is_financial_consultant %}
-        <hr>
-        <h5 class="card-title mb-0">コンサルタント用資料</h5>
-        <br>
-          <p>コンサルタント用資料1</p>
-          {% if debt.document_url_c1 %}
-          <a href="{{ debt.document_url_c1 }}" target="_blank">{{ debt.document_url_c1 }}</a>
-          <br>
-          {% endif %}
-          <p>コンサルタント用資料2</p>
-          {% if debt.document_url_c2 %}
-          <a href="{{ debt.document_url_c2 }}" target="_blank">{{ debt.document_url_c2 }}</a>
-          <br>
-          {% endif %}
-          <p>コンサルタント用資料3</p>
-          {% if debt.document_url_c3 %}
-          <a href="{{ debt.document_url_c3 }}" target="_blank">{{ debt.document_url_c3 }}</a>
-          <br>
-          {% endif %}
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- メモ -->
 <div class="row g-3 mt-3">
@@ -279,6 +239,64 @@
   </div>
 </div>
 
+<!-- クラウドストレージへのリンク -->
+<div class="row g-3 mt-3">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">ドキュメントリンク</h5>
+      </div>
+      <div class="card-body">
+        <h6>返済予定表</h6>
+        {% if debt.document_url %}
+        <a href="{{ debt.document_url }}" target="_blank">{{ debt.document_url }}</a>
+        <br>
+        {% else %}
+        <p>ドロップボックスなど、クラウドストレージにある資料へのリンクを登録すると便利です。</p>
+        {% endif %}
+        <br>
+        <h6>金銭消費貸借契約書</h6>
+        {% if debt.document_url2 %}
+        
+        <a href="{{ debt.document_url2 }}" target="_blank">{{ debt.document_url2 }}</a>
+        <br>
+        {% endif %}
+        <br>
+        <h6>保証協会資料・担保契約書など</h6>
+        {% if debt.document_url3 %}
+        <a href="{{ debt.document_url3 }}" target="_blank">{{ debt.document_url3 }}</a>
+        {% endif %}
+        {% if user.is_financial_consultant %}
+        <hr>
+        <h5 class="card-title mb-0">コンサルタント用資料</h5>
+        <br>
+        <h6>コンサルタント用資料1</h6>
+        {% if debt.document_url_c1 %}
+        <a href="{{ debt.document_url_c1 }}" target="_blank">{{ debt.document_url_c1 }}</a>
+        <br>
+        {% endif %}
+        <br>
+        <h6>コンサルタント用資料2</h6>
+        {% if debt.document_url_c2 %}
+        <a href="{{ debt.document_url_c2 }}" target="_blank">{{ debt.document_url_c2 }}</a>
+        <br>
+        {% endif %}
+        <br>
+        <h6>コンサルタント用資料3</h6>
+        <a href="{{ debt.document_url_c3 }}" target="_blank">{{ debt.document_url_c3 }}</a>
+        <br>
+        {% endif %}
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary">一覧に戻る</a>
+        <a href="{% url 'debt_update' debt.id %}" class="btn btn-secondary">編集</a>
+        <a href="{% url 'debt_delete' debt.id %}" class="btn btn-danger">削除</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 <div class="row g-3 mt-3" id="others">
   <div class="col-lg-12 d-flex align-items-stretch">
@@ -289,6 +307,11 @@
       <div class="card-body">
         {% include 'scoreai/debt_list_active.html' %}
         {% include 'scoreai/debt_list_chart.html' %}
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary">一覧に戻る</a>
+        <a href="{% url 'debt_update' debt.id %}" class="btn btn-secondary">編集</a>
+        <a href="{% url 'debt_delete' debt.id %}" class="btn btn-danger">削除</a>
       </div>
     </div>
   </div>

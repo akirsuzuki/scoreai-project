@@ -10,3 +10,4 @@ start.sh
 migrations.sh
 migrate.sh
 build.sh
+DOCKER_SETUP.md

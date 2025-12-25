@@ -1,6 +1,17 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
-from .models import *
+from .models import (
+    Company,
+    IndustryClassification,
+    IndustrySubClassification,
+    FiscalSummary_Year,
+    FiscalSummary_Month,
+    Debt,
+    Stakeholder_name,
+    StockEvent,
+    StockEventLine,
+    MeetingMinutes,
+)
 from django_select2.forms import Select2Widget
 from django.contrib.auth import get_user_model
 

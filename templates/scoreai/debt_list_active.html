@@ -100,7 +100,7 @@
     tables.forEach(tableId => {
       const table = new DataTable(`#${tableId}`, {
         scrollX: true,
-        pageLength: 20,
+        pageLength: 25,
         footerCallback: function (row, data, start, end, display) {
           let api = this.api();
           let intVal = function (i) {

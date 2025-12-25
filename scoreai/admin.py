@@ -1,5 +1,28 @@
 from django.contrib import admin
-from .models import *
+from .models import (
+    User,
+    Company,
+    UserCompany,
+    Firm,
+    UserFirm,
+    FirmCompany,
+    FinancialInstitution,
+    SecuredType,
+    Debt,
+    MeetingMinutes,
+    Blog,
+    FiscalSummary_Year,
+    FiscalSummary_Month,
+    Stakeholder_name,
+    StockEvent,
+    StockEventLine,
+    IndustryClassification,
+    IndustrySubClassification,
+    IndustryIndicator,
+    IndustryBenchmark,
+    TechnicalTerm,
+    Help,
+)
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html

@@ -34,9 +34,51 @@ from operator import itemgetter
 from io import TextIOWrapper
 
 from .mixins import SelectedCompanyMixin
-from .models import *
-from .forms import *
-from .tokens import *
+from .models import (
+    User,
+    Company,
+    UserCompany,
+    Firm,
+    UserFirm,
+    FirmCompany,
+    FinancialInstitution,
+    SecuredType,
+    Debt,
+    MeetingMinutes,
+    Blog,
+    FiscalSummary_Year,
+    FiscalSummary_Month,
+    Stakeholder_name,
+    StockEvent,
+    StockEventLine,
+    IndustryClassification,
+    IndustrySubClassification,
+    IndustryIndicator,
+    IndustryBenchmark,
+    TechnicalTerm,
+    Help,
+)
+from .forms import (
+    CustomUserCreationForm,
+    LoginForm,
+    UserProfileUpdateForm,
+    CompanyForm,
+    IndustryBenchmarkImportForm,
+    FiscalSummary_YearForm,
+    FiscalSummary_MonthForm,
+    MoneyForwardCsvUploadForm_Month,
+    MoneyForwardCsvUploadForm_Year,
+    DebtForm,
+    Stakeholder_nameForm,
+    StockEventForm,
+    StockEventLineForm,
+    CsvUploadForm,
+    ChatForm,
+    MeetingMinutesForm,
+    IndustryClassificationImportForm,
+    IndustrySubClassificationImportForm,
+)
+from .tokens import account_activation_token
 import random
 import csv, io
 import calendar
@@ -69,7 +111,13 @@ class IndexView(LoginRequiredMixin, SelectedCompanyMixin, generic.TemplateView):
         if form.is_valid():
             user_message = form.cleaned_data['message']
             selected_company = self.get_selected_company()
-            debts = Debt.objects.filter(company=self.this_company)
+            debts = Debt.objects.filter(
+                company=self.this_company
+            ).select_related(
+                'financial_institution',
+                'secured_type',
+                'company'
+            )
 
             # 債務情報を文字列にフォーマット
             debt_info = "\n".join([f"債務{i+1}: {debt.principal}円 (金利: {debt.interest_rate}%)" for i, debt in enumerate(debts)])
@@ -190,7 +238,9 @@ class UserProfileView(LoginRequiredMixin, SelectedCompanyMixin, generic.Template
         context = super().get_context_data(**kwargs)
         username = self.request.user.username
         context['title'] = f'{username}のユーザー情報'
-        context['user_companies'] = UserCompany.objects.filter(user=self.request.user)
+        context['user_companies'] = UserCompany.objects.filter(
+            user=self.request.user
+        ).select_related('company')
         return context
 
 
@@ -210,7 +260,9 @@ class UserProfileUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'プロフィール更新'
-        context['user_companies'] = UserCompany.objects.filter(user=self.request.user)
+        context['user_companies'] = UserCompany.objects.filter(
+            user=self.request.user
+        ).select_related('company')
         return context
 ##########################################################################
 ###                    Company の View                                 ###
@@ -227,7 +279,10 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = f'{self.object.name} の詳細'
         context['user_count'] = self.object.user_count
-        context['users'] = UserCompany.objects.filter(company=self.object, active=True).select_related('user')
+        context['users'] = UserCompany.objects.filter(
+            company=self.object,
+            active=True
+        ).select_related('user', 'company')
         return context
 
 class CompanyUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
@@ -255,7 +310,9 @@ class CompanyUpdateView(LoginRequiredMixin, SelectedCompanyMixin, UpdateView):
 # 会社情報編集時に業種分類の親子関係の入力制御を画面上で行うための処理
 def load_industry_subclassifications(request):
     industry_classification_id = request.GET.get('industry_classification')
-    subclassifications = IndustrySubClassification.objects.filter(industry_classification_id=industry_classification_id).order_by('name')
+    subclassifications = IndustrySubClassification.objects.filter(
+        industry_classification_id=industry_classification_id
+    ).select_related('industry_classification').order_by('name')
     return JsonResponse(list(subclassifications.values('id', 'name')), safe=False)
 
 ##########################################################################
@@ -270,7 +327,9 @@ class FiscalSummary_YearCreateView(LoginRequiredMixin, SelectedCompanyMixin, Cre
 
     def get_initial(self):
         initial = super().get_initial()
-        max_year = FiscalSummary_Year.objects.filter(company=self.this_company).aggregate(Max('year'))['year__max']
+        max_year = FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        ).aggregate(Max('year'))['year__max']
         if max_year is not None:
             initial['year'] = max_year + 1
         return initial
@@ -376,13 +435,17 @@ def get_finance_score(year, industry_classification, industry_subclassification,
         if indicator_name == 'EBITDA_interest_bearing_debt_ratio' and (value is not None or value < 0):
             return 1
         
-        # 最初の検索
+        # 最初の検索（N+1問題を回避するため、関連オブジェクトを事前取得）
         benchmark = IndustryBenchmark.objects.filter(
             year=year,
             industry_classification=industry_classification,
             industry_subclassification=industry_subclassification,
             company_size=company_size,
             indicator=indicator_instance
+        ).select_related(
+            'industry_classification',
+            'industry_subclassification',
+            'indicator'
         ).first()
         # 見つからない場合は year-1 で再検索
         if not benchmark:
@@ -392,6 +455,10 @@ def get_finance_score(year, industry_classification, industry_subclassification,
                 industry_subclassification=industry_subclassification,
                 company_size=company_size,
                 indicator=indicator_instance
+            ).select_related(
+                'industry_classification',
+                'industry_subclassification',
+                'indicator'
             ).first()
 
         # それでも見つからない場合は year=2022 で再検索
@@ -402,6 +469,10 @@ def get_finance_score(year, industry_classification, industry_subclassification,
                 industry_subclassification=industry_subclassification,
                 company_size=company_size,
                 indicator=indicator_instance
+            ).select_related(
+                'industry_classification',
+                'industry_subclassification',
+                'indicator'
             ).first()
 
         # それでも見つからなければ None を返す
@@ -473,7 +544,10 @@ class FiscalSummary_YearDeleteView(LoginRequiredMixin, SelectedCompanyMixin, Del
 def download_fiscal_summary_year_csv(request, param=None):
    # SelectedCompanyMixinのget_selected_company方法を再現
     def get_selected_company():
-        return UserCompany.objects.filter(user=request.user, is_selected=True).first()
+        return UserCompany.objects.filter(
+            user=request.user,
+            is_selected=True
+        ).select_related('user', 'company').first()
     response = HttpResponse(content_type='text/csv')
     response.charset = 'shift-jis'
     response['Content-Disposition'] = 'attachment; filename="fiscal_summary_years.csv"'
@@ -507,7 +581,9 @@ def download_fiscal_summary_year_csv(request, param=None):
     this_company = selected_company.company
 
     if param == 'all':
-        fiscal_summary_years = FiscalSummary_Year.objects.filter(company=this_company).order_by('year')
+        fiscal_summary_years = FiscalSummary_Year.objects.filter(
+            company=this_company
+        ).select_related('company').order_by('year')
     elif param != 'all' and param != 'sample':
         fiscal_summary_years = [get_object_or_404(FiscalSummary_Year, pk=str(param), company=this_company)]
     else:
@@ -583,13 +659,19 @@ class FiscalSummary_YearDetailView(LoginRequiredMixin, SelectedCompanyMixin, Det
         context = super().get_context_data(**kwargs)
         # 前年のデータを取得してcontextに追加
         # previous_year = self.object.year - 1
-        previous_data = FiscalSummary_Year.objects.filter(year__lt=self.object.year).order_by('-year').first()
-        next_data = FiscalSummary_Year.objects.filter(year__gt=self.object.year).order_by('year').first()
+        previous_data = FiscalSummary_Year.objects.filter(
+            year__lt=self.object.year,
+            company=self.object.company
+        ).select_related('company').order_by('-year').first()
+        next_data = FiscalSummary_Year.objects.filter(
+            year__gt=self.object.year,
+            company=self.object.company
+        ).select_related('company').order_by('year').first()
         context['previous_year_data'] = previous_data
         context['next_year_data'] = next_data
 
         # TechnicalTermの全データを取得し、nameをキーにして辞書を作成
-        technical_terms = TechnicalTerm.objects.all()
+        technical_terms = TechnicalTerm.objects.all()  # 関連オブジェクトなし
         context['technical_terms'] = technical_terms
 
         # ベンチマーク指数を取得
@@ -605,7 +687,7 @@ class LatestFiscalSummaryYearDetailView(LoginRequiredMixin, SelectedCompanyMixin
         latest_fiscal_summary_year = FiscalSummary_Year.objects.filter(
             company=self.this_company, 
             is_draft=False
-        ).order_by('-year').first()
+        ).select_related('company').order_by('-year').first()
         
         if not latest_fiscal_summary_year:
             messages.error(request, "No fiscal summary year data available.")
@@ -626,7 +708,9 @@ class FiscalSummary_YearListView(LoginRequiredMixin, SelectedCompanyMixin, ListV
         page_param = int(self.request.GET.get('page_param', 1))
         years_in_page = int(self.request.GET.get('years_in_page', 5))  # Default to 5 if not specified
 
-        queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
+        queryset = FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        ).select_related('company').order_by('-year')
         
         if not is_draft:
             queryset = queryset.filter(is_draft=False)
@@ -816,7 +900,12 @@ class FiscalSummary_MonthUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Up
     success_url = reverse_lazy('fiscal_summary_month_list')
 
     def get_queryset(self):
-        return FiscalSummary_Month.objects.filter(fiscal_summary_year__company=self.this_company).order_by('-fiscal_summary_year__year', 'period')
+        return FiscalSummary_Month.objects.filter(
+            fiscal_summary_year__company=self.this_company
+        ).select_related(
+            'fiscal_summary_year',
+            'fiscal_summary_year__company'
+        ).order_by('-fiscal_summary_year__year', 'period')
 
     def get_object(self, queryset=None):
         obj = super(UpdateView, self).get_object(queryset)
@@ -872,7 +961,12 @@ class FiscalSummary_MonthDetailView(LoginRequiredMixin, SelectedCompanyMixin, De
     context_object_name = 'fiscal_summary_month'
 
     def get_queryset(self):
-        return FiscalSummary_Month.objects.filter(fiscal_summary_year__company=self.this_company).order_by('-fiscal_summary_year__year', 'period')
+        return FiscalSummary_Month.objects.filter(
+            fiscal_summary_year__company=self.this_company
+        ).select_related(
+            'fiscal_summary_year',
+            'fiscal_summary_year__company'
+        ).order_by('-fiscal_summary_year__year', 'period')
 
     def get_object(self, queryset=None):
         # Override get_object to check if the object belongs to the selected company
@@ -892,7 +986,12 @@ class FiscalSummary_MonthListView(LoginRequiredMixin, SelectedCompanyMixin, List
     context_object_name = 'fiscal_summary_months'
 
     def get_queryset(self):
-        return FiscalSummary_Month.objects.filter(fiscal_summary_year__company=self.this_company).order_by('-fiscal_summary_year__year', 'period')
+        return FiscalSummary_Month.objects.filter(
+            fiscal_summary_year__company=self.this_company
+        ).select_related(
+            'fiscal_summary_year',
+            'fiscal_summary_year__company'
+        ).order_by('-fiscal_summary_year__year', 'period')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -953,7 +1052,10 @@ class FiscalSummary_MonthListView(LoginRequiredMixin, SelectedCompanyMixin, List
 @login_required
 def download_fiscal_summary_month_csv(request, param=None):
     def get_selected_company():
-        return UserCompany.objects.filter(user=request.user, is_selected=True).first()
+        return UserCompany.objects.filter(
+            user=request.user,
+            is_selected=True
+        ).select_related('user', 'company').first()
     
     response = HttpResponse(content_type='text/csv')
     response.charset = 'shift-jis'
@@ -1637,7 +1739,9 @@ class MeetingMinutesListView(LoginRequiredMixin, SelectedCompanyMixin, ListView)
     paginate_by = 10
 
     def get_queryset(self):
-        queryset = MeetingMinutes.objects.filter(company=self.this_company).order_by('-meeting_date')
+        queryset = MeetingMinutes.objects.filter(
+            company=self.this_company
+        ).select_related('company', 'created_by').order_by('-meeting_date')
         date = self.request.GET.get('date')
         keyword = self.request.GET.get('keyword')
 
@@ -1675,7 +1779,7 @@ class MeetingMinutesDetailView(LoginRequiredMixin, SelectedCompanyMixin, DetailV
         # 同じ会社の直近5件の議事録を取得（現在の議事録を除く）
         recent_meetings = MeetingMinutes.objects.filter(
             company=current_meeting.company
-        ).exclude(
+        ).select_related('company', 'created_by').exclude(
             id=current_meeting.id
         ).order_by('-meeting_date')[:5]
         
@@ -1689,7 +1793,9 @@ class MeetingMinutesDeleteView(LoginRequiredMixin, SelectedCompanyMixin, DeleteV
     success_url = reverse_lazy('meeting_minutes_list')
 
     def get_queryset(self):
-        return MeetingMinutes.objects.filter(company=self.this_company)
+        return MeetingMinutes.objects.filter(
+            company=self.this_company
+        ).select_related('company', 'created_by')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1725,7 +1831,9 @@ class Stakeholder_nameUpdateView(LoginRequiredMixin, SelectedCompanyMixin, Updat
 
     def get_queryset(self):
         # 選択された会社のStakeholder_nameオブジェクトのみを返す
-        return Stakeholder_name.objects.filter(company=self.this_company)
+        return Stakeholder_name.objects.filter(
+            company=self.this_company
+        ).select_related('company')
 
     def get_success_url(self):
         return reverse_lazy('stakeholder_name_detail', kwargs={'pk': self.object.pk})
@@ -1747,7 +1855,9 @@ class Stakeholder_nameListView(LoginRequiredMixin, SelectedCompanyMixin, ListVie
     context_object_name = 'stakeholder_names'
 
     def get_queryset(self):
-        return Stakeholder_name.objects.filter(company=self.this_company)
+        return Stakeholder_name.objects.filter(
+            company=self.this_company
+        ).select_related('company')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -1771,7 +1881,9 @@ class Stakeholder_nameDetailView(LoginRequiredMixin, SelectedCompanyMixin, Detai
     context_object_name = 'stakeholder_name'
 
     def get_queryset(self):
-        return Stakeholder_name.objects.filter(company=self.this_company)
+        return Stakeholder_name.objects.filter(
+            company=self.this_company
+        ).select_related('company')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2695,7 +2807,14 @@ def get_monthly_summaries(this_company, num_years=5):
 # 選択済みの会社のDebtデータを取得
 def get_debt_list(this_company):
     # 対象となる借入の絞り込み
-    debts = Debt.objects.filter(company=this_company)
+    # N+1問題を回避するため、関連オブジェクトを事前取得
+    debts = Debt.objects.filter(
+        company=this_company
+    ).select_related(
+        'financial_institution',
+        'secured_type',
+        'company'
+    )
 
     debt_list = []
     debt_list_rescheduled = []
