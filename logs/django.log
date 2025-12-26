@@ -1098,3 +1098,596 @@ Traceback (most recent call last):
     raise exceptions.from_grpc_error(exc) from exc
 google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
 INFO 2025-12-26 13:49:17,141 basehttp "POST / HTTP/1.1" 200 46123
+INFO 2025-12-26 13:49:21,882 basehttp "GET /ai-consultation/ HTTP/1.1" 200 19544
+INFO 2025-12-26 13:49:36,011 basehttp "GET /user_profile/ HTTP/1.1" 200 24616
+ERROR 2025-12-26 13:49:37,831 log Internal Server Error: /admin/ai-scripts/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 862, in do_for
+    nodelist_loop = parser.parse(
+                    ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 489, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 487, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 605, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 706, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: ' if script.created_by else '-'' from 'script.created_by.username if script.created_by else '-''
+ERROR 2025-12-26 13:49:37,834 basehttp "GET /admin/ai-scripts/ HTTP/1.1" 500 231851
+INFO 2025-12-26 13:51:02,473 basehttp "GET / HTTP/1.1" 200 45806
+INFO 2025-12-26 13:51:07,664 basehttp "GET /debts_all/ HTTP/1.1" 200 53112
+WARNING 2025-12-26 13:51:07,693 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2025-12-26 13:51:09,680 basehttp "GET /debts_byBank/ HTTP/1.1" 200 28544
+INFO 2025-12-26 13:51:13,613 basehttp "GET /debts_all/ HTTP/1.1" 200 53112
+WARNING 2025-12-26 13:51:13,629 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2025-12-26 13:51:16,016 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 31240
+INFO 2025-12-26 13:51:18,211 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/update/ HTTP/1.1" 200 84627
+INFO 2025-12-26 13:51:18,244 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2025-12-26 13:51:18,248 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2025-12-26 13:51:18,248 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2025-12-26 13:51:18,248 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2025-12-26 13:51:18,250 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2025-12-26 13:51:24,659 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 39076
+INFO 2025-12-26 13:51:28,633 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2025-12-26 13:51:28,656 basehttp "GET /fiscal_summary_year/01J8GZVCDN0TXNTHH1NRVQYWZJ/detail/ HTTP/1.1" 200 58253
+INFO 2025-12-26 13:51:33,147 basehttp "GET /fiscal_summary_year/01J8HFV4QHTY3WDMD8KT6PS6ZN/detail/ HTTP/1.1" 200 57957
+INFO 2025-12-26 13:51:39,672 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 35300
+INFO 2025-12-26 13:51:43,201 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 20339
+INFO 2025-12-26 13:51:44,615 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 23932
+INFO 2025-12-26 13:54:23,073 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 13:54:26,790 basehttp "GET / HTTP/1.1" 200 45806
+INFO 2025-12-26 13:54:27,826 basehttp "GET /ai-consultation/ HTTP/1.1" 200 24765
+ERROR 2025-12-26 13:54:30,252 mixins Unexpected error in AIConsultationView.dispatch: 'FiscalSummary_Year' object has no attribute 'net_income'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 108, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:30,275 log Internal Server Error: /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 108, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:30,277 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 500 97012
+ERROR 2025-12-26 13:54:44,308 mixins Unexpected error in AIConsultationView.dispatch: 'FiscalSummary_Year' object has no attribute 'net_income'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 112, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:44,319 log Internal Server Error: /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 112, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:44,321 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 500 97557
+ERROR 2025-12-26 13:54:47,781 mixins Unexpected error in AIConsultationView.dispatch: 'FiscalSummary_Year' object has no attribute 'net_income'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 115, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:47,793 log Internal Server Error: /ai-consultation/01KDCG3BCDW9QKK8VY9ACMC0VG/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/ai_consultation_views.py", line 65, in get_context_data
+    available_data = get_consultation_data(consultation_type, self.this_company)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 115, in get_consultation_data
+    data['fiscal_summary'] = get_fiscal_summary_data(company)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/ai_consultation_data.py", line 37, in get_fiscal_summary_data
+    'net_income': latest_fiscal.net_income,
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'FiscalSummary_Year' object has no attribute 'net_income'. Did you mean: 'other_income'?
+ERROR 2025-12-26 13:54:47,794 basehttp "GET /ai-consultation/01KDCG3BCDW9QKK8VY9ACMC0VG/ HTTP/1.1" 500 97468
+INFO 2025-12-26 13:54:49,902 basehttp "GET /ai-consultation/01KDCG3BCEQSDHGBGCKXKDEPHF/ HTTP/1.1" 200 25905
+INFO 2025-12-26 13:54:51,293 autoreload /app/scoreai/utils/ai_consultation_data.py changed, reloading.
+INFO 2025-12-26 13:54:51,621 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 13:54:58,156 autoreload /app/scoreai/utils/ai_consultation_data.py changed, reloading.
+INFO 2025-12-26 13:54:58,380 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 13:55:46,693 basehttp "GET /ai-consultation/ HTTP/1.1" 200 24765
+INFO 2025-12-26 13:55:48,165 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 25294
+ERROR 2025-12-26 13:55:59,797 ai_consultation_data Error building prompt: Object of type Decimal is not JSON serializable
+Traceback (most recent call last):
+  File "/app/scoreai/utils/ai_consultation_data.py", line 183, in build_consultation_prompt
+    template_vars['monthly_data'] = json.dumps(monthly_data, ensure_ascii=False, indent=2)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+          ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 202, in encode
+    chunks = list(chunks)
+             ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 430, in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+  File "/usr/local/lib/python3.12/json/encoder.py", line 326, in _iterencode_list
+    yield from chunks
+  File "/usr/local/lib/python3.12/json/encoder.py", line 406, in _iterencode_dict
+    yield from chunks
+  File "/usr/local/lib/python3.12/json/encoder.py", line 439, in _iterencode
+    o = _default(o)
+        ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/json/encoder.py", line 180, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+TypeError: Object of type Decimal is not JSON serializable
+INFO 2025-12-26 13:55:59,800 gemini Trying model: gemini-pro
+INFO 2025-12-26 13:55:59,800 gemini Successfully initialized model: gemini-pro
+ERROR 2025-12-26 13:55:59,998 gemini Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 13:56:00,010 gemini Error type: NotFound
+ERROR 2025-12-26 13:56:00,010 ai_consultation_views AI consultation error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/views/ai_consultation_views.py", line 121, in post
+    ai_response = get_gemini_response(
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 13:56:00,013 log Internal Server Error: /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/
+ERROR 2025-12-26 13:56:00,013 basehttp "POST /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/ HTTP/1.1" 500 273
+INFO 2025-12-26 13:56:15,748 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 19318
+INFO 2025-12-26 13:56:17,398 basehttp "GET /settings/my-scripts/create/ HTTP/1.1" 200 23201
+INFO 2025-12-26 13:57:52,249 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-26 13:57:54,678 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 13:58:16,819 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-26 13:58:17,092 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 15:48:16,152 basehttp "GET /settings/my-scripts/create/ HTTP/1.1" 200 24626
+INFO 2025-12-26 15:48:16,170 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2025-12-26 15:48:16,215 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2025-12-26 15:48:20,543 basehttp "GET /ai-consultation/ HTTP/1.1" 200 24765
+INFO 2025-12-26 15:48:22,820 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 200 25103
+INFO 2025-12-26 15:48:24,331 basehttp "GET / HTTP/1.1" 200 45806
+INFO 2025-12-26 15:48:26,096 basehttp "GET /ai-consultation/ HTTP/1.1" 200 24765
+INFO 2025-12-26 15:48:27,551 basehttp "GET / HTTP/1.1" 200 45806
+INFO 2025-12-26 15:48:36,495 gemini Trying model: gemini-pro
+INFO 2025-12-26 15:48:36,495 gemini Successfully initialized model: gemini-pro
+ERROR 2025-12-26 15:48:36,777 gemini Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 15:48:36,783 gemini Error type: NotFound
+ERROR 2025-12-26 15:48:36,783 gemini Financial advice generation error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 15:48:36,784 index_views Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 93, in post
+    response_message = get_financial_advice(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+INFO 2025-12-26 15:48:36,792 basehttp "POST / HTTP/1.1" 200 46105
+INFO 2025-12-26 15:49:41,265 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-26 15:49:43,818 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 15:49:46,367 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-26 15:49:46,592 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 15:49:54,076 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-26 15:49:54,315 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 15:50:01,778 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-26 15:50:02,000 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-26 16:43:58,835 base Method Not Allowed (POST): /
+WARNING 2025-12-26 16:43:58,839 log Method Not Allowed: /
+WARNING 2025-12-26 16:43:58,839 basehttp "POST / HTTP/1.1" 405 0
+INFO 2025-12-26 16:44:20,691 autoreload Watching for file changes with StatReloader
+WARNING 2025-12-26 16:44:38,789 base Method Not Allowed (POST): /
+WARNING 2025-12-26 16:44:38,790 log Method Not Allowed: /
+WARNING 2025-12-26 16:44:38,790 basehttp "POST / HTTP/1.1" 405 0
+WARNING 2025-12-26 16:44:44,609 base Method Not Allowed (POST): /
+WARNING 2025-12-26 16:44:44,610 log Method Not Allowed: /
+WARNING 2025-12-26 16:44:44,610 basehttp "POST / HTTP/1.1" 405 0
+WARNING 2025-12-26 16:44:54,266 base Method Not Allowed (POST): /
+WARNING 2025-12-26 16:44:54,267 log Method Not Allowed: /
+WARNING 2025-12-26 16:44:54,268 basehttp "POST / HTTP/1.1" 405 0
+INFO 2025-12-26 16:44:59,727 basehttp "GET / HTTP/1.1" 200 44821
+INFO 2025-12-26 16:45:07,312 basehttp "GET /debts_all/ HTTP/1.1" 200 53112
+WARNING 2025-12-26 16:45:07,336 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2025-12-26 18:03:48,021 basehttp "GET /debts_all/ HTTP/1.1" 200 53112
+WARNING 2025-12-26 18:03:48,053 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2025-12-26 18:03:48,098 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:50,494 basehttp "GET /debt/create/ HTTP/1.1" 200 84328
+INFO 2025-12-26 18:03:50,511 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:50,514 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:50,517 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:50,518 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:50,518 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2025-12-26 18:03:54,142 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 23615
+ERROR 2025-12-26 18:06:18,519 ocr Google Cloud Vision APIの認証情報が設定されていません。GOOGLE_APPLICATION_CREDENTIALSまたはGOOGLE_APPLICATION_CREDENTIALS_JSONを設定してください。
+INFO 2025-12-26 18:06:18,532 basehttp "POST /import_fiscal_summary_ocr/ HTTP/1.1" 200 24268
+INFO 2025-12-26 18:08:09,788 basehttp "GET / HTTP/1.1" 200 44662
+INFO 2025-12-26 18:08:11,805 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 23456
+ERROR 2025-12-26 18:08:14,011 ocr Google Cloud Vision APIの認証情報が設定されていません。GOOGLE_APPLICATION_CREDENTIALSまたはGOOGLE_APPLICATION_CREDENTIALS_JSONを設定してください。
+INFO 2025-12-26 18:08:14,014 basehttp "POST /import_fiscal_summary_ocr/ HTTP/1.1" 200 24109
+INFO 2025-12-26 18:08:15,127 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 21947
+INFO 2025-12-26 18:08:17,047 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 22281
+INFO 2025-12-26 18:08:18,429 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 21947
+INFO 2025-12-26 18:08:20,958 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 22843
+INFO 2025-12-26 18:08:20,976 basehttp "GET /static/scoreai/img/MFimport_year2.png HTTP/1.1" 200 40771
+INFO 2025-12-26 18:08:20,976 basehttp "GET /static/scoreai/img/MFimport_year.png HTTP/1.1" 200 91423
+INFO 2025-12-26 19:48:53,228 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2025-12-26 19:48:53,956 autoreload Watching for file changes with StatReloader
+ERROR 2025-12-26 19:50:17,146 ocr Vision API client initialization error: File /Users/akirasuzuki/Desktop/work/score/scoreai-project/credentials/vision-api-key.json was not found.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/ocr.py", line 37, in initialize_vision_client
+    client = vision.ImageAnnotatorClient()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/client.py", line 709, in __init__
+    self._transport = transport_init(
+                      ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/transports/grpc.py", line 238, in __init__
+    super().__init__(
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/transports/base.py", line 108, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 705, in default
+    credentials, project_id = checker()
+                              ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 698, in <lambda>
+    lambda: _get_explicit_environ_credentials(quota_project_id=quota_project_id),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 346, in _get_explicit_environ_credentials
+    credentials, project_id = load_credentials_from_file(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 173, in load_credentials_from_file
+    raise exceptions.DefaultCredentialsError(
+google.auth.exceptions.DefaultCredentialsError: File /Users/akirasuzuki/Desktop/work/score/scoreai-project/credentials/vision-api-key.json was not found.
+ERROR 2025-12-26 19:55:32,584 ocr Vision API client initialization error: File /Users/akirasuzuki/Desktop/work/score/scoreai-project/credentials/vision-api-key.json was not found.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/ocr.py", line 23, in initialize_vision_client
+    client = vision.ImageAnnotatorClient()
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/client.py", line 709, in __init__
+    self._transport = transport_init(
+                      ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/transports/grpc.py", line 238, in __init__
+    super().__init__(
+  File "/usr/local/lib/python3.12/site-packages/google/cloud/vision_v1/services/image_annotator/transports/base.py", line 108, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 705, in default
+    credentials, project_id = checker()
+                              ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 698, in <lambda>
+    lambda: _get_explicit_environ_credentials(quota_project_id=quota_project_id),
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 346, in _get_explicit_environ_credentials
+    credentials, project_id = load_credentials_from_file(
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/auth/_default.py", line 173, in load_credentials_from_file
+    raise exceptions.DefaultCredentialsError(
+google.auth.exceptions.DefaultCredentialsError: File /Users/akirasuzuki/Desktop/work/score/scoreai-project/credentials/vision-api-key.json was not found.

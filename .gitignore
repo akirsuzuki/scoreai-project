@@ -13,3 +13,8 @@ build.sh
 DOCKER_SETUP.md
 *.key
 server.pass.key
+# Google Cloud認証情報
+credentials/
+*.json
+!package.json
+!package-lock.json

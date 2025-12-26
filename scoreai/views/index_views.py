@@ -3,17 +3,13 @@
 """
 from typing import Any, Dict
 from django.shortcuts import render
-from django.conf import settings
 from django.contrib import messages
 from django.utils import timezone
 from django.views import generic
-import requests
 import logging
 
 from ..mixins import SelectedCompanyMixin
 from ..models import Debt
-from ..forms import ChatForm
-from ..utils.gemini import get_financial_advice
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,
@@ -27,7 +23,7 @@ logger = logging.getLogger(__name__)
 class IndexView(SelectedCompanyMixin, generic.TemplateView):
     """ダッシュボードビュー
     
-    財務サマリー、借入情報、AIチャット機能を提供するメインダッシュボードです。
+    財務サマリー、借入情報を提供するメインダッシュボードです。
     """
     template_name = 'scoreai/index.html'
 
@@ -44,7 +40,6 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         """
         try:
             context = self.get_context_data()
-            context['form'] = ChatForm()
             return render(request, self.template_name, context)
         except Exception as e:
             # データを取得できない場合は help.html に遷移
@@ -58,75 +53,6 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
                 'データの取得中にエラーが発生しました。管理者にお問い合わせください。'
             )
             return render(request, 'scoreai/help.html')
-
-    def post(self, request, *args, **kwargs):
-        """POSTリクエストの処理（AIチャット機能）
-        
-        Args:
-            request: HTTPリクエストオブジェクト
-            *args: 位置引数
-            **kwargs: キーワード引数
-            
-        Returns:
-            レンダリングされたレスポンス（AI応答を含む）
-        """
-        context = self.get_context_data()
-        form = ChatForm(request.POST)
-        if form.is_valid():
-            user_message = form.cleaned_data['message']
-            debts = Debt.objects.filter(
-                company=self.this_company
-            ).select_related(
-                'financial_institution',
-                'secured_type',
-                'company'
-            )
-
-            # 債務情報を文字列にフォーマット
-            debt_info = "\n".join([
-                f"債務{i+1}: {debt.principal}円 (金利: {debt.interest_rate}%)"
-                for i, debt in enumerate(debts)
-            ])
-
-            # Google Gemini APIを使用して財務アドバイスを取得
-            try:
-                response_message = get_financial_advice(
-                    user_message=user_message,
-                    debt_info=debt_info
-                )
-                
-                if response_message:
-                    context['response_message'] = response_message
-                else:
-                    context['response_message'] = "アドバイスの生成中にエラーが発生しました。しばらくしてから再度お試しください。"
-                    logger.warning(
-                        "Gemini API returned empty response",
-                        extra={'user': request.user.id}
-                    )
-            except ValueError as e:
-                # APIキー関連のエラー
-                error_msg = str(e)
-                if "GEMINI_API_KEY" in error_msg:
-                    context['response_message'] = "Gemini APIキーが設定されていません。管理者にお問い合わせください。"
-                else:
-                    context['response_message'] = f"設定エラー: {error_msg}"
-                logger.error(
-                    f"Gemini API configuration error: {e}",
-                    exc_info=True,
-                    extra={'user': request.user.id}
-                )
-            except Exception as e:
-                error_type = type(e).__name__
-                error_msg = str(e)
-                context['response_message'] = f"APIへの接続中にエラーが発生しました（{error_type}）。しばらくしてから再度お試しください。"
-                logger.error(
-                    f"Gemini API error: {e}",
-                    exc_info=True,
-                    extra={'user': request.user.id}
-                )
-
-        context['form'] = form
-        return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得

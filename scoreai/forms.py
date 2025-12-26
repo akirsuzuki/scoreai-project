@@ -410,7 +410,7 @@ class AIConsultationScriptForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
         self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
-        self.fields['default_prompt_template'].help_text = 'プロンプトテンプレート。{user_message}, {company_name}, {fiscal_summary}, {debt_info}, {monthly_data}などの変数が使用できます。'
+        self.fields['default_prompt_template'].help_text = 'プロンプトテンプレート。利用可能な変数: {user_message}（ユーザーの質問）, {company_name}（会社名）, {industry}（業種）, {size}（規模）, {fiscal_summary}（決算書データ・JSON）, {debt_info}（借入情報・JSON）, {monthly_data}（月次推移データ・JSON）。使用例はフォーム下部を参照してください。'
 
 
 class UserAIConsultationScriptForm(forms.ModelForm):
@@ -431,4 +431,4 @@ class UserAIConsultationScriptForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
         self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
-        self.fields['prompt_template'].help_text = 'プロンプトテンプレート。{user_message}, {company_name}, {fiscal_summary}, {debt_info}, {monthly_data}などの変数が使用できます。'
+        self.fields['prompt_template'].help_text = 'プロンプトテンプレート。利用可能な変数: {user_message}（ユーザーの質問）, {company_name}（会社名）, {industry}（業種）, {size}（規模）, {fiscal_summary}（決算書データ・JSON）, {debt_info}（借入情報・JSON）, {monthly_data}（月次推移データ・JSON）。使用例はフォーム下部を参照してください。'

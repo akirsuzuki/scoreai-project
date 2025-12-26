@@ -222,15 +222,13 @@
                 <span class="hide-menu">年次決算</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="{% url 'import_fiscal_summary_ocr' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">OCR読み込み</span>
-              </a>
-            </li>
           </ul>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'import_fiscal_summary_ocr' %}" aria-expanded="false">
+            <span class="hide-menu">📄 OCR読み込み</span>
+          </a>
         </li>
         
         <li class="nav-small-cap">

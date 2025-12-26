@@ -34,7 +34,7 @@ def get_fiscal_summary_data(company: Company) -> Dict[str, Any]:
         'gross_profit': latest_fiscal.gross_profit,
         'operating_profit': latest_fiscal.operating_profit,
         'ordinary_profit': latest_fiscal.ordinary_profit,
-        'net_income': latest_fiscal.net_income,
+        'net_profit': latest_fiscal.net_profit,  # モデルでは net_profit が正しい属性名
         'total_assets': latest_fiscal.total_assets,
         'total_liabilities': latest_fiscal.total_liabilities,
         'total_net_assets': latest_fiscal.total_net_assets,

@@ -55,14 +55,38 @@
                             <div class="mt-2">
                                 <small class="text-muted">
                                     <strong>利用可能な変数:</strong><br>
-                                    {user_message} - ユーザーの質問<br>
-                                    {company_name} - 会社名<br>
-                                    {industry} - 業種<br>
-                                    {size} - 規模<br>
-                                    {fiscal_summary} - 決算書データ（JSON）<br>
-                                    {debt_info} - 借入情報（JSON）<br>
-                                    {monthly_data} - 月次推移データ（JSON）
+                                    <code>{user_message}</code> - ユーザーの質問<br>
+                                    <code>{company_name}</code> - 会社名<br>
+                                    <code>{industry}</code> - 業種<br>
+                                    <code>{size}</code> - 規模<br>
+                                    <code>{fiscal_summary}</code> - 決算書データ（JSON）<br>
+                                    <code>{debt_info}</code> - 借入情報（JSON）<br>
+                                    <code>{monthly_data}</code> - 月次推移データ（JSON）
                                 </small>
+                                <div class="mt-3">
+                                    <details>
+                                        <summary class="text-primary" style="cursor: pointer;"><strong>使用例を見る</strong></summary>
+                                        <div class="mt-2 p-3 bg-light border rounded">
+                                            <strong>基本的な例:</strong><br>
+                                            <pre class="bg-white p-2 border rounded small">【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+
+【決算書データ】
+{fiscal_summary}
+
+【借入情報】
+{debt_info}
+
+【ユーザーの質問】
+{user_message}
+
+上記の情報を基に、具体的なアドバイスを提供してください。</pre>
+                                            <p class="mt-2 mb-0"><small>より詳しい例は <code>PROMPT_TEMPLATE_EXAMPLES.md</code> ファイルを参照してください。</small></p>
+                                        </div>
+                                    </details>
+                                </div>
                             </div>
                         </div>
                         
