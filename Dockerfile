@@ -1,5 +1,10 @@
 # ベースイメージを指定
-FROM python:3.12-slim
+FROM python:3.12
+
+# poppler-utilsをインストール（pdf2image用）
+RUN apt-get update && apt-get install -y \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*-slim
 
 # 作業ディレクトリを作成
 RUN mkdir -p /app
@@ -14,6 +19,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
+    poppler-utils \
   && rm -rf /var/lib/apt/lists/*
 
 # Pythonの依存関係をインストール

@@ -1,0 +1,96 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">{{ title }}</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="{{ form.consultation_type.id_for_label }}" class="form-label">{{ form.consultation_type.label }}</label>
+                            {{ form.consultation_type }}
+                            {% if form.consultation_type.errors %}
+                            <div class="text-danger">{{ form.consultation_type.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="text-danger">{{ form.name.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.system_instruction.id_for_label }}" class="form-label">{{ form.system_instruction.label }}</label>
+                            {{ form.system_instruction }}
+                            {% if form.system_instruction.help_text %}
+                            <div class="form-text">{{ form.system_instruction.help_text }}</div>
+                            {% endif %}
+                            {% if form.system_instruction.errors %}
+                            <div class="text-danger">{{ form.system_instruction.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.prompt_template.id_for_label }}" class="form-label">{{ form.prompt_template.label }}</label>
+                            {{ form.prompt_template }}
+                            {% if form.prompt_template.help_text %}
+                            <div class="form-text">{{ form.prompt_template.help_text }}</div>
+                            {% endif %}
+                            {% if form.prompt_template.errors %}
+                            <div class="text-danger">{{ form.prompt_template.errors }}</div>
+                            {% endif %}
+                            <div class="mt-2">
+                                <small class="text-muted">
+                                    <strong>利用可能な変数:</strong><br>
+                                    {user_message} - ユーザーの質問<br>
+                                    {company_name} - 会社名<br>
+                                    {industry} - 業種<br>
+                                    {size} - 規模<br>
+                                    {fiscal_summary} - 決算書データ（JSON）<br>
+                                    {debt_info} - 借入情報（JSON）<br>
+                                    {monthly_data} - 月次推移データ（JSON）
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            {{ form.is_default }}
+                            <label for="{{ form.is_default.id_for_label }}" class="form-check-label">{{ form.is_default.label }}</label>
+                            {% if form.is_default.errors %}
+                            <div class="text-danger">{{ form.is_default.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3 form-check">
+                            {{ form.is_active }}
+                            <label for="{{ form.is_active.id_for_label }}" class="form-check-label">{{ form.is_active.label }}</label>
+                            {% if form.is_active.errors %}
+                            <div class="text-danger">{{ form.is_active.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-end gap-2">
+                            <a href="{% url 'user_ai_script_list' %}" class="btn btn-secondary">キャンセル</a>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

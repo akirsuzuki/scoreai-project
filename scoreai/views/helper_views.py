@@ -73,10 +73,11 @@ def chat_view(request: HttpRequest) -> HttpResponse:
     Returns:
         レンダリングされたレスポンス
     """
-    from django.conf import settings
-    import requests
     from ..models import Debt
+    from ..utils.gemini import get_financial_advice
+    import logging
     
+    logger = logging.getLogger(__name__)
     response_message = None
     debts = Debt.objects.all()
 
@@ -85,31 +86,25 @@ def chat_view(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             user_message = form.cleaned_data['message']
 
-            # Prepare the API request to ChatGPT
-            headers = {
-                'Authorization': f'Bearer {settings.OPENAI_API_KEY}',
-                'Content-Type': 'application/json',
-            }
-            data = {
-                "model": "gpt-3.5-turbo",
-                "messages": [{"role": "user", "content": user_message}],
-            }
+            # Google Gemini APIを使用して財務アドバイスを取得
             try:
-                api_response = requests.post(
-                    'https://api.openai.com/v1/chat/completions',
-                    headers=headers,
-                    json=data,
-                    timeout=30
+                response_message = get_financial_advice(
+                    user_message=user_message
                 )
-
-                if api_response.status_code == 200:
-                    response_message = api_response.json()['choices'][0]['message']['content']
-                else:
-                    response_message = (
-                        f"エラーが発生しました: {api_response.status_code} - {api_response.text}"
+                
+                if not response_message:
+                    response_message = "アドバイスの生成中にエラーが発生しました。しばらくしてから再度お試しください。"
+                    logger.warning(
+                        "Gemini API returned empty response",
+                        extra={'user': request.user.id if request.user.is_authenticated else None}
                     )
-            except requests.RequestException as e:
+            except Exception as e:
                 response_message = "APIへの接続中にエラーが発生しました。しばらくしてから再度お試しください。"
+                logger.error(
+                    f"Gemini API error: {e}",
+                    exc_info=True,
+                    extra={'user': request.user.id if request.user.is_authenticated else None}
+                )
     else:
         form = ChatForm()
 

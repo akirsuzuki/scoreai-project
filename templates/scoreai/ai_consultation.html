@@ -1,0 +1,258 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<style>
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 300px);
+    max-height: 800px;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.message {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.message.user {
+    justify-content: flex-end;
+}
+
+.message.ai {
+    justify-content: flex-start;
+}
+
+.message-bubble {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    word-wrap: break-word;
+}
+
+.message.user .message-bubble {
+    background: #667eea;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.message.ai .message-bubble {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.message-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.chat-input-container {
+    padding: 16px;
+    background: white;
+    border-top: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+
+.chat-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    resize: none;
+    font-size: 14px;
+}
+
+.chat-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.ai-loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    border-top-color: #667eea;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">
+                        {{ consultation_type.icon }} {{ consultation_type.name }}
+                    </h3>
+                    <div>
+                        <a href="{% url 'ai_consultation_history' %}" class="btn btn-sm btn-outline-secondary">履歴</a>
+                        <a href="{% url 'user_ai_script_list' %}" class="btn btn-sm btn-outline-secondary">設定</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>【利用可能なデータ】</h6>
+                        <ul class="list-unstyled">
+                            {% if available_data.fiscal_summary %}
+                            <li>✓ 決算書データ（{{ available_data.fiscal_summary.year }}年度）</li>
+                            {% endif %}
+                            {% if available_data.debt_info %}
+                            <li>✓ 借入情報（{{ available_data.debt_info|length }}件）</li>
+                            {% endif %}
+                            {% if available_data.monthly_data %}
+                            <li>✓ 月次推移データ（{{ available_data.monthly_data|length }}ヶ月）</li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            {% for history in histories %}
+                            <div class="message user">
+                                <div class="message-bubble">
+                                    {{ history.user_message }}
+                                </div>
+                            </div>
+                            <div class="message ai">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-bubble">
+                                    {{ history.ai_response|linebreaks }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <textarea 
+                                id="chatInput" 
+                                class="chat-input" 
+                                rows="3" 
+                                placeholder="相談内容を入力してください（例: 今期の着地予測をしてください）"
+                            ></textarea>
+                            <div class="chat-actions">
+                                <button id="sendButton" class="btn btn-primary chat-button">
+                                    送信
+                                </button>
+                                <span id="loadingIndicator" class="ai-loading" style="display: none;"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('sendButton');
+    const chatMessages = document.getElementById('chatMessages');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    function addMessage(message, isUser) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${isUser ? 'user' : 'ai'}`;
+        
+        if (isUser) {
+            messageDiv.innerHTML = `
+                <div class="message-bubble">${message}</div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-bubble">${message.replace(/\n/g, '<br>')}</div>
+            `;
+        }
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // ユーザーメッセージを表示
+        addMessage(message, true);
+        chatInput.value = '';
+        
+        // ローディング表示
+        sendButton.disabled = true;
+        loadingIndicator.style.display = 'inline-block';
+        
+        // APIリクエスト
+        fetch('{% url "ai_consultation_api" consultation_type.id %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: `message=${encodeURIComponent(message)}`
+        })
+        .then(response => response.json())
+        .then(data => {
+            loadingIndicator.style.display = 'none';
+            sendButton.disabled = false;
+            
+            if (data.success) {
+                addMessage(data.response, false);
+            } else {
+                addMessage('エラー: ' + (data.error || '不明なエラーが発生しました'), false);
+            }
+        })
+        .catch(error => {
+            loadingIndicator.style.display = 'none';
+            sendButton.disabled = false;
+            addMessage('エラー: 通信に失敗しました', false);
+            console.error('Error:', error);
+        });
+    }
+    
+    sendButton.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+});
+</script>
+{% endblock %}
+

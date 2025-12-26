@@ -39,6 +39,9 @@ from .utils import (
 # Helper views
 from .helper_views import select_company, chat_view
 
+# OCR views
+from .ocr_views import ImportFiscalSummaryFromOcrView
+
 # views.pyから必要な関数とビューを再エクスポート（循環インポートを避けるため、遅延インポート）
 # 注意: views.pyがviews/__init__.pyをインポートしないようにする必要がある
 def _import_views_py():
@@ -227,5 +230,7 @@ __all__ = [
     # Helper functions
     'select_company',
     'chat_view',
+    # OCR
+    'ImportFiscalSummaryFromOcrView',
 ]
 

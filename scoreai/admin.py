@@ -22,6 +22,10 @@ from .models import (
     IndustryBenchmark,
     TechnicalTerm,
     Help,
+    AIConsultationType,
+    AIConsultationScript,
+    UserAIConsultationScript,
+    AIConsultationHistory,
 )
 from django import forms
 from django.core.exceptions import ValidationError
@@ -224,3 +228,41 @@ class HelpAdmin(admin.ModelAdmin):
     list_display = ('title', 'category')
     list_display_links = ('title', 'category')
     ordering = ('category', 'title')
+
+
+@admin.register(AIConsultationType)
+class AIConsultationTypeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'icon', 'is_active', 'order')
+    list_display_links = ('name',)
+    list_filter = ('is_active',)
+    ordering = ('order', 'name')
+
+
+@admin.register(AIConsultationScript)
+class AIConsultationScriptAdmin(admin.ModelAdmin):
+    list_display = ('name', 'consultation_type', 'is_default', 'is_active', 'created_by', 'updated_at')
+    list_display_links = ('name',)
+    list_filter = ('consultation_type', 'is_default', 'is_active')
+    search_fields = ('name', 'consultation_type__name')
+    ordering = ('consultation_type', 'is_default', 'name')
+    readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(UserAIConsultationScript)
+class UserAIConsultationScriptAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'consultation_type', 'is_default', 'is_active', 'updated_at')
+    list_display_links = ('name',)
+    list_filter = ('consultation_type', 'is_default', 'is_active')
+    search_fields = ('name', 'user__username', 'consultation_type__name')
+    ordering = ('user', 'consultation_type', 'is_default', 'name')
+    readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(AIConsultationHistory)
+class AIConsultationHistoryAdmin(admin.ModelAdmin):
+    list_display = ('user', 'company', 'consultation_type', 'created_at')
+    list_display_links = ('created_at',)
+    list_filter = ('consultation_type', 'created_at')
+    search_fields = ('user__username', 'company__name', 'consultation_type__name')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at',)

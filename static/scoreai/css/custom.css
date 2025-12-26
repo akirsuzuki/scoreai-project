@@ -48,6 +48,32 @@ div.dt-container {
   text-decoration: none;
 }
 
+/* AI相談センターのスタイル */
+.ai-consultation-center {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    margin: 10px 5px;
+    padding: 8px;
+}
+
+.ai-consultation-center .sidebar-link {
+    color: white !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ai-consultation-center .sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.ai-consultation-center .badge {
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
 .text-xsmall a:hover {
   text-decoration: underline;
 }

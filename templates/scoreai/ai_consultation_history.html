@@ -1,0 +1,109 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">AI相談履歴</h3>
+                    <a href="{% url 'ai_consultation_center' %}" class="btn btn-primary">相談センターに戻る</a>
+                </div>
+                <div class="card-body">
+                    {% if histories %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>日時</th>
+                                    <th>相談タイプ</th>
+                                    <th>質問</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for history in histories %}
+                                <tr>
+                                    <td>{{ history.created_at|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ history.consultation_type.icon }} {{ history.consultation_type.name }}</td>
+                                    <td>{{ history.user_message|truncatewords:20 }}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#historyModal{{ history.id }}">
+                                            詳細
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Modal -->
+                                <div class="modal fade" id="historyModal{{ history.id }}" tabindex="-1">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">{{ history.consultation_type.name }} - {{ history.created_at|date:"Y-m-d H:i" }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h6>質問:</h6>
+                                                <p>{{ history.user_message }}</p>
+                                                <hr>
+                                                <h6>AI応答:</h6>
+                                                <p>{{ history.ai_response|linebreaks }}</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    {% if is_paginated %}
+                    <nav aria-label="ページネーション">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                    {% else %}
+                    <p class="text-center text-muted">相談履歴がありません。</p>
+                    <div class="text-center">
+                        <a href="{% url 'ai_consultation_center' %}" class="btn btn-primary">相談を開始</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

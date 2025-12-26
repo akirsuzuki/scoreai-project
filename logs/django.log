@@ -52,3 +52,1049 @@ INFO 2025-12-25 15:58:47,384 autoreload Watching for file changes with StatReloa
 INFO 2025-12-25 17:46:34,747 basehttp "GET / HTTP/1.1" 200 43724
 INFO 2025-12-25 17:46:34,775 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 200 2749
 INFO 2025-12-25 17:46:34,878 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 200 4153
+INFO 2025-12-25 19:06:03,485 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 19:06:57,918 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 19:06:58,096 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 19:07:01,254 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-25 19:07:01,425 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 19:10:49,305 autoreload /app/score/settings.py changed, reloading.
+INFO 2025-12-25 19:10:49,497 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 19:11:18,248 autoreload /app/scoreai/utils/__init__.py changed, reloading.
+INFO 2025-12-25 19:11:18,409 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 20:09:55,179 autoreload /app/scoreai/utils/__init__.py changed, reloading.
+INFO 2025-12-25 20:09:55,653 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 20:10:08,178 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2025-12-25 20:10:08,379 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 20:33:16,121 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 20:33:16,564 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 20:33:17,698 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 20:33:17,834 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 20:36:13,303 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 20:36:13,480 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:08:42,985 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:09:17,790 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 21:09:17,939 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:10:03,922 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 21:10:04,078 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:10:11,300 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 21:10:11,458 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:10:29,554 autoreload Watching for file changes with StatReloader
+INFO 2025-12-25 21:12:01,506 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-25 21:12:01,680 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:35:43,477 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:36:00,379 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:46:12,575 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:46:37,971 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 06:46:38,579 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:46:44,598 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 06:46:44,976 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:47:47,912 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:47:52,334 basehttp "GET / HTTP/1.1" 200 44111
+INFO 2025-12-26 06:47:52,366 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2025-12-26 06:47:52,419 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2025-12-26 06:48:00,275 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 21458
+INFO 2025-12-26 06:48:07,856 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 21048
+INFO 2025-12-26 06:48:10,850 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 06:48:10,874 basehttp "GET /static/scoreai/img/MFimport_month2.png HTTP/1.1" 200 41752
+INFO 2025-12-26 06:48:10,877 basehttp "GET /static/scoreai/img/MFimport_month.png HTTP/1.1" 200 130385
+INFO 2025-12-26 06:48:29,232 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 06:48:29,233 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 06:48:29,240 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23118
+INFO 2025-12-26 06:48:44,842 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 06:48:44,843 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 06:48:44,852 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23118
+INFO 2025-12-26 06:49:31,099 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 06:49:31,099 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 06:49:31,109 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23118
+INFO 2025-12-26 06:50:18,753 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 06:50:19,207 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 06:50:38,216 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 06:50:38,426 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:09:38,060 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:09:41,898 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:09:41,899 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:09:41,899 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:09:41,899 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:09:41,899 views CSV header length: 6
+INFO 2025-12-26 07:09:41,930 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23270
+INFO 2025-12-26 07:09:52,106 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:09:52,106 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:09:52,106 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:09:52,107 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:09:52,107 views CSV header length: 6
+INFO 2025-12-26 07:09:52,120 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23270
+INFO 2025-12-26 07:10:01,886 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:10:01,887 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:10:01,887 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:10:01,887 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:10:01,887 views CSV header length: 6
+INFO 2025-12-26 07:10:01,900 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23270
+INFO 2025-12-26 07:10:16,867 basehttp "GET /debts_byBank/ HTTP/1.1" 200 27152
+INFO 2025-12-26 07:10:21,735 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 23014
+INFO 2025-12-26 07:10:26,616 basehttp "GET /debt/create/ HTTP/1.1" 200 82936
+INFO 2025-12-26 07:10:26,648 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 200 2606
+INFO 2025-12-26 07:10:26,649 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 200 54
+INFO 2025-12-26 07:10:26,651 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 200 79212
+INFO 2025-12-26 07:10:26,652 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 200 14966
+INFO 2025-12-26 07:10:26,653 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 200 862
+INFO 2025-12-26 07:10:42,253 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:10:42,535 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:10:44,667 basehttp "GET /debts_all/ HTTP/1.1" 200 51720
+WARNING 2025-12-26 07:10:44,691 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2025-12-26 07:10:49,183 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:10:49,420 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:10:52,201 basehttp "GET /debts_byBank/ HTTP/1.1" 200 27152
+INFO 2025-12-26 07:10:57,812 basehttp "GET /debt/create/ HTTP/1.1" 200 82936
+INFO 2025-12-26 07:11:31,031 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:11:36,060 basehttp "GET /debt/create/ HTTP/1.1" 200 82936
+INFO 2025-12-26 07:11:44,439 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 22223
+INFO 2025-12-26 07:11:46,572 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 21048
+INFO 2025-12-26 07:11:54,351 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 07:12:01,377 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:12:01,378 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:12:01,378 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:12:01,378 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:12:01,378 views CSV header length: 6
+ERROR 2025-12-26 07:12:01,378 views CSV processing error: name 'InvalidOperation' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/views.py", line 1112, in _parse_amount
+    amount = Decimal(cleaned_value)
+             ^^^^^^^
+NameError: name 'Decimal' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/views.py", line 1009, in form_valid
+    self._parse_amount(col, row_number, row_index)
+  File "/app/scoreai/views.py", line 1114, in _parse_amount
+    except (ValueError, InvalidOperation) as e:
+                        ^^^^^^^^^^^^^^^^
+NameError: name 'InvalidOperation' is not defined
+INFO 2025-12-26 07:12:01,395 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23158
+INFO 2025-12-26 07:22:54,728 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:22:56,819 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:22:56,819 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:22:56,819 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:22:56,819 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:22:56,819 views CSV header length: 6
+INFO 2025-12-26 07:22:56,848 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23998
+INFO 2025-12-26 07:23:02,732 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:23:02,733 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:23:02,733 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:23:02,733 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:23:02,733 views CSV header length: 6
+INFO 2025-12-26 07:23:02,740 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23998
+INFO 2025-12-26 07:23:04,142 basehttp "GET / HTTP/1.1" 200 44111
+INFO 2025-12-26 07:23:08,380 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 21048
+INFO 2025-12-26 07:23:09,721 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 07:23:16,702 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:23:16,702 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:23:16,702 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:23:16,702 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:23:16,702 views CSV header length: 6
+INFO 2025-12-26 07:23:16,710 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23998
+INFO 2025-12-26 07:23:56,970 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:23:57,401 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:23:58,963 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:23:59,147 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:24:17,014 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:24:17,298 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:24:24,833 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:24:25,034 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:24:48,009 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:25:02,769 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:25:02,770 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:25:02,770 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:02,770 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:02,770 views CSV header length: 6
+INFO 2025-12-26 07:25:02,797 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23230
+INFO 2025-12-26 07:25:25,654 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:25:25,655 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:25:25,655 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:25,655 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:25,655 views CSV header length: 6
+INFO 2025-12-26 07:25:25,668 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23230
+INFO 2025-12-26 07:25:34,133 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:25:34,134 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:25:34,134 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:34,134 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:25:34,134 views CSV header length: 6
+INFO 2025-12-26 07:25:34,150 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:25:34,174 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 75920
+INFO 2025-12-26 07:26:14,043 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:26:14,043 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:26:14,043 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:26:14,043 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:26:14,043 views CSV header length: 6
+INFO 2025-12-26 07:26:14,049 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:26:14,065 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 75920
+INFO 2025-12-26 07:26:45,508 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:26:46,059 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:27:28,575 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:27:28,964 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:27:39,615 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:27:39,816 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:37:05,878 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:37:13,146 views CSV upload action: upload, preview_only: False
+INFO 2025-12-26 07:37:13,156 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:37:13,156 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:37:13,156 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:37:13,156 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:37:13,156 views CSV header length: 6
+INFO 2025-12-26 07:37:13,169 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:37:13,202 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 75920
+INFO 2025-12-26 07:37:19,115 views CSV upload action: upload, preview_only: False
+INFO 2025-12-26 07:37:19,122 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:37:19,123 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:37:19,123 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:37:19,123 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:37:19,123 views CSV header length: 6
+INFO 2025-12-26 07:37:19,143 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23230
+INFO 2025-12-26 07:37:34,440 views CSV upload action: upload, preview_only: False
+INFO 2025-12-26 07:37:34,448 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:37:34,448 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:37:34,448 views CSV header row: ['', '勘定科目', '開始月:2025-07-01', '期間借方金額', '期間貸方金額', '終了月:2025-09-30', '構成比']
+INFO 2025-12-26 07:37:34,448 views CSV header row: ['', '勘定科目', '開始月:2025-07-01', '期間借方金額', '期間貸方金額', '終了月:2025-09-30', '構成比']
+INFO 2025-12-26 07:37:34,449 views CSV header length: 7
+ERROR 2025-12-26 07:37:34,449 views CSV processing error: [<class 'decimal.ConversionSyntax'>]
+Traceback (most recent call last):
+  File "/app/scoreai/views.py", line 1005, in form_valid
+    int(Decimal(col.replace(',', '')) // 1000) if col else 0
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]
+INFO 2025-12-26 07:37:34,465 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 200 23174
+INFO 2025-12-26 07:37:53,952 views CSV upload action: upload, preview_only: False
+INFO 2025-12-26 07:37:53,978 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:37:53,979 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:37:53,979 views CSV header row: ['', '勘定科目', '補助科目', '2014年度', '2015年度', '2016年度', '2017年度', '2018年度', '2019年度', '2020年度', '2021年度', '2022年度', '2023年度', '2024年度', '当期']
+INFO 2025-12-26 07:37:53,979 views CSV header row: ['', '勘定科目', '補助科目', '2014年度', '2015年度', '2016年度', '2017年度', '2018年度', '2019年度', '2020年度', '2021年度', '2022年度', '2023年度', '2024年度', '当期']
+INFO 2025-12-26 07:37:53,979 views CSV header length: 15
+INFO 2025-12-26 07:37:54,010 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:37:54,024 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 76007
+INFO 2025-12-26 07:38:28,010 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 21048
+INFO 2025-12-26 07:38:31,817 basehttp "GET /download_fiscal_summary_month_csv/all/ HTTP/1.1" 200 3136
+INFO 2025-12-26 07:38:34,312 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 07:38:44,456 views CSV upload action: upload, preview_only: False
+INFO 2025-12-26 07:38:44,463 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:38:44,464 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:38:44,464 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:38:44,464 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:38:44,464 views CSV header length: 6
+INFO 2025-12-26 07:38:44,474 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:38:44,491 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 76079
+INFO 2025-12-26 07:38:58,397 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 75720
+INFO 2025-12-26 07:39:15,903 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 33908
+ERROR 2025-12-26 07:39:19,515 mixins Unexpected error in MeetingMinutesCreateView.dispatch: name 'forms' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1635, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:39:19,540 log Internal Server Error: /meeting_minutes/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1635, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:39:19,541 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 500 95021
+WARNING 2025-12-26 07:39:19,637 log Not Found: /favicon.ico
+WARNING 2025-12-26 07:39:19,637 basehttp "GET /favicon.ico HTTP/1.1" 404 25000
+INFO 2025-12-26 07:39:23,121 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 22890
+INFO 2025-12-26 07:39:25,443 basehttp "GET /meeting_minutes/01HYFKMZ3NYHVDET5KNM0VTKGV/6/ HTTP/1.1" 200 19420
+ERROR 2025-12-26 07:39:29,516 mixins Unexpected error in MeetingMinutesUpdateView.dispatch: name 'forms' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 202, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1662, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:39:29,531 log Internal Server Error: /meeting_minutes/01HYFKMZ3NYHVDET5KNM0VTKGV/6/update/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 202, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1662, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:39:29,532 basehttp "GET /meeting_minutes/01HYFKMZ3NYHVDET5KNM0VTKGV/6/update/ HTTP/1.1" 500 96097
+INFO 2025-12-26 07:39:32,827 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:39:33,264 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:39:34,926 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:39:35,255 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:39:37,835 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:39:38,181 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:39:49,198 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:39:49,509 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:40:40,462 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:40:44,874 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 21653
+INFO 2025-12-26 07:40:46,980 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 07:40:55,564 views CSV upload action: upload, preview_only: False, POST data: ['csrfmiddlewaretoken', 'fiscal_year', 'override_flag']
+INFO 2025-12-26 07:40:55,576 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:40:55,576 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:40:55,576 views Upload mode detected - proceeding with data save
+INFO 2025-12-26 07:40:55,576 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:40:55,576 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:40:55,576 views CSV header length: 6
+INFO 2025-12-26 07:40:55,577 views Saving monthly data to database
+INFO 2025-12-26 07:40:55,581 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:40:55,596 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 76079
+INFO 2025-12-26 07:41:03,506 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 22484
+INFO 2025-12-26 07:41:04,949 views CSV upload action: upload, preview_only: False, POST data: ['csrfmiddlewaretoken', 'fiscal_year', 'override_flag', 'action']
+INFO 2025-12-26 07:41:04,953 csv_utils Encoding detected (fallback): shift-jis
+INFO 2025-12-26 07:41:04,954 csv_utils CSV read successfully with encoding: shift-jis
+INFO 2025-12-26 07:41:04,954 views Upload mode detected - proceeding with data save
+INFO 2025-12-26 07:41:04,954 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:41:04,954 views CSV header row: ['', '勘定科目', '7月', '8月', '9月', '合計']
+INFO 2025-12-26 07:41:04,954 views CSV header length: 6
+INFO 2025-12-26 07:41:04,955 views Saving monthly data to database
+INFO 2025-12-26 07:41:04,960 basehttp "POST /import_fiscal_summary_month_MF/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:41:04,979 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 200 76079
+INFO 2025-12-26 07:41:36,605 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 18994
+INFO 2025-12-26 07:41:37,284 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:41:37,971 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:41:39,217 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 19825
+INFO 2025-12-26 07:41:39,849 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:41:40,292 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:41:44,241 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2025-12-26 07:41:44,533 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:41:46,025 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2025-12-26 07:41:46,059 basehttp "GET /fiscal_summary_year/01J8GZVCDN0TXNTHH1NRVQYWZJ/detail/ HTTP/1.1" 200 56861
+INFO 2025-12-26 07:41:51,629 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 35852
+ERROR 2025-12-26 07:41:55,803 mixins Unexpected error in MeetingMinutesCreateView.dispatch: name 'forms' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1615, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:41:55,817 log Internal Server Error: /meeting_minutes/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 178, in get
+    return super().get(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 142, in get
+    return self.render_to_response(self.get_context_data())
+                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 72, in get_context_data
+    kwargs["form"] = self.get_form()
+                     ^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1615, in get_form
+    form.fields['company'].widget = forms.HiddenInput()
+                                    ^^^^^
+NameError: name 'forms' is not defined. Did you mean: 'form'?
+ERROR 2025-12-26 07:41:55,818 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 500 95026
+INFO 2025-12-26 07:42:06,442 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:42:06,726 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:43:49,478 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:43:49,954 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:43:58,767 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2025-12-26 07:43:59,340 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 07:46:53,169 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 36202
+INFO 2025-12-26 07:47:00,257 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 18947
+INFO 2025-12-26 12:49:34,570 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:49:37,851 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 33908
+INFO 2025-12-26 12:49:37,867 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2025-12-26 12:49:37,914 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2025-12-26 12:49:46,869 basehttp "GET / HTTP/1.1" 200 44414
+ERROR 2025-12-26 12:49:59,885 mixins Unexpected error in IndexView.dispatch: 'IndexView' object has no attribute 'get_selected_company'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 77, in post
+    selected_company = self.get_selected_company()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'IndexView' object has no attribute 'get_selected_company'
+ERROR 2025-12-26 12:49:59,935 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 77, in post
+    selected_company = self.get_selected_company()
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'IndexView' object has no attribute 'get_selected_company'
+ERROR 2025-12-26 12:49:59,937 basehttp "POST / HTTP/1.1" 500 87638
+INFO 2025-12-26 12:51:34,749 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:51:36,795 basehttp "GET / HTTP/1.1" 200 44764
+ERROR 2025-12-26 12:51:39,203 gemini Gemini API error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 54, in get_gemini_response
+    response = model_instance.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+WARNING 2025-12-26 12:51:39,211 index_views Gemini API returned empty response
+INFO 2025-12-26 12:51:39,215 basehttp "POST / HTTP/1.1" 200 44728
+INFO 2025-12-26 12:52:08,096 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:52:10,478 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:52:15,057 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:52:15,305 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:52:20,755 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2025-12-26 12:52:20,974 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:52:30,603 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 37684
+INFO 2025-12-26 12:52:37,132 basehttp "GET /user_profile/ HTTP/1.1" 200 23224
+INFO 2025-12-26 12:52:37,874 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:52:38,160 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:52:39,071 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+ERROR 2025-12-26 12:52:39,099 index_views Error in IndexView.get: float() argument must be a string or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 48, in get
+    return render(request, self.template_name, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1067, in render
+    output = self.filter_expression.resolve(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 745, in resolve
+    new_obj = func(obj, *arg_vals)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/templatetags/custom_filters.py", line 72, in multiply
+    return float(value) * float(arg)
+           ^^^^^^^^^^^^
+TypeError: float() argument must be a string or a real number, not 'NoneType'
+INFO 2025-12-26 12:52:39,105 basehttp "GET / HTTP/1.1" 200 18983
+ERROR 2025-12-26 12:52:41,587 index_views Error in IndexView.get: float() argument must be a string or a real number, not 'NoneType'
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 48, in get
+    return render(request, self.template_name, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 210, in render
+    return template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 173, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1067, in render
+    output = self.filter_expression.resolve(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 745, in resolve
+    new_obj = func(obj, *arg_vals)
+              ^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/templatetags/custom_filters.py", line 72, in multiply
+    return float(value) * float(arg)
+           ^^^^^^^^^^^^
+TypeError: float() argument must be a string or a real number, not 'NoneType'
+INFO 2025-12-26 12:52:41,591 basehttp "GET / HTTP/1.1" 200 18704
+INFO 2025-12-26 12:52:45,662 basehttp "GET /user_profile/ HTTP/1.1" 200 23219
+INFO 2025-12-26 12:52:47,010 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2025-12-26 12:52:47,028 basehttp "GET / HTTP/1.1" 200 44761
+INFO 2025-12-26 12:52:49,787 basehttp "GET /user_profile/ HTTP/1.1" 200 23224
+INFO 2025-12-26 12:52:49,852 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:52:50,096 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:52:51,074 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 20474
+INFO 2025-12-26 12:52:52,736 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/update/ HTTP/1.1" 200 21043
+INFO 2025-12-26 12:52:54,159 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 20474
+INFO 2025-12-26 12:52:56,721 basehttp "GET /help/ HTTP/1.1" 200 18377
+INFO 2025-12-26 12:54:38,469 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:54:45,842 basehttp "GET / HTTP/1.1" 200 44414
+ERROR 2025-12-26 12:54:57,327 gemini Gemini API error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 54, in get_gemini_response
+    response = model_instance.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 12:54:57,333 gemini Error type: NotFound
+ERROR 2025-12-26 12:54:57,333 gemini Financial advice generation error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 128, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 54, in get_gemini_response
+    response = model_instance.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 12:54:57,333 index_views Gemini API error: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 93, in post
+    response_message = get_financial_advice(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 128, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 54, in get_gemini_response
+    response = model_instance.generate_content(prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+INFO 2025-12-26 12:54:57,337 basehttp "POST / HTTP/1.1" 200 44731
+WARNING 2025-12-26 12:55:10,644 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-12-26 12:55:10,646 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 25111
+INFO 2025-12-26 12:55:10,975 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js.map HTTP/1.1" 200 333974
+INFO 2025-12-26 12:56:16,437 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:56:18,799 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:56:47,091 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:56:47,411 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:56:59,066 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2025-12-26 12:56:59,331 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:57:23,774 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 12:57:29,906 gemini Trying model: gemini-pro
+INFO 2025-12-26 12:57:29,907 gemini Successfully initialized model: gemini-pro
+ERROR 2025-12-26 12:57:30,022 gemini Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 12:57:30,024 gemini Error type: NotFound
+ERROR 2025-12-26 12:57:30,024 gemini Financial advice generation error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 12:57:30,025 index_views Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 93, in post
+    response_message = get_financial_advice(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+INFO 2025-12-26 12:57:30,060 basehttp "POST / HTTP/1.1" 200 44731
+WARNING 2025-12-26 12:57:30,124 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-12-26 12:57:30,127 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 25111
+INFO 2025-12-26 13:49:10,981 autoreload Watching for file changes with StatReloader
+INFO 2025-12-26 13:49:16,936 gemini Trying model: gemini-pro
+INFO 2025-12-26 13:49:16,937 gemini Successfully initialized model: gemini-pro
+ERROR 2025-12-26 13:49:17,106 gemini Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 13:49:17,110 gemini Error type: NotFound
+ERROR 2025-12-26 13:49:17,110 gemini Financial advice generation error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+ERROR 2025-12-26 13:49:17,110 index_views Gemini API error: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 93, in post
+    response_message = get_financial_advice(
+                       ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 151, in get_financial_advice
+    return get_gemini_response(prompt, system_instruction=system_instruction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.NotFound: 404 models/gemini-pro is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.
+INFO 2025-12-26 13:49:17,141 basehttp "POST / HTTP/1.1" 200 46123

@@ -152,7 +152,13 @@ try:
     from .local_settings import *
 except ImportError:
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    # OpenAI API (非推奨 - 後方互換性のため残す)
     OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+    # Google AI API
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+    # Google Cloud Vision API（サービスアカウントキーのパス）
+    GOOGLE_APPLICATION_CREDENTIALS = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    GOOGLE_CLOUD_PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT_ID")
     DEBUG = os.environ.get('DEBUG', 'False') == 'True'
     ALLOWED_HOSTS = ['.herokuapp.com', 'www.score-ai.net', 'score-ai.net', '0.0.0.0', '127.0.0.1']
     # EMAIL_HOST_USER = 'sth' or os.environ['EMAIL_HOST_USER']

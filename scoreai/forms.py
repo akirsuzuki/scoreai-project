@@ -11,6 +11,9 @@ from .models import (
     StockEvent,
     StockEventLine,
     MeetingMinutes,
+    AIConsultationType,
+    AIConsultationScript,
+    UserAIConsultationScript,
 )
 from django_select2.forms import Select2Widget
 from django.contrib.auth import get_user_model
@@ -200,7 +203,8 @@ class MoneyForwardCsvUploadForm_Month(forms.Form):
     )
     csv_file = forms.FileField(
         label='CSVファイル',
-        required=True
+        required=True,
+        help_text='Money Forwardからエクスポートした月次PL CSVファイル'
     )
     override_flag = forms.BooleanField(
         required=False,
@@ -214,9 +218,39 @@ class MoneyForwardCsvUploadForm_Month(forms.Form):
             self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
 
 
+class OcrUploadForm(forms.Form):
+    """OCR用のフォーム（PDF/画像アップロード）"""
+    file = forms.FileField(
+        label='決算書ファイル（PDF/画像）',
+        required=True,
+        help_text='PDF、PNG、JPEG形式をサポートしています'
+    )
+    file_type = forms.ChoiceField(
+        choices=[
+            ('auto', '自動検出'),
+            ('pdf', 'PDF'),
+            ('image', '画像（PNG/JPEG）'),
+        ],
+        label='ファイルタイプ',
+        initial='auto',
+        required=False
+    )
+    fiscal_year = forms.IntegerField(
+        label='年度',
+        required=False,
+        help_text='年度が自動検出できない場合に手動で入力してください'
+    )
+    override_flag = forms.BooleanField(
+        required=False,
+        label='既存データを上書きする',
+        initial=False
+    )
+
+
 class MoneyForwardCsvUploadForm_Year(forms.Form):
     csv_file = forms.FileField(
         label='CSVファイル',
+        help_text='Money Forwardからエクスポートした残高試算表 CSVファイル',
         required=True
     )
     override_flag = forms.BooleanField(
@@ -356,3 +390,45 @@ class IndustryClassificationImportForm(forms.Form):
 
 class IndustrySubClassificationImportForm(forms.Form):
     csv_file = forms.FileField(label='CSVファイルを選択してください')
+
+
+class AIConsultationScriptForm(forms.ModelForm):
+    """AIスクリプトフォーム（システム用）"""
+    class Meta:
+        model = AIConsultationScript
+        fields = ['consultation_type', 'name', 'system_instruction', 'default_prompt_template', 'is_default', 'is_active']
+        widgets = {
+            'consultation_type': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'system_instruction': forms.Textarea(attrs={'rows': 10, 'class': 'form-control'}),
+            'default_prompt_template': forms.Textarea(attrs={'rows': 15, 'class': 'form-control'}),
+            'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
+        self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
+        self.fields['default_prompt_template'].help_text = 'プロンプトテンプレート。{user_message}, {company_name}, {fiscal_summary}, {debt_info}, {monthly_data}などの変数が使用できます。'
+
+
+class UserAIConsultationScriptForm(forms.ModelForm):
+    """AIスクリプトフォーム（ユーザー用）"""
+    class Meta:
+        model = UserAIConsultationScript
+        fields = ['consultation_type', 'name', 'system_instruction', 'prompt_template', 'is_default', 'is_active']
+        widgets = {
+            'consultation_type': forms.Select(attrs={'class': 'form-control'}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'system_instruction': forms.Textarea(attrs={'rows': 10, 'class': 'form-control'}),
+            'prompt_template': forms.Textarea(attrs={'rows': 15, 'class': 'form-control'}),
+            'is_default': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
+        self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
+        self.fields['prompt_template'].help_text = 'プロンプトテンプレート。{user_message}, {company_name}, {fiscal_summary}, {debt_info}, {monthly_data}などの変数が使用できます。'

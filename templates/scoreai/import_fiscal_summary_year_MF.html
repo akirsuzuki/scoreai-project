@@ -43,9 +43,21 @@
               <p>インポートするCSVに存在する項目だけが更新され、存在しない項目はそのままの値が維持されます。</p>
               <p>貸借対照表のCSV、損益計算書のCSVの2つをアップロードしてください。</p>
               <p>順番はどちらが先でも構いません。</p>
-              <strong>エンコードはShift-JISでお願いします。</strong>
+              <div class="alert alert-info">
+                <strong>エンコーディング:</strong> UTF-8、Shift-JIS、EUC-JPを自動検出します。
+              </div>
               <p></p>
           </form>
+          
+          {% if messages %}
+          <div class="messages mt-3">
+              {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+                  {{ message|linebreaks }}
+              </div>
+              {% endfor %}
+          </div>
+          {% endif %}
       </div>
       <div class="card-footer text-end">
           <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>

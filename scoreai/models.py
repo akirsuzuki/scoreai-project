@@ -800,3 +800,118 @@ class Help(models.Model):
 
     def __str__(self):
         return self.title
+
+
+# AI相談機能関連のモデル
+class AIConsultationType(models.Model):
+    """相談タイプ（財務、補助金、税務、法律など）"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    name = models.CharField(max_length=50, unique=True, verbose_name="相談タイプ名")  # "財務相談"
+    icon = models.CharField(max_length=20, verbose_name="アイコン")  # "💰"
+    description = models.TextField(verbose_name="説明")  # 相談タイプの説明
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    order = models.IntegerField(default=0, verbose_name="表示順序")  # 表示順序
+    color = models.CharField(max_length=7, default="#007bff", verbose_name="カラー")  # カードの色
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = 'AI相談タイプ'
+        verbose_name_plural = 'AI相談タイプ'
+    
+    def __str__(self):
+        return self.name
+
+
+class AIConsultationScript(models.Model):
+    """AI相談スクリプト（システム全体用・管理者が編集）"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    consultation_type = models.ForeignKey(
+        AIConsultationType,
+        on_delete=models.CASCADE,
+        related_name='system_scripts',
+        verbose_name="相談タイプ"
+    )
+    name = models.CharField(max_length=100, verbose_name="スクリプト名")  # スクリプト名
+    system_instruction = models.TextField(verbose_name="システムプロンプト")  # システムプロンプト
+    default_prompt_template = models.TextField(verbose_name="プロンプトテンプレート")  # デフォルトプロンプトテンプレート
+    is_default = models.BooleanField(default=True, verbose_name="デフォルト")  # デフォルトスクリプトか
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="作成者")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'AI相談スクリプト（システム）'
+        verbose_name_plural = 'AI相談スクリプト（システム）'
+        unique_together = [['consultation_type', 'is_default']]
+    
+    def __str__(self):
+        return f"{self.consultation_type.name} - {self.name}"
+
+
+class UserAIConsultationScript(models.Model):
+    """ユーザー独自のAI相談スクリプト"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='ai_scripts',
+        verbose_name="ユーザー"
+    )
+    consultation_type = models.ForeignKey(
+        AIConsultationType,
+        on_delete=models.CASCADE,
+        related_name='user_scripts',
+        verbose_name="相談タイプ"
+    )
+    name = models.CharField(max_length=100, verbose_name="スクリプト名")  # スクリプト名
+    system_instruction = models.TextField(verbose_name="システムプロンプト")  # システムプロンプト
+    prompt_template = models.TextField(verbose_name="プロンプトテンプレート")  # プロンプトテンプレート
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    is_default = models.BooleanField(default=False, verbose_name="デフォルト")  # このタイプのデフォルトか
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'AI相談スクリプト（ユーザー）'
+        verbose_name_plural = 'AI相談スクリプト（ユーザー）'
+        unique_together = [['user', 'consultation_type', 'is_default']]
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.consultation_type.name} - {self.name}"
+
+
+class AIConsultationHistory(models.Model):
+    """AI相談の履歴"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='consultation_histories', verbose_name="ユーザー")
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='consultation_histories', verbose_name="会社")
+    consultation_type = models.ForeignKey(AIConsultationType, on_delete=models.CASCADE, verbose_name="相談タイプ")
+    user_message = models.TextField(verbose_name="ユーザーの質問")  # ユーザーの質問
+    ai_response = models.TextField(verbose_name="AIの応答")  # AIの応答
+    script_used = models.ForeignKey(
+        AIConsultationScript,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="使用したスクリプト（システム）"
+    )  # 使用したスクリプト（システム用）
+    user_script_used = models.ForeignKey(
+        UserAIConsultationScript,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name="使用したスクリプト（ユーザー）"
+    )  # 使用したスクリプト（ユーザー用）
+    data_snapshot = models.JSONField(default=dict, verbose_name="データスナップショット")  # 相談時に使用したデータのスナップショット
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'AI相談履歴'
+        verbose_name_plural = 'AI相談履歴'
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.consultation_type.name} - {self.created_at}"

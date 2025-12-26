@@ -18,3 +18,8 @@ crispy-bootstrap4
 psycopg2
 django_heroku
 dj-static
+google-generativeai
+google-cloud-vision
+Pillow
+pdf2image
+chardet

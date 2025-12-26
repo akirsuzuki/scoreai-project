@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django import forms
 
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
@@ -88,6 +89,7 @@ import requests
 from django.core.serializers import serialize
 from django.core.serializers.json import DjangoJSONEncoder
 from django.core.exceptions import FieldDoesNotExist
+from decimal import Decimal, InvalidOperation
 
 # デバッグ用
 import logging
@@ -96,6 +98,11 @@ logger = logging.getLogger(__name__)
 # 注意: views/__init__.pyからインポートしない（循環インポートを避けるため）
 # urls.pyで直接views/__init__.pyからインポートする
 # ここでは、views.py内で必要な関数を直接インポート
+from scoreai.utils.csv_utils import (
+    read_csv_with_auto_encoding,
+    validate_csv_structure,
+    preview_csv_data
+)
 from .views.utils import (
     get_finance_score,
     calculate_total_monthly_summaries,
@@ -904,14 +911,49 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
         override_flag = form.cleaned_data.get('override_flag', False)
 
         try:
-            # CSV解析
-            file_data = csv_file.read().decode('shift-jis')
-            csv_reader = csv.reader(file_data.splitlines())
+            # エンコーディング自動検出でCSVを読み込む
+            csv_data, encoding = read_csv_with_auto_encoding(csv_file)
+            
+            if not csv_data:
+                messages.error(self.request, 'CSVファイルが空です。')
+                return self.form_invalid(form)
+            
+            # CSV構造の検証（マネーフォワードのCSVは列名が異なる可能性があるため、柔軟に検証）
+            # 最低限、データが存在することを確認
+            is_valid, error_msg = validate_csv_structure(
+                csv_data,
+                expected_columns=None,  # 列名のチェックをスキップ（マネーフォワードの形式に依存）
+                min_rows=2
+            )
+            
+            if not is_valid:
+                messages.error(self.request, f'CSVファイルの構造が不正です: {error_msg}')
+                return self.form_invalid(form)
+            
+            # デバッグ用: ヘッダー行をログに記録
+            if csv_data:
+                logger.info(f"CSV header row: {csv_data[0]}")
+            
+            # CSVデータを処理
+            csv_reader = iter(csv_data)
             header = next(csv_reader)  # ヘッダー行を読み飛ばす
+            
+            # デバッグ用: ヘッダー行をログとメッセージに記録
+            logger.info(f"CSV header row: {header}")
+            logger.info(f"CSV header length: {len(header)}")
+            
+            # ヘッダー行が空または短すぎる場合のチェック
+            if not header or len(header) < 2:
+                messages.error(
+                    self.request, 
+                    f'CSVファイルのヘッダー行が不正です。ヘッダー: {header}'
+                )
+                return self.form_invalid(form)
 
             # ヘッダーから月度情報を取得
-            # 最初の2列をスキップ ("科目", "行")
-            header_columns = header[2:]
+            # 最初の2列をスキップ ("科目", "行" またはマネーフォワードの形式)
+            # マネーフォワードのCSVは最初の列が科目名、2列目が行番号の可能性がある
+            header_columns = header[2:] if len(header) > 2 else header
             months = []
             current_month = 1
 
@@ -935,6 +977,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
             operating_profit_data = [0] * num_columns
             ordinary_profit_data = [0] * num_columns
 
+            # データ行を処理（元のロジックに戻す）
             for row in csv_reader:
                 label = row[0]  # ラベルは最初の列にある
 
@@ -961,6 +1004,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
                 elif label == "当期純利益":
                     # "当期純利益"が出てきたら読み込み終了
                     break
+            
 
             # 月度データを生成
             for month, sales, gross_profit, operating_profit, ordinary_profit in zip(
@@ -989,13 +1033,53 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
                         }
                     )
 
-            messages.success(self.request, 'CSVファイルが正常にインポートされました。')
+            messages.success(
+                self.request, 
+                f'CSVファイルが正常にインポートされました。（エンコーディング: {encoding}）'
+            )
+        except UnicodeDecodeError as e:
+            messages.error(
+                self.request, 
+                f'CSVファイルのエンコーディングを検出できませんでした。UTF-8またはShift-JIS形式のファイルをアップロードしてください。'
+            )
+            logger.error(f"CSV encoding error: {e}", exc_info=True)
+            return self.form_invalid(form)
+        except ValueError as e:
+            messages.error(self.request, f'CSVファイルの形式が不正です: {str(e)}')
+            logger.error(f"CSV validation error: {e}", exc_info=True)
+            return self.form_invalid(form)
         except Exception as e:
-            messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')
+            messages.error(
+                self.request, 
+                f'CSVファイルの処理中にエラーが発生しました: {str(e)}'
+            )
+            logger.error(f"CSV processing error: {e}", exc_info=True, extra={'user': self.request.user.id})
             return self.form_invalid(form)
 
         return super().form_valid(form)
-
+    
+    def _parse_amount(self, value: str, row_number: int, column_index: int) -> int:
+        """
+        金額文字列をパース（エラーハンドリング付き）
+        
+        Args:
+            value: 金額文字列
+            row_number: 行番号（エラーメッセージ用）
+            column_index: 列インデックス（エラーメッセージ用）
+            
+        Returns:
+            パースされた金額（千円単位）
+        """
+        if not value or value.strip() == '':
+            return 0
+        
+        try:
+            # カンマと全角スペースを除去
+            cleaned_value = value.replace(',', '').replace('，', '').replace(' ', '').replace('　', '')
+            amount = Decimal(cleaned_value)
+            return int(amount // 1000)
+        except (ValueError, InvalidOperation) as e:
+            raise ValueError(f"列{column_index}: 数値のパースに失敗しました（値: '{value}'）")
 
 
 # Moneyfowardの試算表（貸借対照表と損益計算書）をアップしたらそのまま変換してインポートする
@@ -1018,13 +1102,55 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
         override_flag = form.cleaned_data.get('override_flag', False)
 
         try:
-            # CSV解析
-            file_data = csv_file.read().decode('shift-jis')
-            csv_reader = csv.reader(file_data.splitlines())
+            # エンコーディング自動検出でCSVを読み込む
+            csv_data, encoding = read_csv_with_auto_encoding(csv_file)
+            
+            if not csv_data:
+                messages.error(self.request, 'CSVファイルが空です。')
+                return self.form_invalid(form)
+            
+            # CSV構造の検証
+            is_valid, error_msg = validate_csv_structure(
+                csv_data,
+                min_rows=2
+            )
+            
+            if not is_valid:
+                messages.error(self.request, f'CSVファイルの構造が不正です: {error_msg}')
+                return self.form_invalid(form)
+            
+            # CSVデータを処理
+            csv_reader = iter(csv_data)
 
-            # 1行目の3列目から年度を取得
+            # 1行目の3列目から年度を取得（エラーハンドリング強化）
             first_row = next(csv_reader)
-            fiscal_year = first_row[2][4:8]
+            
+            if len(first_row) < 3:
+                messages.error(
+                    self.request, 
+                    f'CSVファイルの1行目の列数が不足しています（最低3列必要）。実際の列数: {len(first_row)}'
+                )
+                return self.form_invalid(form)
+            
+            try:
+                fiscal_year_str = first_row[2]
+                if len(fiscal_year_str) < 8:
+                    messages.error(
+                        self.request, 
+                        f'年度情報の形式が不正です。3列目の値: "{fiscal_year_str}"'
+                    )
+                    return self.form_invalid(form)
+                fiscal_year = fiscal_year_str[4:8]
+                
+                # 年度が数値か確認
+                int(fiscal_year)  # 数値でない場合はValueErrorが発生
+            except (IndexError, ValueError) as e:
+                messages.error(
+                    self.request, 
+                    f'年度の取得に失敗しました。CSVファイルの1行目3列目に年度情報が含まれているか確認してください。'
+                )
+                logger.error(f"Fiscal year extraction error: {e}", exc_info=True)
+                return self.form_invalid(form)
 
             # 既に存在する場合は上書きチェック、存在しない場合は新規作成
             fiscal_summary_years = FiscalSummary_Year.objects.filter(year=fiscal_year, company=self.this_company)
@@ -1111,23 +1237,40 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
                 "支払利息": "interest_expense",
             }
 
+            errors = []
             for row in csv_reader:
                 current_line += 1
                 # 空行または不完全な行をスキップ
                 if not row or len(row) < 1:
-                    logger.warning(f"空行または不完全な行が検出されました（行番号: {current_line}）： {row}")
+                    logger.warning(f"空行または不完全な行が検出されました（行番号: {current_line}）")
                     continue
 
-                # 項目名の決定
-                if len(row) >= 5 and row[0] != '':
-                    mapping_label = row[0]
-                elif len(row) >= 2 and row[1] != '':
-                    mapping_label = row[1]
-                else:
-                    logger.warning(f"この行はスッキップします（行番号: {current_line}）： {row}")
-                    continue
+                # 項目名の決定（エラーハンドリング強化）
+                try:
+                    if len(row) >= 5 and row[0] != '':
+                        mapping_label = row[0]
+                    elif len(row) >= 2 and row[1] != '':
+                        mapping_label = row[1]
+                    else:
+                        logger.warning(f"この行はスキップします（行番号: {current_line}）")
+                        continue
 
-                value = int(Decimal(row[5].replace(',', '')) // 1000) if row[5] else 0
+                    # 金額のパース（エラーハンドリング強化）
+                    if len(row) < 6:
+                        errors.append(f"行{current_line}: 列数が不足しています（最低6列必要）。実際の列数: {len(row)}")
+                        continue
+                    
+                    value_str = row[5] if row[5] else '0'
+                    try:
+                        cleaned_value = value_str.replace(',', '').replace('，', '').replace(' ', '').replace('　', '')
+                        value = int(Decimal(cleaned_value) // 1000)
+                    except (ValueError, InvalidOperation) as e:
+                        errors.append(f"行{current_line}列6: 数値のパースに失敗しました（値: '{value_str}'）")
+                        continue
+                except Exception as e:
+                    errors.append(f"行{current_line}: 処理中にエラーが発生しました: {str(e)}")
+                    logger.error(f"Row {current_line} processing error: {e}", exc_info=True)
+                    continue
                 
                 if mapping_label in label_field_mapping:
                     field_name = label_field_mapping[mapping_label]
@@ -1167,12 +1310,25 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
 
             messages.success(self.request, 'CSVファイルが正常にインポートされました。下書きデータとして保存されていますので、適宜必要な情報を追加してください。')
 
-        except Exception as e:
+        except UnicodeDecodeError as e:
             messages.error(
                 self.request, 
-                f'CSVファイルの処理中にエラーが発生しました: {str(e)} '
-                f'(行番号: {current_line}, 項目名：{mapping_label}、行データ：{row})'
+                f'CSVファイルのエンコーディングを検出できませんでした。UTF-8またはShift-JIS形式のファイルをアップロードしてください。'
             )
+            logger.error(f"CSV encoding error: {e}", exc_info=True)
+            return self.form_invalid(form)
+        except ValueError as e:
+            messages.error(self.request, f'CSVファイルの形式が不正です: {str(e)}')
+            logger.error(f"CSV validation error: {e}", exc_info=True)
+            return self.form_invalid(form)
+        except Exception as e:
+            error_detail = f'CSVファイルの処理中にエラーが発生しました: {str(e)}'
+            if 'current_line' in locals():
+                error_detail += f' (行番号: {current_line})'
+            if 'mapping_label' in locals():
+                error_detail += f' (項目名: {mapping_label})'
+            messages.error(self.request, error_detail)
+            logger.error(f"CSV processing error: {e}", exc_info=True, extra={'user': self.request.user.id})
             return self.form_invalid(form)
 
         return super().form_valid(form)

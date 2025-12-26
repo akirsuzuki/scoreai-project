@@ -11,6 +11,25 @@ from .views import (
     CompanyUpdateView,
     select_company,
     load_industry_subclassifications,
+    ImportFiscalSummaryFromOcrView,
+)
+from .views.ai_consultation_views import (
+    AIConsultationCenterView,
+    AIConsultationView,
+    AIConsultationAPIView,
+    AIConsultationHistoryView,
+)
+from .views.ai_script_views import (
+    AdminAIScriptListView,
+    AdminAIScriptCreateView,
+    AdminAIScriptUpdateView,
+    AdminAIScriptDeleteView,
+    UserAIScriptListView,
+    UserAIScriptCreateView,
+    UserAIScriptUpdateView,
+    UserAIScriptDeleteView,
+)
+from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
     remove_client,
@@ -115,6 +134,7 @@ urlpatterns = [
     path('import_fiscal_summary_month_MF/', ImportFiscalSummary_Month_FromMoneyforward.as_view(), name='import_fiscal_summary_month_MF'),
     path('import_fiscal_summary_year/', ImportFiscalSummary_Year.as_view(), name='import_fiscal_summary_year'),
     path('import_fiscal_summary_year_MF/', ImportFiscalSummary_Year_FromMoneyforward.as_view(), name='import_fiscal_summary_year_MF'),
+    path('import_fiscal_summary_ocr/', ImportFiscalSummaryFromOcrView.as_view(), name='import_fiscal_summary_ocr'),
     # 追加
     path('get-monthly-totals/', FiscalSummary_YearCreateView.as_view(http_method_names=['get']), name='get_monthly_totals'),
     path('debt/create/', DebtCreateView.as_view(), name='debt_create'),
@@ -160,4 +180,19 @@ urlpatterns = [
     path('industry_classification_list/', IndustryClassificationListView.as_view(), name='industry_classification_list'),
     path('import_industry_subclassification/', ImportIndustrySubClassificationView.as_view(), name='import_industry_subclassification'),
     path('industry_subclassification_list/', IndustrySubClassificationListView.as_view(), name='industry_subclassification_list'),
+    # AI相談関連
+    path('ai-consultation/', AIConsultationCenterView.as_view(), name='ai_consultation_center'),
+    path('ai-consultation/<str:consultation_type_id>/', AIConsultationView.as_view(), name='ai_consultation'),
+    path('ai-consultation/<str:consultation_type_id>/api/', AIConsultationAPIView.as_view(), name='ai_consultation_api'),
+    path('ai-consultation/history/', AIConsultationHistoryView.as_view(), name='ai_consultation_history'),
+    # スクリプト管理（管理者用）
+    path('admin/ai-scripts/', AdminAIScriptListView.as_view(), name='admin_ai_script_list'),
+    path('admin/ai-scripts/create/', AdminAIScriptCreateView.as_view(), name='admin_ai_script_create'),
+    path('admin/ai-scripts/<str:pk>/edit/', AdminAIScriptUpdateView.as_view(), name='admin_ai_script_edit'),
+    path('admin/ai-scripts/<str:pk>/delete/', AdminAIScriptDeleteView.as_view(), name='admin_ai_script_delete'),
+    # スクリプト管理（ユーザー用）
+    path('settings/my-scripts/', UserAIScriptListView.as_view(), name='user_ai_script_list'),
+    path('settings/my-scripts/create/', UserAIScriptCreateView.as_view(), name='user_ai_script_create'),
+    path('settings/my-scripts/<str:pk>/edit/', UserAIScriptUpdateView.as_view(), name='user_ai_script_edit'),
+    path('settings/my-scripts/<str:pk>/delete/', UserAIScriptDeleteView.as_view(), name='user_ai_script_delete'),
 ]

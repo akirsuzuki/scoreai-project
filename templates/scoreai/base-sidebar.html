@@ -20,7 +20,19 @@
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'index' %}" aria-expanded="false">
-            <span class="hide-menu">ダッシュボード</span>
+            <span class="hide-menu">📊 ダッシュボード</span>
+          </a>
+        </li>
+        
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">AI相談</span>
+        </li>
+        
+        <li class="sidebar-item ai-consultation-center">
+          <a class="sidebar-link" href="{% url 'ai_consultation_center' %}" aria-expanded="false">
+            <span class="hide-menu">🤖 AI相談センター</span>
+            <span class="badge bg-danger rounded-pill ms-auto" style="font-size: 10px;">NEW</span>
           </a>
         </li>
         
@@ -191,7 +203,7 @@
 
         <li class="sidebar-item">
           <a class="sidebar-link" href="#collapseCSVImport" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">CSV Import</span><i class="fa-solid fa-angles-right ms-auto"></i>
+            <span class="hide-menu">📥 CSV取り込み</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
           <ul id="collapseCSVImport" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
@@ -210,9 +222,41 @@
                 <span class="hide-menu">年次決算</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a href="{% url 'import_fiscal_summary_ocr' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">OCR読み込み</span>
+              </a>
+            </li>
           </ul>
         </li>
-
+        
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">設定</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_profile' %}" aria-expanded="false">
+            <span class="hide-menu">⚙️ プロフィール</span>
+          </a>
+        </li>
+        
+        {% if user.is_superuser %}
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'admin_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu">⚙️ AIスクリプト管理</span>
+          </a>
+        </li>
+        {% endif %}
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu">⚙️ マイスクリプト</span>
+          </a>
+        </li>
 
         <!-- コンサルタントの場合のみ表示 -->
         {% if user.is_financial_consultant %}

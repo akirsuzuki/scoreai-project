@@ -13,6 +13,7 @@ import logging
 from ..mixins import SelectedCompanyMixin
 from ..models import Debt
 from ..forms import ChatForm
+from ..utils.gemini import get_financial_advice
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,
@@ -73,7 +74,6 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         form = ChatForm(request.POST)
         if form.is_valid():
             user_message = form.cleaned_data['message']
-            selected_company = self.get_selected_company()
             debts = Debt.objects.filter(
                 company=self.this_company
             ).select_related(
@@ -88,50 +88,39 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
                 for i, debt in enumerate(debts)
             ])
 
-            # プロンプトを作成
-            prompt = f"""以下の債務情報に基づいて、最適な返済計画についてアドバイスしてください：
-            {debt_info}
-            ユーザーの質問: {user_message}
-            総債務額、平均金利、そして最も効果的な返済方法を提案してください。"""
-
-            # Prepare the API request to ChatGPT
-            headers = {
-                'Authorization': f'Bearer {settings.OPENAI_API_KEY}',
-                'Content-Type': 'application/json',
-            }
-            data = {
-                "model": "gpt-3.5-turbo",
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "あなたは財務アドバイザーです。与えられた債務情報に基づいて、最適な返済計画を提案してください。"
-                    },
-                    {"role": "user", "content": prompt}
-                ],
-            }
-
+            # Google Gemini APIを使用して財務アドバイスを取得
             try:
-                api_response = requests.post(
-                    'https://api.openai.com/v1/chat/completions',
-                    headers=headers,
-                    json=data,
-                    timeout=30
+                response_message = get_financial_advice(
+                    user_message=user_message,
+                    debt_info=debt_info
                 )
-
-                if api_response.status_code == 200:
-                    context['response_message'] = api_response.json()['choices'][0]['message']['content']
+                
+                if response_message:
+                    context['response_message'] = response_message
                 else:
-                    context['response_message'] = (
-                        f"エラーが発生しました: {api_response.status_code} - {api_response.text}"
-                    )
-                    logger.error(
-                        f"OpenAI API error: {api_response.status_code} - {api_response.text}",
+                    context['response_message'] = "アドバイスの生成中にエラーが発生しました。しばらくしてから再度お試しください。"
+                    logger.warning(
+                        "Gemini API returned empty response",
                         extra={'user': request.user.id}
                     )
-            except requests.RequestException as e:
-                context['response_message'] = "APIへの接続中にエラーが発生しました。しばらくしてから再度お試しください。"
+            except ValueError as e:
+                # APIキー関連のエラー
+                error_msg = str(e)
+                if "GEMINI_API_KEY" in error_msg:
+                    context['response_message'] = "Gemini APIキーが設定されていません。管理者にお問い合わせください。"
+                else:
+                    context['response_message'] = f"設定エラー: {error_msg}"
                 logger.error(
-                    f"OpenAI API request error: {e}",
+                    f"Gemini API configuration error: {e}",
+                    exc_info=True,
+                    extra={'user': request.user.id}
+                )
+            except Exception as e:
+                error_type = type(e).__name__
+                error_msg = str(e)
+                context['response_message'] = f"APIへの接続中にエラーが発生しました（{error_type}）。しばらくしてから再度お試しください。"
+                logger.error(
+                    f"Gemini API error: {e}",
                     exc_info=True,
                     extra={'user': request.user.id}
                 )

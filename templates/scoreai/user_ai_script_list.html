@@ -1,0 +1,72 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="card-title mb-0">⚙️ マイスクリプト</h3>
+                    <a href="{% url 'user_ai_script_create' %}" class="btn btn-primary">新規作成</a>
+                </div>
+                <div class="card-body">
+                    {% if scripts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>相談タイプ</th>
+                                    <th>スクリプト名</th>
+                                    <th>デフォルト</th>
+                                    <th>有効</th>
+                                    <th>更新日時</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for script in scripts %}
+                                <tr>
+                                    <td>{{ script.consultation_type.icon }} {{ script.consultation_type.name }}</td>
+                                    <td>{{ script.name }}</td>
+                                    <td>
+                                        {% if script.is_default %}
+                                        <span class="badge bg-success">デフォルト</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if script.is_active %}
+                                        <span class="badge bg-success">有効</span>
+                                        {% else %}
+                                        <span class="badge bg-danger">無効</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ script.updated_at|date:"Y-m-d H:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'user_ai_script_edit' script.pk %}" class="btn btn-sm btn-outline-primary">編集</a>
+                                        <a href="{% url 'user_ai_script_delete' script.pk %}" class="btn btn-sm btn-outline-danger">削除</a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted">スクリプトが登録されていません。</p>
+                    <div class="text-center">
+                        <a href="{% url 'user_ai_script_create' %}" class="btn btn-primary">最初のスクリプトを作成</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

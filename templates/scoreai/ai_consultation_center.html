@@ -1,0 +1,69 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">🤖 AI相談センター</h3>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
+                    
+                    <div class="row">
+                        {% for consultation_type in consultation_types %}
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card consultation-card h-100" style="border-top: 4px solid {{ consultation_type.color }};">
+                                <div class="card-body d-flex flex-column">
+                                    <div class="consultation-card-icon text-center mb-3" style="font-size: 48px;">
+                                        {{ consultation_type.icon }}
+                                    </div>
+                                    <h5 class="card-title consultation-card-title text-center">
+                                        {{ consultation_type.name }}
+                                    </h5>
+                                    <p class="card-text consultation-card-description text-center flex-grow-1">
+                                        {{ consultation_type.description }}
+                                    </p>
+                                    <div class="text-center mt-auto">
+                                        <a href="{% url 'ai_consultation' consultation_type.id %}" class="btn btn-primary consultation-card-button">
+                                            相談開始 →
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center text-muted">相談タイプが登録されていません。</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.consultation-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+.consultation-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.consultation-card-button {
+    width: 100%;
+}
+</style>
+{% endblock %}
+
