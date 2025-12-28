@@ -1,0 +1,223 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row mt-4">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">{{ title }}</h5>
+      </div>
+      <div class="card-body">
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+            {{ message }}
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if storage_setting and is_connected %}
+        <div class="alert alert-success">
+          <h6><i class="fa-solid fa-check-circle"></i> 連携済み</h6>
+          <p class="mb-0">
+            <strong>ストレージタイプ:</strong> {{ storage_setting.get_storage_type_display }}<br>
+            <strong>連携日時:</strong> {{ storage_setting.created_at|date:"Y年m月d日 H:i" }}<br>
+            <strong>状態:</strong> SCORE AIがあなたの{{ storage_setting.get_storage_type_display }}にアクセス可能な状態です
+          </p>
+        </div>
+
+        {% if connection_status %}
+        <div class="card mt-3">
+          <div class="card-header">
+            <h6 class="card-title mb-0"><i class="fa-solid fa-network-wired"></i> 接続状態</h6>
+          </div>
+          <div class="card-body">
+            {% if connection_status.status == 'success' %}
+            <div class="alert alert-success mb-3">
+              <i class="fa-solid fa-check-circle"></i> {{ connection_status.message }}
+            </div>
+            {% if connection_status.user_email %}
+            <table class="table table-sm">
+              <tbody>
+                <tr>
+                  <th style="width: 40%;">Googleアカウント</th>
+                  <td>{{ connection_status.user_email }}</td>
+                </tr>
+                {% if connection_status.user_name %}
+                <tr>
+                  <th>表示名</th>
+                  <td>{{ connection_status.user_name }}</td>
+                </tr>
+                {% endif %}
+                {% if connection_status.storage_limit %}
+                <tr>
+                  <th>ストレージ容量</th>
+                  <td>
+                    {% if connection_status.storage_used %}
+                      {{ connection_status.storage_used|filesizeformat }} / {{ connection_status.storage_limit|filesizeformat }}
+                      {% if connection_status.storage_limit > 0 %}
+                        (使用率: {% widthratio connection_status.storage_used connection_status.storage_limit 100 %}%)
+                      {% endif %}
+                    {% else %}
+                      {{ connection_status.storage_limit|filesizeformat }}
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+            {% endif %}
+            {% else %}
+            <div class="alert alert-danger">
+              <i class="fa-solid fa-exclamation-triangle"></i> {{ connection_status.message }}
+            </div>
+            {% endif %}
+            <form method="post" action="{% url 'storage_test_connection' %}" class="mt-2">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-refresh"></i> 接続を再テスト
+              </button>
+            </form>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if token_status %}
+        <div class="card mt-3">
+          <div class="card-header">
+            <h6 class="card-title mb-0"><i class="fa-solid fa-key"></i> トークン状態</h6>
+          </div>
+          <div class="card-body">
+            <table class="table table-sm">
+              <tbody>
+                <tr>
+                  <th style="width: 40%;">アクセストークン</th>
+                  <td>
+                    {% if token_status.has_access_token %}
+                      <span class="badge bg-success">設定済み</span>
+                    {% else %}
+                      <span class="badge bg-danger">未設定</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                <tr>
+                  <th>リフレッシュトークン</th>
+                  <td>
+                    {% if token_status.has_refresh_token %}
+                      <span class="badge bg-success">設定済み</span>
+                    {% else %}
+                      <span class="badge bg-warning">未設定</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% if token_status.token_expires_at %}
+                <tr>
+                  <th>トークン有効期限</th>
+                  <td>
+                    {{ token_status.token_expires_at|date:"Y年m月d日 H:i" }}
+                    {% if token_status.is_valid %}
+                      <span class="badge bg-success ms-2">有効（あと{{ token_status.remaining_hours }}時間）</span>
+                    {% elif token_status.is_expired %}
+                      <span class="badge bg-danger ms-2">期限切れ</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="alert alert-info mt-3">
+          <h6><i class="fa-solid fa-info-circle"></i> アクセス権限について</h6>
+          <p class="mb-0">
+            あなたの{{ storage_setting.get_storage_type_display }}は、SCORE AIからアクセス可能な状態です。<br>
+            アップロードしたファイルは、あなたの{{ storage_setting.get_storage_type_display }}に自動的に保存されます。<br>
+            連携を解除する場合は、下の「連携を解除」ボタンをクリックしてください。
+          </p>
+        </div>
+
+        <div class="mt-3">
+          <form method="post" action="{% url 'storage_disconnect' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" onclick="return confirm('本当に連携を解除しますか？');">
+              <i class="fa-solid fa-unlink"></i> 連携を解除
+            </button>
+          </form>
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+          <h6><i class="fa-solid fa-info-circle"></i> クラウドストレージ連携について</h6>
+          <p>クラウドストレージと連携することで、アップロードしたドキュメントを自動的に保存し、管理できます。</p>
+          <p class="mb-0">対応ストレージ: Google Drive, Box, Dropbox, OneDrive</p>
+        </div>
+
+        <div class="mt-4">
+          <h6>ストレージを選択して連携を開始</h6>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body text-center">
+                  <i class="fab fa-google-drive fa-3x text-primary mb-3"></i>
+                  <h5>Google Drive</h5>
+                  <p class="text-muted">Googleアカウントでログインして連携</p>
+                  <a href="{% url 'storage_google_drive_auth' %}" class="btn btn-primary">
+                    <i class="fa-solid fa-link"></i> Google Driveと連携
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body text-center">
+                  <i class="fab fa-dropbox fa-3x text-primary mb-3"></i>
+                  <h5>Dropbox</h5>
+                  <p class="text-muted">準備中</p>
+                  <button class="btn btn-secondary" disabled>
+                    <i class="fa-solid fa-clock"></i> 準備中
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body text-center">
+                  <i class="fab fa-microsoft fa-3x text-primary mb-3"></i>
+                  <h5>OneDrive</h5>
+                  <p class="text-muted">準備中</p>
+                  <button class="btn btn-secondary" disabled>
+                    <i class="fa-solid fa-clock"></i> 準備中
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body text-center">
+                  <i class="fab fa-box fa-3x text-primary mb-3"></i>
+                  <h5>Box</h5>
+                  <p class="text-muted">準備中</p>
+                  <button class="btn btn-secondary" disabled>
+                    <i class="fa-solid fa-clock"></i> 準備中
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

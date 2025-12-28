@@ -220,8 +220,18 @@ class MoneyForwardCsvUploadForm_Month(forms.Form):
 
 class OcrUploadForm(forms.Form):
     """OCR用のフォーム（PDF/画像アップロード）"""
+    document_type = forms.ChoiceField(
+        choices=[
+            ('financial_statement', '決算書'),
+            ('loan_contract', '金銭消費貸借契約書'),
+        ],
+        label='書類タイプ',
+        initial='financial_statement',
+        required=True,
+        help_text='読み込む書類の種類を選択してください'
+    )
     file = forms.FileField(
-        label='決算書ファイル（PDF/画像）',
+        label='ファイル（PDF/画像）',
         required=True,
         help_text='PDF、PNG、JPEG形式をサポートしています'
     )
@@ -238,7 +248,7 @@ class OcrUploadForm(forms.Form):
     fiscal_year = forms.IntegerField(
         label='年度',
         required=False,
-        help_text='年度が自動検出できない場合に手動で入力してください'
+        help_text='決算書の場合、年度が自動検出できない場合に手動で入力してください'
     )
     override_flag = forms.BooleanField(
         required=False,
@@ -432,3 +442,24 @@ class UserAIConsultationScriptForm(forms.ModelForm):
         self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
         self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
         self.fields['prompt_template'].help_text = 'プロンプトテンプレート。利用可能な変数: {user_message}（ユーザーの質問）, {company_name}（会社名）, {industry}（業種）, {size}（規模）, {fiscal_summary}（決算書データ・JSON）, {debt_info}（借入情報・JSON）, {monthly_data}（月次推移データ・JSON）。使用例はフォーム下部を参照してください。'
+
+
+class CloudStorageSettingForm(forms.ModelForm):
+    """クラウドストレージ設定フォーム"""
+    class Meta:
+        from .models import CloudStorageSetting
+        model = CloudStorageSetting
+        fields = ['storage_type']
+        widgets = {
+            'storage_type': forms.Select(attrs={'class': 'form-control'}),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['storage_type'].choices = [
+            ('', '選択してください'),
+            ('google_drive', 'Google Drive'),
+            ('box', 'Box'),
+            ('dropbox', 'Dropbox'),
+            ('onedrive', 'OneDrive'),
+        ]

@@ -29,6 +29,17 @@ from .views.ai_script_views import (
     UserAIScriptUpdateView,
     UserAIScriptDeleteView,
 )
+from .views.storage_views import (
+    CloudStorageSettingView,
+    GoogleDriveOAuthInitView,
+    GoogleDriveOAuthCallbackView,
+    CloudStorageDisconnectView,
+    CloudStorageTestConnectionView,
+)
+from .views.storage_file_views import (
+    StorageFileListView,
+    StorageFileProcessView,
+)
 from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
@@ -195,4 +206,14 @@ urlpatterns = [
     path('settings/my-scripts/create/', UserAIScriptCreateView.as_view(), name='user_ai_script_create'),
     path('settings/my-scripts/<str:pk>/edit/', UserAIScriptUpdateView.as_view(), name='user_ai_script_edit'),
     path('settings/my-scripts/<str:pk>/delete/', UserAIScriptDeleteView.as_view(), name='user_ai_script_delete'),
+    
+    # クラウドストレージ設定
+    path('storage/setting/', CloudStorageSettingView.as_view(), name='storage_setting'),
+    path('storage/google-drive/auth/', GoogleDriveOAuthInitView.as_view(), name='storage_google_drive_auth'),
+    path('storage/google-drive/callback/', GoogleDriveOAuthCallbackView.as_view(), name='storage_google_drive_callback'),
+    path('storage/disconnect/', CloudStorageDisconnectView.as_view(), name='storage_disconnect'),
+    path('storage/test-connection/', CloudStorageTestConnectionView.as_view(), name='storage_test_connection'),
+    # ストレージファイル管理
+    path('storage/files/', StorageFileListView.as_view(), name='storage_file_list'),
+    path('storage/files/process/', StorageFileProcessView.as_view(), name='storage_file_process'),
 ]

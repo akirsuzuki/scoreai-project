@@ -225,3 +225,194 @@ def parse_financial_statement_from_text(text: str) -> Dict[str, Any]:
     
     return parsed_data
 
+
+def parse_loan_contract_from_text(text: str) -> Dict[str, Any]:
+    """
+    OCRで抽出したテキストから金銭消費貸借契約書データをパース
+    
+    注意: これは基本的な実装です。実際の契約書の形式に応じて
+    より高度なパースロジックが必要になる場合があります。
+    
+    Args:
+        text: OCRで抽出したテキスト
+        
+    Returns:
+        パースされた契約書データの辞書
+    """
+    import re
+    from decimal import Decimal, InvalidOperation
+    from datetime import datetime
+    
+    parsed_data = {
+        'financial_institution_name': None,
+        'principal': None,  # 借入元本（円）
+        'issue_date': None,  # 実行日
+        'start_date': None,  # 返済開始日
+        'interest_rate': None,  # 利息（%）
+        'monthly_repayment': None,  # 月返済額（円）
+        'is_securedby_management': None,  # 経営者保証
+        'is_collateraled': None,  # 担保
+    }
+    
+    # 金融機関名の抽出
+    # 一般的な金融機関名のパターン
+    financial_institution_patterns = [
+        r'(三菱UFJ銀行|三井住友銀行|みずほ銀行|りそな銀行|横浜銀行|静岡銀行|千葉銀行|きらぼし銀行)',
+        r'(地方銀行|信用金庫|信用組合|労働金庫)',
+        r'(株式会社\s*[^\s]+銀行)',
+        r'([^\s]+銀行)',
+        r'([^\s]+信用金庫)',
+        r'([^\s]+信用組合)',
+    ]
+    
+    for pattern in financial_institution_patterns:
+        match = re.search(pattern, text)
+        if match:
+            parsed_data['financial_institution_name'] = match.group(1).strip()
+            break
+    
+    # 借入元本の抽出（「金」「円」などの単位を含む）
+    principal_patterns = [
+        r'借入[金元本]*[：:]*\s*([\d,]+)\s*[千万億]*円',
+        r'元本[：:]*\s*([\d,]+)\s*[千万億]*円',
+        r'金額[：:]*\s*([\d,]+)\s*[千万億]*円',
+        r'([\d,]+)\s*[千万億]*円[^\d]*借入',
+        r'([\d,]+)\s*[千万億]*円[^\d]*元本',
+    ]
+    
+    for pattern in principal_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                value_str = match.group(1).replace(',', '').replace('，', '')
+                # 千万億の単位を処理
+                multiplier = 1
+                if '千万' in text[match.start():match.end()+20]:
+                    multiplier = 10000000
+                elif '万' in text[match.start():match.end()+20]:
+                    multiplier = 10000
+                elif '億' in text[match.start():match.end()+20]:
+                    multiplier = 100000000
+                elif '千' in text[match.start():match.end()+20]:
+                    multiplier = 1000
+                
+                value = int(Decimal(value_str) * multiplier)
+                parsed_data['principal'] = value
+                break
+            except (ValueError, InvalidOperation):
+                continue
+    
+    # 実行日の抽出
+    date_patterns = [
+        r'実行日[：:]*\s*(\d{4})[年/\-](\d{1,2})[月/\-](\d{1,2})日?',
+        r'契約日[：:]*\s*(\d{4})[年/\-](\d{1,2})[月/\-](\d{1,2})日?',
+        r'(\d{4})[年/\-](\d{1,2})[月/\-](\d{1,2})日?[^\d]*実行',
+        r'令和(\d+)年(\d{1,2})月(\d{1,2})日[^\d]*実行',
+    ]
+    
+    for pattern in date_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                if '令和' in pattern:
+                    reiwa_year = int(match.group(1))
+                    year = 2018 + reiwa_year
+                    month = int(match.group(2))
+                    day = int(match.group(3))
+                else:
+                    year = int(match.group(1))
+                    month = int(match.group(2))
+                    day = int(match.group(3))
+                parsed_data['issue_date'] = datetime(year, month, day).date()
+                break
+            except (ValueError, IndexError):
+                continue
+    
+    # 返済開始日の抽出
+    start_date_patterns = [
+        r'返済開始日[：:]*\s*(\d{4})[年/\-](\d{1,2})[月/\-](\d{1,2})日?',
+        r'(\d{4})[年/\-](\d{1,2})[月/\-](\d{1,2})日?[^\d]*返済開始',
+        r'令和(\d+)年(\d{1,2})月(\d{1,2})日[^\d]*返済開始',
+    ]
+    
+    for pattern in start_date_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                if '令和' in pattern:
+                    reiwa_year = int(match.group(1))
+                    year = 2018 + reiwa_year
+                    month = int(match.group(2))
+                    day = int(match.group(3))
+                else:
+                    year = int(match.group(1))
+                    month = int(match.group(2))
+                    day = int(match.group(3))
+                parsed_data['start_date'] = datetime(year, month, day).date()
+                break
+            except (ValueError, IndexError):
+                continue
+    
+    # 利息（年利）の抽出
+    interest_patterns = [
+        r'利息[：:]*\s*([\d.]+)\s*%',
+        r'年利[：:]*\s*([\d.]+)\s*%',
+        r'利率[：:]*\s*([\d.]+)\s*%',
+        r'([\d.]+)\s*%[^\d]*年利',
+        r'([\d.]+)\s*%[^\d]*利息',
+    ]
+    
+    for pattern in interest_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                value = Decimal(match.group(1))
+                parsed_data['interest_rate'] = float(value)
+                break
+            except (ValueError, InvalidOperation):
+                continue
+    
+    # 月返済額の抽出
+    monthly_repayment_patterns = [
+        r'月返済[額]*[：:]*\s*([\d,]+)\s*[千万億]*円',
+        r'返済額[：:]*\s*([\d,]+)\s*[千万億]*円',
+        r'([\d,]+)\s*[千万億]*円[^\d]*月返済',
+        r'([\d,]+)\s*[千万億]*円[^\d]*返済額',
+    ]
+    
+    for pattern in monthly_repayment_patterns:
+        match = re.search(pattern, text)
+        if match:
+            try:
+                value_str = match.group(1).replace(',', '').replace('，', '')
+                # 千万億の単位を処理
+                multiplier = 1
+                if '千万' in text[match.start():match.end()+20]:
+                    multiplier = 10000000
+                elif '万' in text[match.start():match.end()+20]:
+                    multiplier = 10000
+                elif '億' in text[match.start():match.end()+20]:
+                    multiplier = 100000000
+                elif '千' in text[match.start():match.end()+20]:
+                    multiplier = 1000
+                
+                value = int(Decimal(value_str) * multiplier)
+                parsed_data['monthly_repayment'] = value
+                break
+            except (ValueError, InvalidOperation):
+                continue
+    
+    # 経営者保証の有無
+    if re.search(r'経営者保証|代表者保証|個人保証', text):
+        parsed_data['is_securedby_management'] = True
+    elif re.search(r'経営者保証なし|代表者保証なし|個人保証なし', text):
+        parsed_data['is_securedby_management'] = False
+    
+    # 担保の有無
+    if re.search(r'担保[あり有]|抵当権|質権', text):
+        parsed_data['is_collateraled'] = True
+    elif re.search(r'担保なし|無担保', text):
+        parsed_data['is_collateraled'] = False
+    
+    return parsed_data
+

@@ -48,7 +48,13 @@
                                         <span class="badge bg-danger">無効</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ script.created_by.username if script.created_by else '-' }}</td>
+                                    <td>
+                                        {% if script.created_by %}
+                                        {{ script.created_by.username }}
+                                        {% else %}
+                                        -
+                                        {% endif %}
+                                    </td>
                                     <td>{{ script.updated_at|date:"Y-m-d H:i" }}</td>
                                     <td>
                                         <a href="{% url 'admin_ai_script_edit' script.pk %}" class="btn btn-sm btn-outline-primary">編集</a>

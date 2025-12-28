@@ -26,6 +26,9 @@ from .models import (
     AIConsultationScript,
     UserAIConsultationScript,
     AIConsultationHistory,
+    CloudStorageSetting,
+    DocumentFolder,
+    UploadedDocument,
 )
 from django import forms
 from django.core.exceptions import ValidationError
@@ -266,3 +269,66 @@ class AIConsultationHistoryAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'company__name', 'consultation_type__name')
     ordering = ('-created_at',)
     readonly_fields = ('created_at',)
+
+
+@admin.register(CloudStorageSetting)
+class CloudStorageSettingAdmin(admin.ModelAdmin):
+    list_display = ('user', 'storage_type', 'is_active', 'created_at', 'updated_at')
+    list_display_links = ('user',)
+    list_filter = ('storage_type', 'is_active', 'created_at')
+    search_fields = ('user__username', 'user__email')
+    ordering = ('-updated_at',)
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('user', 'storage_type', 'is_active')
+        }),
+        ('認証情報', {
+            'fields': ('access_token', 'refresh_token', 'token_expires_at'),
+            'classes': ('collapse',)
+        }),
+        ('フォルダ設定', {
+            'fields': ('root_folder_id',)
+        }),
+        ('タイムスタンプ', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )
+
+
+@admin.register(DocumentFolder)
+class DocumentFolderAdmin(admin.ModelAdmin):
+    list_display = ('name', 'folder_type', 'subfolder_type', 'order', 'is_active')
+    list_display_links = ('name',)
+    list_filter = ('folder_type', 'subfolder_type', 'is_active')
+    search_fields = ('name',)
+    ordering = ('folder_type', 'order', 'subfolder_type')
+    readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(UploadedDocument)
+class UploadedDocumentAdmin(admin.ModelAdmin):
+    list_display = ('company', 'document_type', 'stored_filename', 'storage_type', 'is_ocr_processed', 'is_data_saved', 'created_at')
+    list_display_links = ('stored_filename',)
+    list_filter = ('document_type', 'storage_type', 'is_ocr_processed', 'is_data_saved', 'created_at')
+    search_fields = ('company__name', 'stored_filename', 'original_filename', 'user__username')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at', 'ocr_processed_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('user', 'company', 'document_type', 'subfolder_type')
+        }),
+        ('ファイル情報', {
+            'fields': ('original_filename', 'stored_filename', 'storage_type', 'file_id', 'folder_id', 'file_url', 'file_size', 'mime_type')
+        }),
+        ('処理状態', {
+            'fields': ('is_ocr_processed', 'ocr_processed_at', 'is_data_saved', 'saved_to_model', 'saved_record_id')
+        }),
+        ('メタデータ', {
+            'fields': ('metadata',),
+            'classes': ('collapse',)
+        }),
+        ('タイムスタンプ', {
+            'fields': ('created_at', 'updated_at')
+        }),
+    )

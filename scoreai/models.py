@@ -883,6 +883,164 @@ class UserAIConsultationScript(models.Model):
         return f"{self.user.username} - {self.consultation_type.name} - {self.name}"
 
 
+class CloudStorageSetting(models.Model):
+    """クラウドストレージ設定（ユーザーごと）"""
+    STORAGE_CHOICES = [
+        ('google_drive', 'Google Drive'),
+        ('box', 'Box'),
+        ('dropbox', 'Dropbox'),
+        ('onedrive', 'OneDrive'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='cloud_storage_setting',
+        verbose_name="ユーザー"
+    )
+    storage_type = models.CharField(
+        "ストレージタイプ",
+        max_length=20,
+        choices=STORAGE_CHOICES,
+        null=True,
+        blank=True
+    )
+    access_token = models.TextField("アクセストークン", blank=True, help_text="OAuth2アクセストークン（暗号化推奨）")
+    refresh_token = models.TextField("リフレッシュトークン", blank=True, help_text="OAuth2リフレッシュトークン（暗号化推奨）")
+    token_expires_at = models.DateTimeField("トークン有効期限", null=True, blank=True)
+    root_folder_id = models.CharField("ルートフォルダID", max_length=255, blank=True, help_text="ストレージ内のルートフォルダID")
+    is_active = models.BooleanField("有効", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'クラウドストレージ設定'
+        verbose_name_plural = 'クラウドストレージ設定'
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_storage_type_display() or '未設定'}"
+
+
+class DocumentFolder(models.Model):
+    """ドキュメントフォルダ構造（システム規定）"""
+    FOLDER_TYPES = [
+        ('financial_statement', '決算書'),
+        ('trial_balance', '試算表'),
+        ('loan_contract', '金銭消費貸借契約書'),
+        ('contract', '契約書'),
+    ]
+    
+    SUBFOLDER_TYPES = [
+        ('balance_sheet', '貸借対照表'),
+        ('profit_loss', '損益計算書'),
+        ('monthly_pl', '月次推移損益計算書'),
+        ('department_pl', '部門別損益計算書'),
+        ('lease', 'リース契約書'),
+        ('sales', '商品売買契約'),
+        ('rental', '賃貸借契約'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    folder_type = models.CharField("フォルダタイプ", max_length=30, choices=FOLDER_TYPES)
+    subfolder_type = models.CharField("サブフォルダタイプ", max_length=30, choices=SUBFOLDER_TYPES, blank=True)
+    name = models.CharField("フォルダ名", max_length=100)
+    order = models.IntegerField("表示順", default=0)
+    is_active = models.BooleanField("有効", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'ドキュメントフォルダ'
+        verbose_name_plural = 'ドキュメントフォルダ'
+        unique_together = ('folder_type', 'subfolder_type')
+        ordering = ['folder_type', 'order', 'subfolder_type']
+    
+    def __str__(self):
+        if self.subfolder_type:
+            return f"{self.get_folder_type_display()} / {self.get_subfolder_type_display()}"
+        return self.get_folder_type_display()
+
+
+class UploadedDocument(models.Model):
+    """アップロードされたドキュメント"""
+    DOCUMENT_TYPES = [
+        ('financial_statement', '決算書'),
+        ('trial_balance', '試算表'),
+        ('loan_contract', '金銭消費貸借契約書'),
+        ('contract', '契約書'),
+        ('other', 'その他'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='uploaded_documents',
+        verbose_name="ユーザー"
+    )
+    company = models.ForeignKey(
+        'Company',
+        on_delete=models.CASCADE,
+        related_name='uploaded_documents',
+        verbose_name="会社"
+    )
+    document_type = models.CharField("ドキュメントタイプ", max_length=30, choices=DOCUMENT_TYPES)
+    subfolder_type = models.CharField("サブフォルダタイプ", max_length=30, blank=True)
+    original_filename = models.CharField("元のファイル名", max_length=255)
+    stored_filename = models.CharField("保存ファイル名", max_length=255, help_text="システムが自動生成したファイル名")
+    storage_type = models.CharField("ストレージタイプ", max_length=20, choices=CloudStorageSetting.STORAGE_CHOICES)
+    file_id = models.CharField("ファイルID", max_length=255, help_text="ストレージ内のファイルID")
+    folder_id = models.CharField("フォルダID", max_length=255, help_text="ストレージ内のフォルダID")
+    file_url = models.URLField("ファイルURL", max_length=500, blank=True)
+    file_size = models.BigIntegerField("ファイルサイズ（バイト）", null=True, blank=True)
+    mime_type = models.CharField("MIMEタイプ", max_length=100, blank=True)
+    
+    # OCR処理関連
+    is_ocr_processed = models.BooleanField("OCR処理済み", default=False)
+    ocr_processed_at = models.DateTimeField("OCR処理日時", null=True, blank=True)
+    
+    # データ保存関連
+    is_data_saved = models.BooleanField("データ保存済み", default=False)
+    saved_to_model = models.CharField("保存先モデル", max_length=50, blank=True, help_text="例: FiscalSummary_Year, Debt")
+    saved_record_id = models.CharField("保存レコードID", max_length=26, blank=True)
+    
+    # メタデータ
+    metadata = models.JSONField("メタデータ", null=True, blank=True, help_text="追加情報（年度、金融機関名など）")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'アップロードドキュメント'
+        verbose_name_plural = 'アップロードドキュメント'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['user', 'company', 'document_type']),
+            models.Index(fields=['is_ocr_processed']),
+            models.Index(fields=['is_data_saved']),
+        ]
+    
+    def __str__(self):
+        return f"{self.company.name} - {self.get_document_type_display()} - {self.stored_filename}"
+    
+    def get_subfolder_type_display(self):
+        """サブフォルダタイプの表示名を取得"""
+        if not self.subfolder_type:
+            return ''
+        
+        subfolder_names = {
+            'balance_sheet': '貸借対照表',
+            'profit_loss': '損益計算書',
+            'monthly_pl': '月次推移損益計算書',
+            'department_pl': '部門別損益計算書',
+            'lease': 'リース契約書',
+            'sales': '商品売買契約',
+            'rental': '賃貸借契約',
+        }
+        
+        return subfolder_names.get(self.subfolder_type, self.subfolder_type)
+
+
 class AIConsultationHistory(models.Model):
     """AI相談の履歴"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)

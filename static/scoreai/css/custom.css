@@ -2,6 +2,34 @@
   background-color: #f8d7da !important;
 }
 
+/* ヘッダーユーザーメニューのスタイル改善 */
+.dropdown-menu .message-body {
+  min-width: 200px;
+}
+
+.dropdown-menu .card-body {
+  padding: 1rem !important;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.dropdown-menu .dropdown-item {
+  padding: 0.75rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-menu .dropdown-item i {
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-menu .dropdown-divider {
+  margin: 0.5rem 0;
+}
+
 /* Index.HTMLのDebtのRowで使用 */
 #debt_table tbody tr {
   cursor: pointer;
@@ -230,5 +258,108 @@ div.dt-container {
     .btn, a, button {
         min-height: 44px; /* タッチターゲットの最小サイズ */
         min-width: 44px;
+    }
+}
+
+/* フッター固定スタイル */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    position: relative;
+}
+
+.body-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 100vh;
+    position: relative;
+    padding-bottom: 0;
+}
+
+.body-wrapper > .container-fluid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding-bottom: 0;
+    position: relative;
+}
+
+/* コンテンツが少ない場合でも、body-wrapperが画面全体の高さを確保 */
+.body-wrapper {
+    min-height: 100vh;
+}
+
+/* コンテンツが少ないページでもフッターが最下部に来るように */
+.body-wrapper > .container-fluid {
+    /* JavaScriptで動的に調整されるが、フォールバックとして最小高さを設定 */
+    min-height: calc(100vh - 200px); /* ヘッダーとフッターの高さを考慮 */
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 270px; /* サイドバーの幅（$sidebar-width-full: 270px） */
+    right: 0;
+    width: calc(100% - 270px); /* サイドバーの幅を引く */
+    z-index: 1000;
+    background-color: #f8f9fa !important;
+    border-top: 1px solid #dee2e6;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    transition: left 0.3s ease, width 0.3s ease;
+}
+
+/* サイドバーが折りたたまれている場合（ミニサイドバー） */
+.page-wrapper[data-sidebartype="mini"] footer,
+.page-wrapper.sidebar-collapsed footer {
+    left: 87px; /* ミニサイドバーの幅（$sidebar-width-mini: 87px） */
+    width: calc(100% - 87px);
+}
+
+/* アイコンバーサイドバーの場合 */
+.page-wrapper[data-sidebartype="iconbar"] footer {
+    left: 180px; /* アイコンバーサイドバーの幅（$sidebar-width-iconbar: 180px） */
+    width: calc(100% - 180px);
+}
+
+/* モバイル対応 */
+@media (max-width: 1024px) {
+    footer {
+        left: 0 !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .body-wrapper {
+        min-height: calc(100vh - 50px); /* モバイルではヘッダーが小さい */
+    }
+    
+    footer {
+        font-size: 0.875rem;
+        padding: 1.5rem 1rem !important;
+    }
+    
+    footer .col-md-3 {
+        margin-bottom: 1rem;
+    }
+    
+    footer h5 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
     }
 }

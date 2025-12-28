@@ -201,9 +201,14 @@
           </ul>
         </li>
 
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">データ取り込み</span>
+        </li>
+        
         <li class="sidebar-item">
           <a class="sidebar-link" href="#collapseCSVImport" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">📥 CSV取り込み</span><i class="fa-solid fa-angles-right ms-auto"></i>
+            <span class="hide-menu"><i class="ti ti-file-upload me-2"></i>CSV取り込み</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
           <ul id="collapseCSVImport" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
@@ -227,7 +232,7 @@
         
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'import_fiscal_summary_ocr' %}" aria-expanded="false">
-            <span class="hide-menu">📄 OCR読み込み</span>
+            <span class="hide-menu"><i class="ti ti-scan me-2"></i>OCR読み込み</span>
           </a>
         </li>
         
@@ -238,42 +243,50 @@
         
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'user_profile' %}" aria-expanded="false">
-            <span class="hide-menu">⚙️ プロフィール</span>
+            <span class="hide-menu"><i class="ti ti-user me-2"></i>プロフィール</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-script me-2"></i>マイスクリプト</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'storage_setting' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-cloud me-2"></i>クラウドストレージ</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'storage_file_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-files me-2"></i>ストレージファイル</span>
           </a>
         </li>
         
         {% if user.is_superuser %}
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'admin_ai_script_list' %}" aria-expanded="false">
-            <span class="hide-menu">⚙️ AIスクリプト管理</span>
+            <span class="hide-menu"><i class="ti ti-settings me-2"></i>AIスクリプト管理</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
+            <span class="hide-menu"><i class="ti ti-shield me-2"></i>管理画面</span>
           </a>
         </li>
         {% endif %}
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
-            <span class="hide-menu">⚙️ マイスクリプト</span>
-          </a>
-        </li>
 
         <!-- コンサルタントの場合のみ表示 -->
         {% if user.is_financial_consultant %}
-
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Consultant Menu</span>
         </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
-            <span class="hide-menu">クライアント一覧</span>
-          </a>
-        </li>
-
-        {% endif %}
-        {% if user.is_superuser %}
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
-            <span class="hide-menu">管理画面</span>
+            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
           </a>
         </li>
         {% endif %}
