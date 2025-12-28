@@ -55,9 +55,9 @@ financial = AIConsultationType.objects.create(
     is_active=True
 )
 
-# 補助金相談
+# 補助金・助成金相談
 subsidy = AIConsultationType.objects.create(
-    name="補助金相談",
+    name="補助金・助成金相談",
     icon="💼",
     description="業種・規模を基に提案",
     order=2,

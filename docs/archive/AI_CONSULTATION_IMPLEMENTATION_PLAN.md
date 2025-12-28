@@ -9,7 +9,7 @@
 ### 1. 相談タイプ（AIConsultationType）
 ```python
 class AIConsultationType(models.Model):
-    """相談タイプ（財務、補助金、税務、法律など）"""
+    """相談タイプ（財務、補助金・助成金、税務、法律など）"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     name = models.CharField(max_length=50, unique=True)  # "財務相談"
     icon = models.CharField(max_length=20)  # "💰"
@@ -231,10 +231,10 @@ def get_financial_consultation_data(company: Company) -> dict:
     }
 ```
 
-### 補助金相談
+### 補助金・助成金相談
 ```python
 def get_subsidy_consultation_data(company: Company) -> dict:
-    """補助金相談に必要なデータを収集"""
+    """補助金・助成金相談に必要なデータを収集"""
     # 会社情報
     # 決算データ（売上、従業員数など）
     # 業種情報

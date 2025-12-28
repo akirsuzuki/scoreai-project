@@ -1,0 +1,85 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <article class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <span class="badge bg-secondary">{{ announcement.post_date|date:"Y年m月d日" }}</span>
+                        {% if announcement.categories.all %}
+                            {% for category in announcement.categories.all %}
+                                <span class="badge bg-info">{{ category.name }}</span>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">作成者: {{ announcement.written_by.username }}</small>
+                </div>
+                
+                <h1 class="card-title mb-4">{{ announcement.title }}</h1>
+                
+                <div class="announcement-content">
+                    {{ announcement.article|linebreaks }}
+                </div>
+            </div>
+        </article>
+
+        <div class="mt-4">
+            <a href="{% url 'announcement_list' %}" class="btn btn-outline-primary">← Blog一覧に戻る</a>
+        </div>
+
+        <!-- 関連記事 -->
+        {% if related_announcements %}
+        <div class="mt-5">
+            <h3>関連記事</h3>
+            <div class="row">
+                {% for related in related_announcements %}
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{% url 'announcement_detail' related.pk %}" class="text-decoration-none">{{ related.title }}</a>
+                            </h5>
+                            <p class="card-text">
+                                <small class="text-muted">{{ related.post_date|date:"Y年m月d日" }}</small>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- サイドバー -->
+    <div class="col-lg-4">
+        {% if recent_announcements %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">最新記事</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for recent in recent_announcements %}
+                    <li class="list-group-item">
+                        <a href="{% url 'announcement_detail' recent.pk %}" class="text-decoration-none">{{ recent.title }}</a>
+                        <br>
+                        <small class="text-muted">{{ recent.post_date|date:"Y年m月d日" }}</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

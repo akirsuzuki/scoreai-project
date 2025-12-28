@@ -377,12 +377,48 @@ class MeetingMinutes(models.Model):
         return F"{self.company.name}"
 
 
+class BlogCategory(models.Model):
+    """ブログカテゴリー"""
+    name = models.CharField(max_length=50, unique=True, verbose_name="カテゴリー名")
+    slug = models.SlugField(max_length=50, unique=True, verbose_name="スラッグ")
+    description = models.TextField(blank=True, verbose_name="説明")
+    order = models.IntegerField(default=0, verbose_name="表示順")
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
+    
+    class Meta:
+        verbose_name = "ブログカテゴリー"
+        verbose_name_plural = "ブログカテゴリー"
+        ordering = ['order', 'name']
+    
+    def __str__(self):
+        return self.name
+
+
 class Blog(models.Model):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, verbose_name="タイトル")
     post_date = models.DateField("投稿日")
-    article = models.TextField()
-    is_draft = models.BooleanField(default=False)
-    written_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    article = models.TextField(verbose_name="本文")
+    is_draft = models.BooleanField(default=False, verbose_name="下書き")
+    written_by = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="作成者")
+    categories = models.ManyToManyField(
+        BlogCategory,
+        blank=True,
+        related_name='blogs',
+        verbose_name="カテゴリー"
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
+    
+    class Meta:
+        verbose_name = "ブログ"
+        verbose_name_plural = "ブログ"
+        ordering = ['-post_date', '-created_at']
+        indexes = [
+            models.Index(fields=['-post_date']),
+            models.Index(fields=['is_draft']),
+        ]
     
     def __str__(self):
         return self.title
@@ -804,7 +840,7 @@ class Help(models.Model):
 
 # AI相談機能関連のモデル
 class AIConsultationType(models.Model):
-    """相談タイプ（財務、補助金、税務、法律など）"""
+    """相談タイプ（財務、補助金・助成金、税務、法律など）"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     name = models.CharField(max_length=50, unique=True, verbose_name="相談タイプ名")  # "財務相談"
     icon = models.CharField(max_length=20, verbose_name="アイコン")  # "💰"

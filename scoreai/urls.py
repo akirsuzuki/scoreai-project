@@ -40,6 +40,10 @@ from .views.storage_file_views import (
     StorageFileListView,
     StorageFileProcessView,
 )
+from .views.blog_views import (
+    AnnouncementListView,
+    AnnouncementDetailView,
+)
 from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
@@ -216,4 +220,8 @@ urlpatterns = [
     # ストレージファイル管理
     path('storage/files/', StorageFileListView.as_view(), name='storage_file_list'),
     path('storage/files/process/', StorageFileProcessView.as_view(), name='storage_file_process'),
+    
+    # お知らせ（ブログ記事を表示）
+    path('announcement/', AnnouncementListView.as_view(), name='announcement_list'),
+    path('announcement/<int:pk>/', AnnouncementDetailView.as_view(), name='announcement_detail'),
 ]

@@ -18,7 +18,7 @@
 
 🤖 AI相談センター（新設・目立つ位置）
    ├─ 💰 財務相談
-   ├─ 💼 補助金相談
+   ├─ 💼 補助金・助成金相談
    ├─ 📋 税務相談
    ├─ ⚖️ 法律相談
    └─ ⚙️ 相談設定（スクリプト管理）
@@ -62,7 +62,7 @@
 ├─────────────────────────────────────────────────────────┤
 │                                                          │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐ │
-│  │  💰 財務相談  │  │  💼 補助金相談 │  │  📋 税務相談  │ │
+│  │  💰 財務相談  │  │  💼 補助金・助成金相談 │  │  📋 税務相談  │ │
 │  │              │  │              │  │              │ │
 │  │  決算書データ │  │  業種・規模   │  │  税務情報    │ │
 │  │  を基に分析  │  │  を基に提案  │  │  を基に提案  │ │
@@ -140,7 +140,7 @@
 #### データモデル
 ```python
 class AIConsultationType(models.Model):
-    """相談タイプ（財務、補助金、税務、法律など）"""
+    """相談タイプ（財務、補助金・助成金、税務、法律など）"""
     name = models.CharField(max_length=50)  # "財務相談"
     icon = models.CharField(max_length=20)  # "💰"
     description = models.TextField()
@@ -174,10 +174,10 @@ class UserAIConsultationScript(models.Model):
 - 借入情報（Debt）
 - 業界比較データ（IndustryBenchmark）
 
-#### 補助金相談
+#### 補助金・助成金相談
 - 会社情報（Company: 業種、規模、所在地）
 - 決算書データ（売上、従業員数など）
-- 補助金マスタデータ（新規作成）
+- 補助金・助成金マスタデータ（新規作成）
 
 #### 税務相談
 - 決算書データ
@@ -203,7 +203,7 @@ class UserAIConsultationScript(models.Model):
 
 ### Phase 3: 相談タイプの追加
 1. 財務相談の改善
-2. 補助金相談の実装
+2. 補助金・助成金相談の実装
 3. 税務相談の実装
 4. 法律相談の実装
 
@@ -273,7 +273,7 @@ def get_consultation_data(consultation_type: str, company: Company) -> dict:
     if consultation_type == "財務相談":
         data['fiscal_summary'] = get_fiscal_summary_data(company)
         data['debt_info'] = get_debt_data(company)
-    elif consultation_type == "補助金相談":
+    elif consultation_type == "補助金・助成金相談":
         data['company_info'] = get_company_info(company)
         data['financial_data'] = get_financial_data(company)
     # ... 他の相談タイプ
@@ -292,7 +292,7 @@ def get_consultation_data(consultation_type: str, company: Company) -> dict:
 │                            │
 │  🤖 AI相談センター [NEW]    │ ← 目立つ
 │    ├─ 💰 財務相談          │
-│    ├─ 💼 補助金相談        │
+│    ├─ 💼 補助金・助成金相談        │
 │    ├─ 📋 税務相談          │
 │    ├─ ⚖️ 法律相談          │
 │    └─ ⚙️ 相談設定          │
@@ -316,7 +316,7 @@ def get_consultation_data(consultation_type: str, company: Company) -> dict:
 │  提供します。                                       │
 │                                                     │
 │  ┌─────────────┐  ┌─────────────┐                │
-│  │ 💰 財務相談  │  │ 💼 補助金相談 │                │
+│  │ 💰 財務相談  │  │ 💼 補助金・助成金相談 │                │
 │  │             │  │             │                │
 │  │ 決算書データ │  │ 業種・規模   │                │
 │  │ を基に分析  │  │ を基に提案  │                │

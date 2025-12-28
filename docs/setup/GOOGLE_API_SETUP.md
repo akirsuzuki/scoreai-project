@@ -10,7 +10,7 @@
 ## 2つのAPIの違い
 
 ### 1. Google Gemini API（AI相談機能）
-- **用途**: AI相談機能（財務相談、補助金相談など）
+- **用途**: AI相談機能（財務相談、補助金・助成金相談など）
 - **認証方法**: **APIキー（文字列）**
 - **設定場所**: `GEMINI_API_KEY`
 - **取得方法**: [Google AI Studio](https://makersuite.google.com/app/apikey)から取得

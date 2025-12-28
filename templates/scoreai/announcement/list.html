@@ -1,0 +1,108 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <h1 class="mb-4">Blog</h1>
+        
+        <!-- 検索フォーム -->
+        <form method="get" class="mb-4">
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="検索..." value="{{ search_query }}">
+                <button class="btn btn-primary" type="submit">検索</button>
+            </div>
+        </form>
+
+        <!-- Blog一覧 -->
+        {% if announcements %}
+            {% for announcement in announcements %}
+            <article class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <span class="badge bg-secondary">{{ announcement.post_date|date:"Y年m月d日" }}</span>
+                            {% if announcement.categories.all %}
+                                {% for category in announcement.categories.all %}
+                                    <span class="badge bg-info">{{ category.name }}</span>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <small class="text-muted">作成者: {{ announcement.written_by.username }}</small>
+                    </div>
+                    <h3 class="card-title">
+                        <a href="{% url 'announcement_detail' announcement.pk %}" class="text-decoration-none">{{ announcement.title }}</a>
+                    </h3>
+                    <p class="card-text text-muted">
+                        {{ announcement.article|truncatewords:50|linebreaks }}
+                    </p>
+                    <a href="{% url 'announcement_detail' announcement.pk %}" class="btn btn-sm btn-outline-primary">続きを読む</a>
+                </div>
+            </article>
+            {% endfor %}
+
+            <!-- ページネーション -->
+            {% if is_paginated %}
+            <nav aria-label="ページネーション">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">前へ</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}">次へ</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <p class="text-muted">記事がありません。</p>
+        {% endif %}
+    </div>
+
+    <!-- サイドバー -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">カテゴリー</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'announcement_list' %}" class="{% if not selected_category %}fw-bold{% endif %} text-decoration-none d-block">すべて</a>
+                    </li>
+                    {% for category in categories %}
+                    <li class="list-group-item">
+                        <a href="?category={{ category.slug }}" class="{% if selected_category == category.slug %}fw-bold{% endif %} text-decoration-none d-block">
+                            {{ category.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

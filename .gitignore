@@ -15,6 +15,9 @@ DOCKER_SETUP.md
 server.pass.key
 # Google Cloud認証情報
 credentials/
+
+# マーケティング戦略（機密情報含む可能性があるため）
+MARKETING_STRATEGY.md
 *.json
 !package.json
 !package-lock.json

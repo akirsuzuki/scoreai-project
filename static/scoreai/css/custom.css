@@ -295,6 +295,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 0;
+    padding: 1.5rem 2rem;
     padding-bottom: 0;
     position: relative;
 }
@@ -308,6 +309,22 @@ body {
 .body-wrapper > .container-fluid {
     /* JavaScriptで動的に調整されるが、フォールバックとして最小高さを設定 */
     min-height: calc(100vh - 200px); /* ヘッダーとフッターの高さを考慮 */
+}
+
+/* レスポンシブ対応：モバイルではパディングを小さく */
+@media (max-width: 768px) {
+    .body-wrapper > .container-fluid {
+        padding: 1rem;
+        padding-bottom: 0;
+    }
+}
+
+/* タブレット対応 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .body-wrapper > .container-fluid {
+        padding: 1.25rem 1.5rem;
+        padding-bottom: 0;
+    }
 }
 
 footer {
@@ -362,4 +379,13 @@ footer {
         font-size: 1rem;
         margin-bottom: 0.5rem;
     }
+}
+
+/* Blog/お知らせページのカテゴリー表示 */
+.announcement .list-group-item a,
+.blog .list-group-item a {
+    word-wrap: break-word;
+    white-space: normal;
+    display: block;
+    width: 100%;
 }

@@ -1631,6 +1631,11 @@ class MeetingMinutesCreateView(SelectedCompanyMixin, CreateView):
         initial['meeting_date'] = timezone.now().date()
         return initial
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '新規ミーティングノート作成'
+        return context
+
 class MeetingMinutesUpdateView(SelectedCompanyMixin, UpdateView):
     model = MeetingMinutes
     form_class = MeetingMinutesForm
@@ -1649,6 +1654,11 @@ class MeetingMinutesUpdateView(SelectedCompanyMixin, UpdateView):
         form.instance.company = self.object.company
         form.instance.created_by = self.object.created_by
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ミーティングノート編集'
+        return context
 
 
 class MeetingMinutesListView(SelectedCompanyMixin, ListView):

@@ -6,12 +6,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
+<div class="row">
+    <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title mb-0">🤖 AI相談センター</h3>
+                    <h3 class="card-title mb-0">AI相談センター</h3>
                 </div>
                 <div class="card-body">
                     <p class="mb-4">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
@@ -21,9 +20,6 @@
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card consultation-card h-100" style="border-top: 4px solid {{ consultation_type.color }};">
                                 <div class="card-body d-flex flex-column">
-                                    <div class="consultation-card-icon text-center mb-3" style="font-size: 48px;">
-                                        {{ consultation_type.icon }}
-                                    </div>
                                     <h5 class="card-title consultation-card-title text-center">
                                         {{ consultation_type.name }}
                                     </h5>
@@ -48,7 +44,6 @@
             </div>
         </div>
     </div>
-</div>
 
 <style>
 .consultation-card {

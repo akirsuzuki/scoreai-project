@@ -11,6 +11,7 @@ from .models import (
     Debt,
     MeetingMinutes,
     Blog,
+    BlogCategory,
     FiscalSummary_Year,
     FiscalSummary_Month,
     Stakeholder_name,
@@ -163,7 +164,32 @@ class FinancialInstitutionAdmin(admin.ModelAdmin):
         }),
     )
 
-admin.site.register(Blog)
+@admin.register(BlogCategory)
+class BlogCategoryAdmin(admin.ModelAdmin):
+    """ブログカテゴリー管理"""
+    list_display = ('name', 'slug', 'order', 'is_active', 'created_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('name', 'description')
+    prepopulated_fields = {'slug': ('name',)}
+    ordering = ('order', 'name')
+
+
+@admin.register(Blog)
+class BlogAdmin(admin.ModelAdmin):
+    """ブログ管理"""
+    list_display = ('title', 'post_date', 'written_by', 'is_draft', 'created_at')
+    list_filter = ('is_draft', 'post_date', 'categories', 'created_at')
+    search_fields = ('title', 'article')
+    filter_horizontal = ('categories',)
+    date_hierarchy = 'post_date'
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('title', 'post_date', 'article', 'written_by', 'is_draft')
+        }),
+        ('カテゴリー', {
+            'fields': ('categories',)
+        }),
+    )
 
 admin.site.register(SecuredType)
 

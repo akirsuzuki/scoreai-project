@@ -92,6 +92,11 @@ class AdminAIScriptDeleteView(UserPassesTestMixin, DeleteView):
         messages.success(self.request, 'スクリプトを削除しました。')
         return super().delete(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'AIスクリプト削除確認（システム）'
+        return context
+
 
 # ユーザー用ビュー
 class UserAIScriptListView(LoginRequiredMixin, ListView):
@@ -164,4 +169,9 @@ class UserAIScriptDeleteView(LoginRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, 'スクリプトを削除しました。')
         return super().delete(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'マイスクリプト削除確認'
+        return context
 

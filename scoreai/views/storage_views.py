@@ -115,6 +115,11 @@ class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
     """Google Drive OAuth認証コールバック"""
     template_name = 'scoreai/storage_oauth_callback.html'
     
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Google Drive認証中'
+        return context
+    
     def get(self, request, *args, **kwargs):
         """OAuth認証コールバック処理"""
         code = request.GET.get('code')
@@ -234,6 +239,11 @@ class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
 class CloudStorageDisconnectView(LoginRequiredMixin, TemplateView):
     """クラウドストレージ連携解除"""
     template_name = 'scoreai/storage_disconnect.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'クラウドストレージ連携解除'
+        return context
     
     def post(self, request, *args, **kwargs):
         """連携解除処理"""

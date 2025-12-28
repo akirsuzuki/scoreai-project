@@ -108,7 +108,8 @@ def get_consultation_data(consultation_type: AIConsultationType, company: Compan
         data['fiscal_summary'] = get_fiscal_summary_data(company)
         data['debt_info'] = get_debt_data(company)
         data['monthly_data'] = get_monthly_data(company)
-    elif '補助金' in consultation_type_name:
+    # 補助金・助成金相談（後方互換性のため「補助金」もチェック）
+    elif '補助金・助成金' in consultation_type_name or '補助金' in consultation_type_name:
         data['fiscal_summary'] = get_fiscal_summary_data(company)
         data['company_info'] = get_company_info(company)
     elif '税務' in consultation_type_name:

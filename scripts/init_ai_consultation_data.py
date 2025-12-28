@@ -26,7 +26,7 @@ consultation_types_data = [
         'color': '#4CAF50',
     },
     {
-        'name': '補助金相談',
+        'name': '補助金・助成金相談',
         'icon': '💼',
         'description': '業種・規模を基に提案',
         'order': 2,
@@ -119,9 +119,9 @@ if consultation_types.get('財務相談'):
     else:
         print("→ 財務相談のデフォルトスクリプトは既に存在します")
 
-# 補助金相談のデフォルトスクリプト
-subsidy_script = """あなたは補助金申請の専門家です。
-会社の業種、規模、財務状況を基に、適切な補助金制度を提案してください。
+# 補助金・助成金相談のデフォルトスクリプト
+subsidy_script = """あなたは補助金・助成金申請の専門家です。
+会社の業種、規模、財務状況を基に、適切な補助金・助成金制度を提案してください。
 返答は日本語で、分かりやすく、具体的な手続き方法も含めて説明してください。"""
 
 subsidy_template = """【会社情報】
@@ -136,16 +136,16 @@ subsidy_template = """【会社情報】
 {user_message}
 
 上記の情報を基に、以下の点を考慮して回答してください：
-1. 該当する可能性のある補助金制度
+1. 該当する可能性のある補助金・助成金制度
 2. 申請のタイミングと期限
 3. 必要な書類と手続き
 4. 申請のポイントと注意事項
 
 回答は日本語で、専門的すぎない言葉で説明してください。"""
 
-if consultation_types.get('補助金相談'):
+if consultation_types.get('補助金・助成金相談'):
     script, created = AIConsultationScript.objects.get_or_create(
-        consultation_type=consultation_types['補助金相談'],
+        consultation_type=consultation_types['補助金・助成金相談'],
         is_default=True,
         defaults={
             'name': 'デフォルト',
@@ -156,9 +156,9 @@ if consultation_types.get('補助金相談'):
         }
     )
     if created:
-        print("✓ 補助金相談のデフォルトスクリプトを作成しました")
+        print("✓ 補助金・助成金相談のデフォルトスクリプトを作成しました")
     else:
-        print("→ 補助金相談のデフォルトスクリプトは既に存在します")
+        print("→ 補助金・助成金相談のデフォルトスクリプトは既に存在します")
 
 # 税務相談のデフォルトスクリプト
 tax_script = """あなたは税務の専門家です。
