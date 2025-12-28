@@ -44,6 +44,15 @@ from .views.blog_views import (
     AnnouncementListView,
     AnnouncementDetailView,
 )
+from .views.plan_views import (
+    PlanListView,
+    PlanDetailView,
+    SubscriptionManageView,
+    SubscriptionCreateView,
+    SubscriptionSuccessView,
+    SubscriptionCancelView,
+)
+from .views.stripe_webhook_views import StripeWebhookView
 from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
@@ -224,4 +233,14 @@ urlpatterns = [
     # お知らせ（ブログ記事を表示）
     path('announcement/', AnnouncementListView.as_view(), name='announcement_list'),
     path('announcement/<int:pk>/', AnnouncementDetailView.as_view(), name='announcement_detail'),
+    
+    # プラン管理（より具体的なパターンを先に配置）
+    path('plans/<str:firm_id>/subscription/create/<str:plan_id>/', SubscriptionCreateView.as_view(), name='subscription_create'),
+    path('plans/<str:firm_id>/subscription/success/', SubscriptionSuccessView.as_view(), name='subscription_success'),
+    path('plans/<str:firm_id>/subscription/cancel/', SubscriptionCancelView.as_view(), name='subscription_cancel'),
+    path('plans/<str:firm_id>/subscription/', SubscriptionManageView.as_view(), name='subscription_manage'),
+    path('plans/<str:firm_id>/<str:plan_id>/', PlanDetailView.as_view(), name='plan_detail'),
+    path('plans/<str:firm_id>/', PlanListView.as_view(), name='plan_list'),
+    # Stripe Webhook
+    path('stripe/webhook/', StripeWebhookView.as_view(), name='stripe_webhook'),
 ]

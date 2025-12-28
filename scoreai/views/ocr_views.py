@@ -17,6 +17,7 @@ from ..models import (
 )
 from ..forms import OcrUploadForm
 from ..utils.document_naming import generate_document_filename, get_folder_path
+from ..utils.usage_tracking import increment_ocr_count
 try:
     from ..utils.ocr import (
         extract_text_from_image,
@@ -217,6 +218,15 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
                 setattr(fiscal_summary_year, field, value)
             fiscal_summary_year.save()
 
+        # 利用状況をカウント
+        usage_incremented = increment_ocr_count(self.this_company.firm)
+        if not usage_incremented:
+            messages.error(
+                request,
+                'OCR読み込みの利用制限に達しています。プランをアップグレードするか、管理者にお問い合わせください。'
+            )
+            return self.get(request)
+        
         messages.success(
             request,
             f'OCR読み込みが完了しました。{fiscal_year}年のデータを更新しました。'
@@ -291,6 +301,15 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
             secured_type=secured_type,
         )
         debt.save()
+        
+        # 利用状況をカウント
+        usage_incremented = increment_ocr_count(self.this_company.firm)
+        if not usage_incremented:
+            messages.error(
+                request,
+                'OCR読み込みの利用制限に達しています。プランをアップグレードするか、管理者にお問い合わせください。'
+            )
+            return self.get(request)
         
         messages.success(
             request,

@@ -163,8 +163,10 @@ except ImportError:
     ALLOWED_HOSTS = ['.herokuapp.com', 'www.score-ai.net', 'score-ai.net', '0.0.0.0', '127.0.0.1']
     # EMAIL_HOST_USER = 'sth' or os.environ['EMAIL_HOST_USER']
     # EMAIL_HOST_PASSWORD = 'sth' or os.environ['EMAIL_HOST_PASSWORD']
-    # STRIPE_PUBLIC_KEY = 'sth' or os.environ['STRIPE_PUBLIC_KEY']
-    # STRIPE_SECRET_KEY = 'sth' or os.environ['STRIPE_SECRET_KEY']
+    # Stripe設定
+    STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+    STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
     # AWS_ACCESS_KEY_ID = 'sth' or os.environ['AWS_ACCESS_KEY_ID']
     # AWS_SECRET_ACCESS_KEY = 'sth' or os.environ['AWS_SECRET_ACCESS_KEY']
     import dj_database_url

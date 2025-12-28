@@ -173,6 +173,242 @@ class FirmCompany(models.Model):
         unique_together = ('firm', 'company')
 
 
+# プラン・サブスクリプション関連のモデル
+
+class FirmPlan(models.Model):
+    """Firm向けプランの定義"""
+    PLAN_TYPE_CHOICES = [
+        ('free', 'Freeプラン（無料・試用）'),
+        ('starter', 'Starterプラン'),
+        ('professional', 'Professionalプラン'),
+        ('enterprise', 'Enterpriseプラン'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    plan_type = models.CharField('プランタイプ', max_length=20, choices=PLAN_TYPE_CHOICES, unique=True)
+    name = models.CharField('プラン名', max_length=255)
+    description = models.TextField('説明', blank=True)
+    
+    # 料金設定
+    monthly_price = models.DecimalField('月額料金', max_digits=10, decimal_places=2, default=0)
+    yearly_price = models.DecimalField('年額料金', max_digits=10, decimal_places=2, null=True, blank=True)
+    yearly_discount_months = models.IntegerField('年払い割引（無料月数）', default=2)
+    
+    # 機能制限
+    max_companies = models.IntegerField('最大Company数', default=1, help_text='0の場合は無制限')
+    max_ai_consultations_per_month = models.IntegerField('月間AI相談回数上限', default=10, help_text='0の場合は無制限')
+    max_ocr_per_month = models.IntegerField('月間OCR読み込み回数上限', default=5, help_text='0の場合は無制限')
+    
+    # 機能フラグ
+    cloud_storage_google_drive = models.BooleanField('Google Drive連携', default=False)
+    cloud_storage_box = models.BooleanField('Box連携', default=False)
+    cloud_storage_dropbox = models.BooleanField('Dropbox連携', default=False)
+    cloud_storage_onedrive = models.BooleanField('OneDrive連携', default=False)
+    
+    report_basic = models.BooleanField('基本レポート', default=True)
+    report_advanced = models.BooleanField('高度なレポート（PDF/Excel）', default=False)
+    report_custom = models.BooleanField('カスタムレポート', default=False)
+    
+    marketing_support = models.BooleanField('マーケティング支援', default=False)
+    marketing_support_seminar = models.IntegerField('セミナー共催回数/年', default=0)
+    marketing_support_offline = models.IntegerField('オフ会実施支援回数/年', default=0)
+    marketing_support_newsletter = models.BooleanField('メルマガ配信支援', default=False)
+    
+    api_integration = models.BooleanField('API連携', default=False)
+    priority_support = models.BooleanField('優先サポート', default=False)
+    profile_page_enhanced = models.BooleanField('プロフィールページ強化', default=False)
+    
+    # Stripe関連
+    stripe_price_id_monthly = models.CharField('Stripe月額価格ID', max_length=255, blank=True)
+    stripe_price_id_yearly = models.CharField('Stripe年額価格ID', max_length=255, blank=True)
+    
+    is_active = models.BooleanField('有効', default=True)
+    order = models.IntegerField('表示順', default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Firmプラン'
+        verbose_name_plural = 'Firmプラン'
+        ordering = ['order', 'plan_type']
+    
+    def __str__(self):
+        return self.name
+    
+    @property
+    def is_unlimited_companies(self):
+        """Company数が無制限かどうか"""
+        return self.max_companies == 0
+    
+    @property
+    def is_unlimited_ai_consultations(self):
+        """AI相談回数が無制限かどうか"""
+        return self.max_ai_consultations_per_month == 0
+    
+    @property
+    def is_unlimited_ocr(self):
+        """OCR回数が無制限かどうか"""
+        return self.max_ocr_per_month == 0
+
+
+class FirmSubscription(models.Model):
+    """Firmのプラン契約情報"""
+    STATUS_CHOICES = [
+        ('trial', '試用期間中'),
+        ('active', '有効'),
+        ('past_due', '支払い遅延'),
+        ('canceled', 'キャンセル済み'),
+        ('unpaid', '未払い'),
+        ('incomplete', '未完了'),
+        ('incomplete_expired', '未完了（期限切れ）'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    firm = models.OneToOneField(Firm, on_delete=models.CASCADE, related_name='subscription', verbose_name='Firm')
+    plan = models.ForeignKey(FirmPlan, on_delete=models.PROTECT, related_name='subscriptions', verbose_name='プラン')
+    
+    # 契約期間
+    status = models.CharField('ステータス', max_length=20, choices=STATUS_CHOICES, default='trial')
+    started_at = models.DateTimeField('開始日時', auto_now_add=True)
+    trial_ends_at = models.DateTimeField('試用期間終了日時', null=True, blank=True)
+    current_period_start = models.DateTimeField('現在の請求期間開始日時', null=True, blank=True)
+    current_period_end = models.DateTimeField('現在の請求期間終了日時', null=True, blank=True)
+    canceled_at = models.DateTimeField('キャンセル日時', null=True, blank=True)
+    ends_at = models.DateTimeField('終了日時', null=True, blank=True)
+    
+    # Stripe関連
+    stripe_customer_id = models.CharField('Stripe顧客ID', max_length=255, blank=True)
+    stripe_subscription_id = models.CharField('StripeサブスクリプションID', max_length=255, blank=True)
+    stripe_price_id = models.CharField('Stripe価格ID', max_length=255, blank=True)
+    stripe_payment_method_id = models.CharField('Stripe支払い方法ID', max_length=255, blank=True)
+    
+    # Enterpriseプラン用の追加Company数
+    additional_companies = models.IntegerField('追加Company数', default=0, help_text='Enterpriseプランの場合、10社ごとの追加分')
+    
+    # 年払い/月払い
+    billing_cycle = models.CharField('請求サイクル', max_length=10, choices=[('monthly', '月払い'), ('yearly', '年払い')], default='monthly')
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Firmサブスクリプション'
+        verbose_name_plural = 'Firmサブスクリプション'
+    
+    def __str__(self):
+        return f"{self.firm.name} - {self.plan.name}"
+    
+    @property
+    def total_companies_allowed(self):
+        """許可される総Company数"""
+        if self.plan.is_unlimited_companies:
+            return 0  # 無制限
+        base = self.plan.max_companies
+        if self.plan.plan_type == 'enterprise':
+            # Enterpriseプランは基本10社 + 追加分
+            return base + self.additional_companies
+        return base
+    
+    @property
+    def total_ai_consultations_allowed(self):
+        """許可される総AI相談回数（月次）"""
+        if self.plan.is_unlimited_ai_consultations:
+            return 0  # 無制限
+        base = self.plan.max_ai_consultations_per_month
+        if self.plan.plan_type == 'enterprise':
+            # Enterpriseプランは基本500回 + 追加分（10社あたり200回）
+            additional = (self.additional_companies // 10) * 200
+            return base + additional
+        return base
+    
+    @property
+    def total_ocr_allowed(self):
+        """許可される総OCR回数（月次）"""
+        if self.plan.is_unlimited_ocr:
+            return 0  # 無制限
+        base = self.plan.max_ocr_per_month
+        if self.plan.plan_type == 'enterprise':
+            # Enterpriseプランは基本250回 + 追加分（10社あたり100回）
+            additional = (self.additional_companies // 10) * 100
+            return base + additional
+        return base
+    
+    @property
+    def is_active_subscription(self):
+        """有効なサブスクリプションかどうか"""
+        return self.status in ['trial', 'active']
+    
+    @property
+    def is_trial(self):
+        """試用期間中かどうか"""
+        return self.status == 'trial' and self.trial_ends_at and timezone.now() < self.trial_ends_at
+
+
+class FirmUsageTracking(models.Model):
+    """Firmの月次利用状況追跡"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='usage_tracking', verbose_name='Firm')
+    subscription = models.ForeignKey(FirmSubscription, on_delete=models.CASCADE, related_name='usage_tracking', verbose_name='サブスクリプション')
+    
+    # 追跡期間
+    year = models.IntegerField('年')
+    month = models.IntegerField('月', validators=[MinValueValidator(1), MaxValueValidator(12)])
+    
+    # 利用状況
+    ai_consultation_count = models.IntegerField('AI相談回数', default=0)
+    ocr_count = models.IntegerField('OCR読み込み回数', default=0)
+    
+    # リセットフラグ
+    is_reset = models.BooleanField('リセット済み', default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Firm利用状況'
+        verbose_name_plural = 'Firm利用状況'
+        unique_together = ('firm', 'year', 'month')
+        ordering = ['-year', '-month']
+    
+    def __str__(self):
+        return f"{self.firm.name} - {self.year}年{self.month}月"
+    
+    @property
+    def ai_consultation_remaining(self):
+        """残りのAI相談回数"""
+        if self.subscription.plan.is_unlimited_ai_consultations:
+            return None  # 無制限
+        total = self.subscription.total_ai_consultations_allowed
+        return max(0, total - self.ai_consultation_count)
+    
+    @property
+    def ocr_remaining(self):
+        """残りのOCR回数"""
+        if self.subscription.plan.is_unlimited_ocr:
+            return None  # 無制限
+        total = self.subscription.total_ocr_allowed
+        return max(0, total - self.ocr_count)
+    
+    @property
+    def ai_consultation_usage_percentage(self):
+        """AI相談利用割合"""
+        if self.subscription.plan.is_unlimited_ai_consultations:
+            return None
+        total = self.subscription.total_ai_consultations_allowed
+        if total == 0:
+            return 0
+        return min(100, (self.ai_consultation_count / total) * 100)
+    
+    @property
+    def ocr_usage_percentage(self):
+        """OCR利用割合"""
+        if self.subscription.plan.is_unlimited_ocr:
+            return None
+        total = self.subscription.total_ocr_allowed
+        if total == 0:
+            return 0
+        return min(100, (self.ocr_count / total) * 100)
+
 
 class FinancialInstitution(models.Model):
     name = models.CharField(max_length=255)

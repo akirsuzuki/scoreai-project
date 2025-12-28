@@ -290,6 +290,21 @@
           </a>
         </li>
         {% endif %}
+        
+        <!-- Firmオーナーの場合のみ表示 -->
+        {% load custom_tags %}
+        {% get_user_firm_owner user as user_firm_owner %}
+        {% if user_firm_owner %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">プラン管理</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-credit-card me-2"></i>プラン・サブスクリプション</span>
+          </a>
+        </li>
+        {% endif %}
     </nav>
   </div>
 </aside>

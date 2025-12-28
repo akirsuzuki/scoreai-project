@@ -1,0 +1,107 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if title %}{{ title }}{% else %}ブログ{% endif %} | SCORE AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'scoreai/css/blog.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">SCORE AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog_list' %}{{ subdomain_param_first }}">ブログ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <article class="blog-detail">
+                    <div class="blog-meta mb-3">
+                        <span class="blog-date">{{ blog.post_date|date:"Y年m月d日" }}</span>
+                        {% if blog.categories.all %}
+                            <span class="blog-categories">
+                                {% for category in blog.categories.all %}
+                                    <span class="badge bg-secondary">{{ category.name }}</span>
+                                {% endfor %}
+                            </span>
+                        {% endif %}
+                        <span class="blog-author">作成者: {{ blog.written_by.username }}</span>
+                    </div>
+                    
+                    <h1 class="blog-title mb-4">{{ blog.title }}</h1>
+                    
+                    <div class="blog-content">
+                        {{ blog.article|linebreaks }}
+                    </div>
+                </article>
+
+                <!-- 関連記事 -->
+                {% if related_blogs %}
+                <div class="related-blogs mt-5">
+                    <h3>関連記事</h3>
+                    <div class="row">
+                        {% for related_blog in related_blogs %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a href="{% url 'blog_detail' related_blog.pk %}{{ subdomain_param }}">{{ related_blog.title }}</a>
+                                    </h5>
+                                    <p class="card-text">
+                                        <small class="text-muted">{{ related_blog.post_date|date:"Y年m月d日" }}</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- サイドバー -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <a href="{% url 'blog_list' %}{{ subdomain_param_first }}" class="btn btn-outline-primary mb-4">← ブログ一覧に戻る</a>
+                    
+                    {% if recent_blogs %}
+                    <h3>最新記事</h3>
+                    <ul class="list-group">
+                        {% for recent_blog in recent_blogs %}
+                        <li class="list-group-item">
+                            <a href="{% url 'blog_detail' recent_blog.pk %}{{ subdomain_param }}">{{ recent_blog.title }}</a>
+                            <br>
+                            <small class="text-muted">{{ recent_blog.post_date|date:"Y年m月d日" }}</small>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 SCORE AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

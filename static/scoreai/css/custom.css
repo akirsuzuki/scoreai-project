@@ -244,6 +244,43 @@ div.dt-container {
     }
 }
 
+/* プログレスバーのアニメーション無効化 */
+.progress,
+.progress-bar,
+.progress-bar-striped,
+.progress-bar-animated,
+.progress-bar.no-animation {
+    animation: none !important;
+    -webkit-animation: none !important;
+    -moz-animation: none !important;
+    -o-animation: none !important;
+    background-image: none !important;
+    background-position: 0 0 !important;
+    background-size: auto !important;
+    transition: width 0.3s ease !important;
+}
+
+/* プログレスバーのストライプパターンを完全に無効化 */
+.progress-bar::before,
+.progress-bar::after {
+    display: none !important;
+    content: none !important;
+}
+
+/* Bootstrapのデフォルトアニメーションを無効化 */
+@keyframes progress-bar-stripes {
+    0% { background-position: 0 0 !important; }
+    100% { background-position: 0 0 !important; }
+}
+
+/* すべてのプログレスバーアニメーションを強制的に無効化 */
+.progress .progress-bar {
+    animation: none !important;
+    -webkit-animation: none !important;
+    background-image: none !important;
+    background-position: 0 0 !important;
+}
+
 /* アクセシビリティの改善 */
 @media (prefers-reduced-motion: reduce) {
     * {

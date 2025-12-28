@@ -1,0 +1,138 @@
+{% extends 'scoreai/base.html' %}
+{% load humanize %}
+
+{% block content %}
+    {% if subscription %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">現在のプラン</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{ subscription.plan.name }}</h3>
+                    <p class="text-muted">{{ subscription.plan.description }}</p>
+                    
+                    <table class="table">
+                        <tr>
+                            <th>ステータス</th>
+                            <td>
+                                <span class="badge {% if subscription.status == 'active' %}bg-success{% elif subscription.status == 'trial' %}bg-info{% elif subscription.status == 'past_due' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ subscription.get_status_display }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>開始日</th>
+                            <td>{{ subscription.started_at|date:"Y年m月d日" }}</td>
+                        </tr>
+                        {% if subscription.trial_ends_at %}
+                        <tr>
+                            <th>試用期間終了日</th>
+                            <td>{{ subscription.trial_ends_at|date:"Y年m月d日" }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if subscription.current_period_end %}
+                        <tr>
+                            <th>次回請求日</th>
+                            <td>{{ subscription.current_period_end|date:"Y年m月d日" }}</td>
+                        </tr>
+                        {% endif %}
+                        <tr>
+                            <th>請求サイクル</th>
+                            <td>{{ subscription.get_billing_cycle_display }}</td>
+                        </tr>
+                        {% if subscription.plan.plan_type == 'enterprise' %}
+                        <tr>
+                            <th>追加Company数</th>
+                            <td>{{ subscription.additional_companies }}社</td>
+                        </tr>
+                        <tr>
+                            <th>総Company数</th>
+                            <td>{{ subscription.total_companies_allowed }}社まで</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                    
+                    <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-primary">プランを変更</a>
+                </div>
+            </div>
+            
+            {% if usage_tracking %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">利用状況（{{ usage_tracking.year }}年{{ usage_tracking.month }}月）</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>AI相談回数</h6>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar no-animation {% if usage_tracking.ai_consultation_usage_percentage and usage_tracking.ai_consultation_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ai_consultation_usage_percentage and usage_tracking.ai_consultation_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 role="progressbar" 
+                                 style="width: {% if usage_tracking.ai_consultation_usage_percentage %}{{ usage_tracking.ai_consultation_usage_percentage }}%{% else %}100%{% endif %}; animation: none !important; background-image: none !important;"
+                                 aria-valuenow="{{ usage_tracking.ai_consultation_count }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="{{ subscription.total_ai_consultations_allowed }}">
+                                {{ usage_tracking.ai_consultation_count }}回
+                                {% if subscription.plan.is_unlimited_ai_consultations %}
+                                （無制限）
+                                {% else %}
+                                / {{ subscription.total_ai_consultations_allowed }}回
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if usage_tracking.ai_consultation_remaining is not None %}
+                        <small class="text-muted">残り: {{ usage_tracking.ai_consultation_remaining }}回</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6>OCR読み込み回数</h6>
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar no-animation {% if usage_tracking.ocr_usage_percentage and usage_tracking.ocr_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ocr_usage_percentage and usage_tracking.ocr_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                                 role="progressbar" 
+                                 style="width: {% if usage_tracking.ocr_usage_percentage %}{{ usage_tracking.ocr_usage_percentage }}%{% else %}100%{% endif %}; animation: none !important; background-image: none !important;"
+                                 aria-valuenow="{{ usage_tracking.ocr_count }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="{{ subscription.total_ocr_allowed }}">
+                                {{ usage_tracking.ocr_count }}回
+                                {% if subscription.plan.is_unlimited_ocr %}
+                                （無制限）
+                                {% else %}
+                                / {{ subscription.total_ocr_allowed }}回
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if usage_tracking.ocr_remaining is not None %}
+                        <small class="text-muted">残り: {{ usage_tracking.ocr_remaining }}回</small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">管理しているCompany</h5>
+                </div>
+                <div class="card-body">
+                    <h3>{{ company_count }}社</h3>
+                    {% if subscription.plan.plan_type == 'enterprise' %}
+                    <p class="text-muted">上限: {{ subscription.total_companies_allowed }}社まで</p>
+                    {% else %}
+                    <p class="text-muted">上限: {{ subscription.plan.max_companies }}社まで</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning">
+        <p class="mb-0">現在、プランに登録されていません。プランを選択して登録してください。</p>
+    </div>
+    <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-primary">プラン一覧を見る</a>
+    {% endif %}
+{% endblock %}
+

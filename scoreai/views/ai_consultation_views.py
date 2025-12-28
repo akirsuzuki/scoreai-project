@@ -25,6 +25,7 @@ from ..models import (
 from ..mixins import SelectedCompanyMixin
 from ..utils.gemini import get_gemini_response
 from ..utils.ai_consultation_data import get_consultation_data, build_consultation_prompt
+from ..utils.usage_tracking import increment_ai_consultation_count
 
 logger = logging.getLogger(__name__)
 
@@ -128,6 +129,14 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                     'success': False,
                     'error': 'AI応答の生成に失敗しました。'
                 }, status=500)
+            
+            # 利用状況をカウント
+            usage_incremented = increment_ai_consultation_count(self.this_company.firm)
+            if not usage_incremented:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'AI相談の利用制限に達しています。プランをアップグレードするか、管理者にお問い合わせください。'
+                }, status=403)
             
             # 履歴を保存
             history = AIConsultationHistory.objects.create(

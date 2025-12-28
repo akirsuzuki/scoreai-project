@@ -6,6 +6,9 @@ from .models import (
     Firm,
     UserFirm,
     FirmCompany,
+    FirmPlan,
+    FirmSubscription,
+    FirmUsageTracking,
     FinancialInstitution,
     SecuredType,
     Debt,
@@ -330,6 +333,90 @@ class DocumentFolderAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     ordering = ('folder_type', 'order', 'subfolder_type')
     readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(FirmPlan)
+class FirmPlanAdmin(admin.ModelAdmin):
+    list_display = ('name', 'plan_type', 'monthly_price', 'max_companies', 'max_ai_consultations_per_month', 'max_ocr_per_month', 'is_active', 'order')
+    list_display_links = ('name',)
+    list_filter = ('plan_type', 'is_active', 'cloud_storage_google_drive', 'cloud_storage_box', 'cloud_storage_dropbox', 'cloud_storage_onedrive')
+    search_fields = ('name', 'description')
+    ordering = ('order', 'plan_type')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('plan_type', 'name', 'description', 'is_active', 'order')
+        }),
+        ('料金設定', {
+            'fields': ('monthly_price', 'yearly_price', 'yearly_discount_months', 'stripe_price_id_monthly', 'stripe_price_id_yearly')
+        }),
+        ('機能制限', {
+            'fields': ('max_companies', 'max_ai_consultations_per_month', 'max_ocr_per_month')
+        }),
+        ('クラウドストレージ連携', {
+            'fields': ('cloud_storage_google_drive', 'cloud_storage_box', 'cloud_storage_dropbox', 'cloud_storage_onedrive')
+        }),
+        ('レポート機能', {
+            'fields': ('report_basic', 'report_advanced', 'report_custom')
+        }),
+        ('マーケティング支援', {
+            'fields': ('marketing_support', 'marketing_support_seminar', 'marketing_support_offline', 'marketing_support_newsletter')
+        }),
+        ('その他機能', {
+            'fields': ('api_integration', 'priority_support', 'profile_page_enhanced')
+        }),
+        ('システム情報', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(FirmSubscription)
+class FirmSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('firm', 'plan', 'status', 'billing_cycle', 'additional_companies', 'started_at', 'current_period_end')
+    list_display_links = ('firm',)
+    list_filter = ('status', 'billing_cycle', 'plan', 'started_at')
+    search_fields = ('firm__name', 'stripe_customer_id', 'stripe_subscription_id')
+    ordering = ('-started_at',)
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('firm', 'plan', 'status', 'billing_cycle', 'additional_companies')
+        }),
+        ('契約期間', {
+            'fields': ('started_at', 'trial_ends_at', 'current_period_start', 'current_period_end', 'canceled_at', 'ends_at')
+        }),
+        ('Stripe情報', {
+            'fields': ('stripe_customer_id', 'stripe_subscription_id', 'stripe_price_id', 'stripe_payment_method_id')
+        }),
+        ('システム情報', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(FirmUsageTracking)
+class FirmUsageTrackingAdmin(admin.ModelAdmin):
+    list_display = ('firm', 'subscription', 'year', 'month', 'ai_consultation_count', 'ocr_count', 'is_reset')
+    list_display_links = ('firm',)
+    list_filter = ('year', 'month', 'is_reset', 'subscription__plan')
+    search_fields = ('firm__name',)
+    ordering = ('-year', '-month', 'firm')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('firm', 'subscription', 'year', 'month', 'is_reset')
+        }),
+        ('利用状況', {
+            'fields': ('ai_consultation_count', 'ocr_count')
+        }),
+        ('システム情報', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
 
 
 @admin.register(UploadedDocument)

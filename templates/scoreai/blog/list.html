@@ -1,0 +1,137 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% if title %}{{ title }}{% else %}ブログ{% endif %} | SCORE AI</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'scoreai/css/blog.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">SCORE AI</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'blog_list' %}{{ subdomain_param_first }}">ブログ</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="mb-4">ブログ</h1>
+                
+                <!-- 検索フォーム -->
+                <form method="get" class="mb-4">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="検索..." value="{{ search_query }}">
+                        {% if subdomain_param %}
+                        <input type="hidden" name="subdomain" value="blog">
+                        {% endif %}
+                        <button class="btn btn-primary" type="submit">検索</button>
+                    </div>
+                </form>
+
+                <!-- ブログ一覧 -->
+                {% if blogs %}
+                    {% for blog in blogs %}
+                    <article class="blog-card mb-4">
+                        <div class="blog-meta">
+                            <span class="blog-date">{{ blog.post_date|date:"Y年m月d日" }}</span>
+                            {% if blog.categories.all %}
+                                <span class="blog-categories">
+                                    {% for category in blog.categories.all %}
+                                        <span class="badge bg-secondary">{{ category.name }}</span>
+                                    {% endfor %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <h2 class="blog-title">
+                            <a href="{% url 'blog_detail' blog.pk %}{{ subdomain_param }}">{{ blog.title }}</a>
+                        </h2>
+                        <div class="blog-excerpt">
+                            {{ blog.article|truncatewords:50|linebreaks }}
+                        </div>
+                        <div class="blog-footer">
+                            <span class="blog-author">作成者: {{ blog.written_by.username }}</span>
+                            <a href="{% url 'blog_detail' blog.pk %}{{ subdomain_param }}" class="btn btn-sm btn-outline-primary">続きを読む</a>
+                        </div>
+                    </article>
+                    {% endfor %}
+
+                    <!-- ページネーション -->
+                    {% if is_paginated %}
+                    <nav aria-label="ページネーション">
+                        <ul class="pagination justify-content-center">
+                            {% if page_obj.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{{ subdomain_param }}">前へ</a>
+                            </li>
+                            {% endif %}
+                            
+                            {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ num }}</span>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{{ subdomain_param }}">{{ num }}</a>
+                            </li>
+                            {% endif %}
+                            {% endfor %}
+                            
+                            {% if page_obj.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if search_query %}&q={{ search_query }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{{ subdomain_param }}">次へ</a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted">ブログ記事がありません。</p>
+                {% endif %}
+            </div>
+
+            <!-- サイドバー -->
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <h3>カテゴリー</h3>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">
+                            <a href="{% url 'blog_list' %}{{ subdomain_param_first }}" class="{% if not selected_category %}active{% endif %}">すべて</a>
+                        </li>
+                        {% for category in categories %}
+                        <li class="list-group-item">
+                            <a href="?category={{ category.slug }}{{ subdomain_param }}" class="{% if selected_category == category.slug %}active{% endif %}">
+                                {{ category.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 SCORE AI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
