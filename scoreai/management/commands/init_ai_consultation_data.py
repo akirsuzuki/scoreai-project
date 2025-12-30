@@ -19,39 +19,38 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("AI相談機能の初期データ投入を開始します..."))
         self.stdout.write("=" * 60)
         
-        # 既存の「補助金相談」を「補助金・助成金相談」に更新
-        old_type = AIConsultationType.objects.filter(name='補助金相談').first()
-        if old_type:
-            old_type.name = '補助金・助成金相談'
-            old_type.save()
-            self.stdout.write(self.style.SUCCESS("✓ 既存の「補助金相談」を「補助金・助成金相談」に更新しました"))
+        # 既存の「補助金相談」または「補助金・助成金相談」を「補助金・助成金」に更新
+        old_names = ['補助金相談', '補助金・助成金相談']
+        for old_name in old_names:
+            old_type = AIConsultationType.objects.filter(name=old_name).first()
+            if old_type:
+                old_type.name = '補助金・助成金'
+                old_type.save()
+                self.stdout.write(self.style.SUCCESS(f"✓ 既存の「{old_name}」を「補助金・助成金」に更新しました"))
+                break
 
         # 相談タイプの作成
         consultation_types_data = [
             {
                 'name': '財務相談',
-                'icon': '💰',
                 'description': '決算書データを基に分析',
                 'order': 1,
                 'color': '#4CAF50',
             },
             {
-                'name': '補助金・助成金相談',
-                'icon': '💼',
+                'name': '補助金・助成金',
                 'description': '業種・規模を基に提案',
                 'order': 2,
                 'color': '#2196F3',
             },
             {
                 'name': '税務相談',
-                'icon': '📋',
                 'description': '税務情報を基に提案',
                 'order': 3,
                 'color': '#FF9800',
             },
             {
                 'name': '法律相談',
-                'icon': '⚖️',
                 'description': '契約・法務を基に提案',
                 'order': 4,
                 'color': '#9C27B0',
@@ -63,7 +62,6 @@ class Command(BaseCommand):
             consultation_type, created = AIConsultationType.objects.get_or_create(
                 name=data['name'],
                 defaults={
-                    'icon': data['icon'],
                     'description': data['description'],
                     'order': data['order'],
                     'color': data['color'],
@@ -129,7 +127,7 @@ class Command(BaseCommand):
             else:
                 self.stdout.write("→ 財務相談のデフォルトスクリプトは既に存在します")
 
-        # 補助金・助成金相談のデフォルトスクリプト
+        # 補助金・助成金のデフォルトスクリプト
         subsidy_script = """あなたは補助金・助成金申請の専門家です。
         会社の業種、規模、財務状況を基に、適切な補助金・助成金制度を提案してください。
 返答は日本語で、分かりやすく、具体的な手続き方法も含めて説明してください。"""
@@ -153,9 +151,9 @@ class Command(BaseCommand):
 
 回答は日本語で、専門的すぎない言葉で説明してください。"""
 
-        if consultation_types.get('補助金・助成金相談'):
+        if consultation_types.get('補助金・助成金'):
             script, created = AIConsultationScript.objects.get_or_create(
-                consultation_type=consultation_types['補助金・助成金相談'],
+                consultation_type=consultation_types['補助金・助成金'],
                 is_default=True,
                 defaults={
                     'name': 'デフォルト',
@@ -166,9 +164,9 @@ class Command(BaseCommand):
                 }
             )
             if created:
-                self.stdout.write(self.style.SUCCESS("✓ 補助金・助成金相談のデフォルトスクリプトを作成しました"))
+                self.stdout.write(self.style.SUCCESS("✓ 補助金・助成金のデフォルトスクリプトを作成しました"))
             else:
-                self.stdout.write("→ 補助金・助成金相談のデフォルトスクリプトは既に存在します")
+                self.stdout.write("→ 補助金・助成金のデフォルトスクリプトは既に存在します")
 
         # 税務相談のデフォルトスクリプト
         tax_script = """あなたは税務の専門家です。

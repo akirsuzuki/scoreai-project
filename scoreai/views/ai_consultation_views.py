@@ -11,6 +11,7 @@ from django.utils.decorators import method_decorator
 from django.db import transaction
 import json
 import logging
+from django_ulid.models import ulid
 
 from ..models import (
     AIConsultationType,
@@ -30,6 +31,44 @@ from ..utils.usage_tracking import increment_ai_consultation_count
 logger = logging.getLogger(__name__)
 
 
+def make_json_serializable(obj):
+    """
+    ULIDやその他のJSONシリアライズできないオブジェクトを文字列に変換
+    再帰的に処理して、ネストされたULIDも変換
+    """
+    # 基本的な型はそのまま返す
+    if isinstance(obj, (int, float, str, bool, type(None))):
+        return obj
+    
+    # 辞書の場合は再帰的に処理
+    if isinstance(obj, dict):
+        return {key: make_json_serializable(value) for key, value in obj.items()}
+    
+    # リストやタプルの場合も再帰的に処理
+    if isinstance(obj, (list, tuple)):
+        return [make_json_serializable(item) for item in obj]
+    
+    # ULID型のチェック
+    # django_ulidのULID型をチェック
+    try:
+        # 型名でチェック
+        type_name = type(obj).__name__
+        module_name = type(obj).__module__
+        
+        # ULID型の可能性がある場合
+        if 'ulid' in module_name.lower() or type_name == 'ULID':
+            return str(obj)
+    except (AttributeError, TypeError):
+        pass
+    
+    # その他のオブジェクトは文字列に変換を試みる
+    # これにより、ULIDやその他のシリアライズできないオブジェクトも文字列に変換される
+    try:
+        return str(obj)
+    except (TypeError, ValueError):
+        return None
+
+
 class AIConsultationCenterView(SelectedCompanyMixin, TemplateView):
     """AI相談センターのトップページ"""
     template_name = 'scoreai/ai_consultation_center.html'
@@ -39,6 +78,7 @@ class AIConsultationCenterView(SelectedCompanyMixin, TemplateView):
         consultation_types = AIConsultationType.objects.filter(is_active=True).order_by('order', 'name')
         context['consultation_types'] = consultation_types
         context['title'] = 'AI相談センター'
+        # 第一レベルなのでタイトルカードを表示
         return context
 
 
@@ -69,6 +109,7 @@ class AIConsultationView(SelectedCompanyMixin, TemplateView):
         context['histories'] = histories
         context['available_data'] = available_data
         context['title'] = f'{consultation_type.name}'
+        context['show_title_card'] = False  # タイトルカードを非表示（テンプレートで独自に表示）
         return context
 
 
@@ -131,14 +172,31 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 }, status=500)
             
             # 利用状況をカウント
-            usage_incremented = increment_ai_consultation_count(self.this_company.firm)
+            usage_incremented = increment_ai_consultation_count(self.this_firm)
             if not usage_incremented:
                 return JsonResponse({
                     'success': False,
                     'error': 'AI相談の利用制限に達しています。プランをアップグレードするか、管理者にお問い合わせください。'
                 }, status=403)
             
-            # 履歴を保存
+            # 履歴を保存（ULIDを文字列に変換）
+            # json.dumps()とjson.loads()を使って、ULIDを確実に文字列に変換
+            # default=strにより、すべてのシリアライズできないオブジェクト（ULID含む）が文字列に変換される
+            try:
+                # まずmake_json_serializableで再帰的に処理
+                serializable_data = make_json_serializable(company_data)
+                # その後、json.dumps()とjson.loads()で確実にシリアライズ可能な形式に変換
+                serializable_data = json.loads(json.dumps(serializable_data, default=str, ensure_ascii=False))
+            except (TypeError, ValueError) as e:
+                logger.warning(f"Failed to serialize with make_json_serializable, using json.dumps default=str: {e}")
+                # フォールバック: json.dumps()のdefault=strを使用
+                try:
+                    serializable_data = json.loads(json.dumps(company_data, default=str, ensure_ascii=False))
+                except (TypeError, ValueError) as e2:
+                    logger.error(f"Failed to serialize company_data even with json.dumps default=str: {e2}")
+                    # 最終手段: 空の辞書を保存
+                    serializable_data = {}
+            
             history = AIConsultationHistory.objects.create(
                 user=request.user,
                 company=self.this_company,
@@ -147,7 +205,7 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 ai_response=ai_response,
                 script_used=system_script if system_script else None,
                 user_script_used=user_script if user_script else None,
-                data_snapshot=company_data
+                data_snapshot=serializable_data
             )
             
             return JsonResponse({
@@ -180,5 +238,6 @@ class AIConsultationHistoryView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'AI相談履歴'
+        context['show_title_card'] = False  # タイトルカードを非表示（テンプレートで独自に表示）
         return context
 

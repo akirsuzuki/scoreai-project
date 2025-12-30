@@ -5,47 +5,83 @@
 {{ title }}
 {% endblock %}
 
-{% block head %}
-{% endblock %}
-
 {% block content %}
-
-<div class="row">
-    <div class="col-lg-12 d-flex align-items-strech">
-        <div class="card w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">{{ title }}</h5>
-            </div>
-            <div class="card-body">
-                <h6>トップページに遷移しようとするとこのページ（ヘルプ）に遷移してしまう。</h6>
-                <p>必要なデータが足りていないことが原因と考えられます。<br>必要なデータとは、月次推移データ3期分、年次決算データです。</p>
-                <h6>その他</h6>
-                <p>作成中</p>
-                <p>作成中</p>
-                <p>作成中</p>
-                <p>作成中</p>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-
-            </div>
-            <div class="card-footer text-end">
-                <a href="{% url 'index' %}" class="btn btn-secondary">Dashboardへ</a>
-                <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
-            </div>
-        </div>
+<!-- カテゴリフィルターとヘルプカードを含むcard - Modernize Notesスタイル -->
+<div class="card">
+  <div class="card-body">
+    <!-- カテゴリフィルター -->
+    <div class="d-flex align-items-center gap-2 flex-wrap mb-4">
+      <a href="{% url 'help' %}" 
+         class="btn d-flex align-items-center gap-2" 
+         style="{% if not selected_category %}background-color: #5D87FF; color: #ffffff; border: 1px solid #5D87FF;{% else %}background-color: #ffffff; color: #2A3547; border: 1px solid #e0e0e0;{% endif %} padding: 8px 16px; border-radius: 7px; font-weight: 500; text-decoration: none; transition: all 0.2s ease-in;">
+        <i class="ti ti-list"></i>
+        <span>全て</span>
+      </a>
+      {% for cat in categories %}
+      <a href="{% url 'help' %}?category={{ cat.value }}" 
+         class="btn d-flex align-items-center gap-2"
+         style="{% if selected_category == cat.value %}background-color: #5D87FF; color: #ffffff; border: 1px solid #5D87FF;{% else %}background-color: #ffffff; color: #2A3547; border: 1px solid #e0e0e0;{% endif %} padding: 8px 16px; border-radius: 7px; font-weight: 500; text-decoration: none; transition: all 0.2s ease-in;">
+        <i class="{{ cat.icon }}"></i>
+        <span>{{ cat.label }}</span>
+      </a>
+      {% endfor %}
     </div>
+
+    <!-- ヘルプカードグリッド -->
+    <div class="row g-3">
+      {% for item in help_items %}
+      <div class="col-md-6 col-lg-4">
+        <div class="card border h-100" style="cursor: pointer; border-left: 4px solid #5D87FF; transition: all 0.2s ease-in;" onclick="window.location.href='{% url 'help_detail' item.pk %}'" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';" onmouseout="this.style.boxShadow='none';">
+          <div class="card-body">
+            <h6 class="fw-semibold mb-2" style="color: #2A3547; font-size: 16px;">{{ item.title }}</h6>
+            <p class="text-muted mb-2 small" style="line-height: 1.6; color: #5A6A85; font-size: 13px;">{{ item.content|truncatewords:30|linebreaks }}</p>
+            <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
+              <span class="badge bg-light text-dark" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">{{ item.get_category_display }}</span>
+              <i class="ti ti-arrow-right text-primary" style="font-size: 18px;"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <p class="text-center text-muted mb-0">ヘルプコンテンツが登録されていません。</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
+{% if is_paginated %}
+<nav aria-label="ページネーション" class="mt-4">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a>
+    </li>
+    {% endif %}
+    
+    {% for num in page_obj.paginator.page_range %}
+    {% if page_obj.number == num %}
+    <li class="page-item active">
+      <span class="page-link">{{ num }}</span>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+    </li>
+    {% endif %}
+    {% endfor %}
+    
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a>
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
 {% endblock %}

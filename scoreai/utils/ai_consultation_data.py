@@ -5,6 +5,37 @@ from typing import Dict, Any, Optional, Tuple
 import json
 import logging
 
+def make_json_serializable_for_prompt(obj):
+    """
+    ULIDやその他のJSONシリアライズできないオブジェクトを文字列に変換
+    プロンプト作成用の簡易版
+    """
+    # 基本的な型はそのまま返す
+    if isinstance(obj, (int, float, str, bool, type(None))):
+        return obj
+    
+    # ULID型のチェック（django_ulid.models.ulid.ULID）
+    try:
+        obj_type = type(obj).__name__
+        if obj_type == 'ULID' or 'ulid' in str(type(obj)).lower():
+            return str(obj)
+    except (AttributeError, TypeError):
+        pass
+    
+    # 辞書の場合は再帰的に処理
+    if isinstance(obj, dict):
+        return {key: make_json_serializable_for_prompt(value) for key, value in obj.items()}
+    
+    # リストやタプルの場合も再帰的に処理
+    if isinstance(obj, (list, tuple)):
+        return [make_json_serializable_for_prompt(item) for item in obj]
+    
+    # その他のオブジェクトは文字列に変換
+    try:
+        return str(obj)
+    except (TypeError, ValueError):
+        return None
+
 from ..models import (
     AIConsultationType,
     AIConsultationScript,
@@ -168,20 +199,38 @@ def build_consultation_prompt(
             'size': company_info.get('size', ''),
         }
         
-        # 決算書データがある場合
+        # 決算書データがある場合（ULIDを文字列に変換してからJSON化）
         if 'fiscal_summary' in company_data:
-            fiscal_summary = company_data['fiscal_summary']
-            template_vars['fiscal_summary'] = json.dumps(fiscal_summary, ensure_ascii=False, indent=2)
+            try:
+                fiscal_summary = make_json_serializable_for_prompt(company_data['fiscal_summary'])
+                # default=strを追加して、ULIDなどのシリアライズできないオブジェクトを確実に文字列に変換
+                template_vars['fiscal_summary'] = json.dumps(fiscal_summary, default=str, ensure_ascii=False, indent=2)
+            except Exception as e:
+                logger.warning(f"Failed to serialize fiscal_summary: {e}")
+                # エラーが発生した場合は空のJSONオブジェクトを設定
+                template_vars['fiscal_summary'] = "{}"
         
-        # 借入情報がある場合
+        # 借入情報がある場合（ULIDを文字列に変換してからJSON化）
         if 'debt_info' in company_data:
-            debt_info = company_data['debt_info']
-            template_vars['debt_info'] = json.dumps(debt_info, ensure_ascii=False, indent=2)
+            try:
+                debt_info = make_json_serializable_for_prompt(company_data['debt_info'])
+                # default=strを追加して、ULIDなどのシリアライズできないオブジェクトを確実に文字列に変換
+                template_vars['debt_info'] = json.dumps(debt_info, default=str, ensure_ascii=False, indent=2)
+            except Exception as e:
+                logger.warning(f"Failed to serialize debt_info: {e}")
+                # エラーが発生した場合は空のJSON配列を設定
+                template_vars['debt_info'] = "[]"
         
-        # 月次データがある場合
+        # 月次データがある場合（ULIDを文字列に変換してからJSON化）
         if 'monthly_data' in company_data:
-            monthly_data = company_data['monthly_data']
-            template_vars['monthly_data'] = json.dumps(monthly_data, ensure_ascii=False, indent=2)
+            try:
+                monthly_data = make_json_serializable_for_prompt(company_data['monthly_data'])
+                # default=strを追加して、ULIDなどのシリアライズできないオブジェクトを確実に文字列に変換
+                template_vars['monthly_data'] = json.dumps(monthly_data, default=str, ensure_ascii=False, indent=2)
+            except Exception as e:
+                logger.warning(f"Failed to serialize monthly_data: {e}")
+                # エラーが発生した場合は空のJSON配列を設定
+                template_vars['monthly_data'] = "[]"
         
         # テンプレートをフォーマット
         prompt = template.format(**template_vars)

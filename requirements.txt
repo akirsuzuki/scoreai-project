@@ -27,3 +27,4 @@ Pillow
 pdf2image
 chardet
 stripe
+markdown

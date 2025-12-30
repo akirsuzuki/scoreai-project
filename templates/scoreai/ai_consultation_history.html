@@ -8,11 +8,26 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">AI相談履歴</h3>
-                    <a href="{% url 'ai_consultation_center' %}" class="btn btn-primary">相談センターに戻る</a>
-                </div>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h4 class="fw-semibold mb-1">AI相談履歴</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'ai_consultation_center' %}" class="text-muted text-decoration-none">AI相談センター</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">AI相談履歴</li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="{% url 'ai_consultation_center' %}" class="btn btn-primary">相談センターに戻る</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-end align-items-center">
+                <!-- ボタンは上部に移動済み -->
+            </div>
                 <div class="card-body">
                     {% if histories %}
                     <div class="table-responsive">
@@ -29,7 +44,7 @@
                                 {% for history in histories %}
                                 <tr>
                                     <td>{{ history.created_at|date:"Y-m-d H:i" }}</td>
-                                    <td>{{ history.consultation_type.icon }} {{ history.consultation_type.name }}</td>
+                                    <td>{{ history.consultation_type.name }}</td>
                                     <td>{{ history.user_message|truncatewords:20 }}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#historyModal{{ history.id }}">

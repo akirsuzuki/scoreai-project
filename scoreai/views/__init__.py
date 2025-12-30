@@ -90,7 +90,9 @@ ImportFiscalSummary_Month_FromMoneyforward = _views_py.ImportFiscalSummary_Month
 DebtCreateView = _views_py.DebtCreateView
 DebtsAllListView = _views_py.DebtsAllListView
 DebtsByBankListView = _views_py.DebtsByBankListView
+DebtsByBankDetailListView = _views_py.DebtsByBankDetailListView
 DebtsBySecuredTypeListView = _views_py.DebtsBySecuredTypeListView
+DebtsBySecuredTypeDetailListView = _views_py.DebtsBySecuredTypeDetailListView
 DebtsArchivedListView = _views_py.DebtsArchivedListView
 DebtDetailView = _views_py.DebtDetailView
 DebtUpdateView = _views_py.DebtUpdateView
@@ -113,9 +115,11 @@ MeetingMinutesListView = _views_py.MeetingMinutesListView
 MeetingMinutesDetailView = _views_py.MeetingMinutesDetailView
 MeetingMinutesDeleteView = _views_py.MeetingMinutesDeleteView
 AboutView = _views_py.AboutView
+from .about_links_views import AboutLinksView
 NewsListView = _views_py.NewsListView
 CompanyProfileView = _views_py.CompanyProfileView
 HelpView = _views_py.HelpView
+HelpDetailView = _views_py.HelpDetailView
 ManualView = _views_py.ManualView
 TermsOfServiceView = _views_py.TermsOfServiceView
 PrivacyPolicyView = _views_py.PrivacyPolicyView
@@ -181,7 +185,9 @@ __all__ = [
     'DebtDeleteView',
     'DebtsAllListView',
     'DebtsByBankListView',
+    'DebtsByBankDetailListView',
     'DebtsBySecuredTypeListView',
+    'DebtsBySecuredTypeDetailListView',
     'DebtsArchivedListView',
     # MeetingMinutes
     'MeetingMinutesCreateView',
@@ -218,9 +224,11 @@ __all__ = [
     'remove_client',
     # Static
     'AboutView',
+    'AboutLinksView',
     'NewsListView',
     'CompanyProfileView',
     'HelpView',
+    'HelpDetailView',
     'ManualView',
     'TermsOfServiceView',
     'PrivacyPolicyView',

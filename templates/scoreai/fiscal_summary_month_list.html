@@ -12,6 +12,15 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">月次PL推移表</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn {% if request.GET.years == '3' or not request.GET.years %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">3期比較の月次推移</a>
+        <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="btn {% if request.GET.years == '1' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">直近年度の月次推移</a>
+      </div>
+    </div>
+  </div>
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">

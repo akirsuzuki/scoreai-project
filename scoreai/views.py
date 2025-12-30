@@ -390,6 +390,7 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
         benchmark_index = get_benchmark_index(self.this_company.industry_classification, self.this_company.industry_subclassification, self.this_company.company_size, self.object.year)
         context['benchmark_index'] = benchmark_index
         context['title'] = '年次決算情報'
+        context['show_title_card'] = False  # 第二レベルなのでタイトルカードを非表示
 
         return context
 
@@ -440,6 +441,8 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         total_records = FiscalSummary_Year.objects.filter(company=self.this_company).count()
         years_in_page = int(self.request.GET.get('years_in_page', 5))
         context['total_pages'] = (total_records + years_in_page - 1) // years_in_page  # Calculate total pages, rounding up
+        context['title'] = '年次財務諸表'
+        # 第一レベルなのでタイトルカードを表示
 
         # Add page_param and years_in_page to the context
         context['page_param'] = self.request.GET.get('page_param', 1)
@@ -753,10 +756,11 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
         months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
 
         context.update({
-            'title': '月次財務サマリー一覧',
+            'title': '月次PL',
             'monthly_summaries_with_summary': monthly_summaries_with_summary,
             'months_label': months_label,
             'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+            # 第一レベルなのでタイトルカードを表示（デフォルト）
         })
         return context
 
@@ -1528,7 +1532,7 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
         ]
 
         context.update({
-            'title': '全借入一覧',
+            'title': '借入管理',
             'debt_list': debt_list,
             'debt_list_totals': debt_list_totals,
             'debt_list_byBank': debt_list_byBank,
@@ -1562,6 +1566,60 @@ class DebtsByBankListView(SelectedCompanyMixin, ListView):
             'debt_list': debt_list,
             'debt_list_totals': debt_list_totals,
             'debt_list_byBank': debt_list_byBank,
+            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+        })
+        return context
+
+
+class DebtsByBankDetailListView(SelectedCompanyMixin, ListView):
+    model = Debt
+    template_name = 'scoreai/debt_list_byBank_detail.html'
+    context_object_name = 'debt_list'
+
+    def get_queryset(self):
+        financial_institution_id = self.kwargs.get('financial_institution_id')
+        debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
+        # 特定の金融機関の借入のみをフィルタリング
+        filtered_debt_list = [
+            debt for debt in debt_list 
+            if str(debt['financial_institution'].id) == str(financial_institution_id)
+        ]
+        return filtered_debt_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        financial_institution_id = self.kwargs.get('financial_institution_id')
+        
+        # 金融機関情報を取得
+        from scoreai.models import FinancialInstitution
+        try:
+            financial_institution = FinancialInstitution.objects.get(id=financial_institution_id)
+        except FinancialInstitution.DoesNotExist:
+            financial_institution = None
+
+        debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
+        filtered_debt_list = [
+            debt for debt in debt_list 
+            if str(debt['financial_institution'].id) == str(financial_institution_id)
+        ]
+
+        # この金融機関の合計を計算
+        bank_totals = {
+            'principal': sum(d['principal'] for d in filtered_debt_list),
+            'monthly_repayment': sum(d['monthly_repayment'] for d in filtered_debt_list),
+            'balances_monthly': [sum(d['balances_monthly'][i] for d in filtered_debt_list) for i in range(12)],
+            'balance_fy1': sum(d['balance_fy1'] for d in filtered_debt_list),
+        }
+
+        from django.utils import timezone
+        context.update({
+            'title': f'{financial_institution.short_name if financial_institution else "金融機関"} - 借入一覧',
+            'financial_institution': financial_institution,
+            'debt_list': filtered_debt_list,
+            'debt_list_totals': debt_list_totals,
+            'bank_totals': bank_totals,
+            'today': timezone.now().date(),
+            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
         })
         return context
 
@@ -1582,6 +1640,60 @@ class DebtsBySecuredTypeListView(SelectedCompanyMixin, ListView):
             'debt_list_totals': debt_list_totals,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'debt_list_byBankAndSecuredType': debt_list_byBankAndSecuredType,
+            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+        })
+        return context
+
+
+class DebtsBySecuredTypeDetailListView(SelectedCompanyMixin, ListView):
+    model = Debt
+    template_name = 'scoreai/debt_list_bySecuredType_detail.html'
+    context_object_name = 'debt_list'
+
+    def get_queryset(self):
+        secured_type_id = self.kwargs.get('secured_type_id')
+        debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
+        # 特定の保証タイプの借入のみをフィルタリング
+        filtered_debt_list = [
+            debt for debt in debt_list 
+            if str(debt['secured_type'].id) == str(secured_type_id)
+        ]
+        return filtered_debt_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        secured_type_id = self.kwargs.get('secured_type_id')
+        
+        # 保証タイプ情報を取得
+        from scoreai.models import SecuredType
+        try:
+            secured_type = SecuredType.objects.get(id=secured_type_id)
+        except SecuredType.DoesNotExist:
+            secured_type = None
+
+        debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
+        filtered_debt_list = [
+            debt for debt in debt_list 
+            if str(debt['secured_type'].id) == str(secured_type_id)
+        ]
+
+        # この保証タイプの合計を計算
+        secured_type_totals = {
+            'principal': sum(d['principal'] for d in filtered_debt_list),
+            'monthly_repayment': sum(d['monthly_repayment'] for d in filtered_debt_list),
+            'balances_monthly': [sum(d['balances_monthly'][i] for d in filtered_debt_list) for i in range(12)],
+            'balance_fy1': sum(d['balance_fy1'] for d in filtered_debt_list),
+        }
+
+        from django.utils import timezone
+        context.update({
+            'title': f'{secured_type.name if secured_type else "保証タイプ"} - 借入一覧',
+            'secured_type': secured_type,
+            'debt_list': filtered_debt_list,
+            'debt_list_totals': debt_list_totals,
+            'secured_type_totals': secured_type_totals,
+            'today': timezone.now().date(),
+            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
         })
         return context
 
@@ -1597,6 +1709,7 @@ class DebtsArchivedListView(SelectedCompanyMixin, ListView):
         context.update({
             'title': 'アーカイブ済み借入一覧',
             'debt_list_nodisplay': debt_list_nodisplay,
+            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
         })
         return context
 
@@ -1688,7 +1801,8 @@ class MeetingMinutesListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company_id'] = self.this_company.id
-        context['title'] = 'ノート一覧'
+        context['title'] = 'ノート'
+        # 第一レベルなのでタイトルカードを表示（デフォルト）
         return context
         
 
@@ -1790,7 +1904,8 @@ class Stakeholder_nameListView(SelectedCompanyMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株主名一覧'
+        context['title'] = '株主情報'
+        # 第一レベルなのでタイトルカードを表示（デフォルト）
         return context
 
 class Stakeholder_nameDeleteView(SelectedCompanyMixin, DeleteView):
@@ -2389,12 +2504,43 @@ class CompanyProfileView(generic.TemplateView):
         context['title'] = '会社概要'
         return context
 
-class HelpView(generic.TemplateView):
+class HelpView(generic.ListView):
+    """ヘルプ一覧ページ"""
+    model = Help
     template_name = 'scoreai/help.html'
+    context_object_name = 'help_items'
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = Help.objects.all()
+        category = self.request.GET.get('category', '')
+        if category:
+            queryset = queryset.filter(category=category)
+        return queryset.order_by('category', 'id')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'ヘルプ'
+        context['selected_category'] = self.request.GET.get('category', '')
+        # カテゴリの選択肢を定義
+        context['categories'] = [
+            {'value': 'ai_usage', 'label': 'AIの活用', 'icon': 'ti ti-brain'},
+            {'value': 'data_entry', 'label': 'データ登録', 'icon': 'ti ti-database'},
+            {'value': 'login', 'label': 'ログイン', 'icon': 'ti ti-login'},
+            {'value': 'others', 'label': 'その他', 'icon': 'ti ti-dots'},
+        ]
+        return context
+
+
+class HelpDetailView(generic.DetailView):
+    """ヘルプ詳細ページ"""
+    model = Help
+    template_name = 'scoreai/help_detail.html'
+    context_object_name = 'help_item'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.title
         return context
 
 class ManualView(generic.TemplateView):

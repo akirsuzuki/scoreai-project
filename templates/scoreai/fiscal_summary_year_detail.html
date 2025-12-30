@@ -14,8 +14,16 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">直近決算詳細</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
+        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">直近決算詳細</a>
+      </div>
+    </div>
+  </div>
   <div class="col-lg-12 d-flex align-items-strech">
-
     <div class="card w-100">
       <div class="card-header">
         <h5 class="card-title mb-0"><strong>{{ fiscal_summary_year.year }}</strong> 年度 決算情報詳細</h5>

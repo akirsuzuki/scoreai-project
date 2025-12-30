@@ -1,0 +1,147 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- Markdown表示用のスタイル -->
+<style>
+.help-detail-content {
+  line-height: 1.8;
+  color: #5A6A85;
+}
+.help-detail-content h1,
+.help-detail-content h2,
+.help-detail-content h3,
+.help-detail-content h4,
+.help-detail-content h5,
+.help-detail-content h6 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #2A3547;
+}
+.help-detail-content h1 { font-size: 2rem; border-bottom: 2px solid #5D87FF; padding-bottom: 0.5rem; }
+.help-detail-content h2 { font-size: 1.75rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.5rem; }
+.help-detail-content h3 { font-size: 1.5rem; }
+.help-detail-content h4 { font-size: 1.25rem; }
+.help-detail-content h5 { font-size: 1.1rem; }
+.help-detail-content h6 { font-size: 1rem; }
+.help-detail-content p {
+  margin-bottom: 1rem;
+}
+.help-detail-content ul,
+.help-detail-content ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+.help-detail-content li {
+  margin-bottom: 0.5rem;
+}
+.help-detail-content code {
+  background-color: #f5f5f5;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+  color: #e83e8c;
+  font-family: 'Courier New', monospace;
+}
+.help-detail-content pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  border-left: 4px solid #5D87FF;
+}
+.help-detail-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: #2A3547;
+}
+.help-detail-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.5rem;
+}
+.help-detail-content table th,
+.help-detail-content table td {
+  padding: 0.75rem;
+  border: 1px solid #dee2e6;
+  text-align: left;
+}
+.help-detail-content table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2A3547;
+}
+.help-detail-content table tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+.help-detail-content blockquote {
+  border-left: 4px solid #5D87FF;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+.help-detail-content a {
+  color: #5D87FF;
+  text-decoration: none;
+}
+.help-detail-content a:hover {
+  text-decoration: underline;
+}
+.help-detail-content strong {
+  font-weight: 600;
+  color: #2A3547;
+}
+.help-detail-content em {
+  font-style: italic;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ help_item.title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'help' %}" class="text-muted text-decoration-none">ヘルプ</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ help_item.title }}</li>
+          </ol>
+        </nav>
+      </div>
+      <div>
+        <a href="{% url 'help' %}" class="btn btn-outline-primary btn-sm">
+          <i class="ti ti-arrow-left me-1"></i>ヘルプ一覧に戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center mb-3">
+          <span class="badge bg-light text-dark me-2">{{ help_item.get_category_display }}</span>
+        </div>
+        <div class="help-detail-content">
+          {% load custom_filters %}
+          {{ help_item.content|markdown }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

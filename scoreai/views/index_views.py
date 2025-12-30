@@ -100,6 +100,7 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
 
         context.update({
             'title': 'ダッシュボード',
+            'show_title_card': False,  # ダッシュボードではタイトルカードを非表示
             'today': timezone.now().date(),
             'months_label': months_label,
             'monthly_summaries': monthly_summaries,

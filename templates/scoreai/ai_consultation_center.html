@@ -8,14 +8,11 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title mb-0">AI相談センター</h3>
-                </div>
-                <div class="card-body">
-                    <p class="mb-4">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
-                    
-                    <div class="row">
+        <div class="card">
+            <div class="card-body">
+                <p class="mb-4">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
+                
+                <div class="row">
                         {% for consultation_type in consultation_types %}
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card consultation-card h-100" style="border-top: 4px solid {{ consultation_type.color }};">

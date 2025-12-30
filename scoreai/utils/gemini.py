@@ -16,10 +16,34 @@ def initialize_gemini() -> None:
     genai.configure(api_key=settings.GEMINI_API_KEY)
 
 
+def get_available_models() -> list:
+    """
+    利用可能なGeminiモデルのリストを取得
+    
+    Returns:
+        利用可能なモデル名のリスト
+    """
+    try:
+        initialize_gemini()
+        # 利用可能なモデルを取得
+        models = genai.list_models()
+        available = []
+        for m in models:
+            # generateContentをサポートしているモデルのみを取得
+            if 'generateContent' in m.supported_generation_methods:
+                available.append(m.name.replace('models/', ''))
+        logger.info(f"Available models: {available}")
+        return available
+    except Exception as e:
+        logger.warning(f"Failed to list models: {e}")
+        # フォールバック: 一般的なモデル名のリスト
+        return ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+
+
 def get_gemini_response(
     prompt: str,
     system_instruction: Optional[str] = None,
-    model: str = "gemini-pro"
+    model: str = None
 ) -> Optional[str]:
     """
     Gemini APIを使用してテキスト生成
@@ -27,7 +51,7 @@ def get_gemini_response(
     Args:
         prompt: ユーザーのプロンプト
         system_instruction: システム指示（オプション）
-        model: 使用するGeminiモデル（デフォルト: gemini-1.5-flash）
+        model: 使用するGeminiモデル（Noneの場合は利用可能なモデルから自動選択）
         
     Returns:
         生成されたテキスト、エラー時はNone
@@ -40,7 +64,7 @@ def get_gemini_response(
             "temperature": 0.7,
             "top_p": 0.95,
             "top_k": 40,
-            "max_output_tokens": 2048,
+            "max_output_tokens": 8192,  # 回答文字数を増加（2048 → 8192）
         }
         
         # モデルを初期化（複数のモデル名を試す）
@@ -50,8 +74,18 @@ def get_gemini_response(
         else:
             full_prompt = prompt
         
-        # 利用可能なモデル名のリスト（フォールバック用）
-        available_models = [model, "gemini-pro", "gemini-1.5-pro", "gemini-1.5-flash"]
+        # 利用可能なモデルを取得
+        if model:
+            available_models = [model]
+        else:
+            available_models = get_available_models()
+        
+        # フォールバック用のモデルリストを追加
+        fallback_models = ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+        for fallback in fallback_models:
+            if fallback not in available_models:
+                available_models.append(fallback)
+        
         model_instance = None
         last_error = None
         

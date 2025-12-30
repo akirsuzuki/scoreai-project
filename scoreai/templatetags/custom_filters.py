@@ -1,6 +1,8 @@
 from django import template
 from django.forms.widgets import Select
+from django.utils.safestring import mark_safe
 from urllib.parse import urlencode
+import markdown
 
 register = template.Library()
 
@@ -92,3 +94,15 @@ def update_query_params(request, **kwargs):
     for key, value in kwargs.items():
         query_params[key] = value
     return '?' + urlencode(query_params)
+
+
+@register.filter(name='markdown')
+def markdown_filter(value):
+    """
+    MarkdownテキストをHTMLに変換
+    Usage: {{ content|markdown }}
+    """
+    if not value:
+        return ''
+    md = markdown.Markdown(extensions=['extra', 'codehilite', 'tables', 'nl2br'])
+    return mark_safe(md.convert(str(value)))

@@ -1,0 +1,118 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row g-3">
+    <!-- Company Section -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Company</h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="{% url 'about' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">SCore_Aiについて</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'announcement_list' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">Blog</span>
+                        </a>
+                    </li>
+                    <li class="mb-0">
+                        <a href="{% url 'company_profile' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">会社概要</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Support Section -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Support</h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="{% url 'help' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">ヘルプ</span>
+                        </a>
+                    </li>
+                    <li class="mb-0">
+                        <a href="{% url 'manual' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">マニュアル</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Legal Section -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Legal</h6>
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <a href="{% url 'terms_of_service' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">利用規約</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'privacy_policy' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">プライバシーポリシー</span>
+                        </a>
+                    </li>
+                    <li class="mb-2">
+                        <a href="{% url 'legal_notice' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">特商法に基づく表示</span>
+                        </a>
+                    </li>
+                    <li class="mb-0">
+                        <a href="{% url 'security_policy' %}" class="text-decoration-none d-flex align-items-center">
+                            <i class="ti ti-chevron-right me-2 text-primary"></i>
+                            <span class="text-muted">セキュリティポリシー</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Social Section -->
+    <div class="col-md-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <h6 class="fw-semibold mb-3">Social</h6>
+                <div class="d-flex gap-3">
+                    <a href="#" aria-label="Facebook" class="text-decoration-none">
+                        <i class="fa-brands fa-square-facebook fs-4 text-primary"></i>
+                    </a>
+                    <a href="#" aria-label="X (Twitter)" class="text-decoration-none">
+                        <i class="fa-brands fa-square-x-twitter fs-4 text-primary"></i>
+                    </a>
+                    <a href="#" aria-label="LinkedIn" class="text-decoration-none">
+                        <i class="fa-brands fa-linkedin fs-4 text-primary"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

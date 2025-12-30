@@ -1,5 +1,387 @@
+/* ============================================
+   Modernizeテーマ準拠 - グローバルスタイル
+   ============================================ */
+
 .bg-light-red {
   background-color: #f8d7da !important;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - ボタンスタイル統一
+   ============================================ */
+
+/* ボタンのベーススタイル - Modernize準拠 */
+.btn {
+  font-weight: 500;
+  border-radius: 7px;
+  transition: all 0.2s ease-in;
+  box-shadow: unset;
+}
+
+.btn:focus {
+  box-shadow: unset;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+/* ボタンサイズ - Modernize準拠 */
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+  border-radius: 5px;
+}
+
+.btn-lg {
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 9px;
+}
+
+/* プライマリボタン - Modernizeカラー */
+.btn-primary {
+  background-color: #5D87FF;
+  border-color: #5D87FF;
+  color: #ffffff;
+}
+
+.btn-primary:hover {
+  background-color: #4a6fe6;
+  border-color: #4a6fe6;
+  color: #ffffff;
+}
+
+.btn-primary:focus {
+  background-color: #4a6fe6;
+  border-color: #4a6fe6;
+  box-shadow: 0 0 0 0.2rem rgba(93, 135, 255, 0.25);
+}
+
+/* セカンダリボタン - Modernizeカラー */
+.btn-secondary {
+  background-color: #49BEFF;
+  border-color: #49BEFF;
+  color: #ffffff;
+}
+
+.btn-secondary:hover {
+  background-color: #3aa8e6;
+  border-color: #3aa8e6;
+  color: #ffffff;
+}
+
+/* 成功ボタン - Modernizeカラー */
+.btn-success {
+  background-color: #13DEB9;
+  border-color: #13DEB9;
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: #11c9a6;
+  border-color: #11c9a6;
+  color: #ffffff;
+}
+
+/* 警告ボタン - Modernizeカラー */
+.btn-warning {
+  background-color: #FFAE1F;
+  border-color: #FFAE1F;
+  color: #ffffff;
+}
+
+.btn-warning:hover {
+  background-color: #e69d1c;
+  border-color: #e69d1c;
+  color: #ffffff;
+}
+
+/* 危険ボタン - Modernizeカラー */
+.btn-danger {
+  background-color: #FA896B;
+  border-color: #FA896B;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background-color: #f97552;
+  border-color: #f97552;
+  color: #ffffff;
+}
+
+/* 情報ボタン - Modernizeカラー */
+.btn-info {
+  background-color: #539BFF;
+  border-color: #539BFF;
+  color: #ffffff;
+}
+
+.btn-info:hover {
+  background-color: #4288e6;
+  border-color: #4288e6;
+  color: #ffffff;
+}
+
+/* アウトラインボタン - Modernizeカラー */
+.btn-outline-primary {
+  color: #5D87FF;
+  border-color: #5D87FF;
+  background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+  background-color: #5D87FF;
+  border-color: #5D87FF;
+  color: #ffffff;
+}
+
+.btn-outline-secondary {
+  color: #49BEFF;
+  border-color: #49BEFF;
+  background-color: transparent;
+}
+
+.btn-outline-secondary:hover {
+  background-color: #49BEFF;
+  border-color: #49BEFF;
+  color: #ffffff;
+}
+
+.btn-outline-success {
+  color: #13DEB9;
+  border-color: #13DEB9;
+  background-color: transparent;
+}
+
+.btn-outline-success:hover {
+  background-color: #13DEB9;
+  border-color: #13DEB9;
+  color: #ffffff;
+}
+
+.btn-outline-warning {
+  color: #FFAE1F;
+  border-color: #FFAE1F;
+  background-color: transparent;
+}
+
+.btn-outline-warning:hover {
+  background-color: #FFAE1F;
+  border-color: #FFAE1F;
+  color: #ffffff;
+}
+
+.btn-outline-danger {
+  color: #FA896B;
+  border-color: #FA896B;
+  background-color: transparent;
+}
+
+.btn-outline-danger:hover {
+  background-color: #FA896B;
+  border-color: #FA896B;
+  color: #ffffff;
+}
+
+.btn-outline-info {
+  color: #539BFF;
+  border-color: #539BFF;
+  background-color: transparent;
+}
+
+.btn-outline-info:hover {
+  background-color: #539BFF;
+  border-color: #539BFF;
+  color: #ffffff;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - カードスタイル統一
+   ============================================ */
+
+.card {
+  border-radius: 7px;
+  border: 0;
+  box-shadow: rgb(145 158 171 / 20%) 0px 0px 2px 0px,
+              rgb(145 158 171 / 12%) 0px 12px 24px -4px;
+  margin-bottom: 0;
+  transition: all 0.2s ease-in;
+}
+
+.card:hover {
+  box-shadow: rgb(145 158 171 / 20%) 0px 0px 4px 0px,
+              rgb(145 158 171 / 16%) 0px 16px 32px -4px;
+}
+
+/* プランカードのヘッダー - 隙間をなくす */
+.card-header {
+  padding: 15px 20px;
+  border-bottom: 0;
+  border-radius: 7px 7px 0 0;
+}
+
+.card-header:first-child {
+  border-radius: 7px 7px 0 0;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #2A3547;
+  margin-bottom: 15px;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  color: #5A6A85;
+  margin-bottom: 10px;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - タイトルバナースタイル
+   ============================================ */
+
+/* タイトルバナー - Modernizeスタイル */
+.card.bg-info-subtle {
+  background: linear-gradient(135deg, #EBF3FE 0%, #ECF2FF 100%);
+  border: 0;
+  box-shadow: rgb(145 158 171 / 20%) 0px 0px 2px 0px,
+              rgb(145 158 171 / 12%) 0px 12px 24px -4px;
+}
+
+.card.bg-info-subtle .card-body {
+  padding: 20px 30px;
+}
+
+.card.bg-info-subtle h4 {
+  font-size: 20px;
+  font-weight: 500;
+  color: #2A3547;
+  margin: 0;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - テーブルスタイル統一
+   ============================================ */
+
+.table {
+  font-size: 14px;
+  color: #5A6A85;
+}
+
+.table thead th {
+  font-weight: 600;
+  color: #2A3547;
+  border-bottom: 2px solid #ebf1f6;
+  padding: 16px;
+}
+
+.table tbody td {
+  padding: 16px;
+  border-bottom: 1px solid #ebf1f6;
+}
+
+.table tbody tr:hover {
+  background-color: #F6F9FC;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #EAEFF4;
+}
+
+.table thead th {
+  background-color: #F6F9FC;
+}
+
+.table tbody td {
+  vertical-align: middle;
+}
+
+/* ボタングループ - Modernizeスタイル */
+.btn-group {
+  gap: 4px;
+}
+
+.btn-group .btn {
+  margin: 0;
+}
+
+/* テーブル内のボタン */
+.table .btn {
+  margin: 0 2px;
+}
+
+.table .btn:first-child {
+  margin-left: 0;
+}
+
+.table .btn:last-child {
+  margin-right: 0;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - フォームスタイル統一
+   ============================================ */
+
+.form-control,
+.form-select {
+  border-radius: 7px;
+  border: 1px solid #ebf1f6;
+  padding: 7px 16px;
+  font-size: 14px;
+  color: #5A6A85;
+  transition: all 0.2s ease-in;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #5D87FF;
+  box-shadow: 0 0 0 0.2rem rgba(93, 135, 255, 0.1);
+  outline: 0;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #2A3547;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* ============================================
+   Modernizeテーマ準拠 - アラートスタイル統一
+   ============================================ */
+
+.alert {
+  border-radius: 7px;
+  border: 0;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+
+.alert-primary {
+  background-color: #ECF2FF;
+  color: #5D87FF;
+}
+
+.alert-success {
+  background-color: #E6FFFA;
+  color: #13DEB9;
+}
+
+.alert-warning {
+  background-color: #FEF5E5;
+  color: #FFAE1F;
+}
+
+.alert-danger {
+  background-color: #FBF2EF;
+  color: #FA896B;
+}
+
+.alert-info {
+  background-color: #EBF3FE;
+  color: #539BFF;
 }
 
 /* ヘッダーユーザーメニューのスタイル改善 */
@@ -364,59 +746,9 @@ body {
     }
 }
 
-footer {
-    position: fixed;
-    bottom: 0;
-    left: 270px; /* サイドバーの幅（$sidebar-width-full: 270px） */
-    right: 0;
-    width: calc(100% - 270px); /* サイドバーの幅を引く */
-    z-index: 1000;
-    background-color: #f8f9fa !important;
-    border-top: 1px solid #dee2e6;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-    transition: left 0.3s ease, width 0.3s ease;
-}
-
-/* サイドバーが折りたたまれている場合（ミニサイドバー） */
-.page-wrapper[data-sidebartype="mini"] footer,
-.page-wrapper.sidebar-collapsed footer {
-    left: 87px; /* ミニサイドバーの幅（$sidebar-width-mini: 87px） */
-    width: calc(100% - 87px);
-}
-
-/* アイコンバーサイドバーの場合 */
-.page-wrapper[data-sidebartype="iconbar"] footer {
-    left: 180px; /* アイコンバーサイドバーの幅（$sidebar-width-iconbar: 180px） */
-    width: calc(100% - 180px);
-}
-
-/* モバイル対応 */
-@media (max-width: 1024px) {
-    footer {
-        left: 0 !important;
-        width: 100% !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .body-wrapper {
-        min-height: calc(100vh - 50px); /* モバイルではヘッダーが小さい */
-    }
-    
-    footer {
-        font-size: 0.875rem;
-        padding: 1.5rem 1rem !important;
-    }
-    
-    footer .col-md-3 {
-        margin-bottom: 1rem;
-    }
-    
-    footer h5 {
-        font-size: 1rem;
-        margin-bottom: 0.5rem;
-    }
-}
+/* ============================================
+   コピーライト表示（フッター削除後の最小限の表示）
+   ============================================ */
 
 /* Blog/お知らせページのカテゴリー表示 */
 .announcement .list-group-item a,
@@ -426,3 +758,4 @@ footer {
     display: block;
     width: 100%;
 }
+

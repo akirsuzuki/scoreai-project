@@ -219,7 +219,7 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
             fiscal_summary_year.save()
 
         # 利用状況をカウント
-        usage_incremented = increment_ocr_count(self.this_company.firm)
+        usage_incremented = increment_ocr_count(self.this_firm)
         if not usage_incremented:
             messages.error(
                 request,
@@ -303,7 +303,7 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
         debt.save()
         
         # 利用状況をカウント
-        usage_incremented = increment_ocr_count(self.this_company.firm)
+        usage_incremented = increment_ocr_count(self.this_firm)
         if not usage_incremented:
             messages.error(
                 request,

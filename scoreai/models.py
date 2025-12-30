@@ -1062,7 +1062,9 @@ class Help(models.Model):
     category =  models.CharField(
         max_length=50,
         choices=(
-            ('login', 'ログインについて'),
+            ('ai_usage', 'AIの活用'),
+            ('data_entry', 'データ登録'),
+            ('login', 'ログイン'),
             ('others', 'その他'),
         ),
         default = 'others',
@@ -1079,7 +1081,6 @@ class AIConsultationType(models.Model):
     """相談タイプ（財務、補助金・助成金、税務、法律など）"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     name = models.CharField(max_length=50, unique=True, verbose_name="相談タイプ名")  # "財務相談"
-    icon = models.CharField(max_length=20, verbose_name="アイコン")  # "💰"
     description = models.TextField(verbose_name="説明")  # 相談タイプの説明
     is_active = models.BooleanField(default=True, verbose_name="有効")
     order = models.IntegerField(default=0, verbose_name="表示順序")  # 表示順序

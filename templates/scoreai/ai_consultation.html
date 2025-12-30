@@ -112,20 +112,27 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h3 class="card-title mb-0">
-                        {{ consultation_type.icon }} {{ consultation_type.name }}
-                    </h3>
-                    <div>
-                        <a href="{% url 'ai_consultation_history' %}" class="btn btn-sm btn-outline-secondary">履歴</a>
-                        <a href="{% url 'user_ai_script_list' %}" class="btn btn-sm btn-outline-secondary">設定</a>
-                    </div>
-                </div>
-                <div class="card-body">
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h4 class="fw-semibold mb-1">{{ consultation_type.name }}</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'ai_consultation_center' %}" class="text-muted text-decoration-none">AI相談センター</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ consultation_type.name }}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div>
+                <a href="{% url 'ai_consultation_history' %}" class="btn btn-sm btn-outline-secondary me-2">履歴</a>
+                <a href="{% url 'user_ai_script_list' %}" class="btn btn-sm btn-outline-secondary">設定</a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
                     <div class="mb-3">
                         <h6>【利用可能なデータ】</h6>
                         <ul class="list-unstyled">
@@ -173,7 +180,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         </div>
     </div>

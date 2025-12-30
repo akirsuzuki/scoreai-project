@@ -264,7 +264,7 @@ class HelpAdmin(admin.ModelAdmin):
 
 @admin.register(AIConsultationType)
 class AIConsultationTypeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'icon', 'is_active', 'order')
+    list_display = ('name', 'is_active', 'order')
     list_display_links = ('name',)
     list_filter = ('is_active',)
     ordering = ('order', 'name')

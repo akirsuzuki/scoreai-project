@@ -3,24 +3,22 @@
 
 {% block content %}
 <div class="container-fluid">
-    <h1 class="mb-4">{{ title }}</h1>
-    
-    <div class="row">
+    <div class="row g-3">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header {% if plan.plan_type == 'enterprise' %}bg-primary text-white{% elif plan.plan_type == 'professional' %}bg-info text-white{% elif plan.plan_type == 'starter' %}bg-success text-white{% else %}bg-secondary text-white{% endif %}">
-                    <h3 class="card-title mb-0">{{ plan.name }}</h3>
+                <div class="card-header {% if plan.plan_type == 'enterprise' %}bg-primary text-white{% elif plan.plan_type == 'professional' %}bg-info text-white{% elif plan.plan_type == 'starter' %}bg-success text-white{% else %}bg-secondary text-white{% endif %} p-3">
+                    <h3 class="card-title mb-0 fw-semibold">{{ plan.name }}</h3>
                 </div>
                 <div class="card-body">
                     {% if plan.description %}
-                    <p class="lead">{{ plan.description }}</p>
+                    <p class="lead mb-4">{{ plan.description }}</p>
                     {% endif %}
                     
-                    <div class="mb-4">
-                        <h4>料金</h4>
-                        <div class="row">
+                    <div class="mb-3">
+                        <h4 class="fw-semibold mb-3">料金</h4>
+                        <div class="row g-3">
                             <div class="col-md-6">
-                                <h3>
+                                <h3 class="mb-0">
                                     {% if plan.monthly_price == 0 %}
                                         無料
                                     {% else %}
@@ -30,16 +28,16 @@
                             </div>
                             {% if plan.yearly_price %}
                             <div class="col-md-6">
-                                <h3>¥{{ plan.yearly_price|floatformat:0|intcomma }}/年</h3>
+                                <h3 class="mb-0">¥{{ plan.yearly_price|floatformat:0|intcomma }}/年</h3>
                                 <small class="text-muted">（{{ plan.yearly_discount_months }}ヶ月分無料）</small>
                             </div>
                             {% endif %}
                         </div>
                     </div>
                     
-                    <div class="mb-4">
-                        <h4>機能制限</h4>
-                        <table class="table">
+                    <div class="mb-3">
+                        <h4 class="fw-semibold mb-3">機能制限</h4>
+                        <table class="table mb-0">
                             <tr>
                                 <th>管理できるCompany数</th>
                                 <td>
@@ -73,11 +71,11 @@
                         </table>
                     </div>
                     
-                    <div class="mb-4">
-                        <h4>利用可能な機能</h4>
-                        <ul class="list-unstyled">
+                    <div class="mb-0">
+                        <h4 class="fw-semibold mb-3">利用可能な機能</h4>
+                        <ul class="list-unstyled mb-0">
                             {% if plan.cloud_storage_google_drive or plan.cloud_storage_box or plan.cloud_storage_dropbox or plan.cloud_storage_onedrive %}
-                            <li><i class="ti ti-check text-success"></i> クラウドストレージ連携:
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> クラウドストレージ連携:
                                 {% if plan.cloud_storage_google_drive %}Google Drive{% endif %}
                                 {% if plan.cloud_storage_box %}Box{% endif %}
                                 {% if plan.cloud_storage_dropbox %}Dropbox{% endif %}
@@ -85,16 +83,16 @@
                             </li>
                             {% endif %}
                             {% if plan.report_basic %}
-                            <li><i class="ti ti-check text-success"></i> 基本レポート</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> 基本レポート</li>
                             {% endif %}
                             {% if plan.report_advanced %}
-                            <li><i class="ti ti-check text-success"></i> 高度なレポート（PDF/Excel出力）</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> 高度なレポート（PDF/Excel出力）</li>
                             {% endif %}
                             {% if plan.report_custom %}
-                            <li><i class="ti ti-check text-success"></i> カスタムレポート</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> カスタムレポート</li>
                             {% endif %}
                             {% if plan.marketing_support %}
-                            <li><i class="ti ti-check text-success"></i> マーケティング支援
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> マーケティング支援
                                 {% if plan.marketing_support_seminar > 0 %}
                                 （セミナー共催: 年{{ plan.marketing_support_seminar }}回まで）
                                 {% endif %}
@@ -107,13 +105,13 @@
                             </li>
                             {% endif %}
                             {% if plan.api_integration %}
-                            <li><i class="ti ti-check text-success"></i> API連携</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> API連携</li>
                             {% endif %}
                             {% if plan.priority_support %}
-                            <li><i class="ti ti-check text-success"></i> 優先サポート</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> 優先サポート</li>
                             {% endif %}
                             {% if plan.profile_page_enhanced %}
-                            <li><i class="ti ti-check text-success"></i> プロフィールページ強化</li>
+                            <li class="mb-2"><i class="ti ti-check text-success"></i> プロフィールページ強化</li>
                             {% endif %}
                         </ul>
                     </div>
@@ -123,12 +121,12 @@
         
         <div class="col-md-4">
             <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">プラン登録</h5>
+                <div class="card-header p-3">
+                    <h5 class="card-title mb-0 fw-semibold">プラン登録</h5>
                 </div>
                 <div class="card-body">
                     {% if is_current_plan %}
-                    <p class="text-muted">現在このプランに登録されています。</p>
+                    <p class="text-muted mb-3">現在このプランに登録されています。</p>
                     <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-primary w-100">サブスクリプション管理</a>
                     {% else %}
                     {% if plan.plan_type == 'free' %}
@@ -157,7 +155,7 @@
         </div>
     </div>
     
-    <div class="mt-4">
+    <div class="mt-3">
         <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-secondary">プラン一覧に戻る</a>
     </div>
 </div>

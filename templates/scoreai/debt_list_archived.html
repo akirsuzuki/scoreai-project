@@ -23,11 +23,21 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="row mt-4">
-    <div class="col-lg-12 d-flex align-items-strech">
-      <div class="card w-100">
-        <div class="card-header">
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">アーカイブ済み</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary btn-sm">借入一覧</a>
+        <a href="{% url 'debts_byBank' %}" class="btn btn-outline-primary btn-sm">金融機関別</a>
+        <a href="{% url 'debts_bySecuredType' %}" class="btn btn-outline-primary btn-sm">保証別</a>
+        <a href="{% url 'debts_archived' %}" class="btn btn-primary btn-sm">アーカイブ済み</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
           <h5 class="card-title fw-semibold">アーカイブ済み</h5>
         </div>
         <div class="card-body">

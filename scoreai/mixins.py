@@ -63,6 +63,66 @@ class SelectedCompanyMixin(LoginRequiredMixin, ErrorHandlingMixin):
             raise ValueError("選択された会社がありません。")
         
         return user_company.company
+    
+    @property
+    def this_firm(self):
+        """Get the currently selected firm for the user"""
+        from .models import UserFirm, FirmCompany, UserCompany
+        
+        # まず、ユーザーの選択されたCompanyとFirmを取得
+        user_company = UserCompany.objects.filter(
+            user=self.request.user,
+            is_selected=True
+        ).select_related('company', 'user').first()
+        
+        if not user_company:
+            raise ValueError("選択された会社がありません。")
+        
+        user_firm = UserFirm.objects.filter(
+            user=self.request.user,
+            is_selected=True
+        ).select_related('firm', 'user').first()
+        
+        if not user_firm:
+            raise ValueError("選択されたFirmがありません。")
+        
+        # CompanyがこのFirmに属しているか確認（まずactive=Trueで検索、見つからない場合はactive条件なしで検索）
+        firm_company = FirmCompany.objects.filter(
+            firm=user_firm.firm,
+            company=user_company.company,
+            active=True
+        ).first()
+        
+        # active=Trueで見つからない場合、active条件なしで検索
+        if not firm_company:
+            firm_company = FirmCompany.objects.filter(
+                firm=user_firm.firm,
+                company=user_company.company
+            ).first()
+        
+        # それでも見つからない場合、Companyに関連するFirmCompanyを検索して、ユーザーが選択したFirmと一致するものを探す
+        if not firm_company:
+            # Companyに関連するFirmCompanyを検索
+            company_firms = FirmCompany.objects.filter(
+                company=user_company.company
+            ).select_related('firm')
+            
+            # ユーザーが選択したFirmと一致するものを探す
+            for cf in company_firms:
+                if cf.firm.id == user_firm.firm.id:
+                    firm_company = cf
+                    break
+        
+        # それでも見つからない場合は、ユーザーが選択したFirmをそのまま返す
+        # （FirmCompanyの関係が存在しない場合でも、ユーザーがそのCompanyとFirmにアクセスできる可能性がある）
+        if not firm_company:
+            logger.warning(
+                f"FirmCompany relationship not found for company {user_company.company.id} and firm {user_firm.firm.id}, "
+                f"but returning selected firm anyway"
+            )
+            return user_firm.firm
+        
+        return user_firm.firm
 
 
 class TransactionMixin:

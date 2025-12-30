@@ -33,22 +33,22 @@
 {% endblock %}
 
 {% block breadcrumb %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">
-      <a class="text-muted text-decoration-none" href="#alldebts">現在返済中</a>
-    </li>
-    <li class="breadcrumb-item">
-      <a class="text-muted text-decoration-none" href="#rescheduled">リスケ中</a>
-    </li>
-    <li class="breadcrumb-item">
-      <a class="text-muted text-decoration-none" href="#finished">返済済み</a>
-    </li>
-  </ol>
-</nav>    
 {% endblock %}
 
 {% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">借入一覧</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'debts_all' %}" class="btn btn-primary btn-sm">借入一覧</a>
+        <a href="{% url 'debts_byBank' %}" class="btn btn-outline-primary btn-sm">金融機関別</a>
+        <a href="{% url 'debts_bySecuredType' %}" class="btn btn-outline-primary btn-sm">保証別</a>
+        <a href="{% url 'debts_archived' %}" class="btn btn-outline-primary btn-sm">アーカイブ済み</a>
+      </div>
+    </div>
+  </div>
+</div>
 <p id="dashboard"></p>
 {% include 'scoreai/debt_dashboard.html' %}
 
