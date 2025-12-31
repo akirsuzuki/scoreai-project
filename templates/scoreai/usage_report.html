@@ -1,0 +1,163 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscription_manage' firm_id=firm.id %}" class="text-muted text-decoration-none">サブスクリプション管理</a></li>
+            <li class="breadcrumb-item active" aria-current="page">利用状況レポート</li>
+          </ol>
+        </nav>
+      </div>
+      <div class="d-flex gap-2">
+        <a href="{% url 'usage_report_export' firm_id=firm.id %}?months={{ months }}" class="btn btn-outline-primary">
+          <i class="ti ti-download me-1"></i>CSVエクスポート
+        </a>
+        <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-secondary">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">利用状況グラフ</h5>
+          <div class="d-flex align-items-center gap-2">
+            <label for="months" class="form-label mb-0">表示期間:</label>
+            <select id="months" class="form-select form-select-sm" style="width: 100px;" onchange="updateMonths(this.value)">
+              <option value="3" {% if months == 3 %}selected{% endif %}>3ヶ月</option>
+              <option value="6" {% if months == 6 %}selected{% endif %}>6ヶ月</option>
+              <option value="12" {% if months == 12 %}selected{% endif %}>12ヶ月</option>
+              <option value="24" {% if months == 24 %}selected{% endif %}>24ヶ月</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="usageChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">利用状況一覧</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">年月</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">AI相談回数</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">OCR読み込み回数</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in usage_data.table_data %}
+              <tr>
+                <td class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">{{ row.label }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ row.ai_consultation|intcomma }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ row.ocr|intcomma }}</p>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const chartData = {{ chart_data|safe }};
+
+const ctx = document.getElementById('usageChart').getContext('2d');
+const usageChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: chartData.labels,
+    datasets: [
+      {
+        label: 'AI相談回数',
+        data: chartData.ai_consultation,
+        borderColor: 'rgb(93, 135, 255)',
+        backgroundColor: 'rgba(93, 135, 255, 0.1)',
+        tension: 0.4,
+        fill: true,
+      },
+      {
+        label: 'OCR読み込み回数',
+        data: chartData.ocr,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+        tension: 0.4,
+        fill: true,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: false,
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1
+        }
+      }
+    }
+  }
+});
+
+function updateMonths(months) {
+  const url = new URL(window.location.href);
+  url.searchParams.set('months', months);
+  window.location.href = url.toString();
+}
+</script>
+{% endblock %}
+

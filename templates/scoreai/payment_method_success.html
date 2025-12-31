@@ -1,0 +1,49 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscription_manage' firm_id=firm.id %}" class="text-muted text-decoration-none">サブスクリプション管理</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'billing_history' firm_id=firm.id %}" class="text-muted text-decoration-none">請求履歴</a></li>
+            <li class="breadcrumb-item active" aria-current="page">支払い方法更新完了</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8 offset-lg-2">
+    <div class="card">
+      <div class="card-body text-center py-5">
+        <div class="mb-4">
+          <i class="ti ti-check-circle" style="font-size: 64px; color: #28a745;"></i>
+        </div>
+        <h3 class="fw-semibold mb-3">支払い方法の更新が完了しました</h3>
+        <p class="text-muted mb-4">新しい支払い方法が正常に設定されました。</p>
+        <div class="d-flex gap-2 justify-content-center">
+          <a href="{% url 'billing_history' firm_id=firm.id %}" class="btn btn-primary">
+            <i class="ti ti-arrow-left me-1"></i>請求履歴に戻る
+          </a>
+          <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-outline-secondary">
+            サブスクリプション管理に戻る
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -53,6 +53,40 @@ from .views.plan_views import (
     SubscriptionSuccessView,
     SubscriptionCancelView,
 )
+from .views.usage_report_views import (
+    UsageReportView,
+    UsageReportExportView,
+    CompanyUsageReportView,
+)
+from .views.billing_views import (
+    BillingHistoryView,
+    BillingInvoiceDetailView,
+    PaymentMethodUpdateView,
+    PaymentMethodSuccessView,
+)
+from .views.subscription_history_views import (
+    SubscriptionHistoryView,
+)
+from .views.firm_settings_views import (
+    FirmSettingsView,
+)
+from .views.notification_views import (
+    NotificationListView,
+    NotificationDetailView,
+    NotificationMarkReadView,
+    NotificationMarkAllReadView,
+)
+from .views.meeting_minutes_ai_views import (
+    MeetingMinutesAIGenerateView,
+    MeetingMinutesAIResultView,
+    MeetingMinutesAISaveView,
+)
+from .views.firm_member_views import (
+    FirmMemberListView,
+    FirmMemberInviteView,
+    FirmMemberUpdateView,
+    FirmInvitationCancelView,
+)
 from .views.stripe_webhook_views import StripeWebhookView
 from .views import (
     # views.pyから再エクスポートされた関数
@@ -104,6 +138,9 @@ from .views import (
     MeetingMinutesListView,
     MeetingMinutesDetailView,
     MeetingMinutesDeleteView,
+    MeetingMinutesAIGenerateView,
+    MeetingMinutesAIResultView,
+    MeetingMinutesAISaveView,
     AboutView,
     NewsListView,
     CompanyProfileView,
@@ -191,6 +228,11 @@ urlpatterns = [
     path('meeting_minutes/create/', MeetingMinutesCreateView.as_view(), name='meeting_minutes_create'),
     path('meeting_minutes/<str:company_id>/<str:pk>/update/', MeetingMinutesUpdateView.as_view(), name='meeting_minutes_update'),
     path('meeting_minutes/<str:company_id>/<str:pk>/delete/', MeetingMinutesDeleteView.as_view(), name='meeting_minutes_delete'),
+    
+    # AI議事録生成
+    path('meeting_minutes/ai/generate/', MeetingMinutesAIGenerateView.as_view(), name='meeting_minutes_ai_generate'),
+    path('meeting_minutes/ai/result/', MeetingMinutesAIResultView.as_view(), name='meeting_minutes_ai_result'),
+    path('meeting_minutes/ai/save/', MeetingMinutesAISaveView.as_view(), name='meeting_minutes_ai_save'),
     path('meeting_minutes_list/', MeetingMinutesListView.as_view(), name='meeting_minutes_list'),
     path('meeting_minutes/<str:company_id>/<str:pk>/', MeetingMinutesDetailView.as_view(), name='meeting_minutes_detail'),
     path('about/', AboutView.as_view(), name='about'),
@@ -249,6 +291,34 @@ urlpatterns = [
     path('plans/<str:firm_id>/subscription/', SubscriptionManageView.as_view(), name='subscription_manage'),
     path('plans/<str:firm_id>/<str:plan_id>/', PlanDetailView.as_view(), name='plan_detail'),
     path('plans/<str:firm_id>/', PlanListView.as_view(), name='plan_list'),
+    # Firmメンバー管理
+    path('firm/<str:firm_id>/members/', FirmMemberListView.as_view(), name='firm_member_list'),
+    path('firm/<str:firm_id>/members/invite/', FirmMemberInviteView.as_view(), name='firm_member_invite'),
+    path('firm/<str:firm_id>/members/<str:member_id>/update/', FirmMemberUpdateView.as_view(), name='firm_member_update'),
+    path('firm/<str:firm_id>/members/<str:invitation_id>/cancel/', FirmInvitationCancelView.as_view(), name='firm_invitation_cancel'),
+    
+    # 利用状況レポート
+    path('firm/<str:firm_id>/usage/report/', UsageReportView.as_view(), name='usage_report'),
+    path('firm/<str:firm_id>/usage/report/export/', UsageReportExportView.as_view(), name='usage_report_export'),
+    path('firm/<str:firm_id>/companies/<str:company_id>/usage/', CompanyUsageReportView.as_view(), name='company_usage_report'),
+    
+    # 請求履歴
+    path('firm/<str:firm_id>/billing/history/', BillingHistoryView.as_view(), name='billing_history'),
+    path('firm/<str:firm_id>/billing/invoice/<str:invoice_id>/', BillingInvoiceDetailView.as_view(), name='billing_invoice_detail'),
+    path('firm/<str:firm_id>/billing/payment-method/update/', PaymentMethodUpdateView.as_view(), name='payment_method_update'),
+    path('firm/<str:firm_id>/billing/payment-method/success/', PaymentMethodSuccessView.as_view(), name='payment_method_success'),
+    
+    # プラン変更履歴
+    path('firm/<str:firm_id>/subscription/history/', SubscriptionHistoryView.as_view(), name='subscription_history'),
+    
+    # Firm設定管理
+    path('firm/<str:firm_id>/settings/', FirmSettingsView.as_view(), name='firm_settings'),
+    
+    # 通知機能
+    path('firm/<str:firm_id>/notifications/', NotificationListView.as_view(), name='notification_list'),
+    path('firm/<str:firm_id>/notifications/<str:notification_id>/', NotificationDetailView.as_view(), name='notification_detail'),
+    path('firm/<str:firm_id>/notifications/<str:notification_id>/mark-read/', NotificationMarkReadView.as_view(), name='notification_mark_read'),
+    path('firm/<str:firm_id>/notifications/mark-all-read/', NotificationMarkAllReadView.as_view(), name='notification_mark_all_read'),
     # Stripe Webhook
     path('stripe/webhook/', StripeWebhookView.as_view(), name='stripe_webhook'),
 ]

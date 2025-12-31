@@ -198,6 +198,23 @@
                 <span class="hide-menu">新規ノート</span>
               </a>
             </li>
+            {% if user.is_financial_consultant %}
+            {% load custom_tags plan_features_tags %}
+            {% get_user_firm_owner user as user_firm_owner %}
+            {% if user_firm_owner %}
+            {% check_plan_feature_access_tag user_firm_owner.firm 'starter' as plan_check %}
+            {% if plan_check.0 %}
+            <li class="sidebar-item">
+              <a href="{% url 'meeting_minutes_ai_generate' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu"><i class="ti ti-sparkles me-1"></i>AI議事録生成</span>
+              </a>
+            </li>
+            {% endif %}
+            {% endif %}
+            {% endif %}
           </ul>
         </li>
 
@@ -236,15 +253,53 @@
           </a>
         </li>
         
+        <!-- 2. is_company_user=True かつ is_manager=True かつ is_financial_consultant=False のユーザー -->
+        <!-- （is_financial_consultant=True の場合は「クライアント会社レベル設定」に表示されるため除外） -->
+        {% if user.is_company_user and user.is_manager and not user.is_financial_consultant %}
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">設定</span>
         </li>
         
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'user_profile' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-user me-2"></i>プロフィール</span>
+          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-script me-2"></i>マイスクリプト</span>
           </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'storage_setting' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-cloud me-2"></i>クラウドストレージ</span>
+          </a>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'storage_file_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-files me-2"></i>ストレージファイル</span>
+          </a>
+        </li>
+        {% endif %}
+        
+        <!-- 3. is_financial_consultant=True かつ is_manager=False のユーザー -->
+        {% if user.is_financial_consultant and not user.is_manager %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Consultantメニュー</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
+          </a>
+        </li>
+        {% endif %}
+        
+        <!-- 4. is_financial_consultant=True かつ is_manager=True のユーザー -->
+        {% if user.is_financial_consultant and user.is_manager %}
+        <!-- クライアント会社レベル設定 -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">クライアント会社レベル設定</span>
         </li>
         
         <li class="sidebar-item">
@@ -265,7 +320,51 @@
           </a>
         </li>
         
+        <!-- Consultantメニュー -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Consultantメニュー</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
+          </a>
+        </li>
+        
+        {% load custom_tags %}
+        {% get_user_firm_owner user as user_firm_owner %}
+        {% if user_firm_owner %}
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-id me-2"></i>スタッフ管理</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-credit-card me-2"></i>プラン</span>
+          </a>
+        </li>
+        {% endif %}
+        {% endif %}
+        
+        <!-- 設定（全ユーザー共通） -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">ユーザー設定</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_profile' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-user me-2"></i>プロフィール</span>
+          </a>
+        </li>
+        
         {% if user.is_superuser %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">管理者</span>
+        </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'admin_ai_script_list' %}" aria-expanded="false">
             <span class="hide-menu"><i class="ti ti-settings me-2"></i>AIスクリプト管理</span>
@@ -274,34 +373,6 @@
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
             <span class="hide-menu"><i class="ti ti-shield me-2"></i>管理画面</span>
-          </a>
-        </li>
-        {% endif %}
-
-        <!-- コンサルタントの場合のみ表示 -->
-        {% if user.is_financial_consultant %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Consultant Menu</span>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
-          </a>
-        </li>
-        {% endif %}
-        
-        <!-- Firmオーナーの場合のみ表示 -->
-        {% load custom_tags %}
-        {% get_user_firm_owner user as user_firm_owner %}
-        {% if user_firm_owner %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">プラン管理</span>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-credit-card me-2"></i>プラン・サブスクリプション</span>
           </a>
         </li>
         {% endif %}

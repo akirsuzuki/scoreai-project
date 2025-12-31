@@ -1,0 +1,140 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscription_manage' firm_id=firm.id %}" class="text-muted text-decoration-none">サブスクリプション管理</a></li>
+            <li class="breadcrumb-item active" aria-current="page">通知一覧</li>
+          </ol>
+        </nav>
+      </div>
+      <div>
+        {% if unread_count > 0 %}
+        <form method="post" action="{% url 'notification_mark_all_read' firm_id=firm.id %}" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-primary">
+            <i class="ti ti-check me-1"></i>すべて既読にする
+          </button>
+        </form>
+        {% endif %}
+        <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-secondary">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="card-title mb-0 fw-semibold">通知一覧</h5>
+          {% if unread_count > 0 %}
+          <span class="badge bg-danger">{{ unread_count }}件の未読通知</span>
+          {% else %}
+          <span class="badge bg-success">すべて既読</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card-body">
+        {% if notifications %}
+        <div class="list-group">
+          {% for notification in notifications %}
+          <a href="{% url 'notification_detail' firm_id=firm.id notification_id=notification.id %}" 
+             class="list-group-item list-group-item-action {% if not notification.is_read %}list-group-item-warning{% endif %}">
+            <div class="d-flex w-100 justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <h6 class="mb-0 fw-semibold">
+                    {% if not notification.is_read %}
+                    <span class="badge bg-danger me-2">未読</span>
+                    {% endif %}
+                    {{ notification.title }}
+                  </h6>
+                </div>
+                <p class="mb-1 text-muted">{{ notification.message|truncatewords:30 }}</p>
+                <small class="text-muted">
+                  <i class="ti ti-clock me-1"></i>{{ notification.created_at|date:"Y年m月d日 H:i" }}
+                  {% if notification.is_read and notification.read_at %}
+                  <span class="ms-3">
+                    <i class="ti ti-check me-1"></i>既読: {{ notification.read_at|date:"Y年m月d日 H:i" }}
+                  </span>
+                  {% endif %}
+                </small>
+              </div>
+              <div>
+                {% if notification.notification_type == 'plan_limit_warning' %}
+                <span class="badge bg-warning">警告</span>
+                {% elif notification.notification_type == 'payment_failed' %}
+                <span class="badge bg-danger">支払い</span>
+                {% elif notification.notification_type == 'subscription_updated' %}
+                <span class="badge bg-info">更新</span>
+                {% elif notification.notification_type == 'member_invited' %}
+                <span class="badge bg-primary">メンバー</span>
+                {% elif notification.notification_type == 'plan_downgrade' %}
+                <span class="badge bg-secondary">プラン</span>
+                {% elif notification.notification_type == 'grace_period_ending' %}
+                <span class="badge bg-warning">グレース期間</span>
+                {% endif %}
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+        
+        <!-- ページネーション -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a>
+            </li>
+            {% endif %}
+            
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active">
+              <span class="page-link">{{ num }}</span>
+            </li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+        {% else %}
+        <div class="text-center py-5">
+          <i class="ti ti-bell-off" style="font-size: 64px; color: #ccc;"></i>
+          <p class="text-muted mt-3 mb-0">通知がありません</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

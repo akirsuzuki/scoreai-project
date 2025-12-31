@@ -15,54 +15,12 @@ import logging
 import stripe
 
 from ..models import Firm, FirmPlan, FirmSubscription, FirmUsageTracking, UserFirm
-from ..mixins import ErrorHandlingMixin
+from ..mixins import ErrorHandlingMixin, FirmOwnerMixin
 
 logger = logging.getLogger(__name__)
 
 # Stripe APIキーの設定
 stripe.api_key = getattr(settings, 'STRIPE_SECRET_KEY', '')
-
-
-class FirmOwnerMixin(LoginRequiredMixin, ErrorHandlingMixin):
-    """Firmのオーナーであることを確認するMixin"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        """Firmのオーナーであることを確認"""
-        if not request.user.is_authenticated:
-            return self.handle_no_permission()
-        
-        # Firm IDを取得
-        firm_id = kwargs.get('firm_id') or self.kwargs.get('firm_id')
-        if firm_id:
-            firm = get_object_or_404(Firm, id=firm_id)
-            # オーナーであることを確認
-            user_firm = UserFirm.objects.filter(
-                user=request.user,
-                firm=firm,
-                is_owner=True,
-                active=True
-            ).first()
-            
-            if not user_firm:
-                messages.error(request, 'このFirmのオーナー権限がありません。')
-                return redirect('index')
-            
-            self.firm = firm
-        else:
-            # ユーザーがオーナーであるFirmを取得
-            user_firm = UserFirm.objects.filter(
-                user=request.user,
-                is_owner=True,
-                active=True
-            ).select_related('firm').first()
-            
-            if not user_firm:
-                messages.error(request, 'オーナー権限を持つFirmが見つかりません。')
-                return redirect('index')
-            
-            self.firm = user_firm.firm
-        
-        return super().dispatch(request, *args, **kwargs)
 
 
 class PlanListView(FirmOwnerMixin, ListView):
@@ -110,9 +68,22 @@ class PlanDetailView(FirmOwnerMixin, DetailView):
             subscription = self.firm.subscription
             context['current_subscription'] = subscription
             context['is_current_plan'] = subscription.plan == self.object
+            
+            # ダウングレード警告をチェック
+            if not context['is_current_plan']:
+                from ..utils.plan_downgrade import check_downgrade_warning
+                needs_warning, exceed_count, exceeding_companies = check_downgrade_warning(
+                    self.firm, self.object
+                )
+                context['downgrade_warning'] = needs_warning
+                context['exceed_count'] = exceed_count
+                context['exceeding_companies'] = exceeding_companies
+            else:
+                context['downgrade_warning'] = False
         except FirmSubscription.DoesNotExist:
             context['current_subscription'] = None
             context['is_current_plan'] = False
+            context['downgrade_warning'] = False
         
         return context
 

@@ -150,6 +150,84 @@ class UserFirm(models.Model):
         return f"{self.firm} - {self.user}"
 
 
+class FirmInvitation(models.Model):
+    """Firmへの招待を管理するモデル"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='invitations', verbose_name='Firm')
+    email = models.EmailField('メールアドレス')
+    invited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_invitations', verbose_name='招待者')
+    is_owner = models.BooleanField('オーナー権限', default=False)
+    invited_at = models.DateTimeField('招待日時', auto_now_add=True)
+    accepted_at = models.DateTimeField('承認日時', null=True, blank=True)
+    is_accepted = models.BooleanField('承認済み', default=False)
+    
+    class Meta:
+        unique_together = ('firm', 'email', 'is_accepted')
+        verbose_name = 'Firm招待'
+        verbose_name_plural = 'Firm招待'
+        ordering = ['-invited_at']
+    
+    def save(self, *args, **kwargs):
+        """保存時にis_acceptedがTrueになった場合、UserFirmレコードを作成"""
+        # 既存のレコードがある場合、is_acceptedの変更を確認
+        if self.pk:
+            try:
+                old_instance = FirmInvitation.objects.get(pk=self.pk)
+                # is_acceptedがFalseからTrueに変更された場合
+                if not old_instance.is_accepted and self.is_accepted:
+                    self._create_user_firm()
+            except FirmInvitation.DoesNotExist:
+                pass
+        else:
+            # 新規作成時でis_acceptedがTrueの場合
+            if self.is_accepted:
+                self._create_user_firm()
+        
+        # accepted_atを設定
+        if self.is_accepted and not self.accepted_at:
+            from django.utils import timezone
+            self.accepted_at = timezone.now()
+        
+        super().save(*args, **kwargs)
+    
+    def _create_user_firm(self):
+        """UserFirmレコードを作成"""
+        from django.utils import timezone
+        
+        # メールアドレスからユーザーを検索
+        try:
+            user = User.objects.get(email=self.email)
+            
+            # 既にUserFirmレコードが存在するか確認
+            existing_user_firm = UserFirm.objects.filter(
+                user=user,
+                firm=self.firm
+            ).first()
+            
+            if existing_user_firm:
+                # 既存のレコードがある場合は更新
+                existing_user_firm.active = True
+                existing_user_firm.is_owner = self.is_owner
+                existing_user_firm.is_selected = False
+                existing_user_firm.save()
+            else:
+                # 新規作成
+                UserFirm.objects.create(
+                    user=user,
+                    firm=self.firm,
+                    active=True,
+                    is_owner=self.is_owner,
+                    is_selected=False
+                )
+        except User.DoesNotExist:
+            # ユーザーが存在しない場合は何もしない（新規ユーザー招待の場合）
+            pass
+    
+    def __str__(self):
+        status = '承認済み' if self.is_accepted else '招待中'
+        return f"{self.firm.name} - {self.email} ({status})"
+
+
 class FirmCompany(models.Model):
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='firm_companies')
@@ -157,6 +235,12 @@ class FirmCompany(models.Model):
     active = models.BooleanField(default=True)
     start_date = models.DateField("開始日")
     end_date = models.DateField("終了日", null=True, blank=True)
+    grace_period_end = models.DateField(
+        'グレース期間終了日',
+        null=True,
+        blank=True,
+        help_text='プランダウングレード時の一時的な保持期間'
+    )
 
     def clean(self):
         if self.end_date and self.start_date > self.end_date:
@@ -171,6 +255,8 @@ class FirmCompany(models.Model):
 
     class Meta:
         unique_together = ('firm', 'company')
+        verbose_name = 'ファーム会社関連'
+        verbose_name_plural = 'ファーム会社関連'
 
 
 # プラン・サブスクリプション関連のモデル
@@ -408,6 +494,64 @@ class FirmUsageTracking(models.Model):
         if total == 0:
             return 0
         return min(100, (self.ocr_count / total) * 100)
+
+
+class SubscriptionHistory(models.Model):
+    """プラン変更履歴"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='subscription_history', verbose_name='Firm')
+    subscription = models.ForeignKey(FirmSubscription, on_delete=models.CASCADE, related_name='history', verbose_name='サブスクリプション')
+    
+    # 変更前のプラン
+    old_plan = models.ForeignKey(FirmPlan, on_delete=models.PROTECT, related_name='old_subscription_history', null=True, blank=True, verbose_name='変更前プラン')
+    
+    # 変更後のプラン
+    new_plan = models.ForeignKey(FirmPlan, on_delete=models.PROTECT, related_name='new_subscription_history', verbose_name='変更後プラン')
+    
+    # 変更理由
+    reason = models.TextField('変更理由', blank=True)
+    
+    # 変更日時
+    changed_at = models.DateTimeField('変更日時', auto_now_add=True)
+    changed_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='変更者')
+    
+    class Meta:
+        verbose_name = 'プラン変更履歴'
+        verbose_name_plural = 'プラン変更履歴'
+        ordering = ['-changed_at']
+    
+    def __str__(self):
+        old_name = self.old_plan.name if self.old_plan else 'なし'
+        return f"{self.firm.name} - {old_name} → {self.new_plan.name} ({self.changed_at.strftime('%Y-%m-%d')})"
+
+
+class FirmNotification(models.Model):
+    """Firm向け通知"""
+    NOTIFICATION_TYPES = [
+        ('plan_limit_warning', 'プラン制限警告'),
+        ('payment_failed', '支払い失敗'),
+        ('subscription_updated', 'サブスクリプション更新'),
+        ('member_invited', 'メンバー招待'),
+        ('plan_downgrade', 'プランダウングレード'),
+        ('grace_period_ending', 'グレース期間終了間近'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='notifications', verbose_name='Firm')
+    notification_type = models.CharField('通知タイプ', max_length=50, choices=NOTIFICATION_TYPES)
+    title = models.CharField('タイトル', max_length=255)
+    message = models.TextField('メッセージ')
+    is_read = models.BooleanField('既読', default=False)
+    created_at = models.DateTimeField('作成日時', auto_now_add=True)
+    read_at = models.DateTimeField('既読日時', null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'Firm通知'
+        verbose_name_plural = 'Firm通知'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.firm.name} - {self.title}"
 
 
 class FinancialInstitution(models.Model):
@@ -1154,6 +1298,42 @@ class UserAIConsultationScript(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.consultation_type.name} - {self.name}"
+
+
+class MeetingMinutesAIScript(models.Model):
+    """AI議事録生成スクリプト（システム全体用・管理者が編集）"""
+    MEETING_TYPE_CHOICES = [
+        ('shareholders_meeting', '株主総会'),
+        ('board_of_directors', '取締役会'),
+        ('management_committee', '経営会議 / 執行役員会'),
+    ]
+    
+    MEETING_CATEGORY_CHOICES = [
+        ('regular', '定時'),
+        ('extraordinary', '臨時'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    meeting_type = models.CharField('会議体', max_length=50, choices=MEETING_TYPE_CHOICES)
+    meeting_category = models.CharField('開催種別', max_length=50, choices=MEETING_CATEGORY_CHOICES)
+    agenda = models.CharField('議題', max_length=100, help_text="議題のキー（financial_approval, officer_election等）")
+    name = models.CharField('スクリプト名', max_length=100)
+    system_instruction = models.TextField('システムプロンプト', help_text="AIの役割や振る舞いを定義するシステムプロンプト")
+    prompt_template = models.TextField('プロンプトテンプレート', help_text="議事録生成用のプロンプトテンプレート。利用可能な変数: {meeting_type_name}, {meeting_category_name}, {agenda_name}, {agenda_description}, {company_name}, {additional_info}")
+    is_default = models.BooleanField('デフォルト', default=True, help_text="この組み合わせのデフォルトスクリプトか")
+    is_active = models.BooleanField('有効', default=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="作成者")
+    created_at = models.DateTimeField('作成日時', auto_now_add=True)
+    updated_at = models.DateTimeField('更新日時', auto_now=True)
+    
+    class Meta:
+        verbose_name = 'AI議事録生成スクリプト'
+        verbose_name_plural = 'AI議事録生成スクリプト'
+        unique_together = [['meeting_type', 'meeting_category', 'agenda', 'is_default']]
+        ordering = ['meeting_type', 'meeting_category', 'agenda', '-is_default', 'name']
+    
+    def __str__(self):
+        return f"{self.get_meeting_type_display()} - {self.get_meeting_category_display()} - {self.agenda} - {self.name}"
 
 
 class CloudStorageSetting(models.Model):

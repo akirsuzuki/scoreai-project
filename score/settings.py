@@ -161,8 +161,14 @@ except ImportError:
     GOOGLE_CLOUD_PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT_ID")
     DEBUG = os.environ.get('DEBUG', 'False') == 'True'
     ALLOWED_HOSTS = ['.herokuapp.com', 'www.score-ai.net', 'score-ai.net', '0.0.0.0', '127.0.0.1']
-    # EMAIL_HOST_USER = 'sth' or os.environ['EMAIL_HOST_USER']
-    # EMAIL_HOST_PASSWORD = 'sth' or os.environ['EMAIL_HOST_PASSWORD']
+    # SendGrid設定
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.sendgrid.net'
+    EMAIL_PORT = 587
+    EMAIL_USE_TLS = True
+    EMAIL_HOST_USER = 'apikey'  # SendGridでは固定値
+    EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', '')
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@score-ai.net')
     # Stripe設定
     STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
@@ -235,6 +241,11 @@ LOGGING = {
         },
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
         'file': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
@@ -250,20 +261,34 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'ERROR' if not DEBUG else 'INFO',
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
         'django.security': {
-            'handlers': ['security_file'],
+            'handlers': ['security_file', 'console'],
             'level': 'WARNING',
             'propagate': True,
         },
         'scoreai': {
-            'handlers': ['file'],
-            'level': 'INFO',
+            'handlers': ['console', 'file'],
+            'level': 'ERROR' if not DEBUG else 'INFO',
             'propagate': True,
         },
+        'scoreai.views.stripe_webhook_views': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',  # Webhook処理は常にINFOレベルでログを出力
+            'propagate': False,
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'ERROR' if not DEBUG else 'INFO',
     },
 }
 

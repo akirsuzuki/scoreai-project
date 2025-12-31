@@ -14,6 +14,7 @@ from .models import (
     AIConsultationType,
     AIConsultationScript,
     UserAIConsultationScript,
+    Firm,
 )
 from django_select2.forms import Select2Widget
 from django.contrib.auth import get_user_model
@@ -99,178 +100,100 @@ class CompanyForm(forms.ModelForm):
         self.fields['industry_subclassification'].required = True
         self.fields['company_size'].required = True
 
-        self.fields['industry_classification'].queryset = IndustryClassification.objects.all()
-        self.fields['industry_subclassification'].queryset = IndustrySubClassification.objects.none()
-
-        if 'industry_classification' in self.data:
-            try:
-                industry_classification_id = int(self.data.get('industry_classification'))
-                self.fields['industry_subclassification'].queryset = IndustrySubClassification.objects.filter(industry_classification_id=industry_classification_id).order_by('name')
-            except (ValueError, TypeError):
-                pass  # invalid input; empty queryset
-        elif self.instance.pk and self.instance.industry_classification:
-            industry_classification = self.instance.industry_classification
-            self.fields['industry_subclassification'].queryset = IndustrySubClassification.objects.filter(industry_classification=industry_classification).order_by('name')
-            self.fields['industry_subclassification'].initial = self.instance.industry_subclassification
-
 
 class IndustryBenchmarkImportForm(forms.Form):
-    csv_file = forms.FileField(label='CSVファイルを選択してください')
+    industry_classification = forms.ModelChoiceField(
+        queryset=IndustryClassification.objects.all(),
+        label='業種分類',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
 
 
 class FiscalSummary_YearForm(forms.ModelForm):
     class Meta:
         model = FiscalSummary_Year
-        exclude = ['id', 'company', 'version', 'score_sales_growth_rate', 'score_operating_profit_margin', 'score_labor_productivity', 'score_EBITDA_interest_bearing_debt_ratio', 'score_operating_working_capital_turnover_period', 'score_equity_ratio']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control'
-        # インスタンスが存在する場合（更新の場合）のみ、yearフィールドを読み取り専用にする
-        if self.instance.pk:
-            self.fields['year'].widget.attrs['readonly'] = True
-
-        if 'financial_statement_notes' in self.fields:
-            self.fields['financial_statement_notes'].widget.attrs['rows'] = 3
+        fields = '__all__'
+        exclude = ['company']
 
 
 class FiscalSummary_MonthForm(forms.ModelForm):
     class Meta:
         model = FiscalSummary_Month
-        fields = ['fiscal_summary_year', 'period', 'sales', 'gross_profit', 'operating_profit', 'ordinary_profit']
-        widgets = {
-            'fiscal_summary_year': forms.Select(attrs={'class': 'form-control', 'id': 'FiscalSummary_Year'}),
-            'period': forms.NumberInput(attrs={
-                'class': 'form-control',
-                    'min': 1,
-                    'max': 13,
-                    'placeholder': '1-13'
-                }),
-            'sales': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'gross_profit': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'operating_profit': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-            'ordinary_profit': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
-        }
-        labels = {
-            'fiscal_summary_year': '年度',
-            'period': '月度',
-            'sales': '売上高（千円）',
-            'gross_profit': '粗利益（千円）',
-            'operating_profit': '営業利益（千円）',
-            'ordinary_profit': '経常利益（千円）',
-        }
-    
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            # Set the initial value to the existing fiscal_summary_year
-            self.fields['fiscal_summary_year'].initial = self.instance.fiscal_summary_year
-            # Make the field readonly to prevent changes
-            self.fields['fiscal_summary_year'].widget.attrs['readonly'] = True
-            # Optionally, add a hidden input to retain the value during form submission
-            self.fields['fiscal_summary_year'].widget = forms.HiddenInput()
-    
-    def clean_fiscal_summary_year(self):
-        if self.instance.pk:
-            # Ensure the original value is maintained
-            return self.instance.fiscal_summary_year
-        return self.cleaned_data['fiscal_summary_year']
-
-    def clean(self):
-        cleaned_data = super().clean()
-        fiscal_summary_year = self.cleaned_data.get('fiscal_summary_year')
-        period = cleaned_data.get('period')
-
-        if fiscal_summary_year and period:
-            existing = FiscalSummary_Month.objects.filter(
-                fiscal_summary_year=fiscal_summary_year, 
-                period=period
-            )
-            if self.instance.pk:
-                existing = existing.exclude(pk=self.instance.pk)
-            if existing.exists():
-                raise forms.ValidationError("この年度と月度の組み合わせは既に存在します。")
-
-        return cleaned_data
+        fields = '__all__'
+        exclude = ['company']
 
 
 class MoneyForwardCsvUploadForm_Month(forms.Form):
     fiscal_year = forms.ModelChoiceField(
         queryset=FiscalSummary_Year.objects.none(),
         label='年度',
-        required=True
+        widget=forms.Select(attrs={'class': 'form-control'})
     )
-    csv_file = forms.FileField(
-        label='CSVファイル',
-        required=True,
-        help_text='Money Forwardからエクスポートした月次PL CSVファイル'
-    )
-    override_flag = forms.BooleanField(
-        required=False,
-        label='既存データを上書きする',
-        initial=False)
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
-        super(MoneyForwardCsvUploadForm_Month, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         if company:
             self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
 
 
 class OcrUploadForm(forms.Form):
-    """OCR用のフォーム（PDF/画像アップロード）"""
     document_type = forms.ChoiceField(
+        label='書類タイプ',
         choices=[
             ('financial_statement', '決算書'),
             ('loan_contract', '金銭消費貸借契約書'),
         ],
-        label='書類タイプ',
-        initial='financial_statement',
-        required=True,
-        help_text='読み込む書類の種類を選択してください'
-    )
-    file = forms.FileField(
-        label='ファイル（PDF/画像）',
-        required=True,
-        help_text='PDF、PNG、JPEG形式をサポートしています'
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        help_text='アップロードする書類の種類を選択してください。'
     )
     file_type = forms.ChoiceField(
-        choices=[
-            ('auto', '自動検出'),
-            ('pdf', 'PDF'),
-            ('image', '画像（PNG/JPEG）'),
-        ],
         label='ファイルタイプ',
+        choices=[
+            ('auto', '自動判定'),
+            ('pdf', 'PDF'),
+            ('image', '画像（PNG/JPEG/GIF/BMP）'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-select'}),
         initial='auto',
-        required=False
+        help_text='ファイルタイプを指定するか、自動判定を選択してください。'
     )
-    fiscal_year = forms.IntegerField(
+    file = forms.FileField(
+        label='ファイル',
+        widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.pdf,.png,.jpg,.jpeg,.gif,.bmp'}),
+        help_text='PDFまたは画像ファイルをアップロードしてください。'
+    )
+    fiscal_year = forms.ModelChoiceField(
+        queryset=FiscalSummary_Year.objects.none(),
         label='年度',
         required=False,
-        help_text='決算書の場合、年度が自動検出できない場合に手動で入力してください'
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        help_text='決算書の場合は年度を選択してください（任意）。'
     )
-    override_flag = forms.BooleanField(
-        required=False,
-        label='既存データを上書きする',
-        initial=False
-    )
-
-
-class MoneyForwardCsvUploadForm_Year(forms.Form):
-    csv_file = forms.FileField(
-        label='CSVファイル',
-        help_text='Money Forwardからエクスポートした残高試算表 CSVファイル',
-        required=True
-    )
-    override_flag = forms.BooleanField(
-        required=False,
-        label='既存データを上書きする',
-        initial=False)
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
-        super(MoneyForwardCsvUploadForm_Year, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
+        if company:
+            self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
+
+
+class MoneyForwardCsvUploadForm_Year(forms.Form):
+    fiscal_year = forms.ModelChoiceField(
+        queryset=FiscalSummary_Year.objects.none(),
+        label='年度',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
+
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super().__init__(*args, **kwargs)
+
         if company:
             self.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
 
@@ -305,101 +228,71 @@ class DebtForm(forms.ModelForm):
 class Stakeholder_nameForm(forms.ModelForm):
     class Meta:
         model = Stakeholder_name
-        fields = ['name', 'is_representative', 'is_board_member', 'is_related_person', 'is_employee', 'memo']
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'is_representative': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_board_member': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_related_person': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_employee': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'memo': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-        }
-        labels = {
-            'name': '株主名',
-            'is_representative': '代表取締役',
-            'is_board_member': '取締役',
-            'is_related_person': '代表者の家族',
-            'is_employee': '従業員',
-            'memo': '備考',
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        fields = '__all__'
+        exclude = ['company']
 
 
 class StockEventForm(forms.ModelForm):
     class Meta:
         model = StockEvent
-        fields = ['fiscal_summary_year', 'name', 'event_date', 'event_type', 'memo']
-        widgets = {
-            'fiscal_summary_year': forms.Select(attrs={'class': 'form-control'}),
-            'event_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-        }
-        labels = {
-            'fiscal_summary_year': '年度',
-            'name': 'イベント名',
-            'event_date': '発行日',
-            'event_type': '発行種別',
-            'memo': '備考',
-        }
+        fields = '__all__'
+        exclude = ['company']
 
 
 class StockEventLineForm(forms.ModelForm):
     class Meta:
         model = StockEventLine
-        fields = ['stakeholder', 'share_quantity', 'share_type', 'acquisition_price', 'memo']
+        fields = '__all__'
+        exclude = ['stock_event']
 
-##########################################################################
-###                   CSVアップロード機能                                ###
-##########################################################################
 
 class CsvUploadForm(forms.Form):
-    csv_file = forms.FileField(label='Select a CSV file')
-    override_flag = forms.BooleanField(
-        required=False,
-        label='既存データを上書きする',
-        initial=False
-    )
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
 
-
-##########################################################################
-###                    検証中 OPEN AI 財務アドバイス機能                    ###
-##########################################################################
-
-# class ChatForm(forms.Form):
-#     message = forms.CharField(label='Message', widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
 
 class ChatForm(forms.Form):
     message = forms.CharField(
-        label='相談内容', 
-        widget=forms.Textarea(attrs={
-            'rows': 3, 
-            'cols': 40,
-            'class': 'form-control'  # form-control クラスを追加
-        })
+        label='メッセージ',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 5}),
+        max_length=1000
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            if 'class' not in field.widget.attrs:
-                field.widget.attrs['class'] = 'form-control'
 
 
 class MeetingMinutesForm(forms.ModelForm):
+    notes = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 15}),
+        help_text='Markdown形式で記述できます。見出し、リスト、太字、コードブロックなどが使用できます。'
+    )
     class Meta:
         model = MeetingMinutes
         fields = ['company', 'created_by', 'meeting_date', 'notes']
         widgets = {
             'meeting_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
-            'notes': forms.Textarea(attrs={'class': 'form-control', 'rows': 20}),
+            # 'notes' widget is overridden by the CharField above
         }
 
+
 class IndustryClassificationImportForm(forms.Form):
-    csv_file = forms.FileField(label='CSVファイルを選択してください')
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
+
 
 class IndustrySubClassificationImportForm(forms.Form):
-    csv_file = forms.FileField(label='CSVファイルを選択してください')
+    industry_classification = forms.ModelChoiceField(
+        queryset=IndustryClassification.objects.all(),
+        label='業種分類',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
+
+
+class FirmSettingsForm(forms.ModelForm):
+    """Firm設定フォーム"""
+    class Meta:
+        model = Firm
+        fields = ['name']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class AIConsultationScriptForm(forms.ModelForm):
@@ -463,3 +356,136 @@ class CloudStorageSettingForm(forms.ModelForm):
             ('dropbox', 'Dropbox'),
             ('onedrive', 'OneDrive'),
         ]
+
+
+class FirmMemberInviteForm(forms.Form):
+    """Firmメンバー招待フォーム"""
+    email = forms.EmailField(
+        label='メールアドレス',
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        help_text='招待するユーザーのメールアドレスを入力してください。'
+    )
+    is_owner = forms.BooleanField(
+        label='オーナー権限を付与',
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='チェックすると、オーナー権限を付与します。'
+    )
+
+
+class MeetingMinutesAIGenerateForm(forms.Form):
+    """AI議事録生成フォーム"""
+    
+    MEETING_TYPE_CHOICES = [
+        ('shareholders_meeting', '株主総会'),
+        ('board_of_directors', '取締役会'),
+        ('management_committee', '経営会議 / 執行役員会'),
+    ]
+    
+    MEETING_CATEGORY_CHOICES = [
+        ('regular', '定時'),
+        ('extraordinary', '臨時'),
+    ]
+    
+    # 株主総会向け議題
+    SHAREHOLDERS_AGENDA_CHOICES = [
+        ('financial_approval', '決算承認: 計算書類および事業報告の承認'),
+        ('officer_election', '役員選任: 取締役・監査役の選任（任期満了や増員）'),
+        ('surplus_disposition', '剰余金処分: 配当の決定'),
+        ('articles_amendment', '定款変更: 商号変更や事業目的の追加'),
+    ]
+    
+    # 取締役会向け議題
+    BOARD_AGENDA_CHOICES = [
+        ('representative_director', '代表取締役の選定: 役職の決定'),
+        ('asset_disposition', '重要な財産の処分: 資産の売却や多額の借入'),
+        ('meeting_convening', '招集決定: 株主総会の開催日時・場所の決定'),
+        ('new_shares', '新株発行: 資金調達（増資）に関する決定'),
+    ]
+    
+    # 経営会議向け議題（汎用的な議題）
+    MANAGEMENT_AGENDA_CHOICES = [
+        ('business_strategy', '事業戦略の検討'),
+        ('budget_approval', '予算の承認'),
+        ('organization_change', '組織変更の決定'),
+        ('other', 'その他'),
+    ]
+    
+    meeting_type = forms.ChoiceField(
+        label='会議体',
+        choices=MEETING_TYPE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        help_text='議事録を作成する会議の種類を選択してください。'
+    )
+    
+    meeting_category = forms.ChoiceField(
+        label='開催種別',
+        choices=MEETING_CATEGORY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        help_text='定例で行われるものか、臨時で開催されるものかを選択してください。'
+    )
+    
+    agenda = forms.ChoiceField(
+        label='主な議題（決議事項）',
+        choices=[],
+        widget=forms.Select(attrs={'class': 'form-select'}),
+        help_text='会議の主な議題を選択してください。'
+    )
+    
+    additional_info = forms.CharField(
+        label='追加情報（任意）',
+        required=False,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 5,
+            'placeholder': '会社名、開催日、その他の詳細情報があれば入力してください。'
+        }),
+        help_text='会社名、開催日、その他の詳細情報があれば入力してください。'
+    )
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # 初期状態では株主総会の議題を設定
+        self.fields['agenda'].choices = self.SHAREHOLDERS_AGENDA_CHOICES
+        
+        # POSTデータがある場合、会議体に応じて議題の選択肢を更新
+        if self.data:
+            meeting_type = self.data.get('meeting_type')
+            if meeting_type:
+                if meeting_type == 'shareholders_meeting':
+                    self.fields['agenda'].choices = self.SHAREHOLDERS_AGENDA_CHOICES
+                elif meeting_type == 'board_of_directors':
+                    self.fields['agenda'].choices = self.BOARD_AGENDA_CHOICES
+                elif meeting_type == 'management_committee':
+                    self.fields['agenda'].choices = self.MANAGEMENT_AGENDA_CHOICES
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        meeting_type = cleaned_data.get('meeting_type')
+        agenda = cleaned_data.get('agenda')
+        
+        # 会議体に応じて議題の選択肢を更新
+        if meeting_type == 'shareholders_meeting':
+            self.fields['agenda'].choices = self.SHAREHOLDERS_AGENDA_CHOICES
+            # 選択された議題が有効かチェック
+            valid_choices = [choice[0] for choice in self.SHAREHOLDERS_AGENDA_CHOICES]
+            if agenda and agenda not in valid_choices:
+                raise forms.ValidationError({
+                    'agenda': f'正しく選択してください。{agenda} は候補にありません。'
+                })
+        elif meeting_type == 'board_of_directors':
+            self.fields['agenda'].choices = self.BOARD_AGENDA_CHOICES
+            valid_choices = [choice[0] for choice in self.BOARD_AGENDA_CHOICES]
+            if agenda and agenda not in valid_choices:
+                raise forms.ValidationError({
+                    'agenda': f'正しく選択してください。{agenda} は候補にありません。'
+                })
+        elif meeting_type == 'management_committee':
+            self.fields['agenda'].choices = self.MANAGEMENT_AGENDA_CHOICES
+            valid_choices = [choice[0] for choice in self.MANAGEMENT_AGENDA_CHOICES]
+            if agenda and agenda not in valid_choices:
+                raise forms.ValidationError({
+                    'agenda': f'正しく選択してください。{agenda} は候補にありません。'
+                })
+        
+        return cleaned_data

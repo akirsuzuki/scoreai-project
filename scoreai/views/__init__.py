@@ -42,6 +42,13 @@ from .helper_views import select_company, chat_view
 # OCR views
 from .ocr_views import ImportFiscalSummaryFromOcrView
 
+# Meeting Minutes AI views
+from .meeting_minutes_ai_views import (
+    MeetingMinutesAIGenerateView,
+    MeetingMinutesAIResultView,
+    MeetingMinutesAISaveView,
+)
+
 # views.pyから必要な関数とビューを再エクスポート（循環インポートを避けるため、遅延インポート）
 # 注意: views.pyがviews/__init__.pyをインポートしないようにする必要がある
 def _import_views_py():
@@ -195,6 +202,10 @@ __all__ = [
     'MeetingMinutesListView',
     'MeetingMinutesDetailView',
     'MeetingMinutesDeleteView',
+    # MeetingMinutes AI
+    'MeetingMinutesAIGenerateView',
+    'MeetingMinutesAIResultView',
+    'MeetingMinutesAISaveView',
     # Stakeholder_name
     'Stakeholder_nameCreateView',
     'Stakeholder_nameUpdateView',

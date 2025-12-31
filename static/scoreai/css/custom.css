@@ -28,9 +28,10 @@
 
 /* ボタンサイズ - Modernize準拠 */
 .btn-sm {
-  padding: 5px 12px;
-  font-size: 12px;
+  padding: 7px 16px;
+  font-size: 13px;
   border-radius: 5px;
+  line-height: 1.5;
 }
 
 .btn-lg {
@@ -251,14 +252,16 @@
 }
 
 .card.bg-info-subtle .card-body {
-  padding: 20px 30px;
+  padding: 24px 30px;
+  overflow: visible;
 }
 
 .card.bg-info-subtle h4 {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #2A3547;
   margin: 0;
+  line-height: 1.4;
 }
 
 /* ============================================
@@ -298,6 +301,36 @@
   vertical-align: middle;
 }
 
+/* ボタン内のアイコン - 整列 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn i {
+  font-size: 16px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn-sm i {
+  font-size: 14px;
+}
+
+.btn-lg i {
+  font-size: 18px;
+}
+
+/* ボタン内のテキスト */
+.btn span {
+  display: inline-block;
+}
+
 /* ボタングループ - Modernizeスタイル */
 .btn-group {
   gap: 4px;
@@ -307,17 +340,23 @@
   margin: 0;
 }
 
-/* テーブル内のボタン */
-.table .btn {
-  margin: 0 2px;
+/* テーブル内のリンクアクション - Modernizeスタイル */
+.table a.text-primary {
+  color: #5D87FF !important;
+  transition: all 0.2s ease-in;
 }
 
-.table .btn:first-child {
-  margin-left: 0;
+.table a.text-primary:hover {
+  color: #4a6fe6 !important;
+  transform: translateY(-1px);
 }
 
-.table .btn:last-child {
-  margin-right: 0;
+.table a.text-primary i {
+  transition: all 0.2s ease-in;
+}
+
+.table a.text-primary:hover i {
+  transform: scale(1.1);
 }
 
 /* ============================================

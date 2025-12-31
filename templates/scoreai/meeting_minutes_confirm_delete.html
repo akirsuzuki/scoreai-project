@@ -1,6 +1,10 @@
 {% extends "scoreai/base.html" %}
 {% load crispy_forms_tags %}
 
+{% block title %}
+ノート削除確認
+{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
@@ -8,11 +12,23 @@
             <div class="card-header">
                 <h5 class="card-title mb-0">削除確認</h5>
             </div>
-            <div class="card-body" style="min-height: 500px; overflow-y: auto;">
-                <p>削除しました</p>
+            <div class="card-body">
+                <p class="mb-3">以下のノートを削除してもよろしいですか？</p>
+                <div class="alert alert-warning">
+                    <p class="mb-2"><strong>ミーティング日:</strong> {{ object.meeting_date|date:"Y年m月d日" }}</p>
+                    <p class="mb-0"><strong>内容:</strong></p>
+                    <div class="mt-2 p-3 bg-light rounded">
+                        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ object.notes|truncatewords:50 }}</pre>
+                    </div>
+                </div>
+                <p class="text-danger"><strong>この操作は取り消せません。</strong></p>
             </div>
             <div class="card-footer text-end">
-                <a href="{% url 'meeting_minutes_list' %}" class="btn btn-primary">一覧に戻る</a>
+                <form method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <a href="{% url 'meeting_minutes_detail' company_id object.pk %}" class="btn btn-outline-secondary">キャンセル</a>
+                    <button type="submit" class="btn btn-danger ms-2">削除する</button>
+                </form>
             </div>
         </div>
     </div>

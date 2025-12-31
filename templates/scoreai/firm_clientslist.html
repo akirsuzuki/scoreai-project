@@ -17,6 +17,38 @@
 
 {% block content %}
 
+<!-- プラン制限情報の表示 -->
+{% if max_companies is not None %}
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="alert {% if can_add_company %}alert-info{% else %}alert-warning{% endif %} d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <strong>プラン制限:</strong>
+        現在: <strong>{{ current_company_count }}</strong>社 / 上限: 
+        {% if is_unlimited %}
+          <strong>無制限</strong>
+        {% else %}
+          <strong>{{ max_companies }}</strong>社
+        {% endif %}
+        
+        {% if not can_add_company %}
+          <span class="badge bg-warning ms-2">制限に達しています</span>
+        {% elif max_companies > 0 and current_company_count >= max_companies|add:"-1" %}
+          <span class="badge bg-info ms-2">あと1社追加可能</span>
+        {% endif %}
+      </div>
+      {% if not can_add_company and user_firm %}
+      <div>
+        <a href="{% url 'plan_list' firm_id=user_firm.firm.id %}" class="btn btn-sm btn-primary">
+          プランをアップグレード
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
@@ -61,7 +93,7 @@
                 <td class="border-bottom-0">
                   <form method="post" action="{% url 'add_client' client_id=client.company.id %}">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-success">追加</button>
+                    <button type="submit" class="btn btn-success" {% if not can_add_company %}disabled title="プランの制限により追加できません"{% endif %}>追加</button>
                   </form>
                 </td>
               </tr> 

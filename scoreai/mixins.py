@@ -160,3 +160,49 @@ class TransactionMixin:
 class TransactionErrorHandlingMixin(TransactionMixin, ErrorHandlingMixin):
     """Combined mixin for transaction management and error handling"""
     pass
+
+
+class FirmOwnerMixin(LoginRequiredMixin, ErrorHandlingMixin):
+    """Firmのオーナーであることを確認するMixin"""
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Firmのオーナーであることを確認"""
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+        
+        from django.shortcuts import get_object_or_404, redirect
+        from django.contrib import messages
+        from .models import Firm, UserFirm
+        
+        # Firm IDを取得
+        firm_id = kwargs.get('firm_id') or self.kwargs.get('firm_id')
+        if firm_id:
+            firm = get_object_or_404(Firm, id=firm_id)
+            # オーナーであることを確認
+            user_firm = UserFirm.objects.filter(
+                user=request.user,
+                firm=firm,
+                is_owner=True,
+                active=True
+            ).first()
+            
+            if not user_firm:
+                messages.error(request, 'このFirmのオーナー権限がありません。')
+                return redirect('index')
+            
+            self.firm = firm
+        else:
+            # ユーザーがオーナーであるFirmを取得
+            user_firm = UserFirm.objects.filter(
+                user=request.user,
+                is_owner=True,
+                active=True
+            ).select_related('firm').first()
+            
+            if not user_firm:
+                messages.error(request, 'オーナー権限を持つFirmが見つかりません。')
+                return redirect('index')
+            
+            self.firm = user_firm.firm
+        
+        return super().dispatch(request, *args, **kwargs)

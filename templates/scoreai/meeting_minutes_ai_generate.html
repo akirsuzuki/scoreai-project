@@ -1,0 +1,197 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const meetingTypeSelect = document.getElementById('id_meeting_type');
+    const agendaSelect = document.getElementById('id_agenda');
+    
+    const agendaChoices = {
+        'shareholders_meeting': [
+            ['financial_approval', '決算承認: 計算書類および事業報告の承認'],
+            ['officer_election', '役員選任: 取締役・監査役の選任（任期満了や増員）'],
+            ['surplus_disposition', '剰余金処分: 配当の決定'],
+            ['articles_amendment', '定款変更: 商号変更や事業目的の追加'],
+        ],
+        'board_of_directors': [
+            ['representative_director', '代表取締役の選定: 役職の決定'],
+            ['asset_disposition', '重要な財産の処分: 資産の売却や多額の借入'],
+            ['meeting_convening', '招集決定: 株主総会の開催日時・場所の決定'],
+            ['new_shares', '新株発行: 資金調達（増資）に関する決定'],
+        ],
+        'management_committee': [
+            ['business_strategy', '事業戦略の検討'],
+            ['budget_approval', '予算の承認'],
+            ['organization_change', '組織変更の決定'],
+            ['other', 'その他'],
+        ],
+    };
+    
+    function updateAgendaChoices() {
+        const selectedType = meetingTypeSelect.value;
+        const choices = agendaChoices[selectedType] || [];
+        
+        // 現在選択されている値を保存
+        const currentValue = agendaSelect.value;
+        
+        // 既存の選択肢をクリア
+        agendaSelect.innerHTML = '';
+        
+        // 新しい選択肢を追加
+        choices.forEach(function(choice) {
+            const option = document.createElement('option');
+            option.value = choice[0];
+            option.textContent = choice[1];
+            // 以前の選択値と一致する場合は選択状態にする
+            if (currentValue === choice[0]) {
+                option.selected = true;
+            }
+            agendaSelect.appendChild(option);
+        });
+        
+        // 選択値が新しい選択肢にない場合は、最初の選択肢を選択
+        if (currentValue && !choices.find(c => c[0] === currentValue)) {
+            if (choices.length > 0) {
+                agendaSelect.value = choices[0][0];
+            }
+        }
+    }
+    
+    meetingTypeSelect.addEventListener('change', updateAgendaChoices);
+    
+    // 初期化
+    updateAgendaChoices();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'meeting_minutes_list' %}" class="text-muted text-decoration-none">ノート一覧</a></li>
+            <li class="breadcrumb-item active" aria-current="page">AI議事録生成</li>
+          </ol>
+        </nav>
+      </div>
+      <div>
+        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-secondary">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">議事録生成条件</h5>
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          
+          <div class="mb-4">
+            <label for="{{ form.meeting_type.id_for_label }}" class="form-label fw-semibold">
+              {{ form.meeting_type.label }}
+            </label>
+            {{ form.meeting_type|add_class:"form-select" }}
+            {% if form.meeting_type.help_text %}
+            <small class="form-text text-muted">{{ form.meeting_type.help_text }}</small>
+            {% endif %}
+            {% if form.meeting_type.errors %}
+            <div class="text-danger">{{ form.meeting_type.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="mb-4">
+            <label for="{{ form.meeting_category.id_for_label }}" class="form-label fw-semibold">
+              {{ form.meeting_category.label }}
+            </label>
+            {{ form.meeting_category|add_class:"form-select" }}
+            {% if form.meeting_category.help_text %}
+            <small class="form-text text-muted">{{ form.meeting_category.help_text }}</small>
+            {% endif %}
+            {% if form.meeting_category.errors %}
+            <div class="text-danger">{{ form.meeting_category.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="mb-4">
+            <label for="{{ form.agenda.id_for_label }}" class="form-label fw-semibold">
+              {{ form.agenda.label }}
+            </label>
+            {{ form.agenda|add_class:"form-select" }}
+            {% if form.agenda.help_text %}
+            <small class="form-text text-muted">{{ form.agenda.help_text }}</small>
+            {% endif %}
+            {% if form.agenda.errors %}
+            <div class="text-danger">{{ form.agenda.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="mb-4">
+            <label for="{{ form.additional_info.id_for_label }}" class="form-label fw-semibold">
+              {{ form.additional_info.label }}
+            </label>
+            {{ form.additional_info|add_class:"form-control" }}
+            {% if form.additional_info.help_text %}
+            <small class="form-text text-muted">{{ form.additional_info.help_text }}</small>
+            {% endif %}
+            {% if form.additional_info.errors %}
+            <div class="text-danger">{{ form.additional_info.errors }}</div>
+            {% endif %}
+          </div>
+          
+          <div class="alert alert-info">
+            <i class="ti ti-info-circle me-2"></i>
+            <strong>注意:</strong> 生成された議事録はテンプレートです。実際の会議内容に合わせて編集してください。
+          </div>
+          
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="ti ti-sparkles me-1"></i>議事録を生成
+            </button>
+            <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-secondary">キャンセル</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">使い方</h5>
+      </div>
+      <div class="card-body">
+        <ol class="mb-0">
+          <li class="mb-2">会議体を選択してください</li>
+          <li class="mb-2">開催種別（定時/臨時）を選択してください</li>
+          <li class="mb-2">主な議題を選択してください</li>
+          <li class="mb-2">必要に応じて追加情報を入力してください</li>
+          <li>「議事録を生成」ボタンをクリックしてください</li>
+        </ol>
+        <hr class="my-3">
+        <p class="text-muted small mb-0">
+          <strong>対象プラン:</strong> Starterプラン以上
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

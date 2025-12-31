@@ -54,7 +54,21 @@
                         {% endif %}
                     </table>
                     
-                    <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-primary">プランを変更</a>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-primary">プランを変更</a>
+                        <a href="{% url 'usage_report' firm_id=firm.id %}" class="btn btn-outline-info">
+                            <i class="ti ti-chart-line me-1"></i>利用状況レポート
+                        </a>
+                        <a href="{% url 'billing_history' firm_id=firm.id %}" class="btn btn-outline-primary">
+                            <i class="ti ti-file-invoice me-1"></i>請求履歴
+                        </a>
+                        <a href="{% url 'subscription_history' firm_id=firm.id %}" class="btn btn-outline-secondary">
+                            <i class="ti ti-history me-1"></i>プラン変更履歴
+                        </a>
+                        <a href="{% url 'firm_settings' firm_id=firm.id %}" class="btn btn-outline-secondary">
+                            <i class="ti ti-settings me-1"></i>Firm設定
+                        </a>
+                    </div>
                 </div>
             </div>
             
@@ -67,9 +81,9 @@
                     <div class="mb-3">
                         <h6>AI相談回数</h6>
                         <div class="progress" style="height: 30px;">
-                            <div class="progress-bar no-animation {% if usage_tracking.ai_consultation_usage_percentage and usage_tracking.ai_consultation_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ai_consultation_usage_percentage and usage_tracking.ai_consultation_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                            <div class="progress-bar no-animation {% if usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
                                  role="progressbar" 
-                                 style="width: {% if usage_tracking.ai_consultation_usage_percentage %}{{ usage_tracking.ai_consultation_usage_percentage }}%{% else %}100%{% endif %}; animation: none !important; background-image: none !important;"
+                                 style="width: {% if usage_tracking.ai_consultation_usage_percentage is not None %}{{ usage_tracking.ai_consultation_usage_percentage }}%{% else %}0%{% endif %}; animation: none !important; background-image: none !important;"
                                  aria-valuenow="{{ usage_tracking.ai_consultation_count }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="{{ subscription.total_ai_consultations_allowed }}">
@@ -89,9 +103,9 @@
                     <div class="mb-3">
                         <h6>OCR読み込み回数</h6>
                         <div class="progress" style="height: 30px;">
-                            <div class="progress-bar no-animation {% if usage_tracking.ocr_usage_percentage and usage_tracking.ocr_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ocr_usage_percentage and usage_tracking.ocr_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                            <div class="progress-bar no-animation {% if usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
                                  role="progressbar" 
-                                 style="width: {% if usage_tracking.ocr_usage_percentage %}{{ usage_tracking.ocr_usage_percentage }}%{% else %}100%{% endif %}; animation: none !important; background-image: none !important;"
+                                 style="width: {% if usage_tracking.ocr_usage_percentage is not None %}{{ usage_tracking.ocr_usage_percentage }}%{% else %}0%{% endif %}; animation: none !important; background-image: none !important;"
                                  aria-valuenow="{{ usage_tracking.ocr_count }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="{{ subscription.total_ocr_allowed }}">

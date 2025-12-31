@@ -1,5 +1,111 @@
 {% extends "scoreai/base.html" %}
 {% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block title %}
+{% if form.instance.pk %}ミーティングノート編集{% else %}新規ミーティングノート作成{% endif %}
+{% endblock %}
+
+{% block head %}
+<style>
+.markdown-preview {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  min-height: 200px;
+  background-color: #f8f9fa;
+  margin-top: 1rem;
+}
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+.markdown-preview p {
+  margin-bottom: 1rem;
+}
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+.markdown-preview blockquote {
+  border-left: 4px solid #5D87FF;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #6c757d;
+  font-style: italic;
+}
+.markdown-preview code {
+  background-color: #ffffff;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.markdown-preview pre {
+  background-color: #ffffff;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+}
+.markdown-preview pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.markdown-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.markdown-preview table th,
+.markdown-preview table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+.markdown-preview table th {
+  background-color: #ffffff;
+  font-weight: 600;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const notesField = document.querySelector('#id_notes');
+  const previewArea = document.getElementById('markdown-preview');
+  
+  if (notesField && previewArea) {
+    // プレビューを更新する関数
+    function updatePreview() {
+      const text = notesField.value;
+      if (text.trim()) {
+        // 簡単なMarkdownプレビュー（実際のレンダリングはサーバー側で行う）
+        // ここでは基本的な変換のみ
+        let html = text
+          .replace(/\n/g, '<br>')
+          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em>$1</em>')
+          .replace(/`(.*?)`/g, '<code>$1</code>');
+        previewArea.innerHTML = html;
+        previewArea.style.display = 'block';
+      } else {
+        previewArea.style.display = 'none';
+      }
+    }
+    
+    // 入力時にプレビューを更新
+    notesField.addEventListener('input', updatePreview);
+    
+    // 初期プレビュー
+    updatePreview();
+  }
+});
+</script>
+{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -18,7 +124,27 @@
                 <div class="card-body">
                     <div class="card-body">
                         {% csrf_token %}
-                        {{ form|crispy }}
+                        <div class="mb-3">
+                            <label for="{{ form.meeting_date.id_for_label }}" class="form-label">{{ form.meeting_date.label }}</label>
+                            {{ form.meeting_date }}
+                            {% if form.meeting_date.errors %}
+                                <div class="text-danger">{{ form.meeting_date.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-3">
+                            <label for="{{ form.notes.id_for_label }}" class="form-label">
+                                {{ form.notes.label }}
+                                <small class="text-muted">（Markdown形式が使用できます）</small>
+                            </label>
+                            {{ form.notes }}
+                            {% if form.notes.help_text %}
+                                <small class="form-text text-muted">{{ form.notes.help_text }}</small>
+                            {% endif %}
+                            {% if form.notes.errors %}
+                                <div class="text-danger">{{ form.notes.errors }}</div>
+                            {% endif %}
+                            <div class="markdown-preview" id="markdown-preview" style="display: none;"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="card-footer text-end">

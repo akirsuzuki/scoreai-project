@@ -2449,23 +2449,81 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return FirmCompany.objects.none()
 
     def get_context_data(self, **kwargs):
+        from .utils.plan_limits import check_company_limit
+        
         context = super().get_context_data(**kwargs)
         clients_assigned = UserCompany.objects.filter(user=self.request.user, as_consultant=True)
         context['clients_assigned'] = clients_assigned
         context['title'] = 'クライアント一覧'
+        
+        # Firmを取得してプラン制限情報を追加
+        user_firm = UserFirm.objects.filter(user=self.request.user, is_selected=True).first()
+        context['user_firm'] = user_firm  # テンプレートで使用するため追加
+        
+        if user_firm:
+            is_allowed, current_count, max_allowed = check_company_limit(user_firm.firm)
+            context['current_company_count'] = current_count
+            context['max_companies'] = max_allowed
+            context['is_unlimited'] = max_allowed == 0
+            context['can_add_company'] = is_allowed
+        else:
+            context['current_company_count'] = 0
+            context['max_companies'] = 0
+            context['is_unlimited'] = True
+            context['can_add_company'] = True
+        
         return context
 
 
 
 @login_required
 def add_client(request, client_id):
+    from django.utils import timezone
+    from .utils.plan_limits import check_company_limit
+    from .models import UserFirm, FirmCompany
+    
     client = Company.objects.get(id=client_id)
-    # 既に追加されているか確認（任意）
+    
+    # Firmを取得
+    user_firm = UserFirm.objects.filter(
+        user=request.user,
+        is_selected=True
+    ).first()
+    
+    if not user_firm:
+        messages.error(request, 'Firmが選択されていません。')
+        return redirect('firm_clientslist')
+    
+    # プラン制限をチェック
+    is_allowed, current_count, max_allowed = check_company_limit(user_firm.firm)
+    
+    if not is_allowed:
+        messages.error(
+            request,
+            f'プランの制限により、これ以上Companyを追加できません。'
+            f'（現在: {current_count}社 / 上限: {max_allowed}社）'
+            f'プランをアップグレードしてください。'
+        )
+        return redirect('firm_clientslist')
+    
+    # 既に追加されているか確認
     if UserCompany.objects.filter(user=request.user, company=client).exists():
         messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
     else:
         UserCompany.objects.create(user=request.user, company=client, as_consultant=True)
-        messages.success(request, f'クライアント "{client.name}" を正常に追加しました。')
+        
+        # FirmCompanyも作成（存在しない場合）
+        FirmCompany.objects.get_or_create(
+            firm=user_firm.firm,
+            company=client,
+            defaults={
+                'active': True,
+                'start_date': timezone.now().date()
+            }
+        )
+        
+        messages.success(request, f'クライアント "{client.name}" をアサインしました。')
+    
     return redirect('firm_clientslist')
 
 @login_required

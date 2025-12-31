@@ -1,0 +1,158 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<style>
+.meeting-minutes-result {
+  line-height: 1.8;
+  color: #2A3547;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+.meeting-minutes-result h1,
+.meeting-minutes-result h2,
+.meeting-minutes-result h3,
+.meeting-minutes-result h4,
+.meeting-minutes-result h5,
+.meeting-minutes-result h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #2A3547;
+}
+.meeting-minutes-result h1 { font-size: 2rem; }
+.meeting-minutes-result h2 { font-size: 1.75rem; }
+.meeting-minutes-result h3 { font-size: 1.5rem; }
+.meeting-minutes-result h4 { font-size: 1.25rem; }
+.meeting-minutes-result p {
+  margin-bottom: 1rem;
+}
+.meeting-minutes-result ul,
+.meeting-minutes-result ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+.meeting-minutes-result blockquote {
+  border-left: 4px solid #5D87FF;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+.meeting-minutes-result code {
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.meeting-minutes-result pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+.meeting-minutes-result pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.meeting-minutes-result table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.meeting-minutes-result table th,
+.meeting-minutes-result table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+.meeting-minutes-result table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'meeting_minutes_list' %}" class="text-muted text-decoration-none">ノート一覧</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'meeting_minutes_ai_generate' %}" class="text-muted text-decoration-none">AI議事録生成</a></li>
+            <li class="breadcrumb-item active" aria-current="page">生成結果</li>
+          </ol>
+        </nav>
+      </div>
+      <div>
+        <a href="{% url 'meeting_minutes_ai_generate' %}" class="btn btn-outline-secondary">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="card-title mb-0 fw-semibold">{{ meeting_title }}</h5>
+          <div>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick="copyToClipboard()">
+              <i class="ti ti-copy me-1"></i>コピー
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="meeting-minutes-result">
+          {{ generated_minutes|markdown }}
+        </div>
+      </div>
+      <div class="card-footer">
+        <form method="post" action="{% url 'meeting_minutes_ai_save' %}" class="d-flex align-items-center gap-3">
+          {% csrf_token %}
+          <div class="flex-grow-1">
+            <label for="meeting_date" class="form-label fw-semibold">会議日</label>
+            <input type="date" name="meeting_date" id="meeting_date" class="form-control" required>
+          </div>
+          <div class="d-flex gap-2 align-items-end">
+            <button type="submit" class="btn btn-primary">
+              <i class="ti ti-device-floppy me-1"></i>議事録を保存
+            </button>
+            <a href="{% url 'meeting_minutes_ai_generate' %}" class="btn btn-outline-secondary">再生成</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function copyToClipboard() {
+  const text = document.querySelector('.meeting-minutes-result').innerText;
+  navigator.clipboard.writeText(text).then(function() {
+    alert('議事録をクリップボードにコピーしました。');
+  }, function(err) {
+    console.error('コピーに失敗しました:', err);
+    alert('コピーに失敗しました。');
+  });
+}
+</script>
+{% endblock %}
+

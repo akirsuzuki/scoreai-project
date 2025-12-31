@@ -29,9 +29,40 @@ function hideLoadingOverlay() {
 
 // フォーム送信時のローディング状態
 function setupFormLoading() {
-    const forms = document.querySelectorAll('form');
+    const forms = document.querySelectorAll('form:not(.no-auto-loading)');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
+            // 既にpreventDefaultが呼ばれている場合は何もしない
+            if (e.defaultPrevented) {
+                return;
+            }
+            
+            // onsubmit属性がある場合、その結果を確認
+            // onsubmitがfalseを返す可能性がある場合は、先に評価する必要がある
+            // ただし、これは非同期で実行されるため、setTimeoutで遅延させる
+            const onsubmitAttr = form.getAttribute('onsubmit');
+            if (onsubmitAttr && onsubmitAttr.includes('confirm')) {
+                // confirmを含むonsubmitの場合は、少し遅延させて処理
+                // これにより、onsubmitの結果を確認できる
+                setTimeout(function() {
+                    if (!e.defaultPrevented) {
+                        const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+                        if (submitButton && !submitButton.disabled) {
+                            submitButton.classList.add('btn-loading');
+                            submitButton.disabled = true;
+                            const originalText = submitButton.textContent || submitButton.value;
+                            submitButton.dataset.originalText = originalText;
+                            submitButton.textContent = '処理中...';
+                            if (submitButton.tagName === 'INPUT') {
+                                submitButton.value = '処理中...';
+                            }
+                        }
+                        form.classList.add('form-loading');
+                    }
+                }, 10);
+                return;
+            }
+            
             const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
             if (submitButton) {
                 submitButton.classList.add('btn-loading');

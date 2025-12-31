@@ -5,10 +5,13 @@ from .models import (
     UserCompany,
     Firm,
     UserFirm,
+    FirmInvitation,
     FirmCompany,
     FirmPlan,
     FirmSubscription,
     FirmUsageTracking,
+    SubscriptionHistory,
+    FirmNotification,
     FinancialInstitution,
     SecuredType,
     Debt,
@@ -30,6 +33,7 @@ from .models import (
     AIConsultationScript,
     UserAIConsultationScript,
     AIConsultationHistory,
+    MeetingMinutesAIScript,
     CloudStorageSetting,
     DocumentFolder,
     UploadedDocument,
@@ -85,6 +89,14 @@ class UserFirmAdmin(admin.ModelAdmin):
     search_fields = ('firm__name','user__username')
     list_filter = ('firm__name',)
     ordering = ('firm',)
+
+@admin.register(FirmInvitation)
+class FirmInvitationAdmin(admin.ModelAdmin):
+    list_display = ('firm', 'email', 'invited_by', 'is_owner', 'invited_at', 'is_accepted')
+    list_display_links = ('firm', 'email')
+    search_fields = ('firm__name', 'email', 'invited_by__username')
+    list_filter = ('firm__name', 'is_accepted', 'is_owner', 'invited_at')
+    ordering = ('-invited_at',)
 
 
 @admin.register(FirmCompany)
@@ -290,6 +302,33 @@ class UserAIConsultationScriptAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
+@admin.register(MeetingMinutesAIScript)
+class MeetingMinutesAIScriptAdmin(admin.ModelAdmin):
+    """AI議事録生成スクリプト管理"""
+    list_display = ('name', 'meeting_type', 'meeting_category', 'agenda', 'is_default', 'is_active', 'created_at', 'updated_at')
+    list_filter = ('meeting_type', 'meeting_category', 'is_default', 'is_active', 'created_at')
+    search_fields = ('name', 'agenda', 'system_instruction', 'prompt_template')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('name', 'meeting_type', 'meeting_category', 'agenda', 'is_default', 'is_active')
+        }),
+        ('スクリプト', {
+            'fields': ('system_instruction', 'prompt_template'),
+            'description': 'システムプロンプト: AIの役割や振る舞いを定義します。\nプロンプトテンプレート: 議事録生成用のプロンプト。利用可能な変数: {meeting_type_name}, {meeting_category_name}, {agenda_name}, {agenda_description}, {company_name}, {additional_info}'
+        }),
+        ('メタ情報', {
+            'fields': ('created_by', 'created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def save_model(self, request, obj, form, change):
+        if not change:  # 新規作成時
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
+
+
 @admin.register(AIConsultationHistory)
 class AIConsultationHistoryAdmin(admin.ModelAdmin):
     list_display = ('user', 'company', 'consultation_type', 'created_at')
@@ -379,7 +418,7 @@ class FirmSubscriptionAdmin(admin.ModelAdmin):
     list_filter = ('status', 'billing_cycle', 'plan', 'started_at')
     search_fields = ('firm__name', 'stripe_customer_id', 'stripe_subscription_id')
     ordering = ('-started_at',)
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('started_at', 'created_at', 'updated_at')
     fieldsets = (
         ('基本情報', {
             'fields': ('firm', 'plan', 'status', 'billing_cycle', 'additional_companies')
@@ -414,6 +453,46 @@ class FirmUsageTrackingAdmin(admin.ModelAdmin):
         }),
         ('システム情報', {
             'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+
+
+@admin.register(SubscriptionHistory)
+class SubscriptionHistoryAdmin(admin.ModelAdmin):
+    list_display = ('firm', 'old_plan', 'new_plan', 'changed_at', 'changed_by', 'reason')
+    list_display_links = ('firm',)
+    list_filter = ('changed_at', 'old_plan', 'new_plan')
+    search_fields = ('firm__name', 'reason')
+    ordering = ('-changed_at',)
+    readonly_fields = ('changed_at',)
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('firm', 'subscription', 'old_plan', 'new_plan', 'changed_by', 'changed_at')
+        }),
+        ('変更理由', {
+            'fields': ('reason',)
+        }),
+    )
+
+
+@admin.register(FirmNotification)
+class FirmNotificationAdmin(admin.ModelAdmin):
+    list_display = ('firm', 'notification_type', 'title', 'is_read', 'created_at')
+    list_display_links = ('firm', 'title')
+    list_filter = ('notification_type', 'is_read', 'created_at')
+    search_fields = ('firm__name', 'title', 'message')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'read_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('firm', 'notification_type', 'title', 'message')
+        }),
+        ('ステータス', {
+            'fields': ('is_read', 'read_at')
+        }),
+        ('システム情報', {
+            'fields': ('created_at',),
             'classes': ('collapse',)
         }),
     )

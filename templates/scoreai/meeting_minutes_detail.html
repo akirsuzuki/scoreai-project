@@ -1,5 +1,96 @@
 {% extends "scoreai/base.html" %}
 {% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block title %}
+ノート詳細 - {{ meeting_minutes.meeting_date|date:"Y-m-d" }}
+{% endblock %}
+
+{% block head %}
+<style>
+.meeting-notes-content {
+  line-height: 1.8;
+  color: #2A3547;
+}
+.meeting-notes-content h1,
+.meeting-notes-content h2,
+.meeting-notes-content h3,
+.meeting-notes-content h4,
+.meeting-notes-content h5,
+.meeting-notes-content h6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  color: #2A3547;
+}
+.meeting-notes-content h1 { font-size: 2rem; }
+.meeting-notes-content h2 { font-size: 1.75rem; }
+.meeting-notes-content h3 { font-size: 1.5rem; }
+.meeting-notes-content h4 { font-size: 1.25rem; }
+.meeting-notes-content p {
+  margin-bottom: 1rem;
+}
+.meeting-notes-content ul,
+.meeting-notes-content ol {
+  margin-bottom: 1rem;
+  padding-left: 2rem;
+}
+.meeting-notes-content blockquote {
+  border-left: 4px solid #5D87FF;
+  padding-left: 1rem;
+  margin-left: 0;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+.meeting-notes-content code {
+  background-color: #f8f9fa;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+.meeting-notes-content pre {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+.meeting-notes-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+.meeting-notes-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+.meeting-notes-content table th,
+.meeting-notes-content table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  text-align: left;
+}
+.meeting-notes-content table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+}
+.meeting-notes-content a {
+  color: #5D87FF;
+  text-decoration: none;
+}
+.meeting-notes-content a:hover {
+  text-decoration: underline;
+}
+.meeting-notes-content strong {
+  font-weight: 600;
+  color: #2A3547;
+}
+.meeting-notes-content em {
+  font-style: italic;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <div class="row">
@@ -9,10 +100,14 @@
                 <h5 class="card-title mb-0 text-end">ミーティング日：{{ meeting_minutes.meeting_date|date:"Y-m-d" }}</h5>
             </div>
             <div class="card-body" style="min-height: 500px; overflow-y: auto;">
-                <pre>{{ meeting_minutes.notes }}</pre>
+                <div class="meeting-notes-content">
+                    {{ meeting_minutes.notes|markdown }}
+                </div>
             </div>
             <div class="card-footer text-end">
+                <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-secondary">一覧に戻る</a>
                 <a href="{% url 'meeting_minutes_update' company_id meeting_minutes.pk %}" class="btn btn-warning">編集</a>
+                <a href="{% url 'meeting_minutes_delete' company_id meeting_minutes.pk %}" class="btn btn-danger" onclick="return confirm('このノートを削除してもよろしいですか？');">削除</a>
             </div>
         </div>
     </div>

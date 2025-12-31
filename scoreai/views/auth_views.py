@@ -89,12 +89,75 @@ class UserProfileView(SelectedCompanyMixin, generic.TemplateView):
         Returns:
             コンテキストデータの辞書
         """
+        from ..models import UserFirm, FirmCompany
+        
         context = super().get_context_data(**kwargs)
-        username = self.request.user.username
+        user = self.request.user
+        username = user.username
         context['title'] = f'{username}のユーザー情報'
+        
+        # ユーザーの基本情報
+        context['user'] = user
+        
+        # 所属しているCompany一覧
         context['user_companies'] = UserCompany.objects.filter(
-            user=self.request.user
-        ).select_related('company')
+            user=user
+        ).select_related('company').order_by('-is_selected', '-is_owner')
+        
+        # 所属しているFirm一覧
+        context['user_firms'] = UserFirm.objects.filter(
+            user=user
+        ).select_related('firm').order_by('-is_selected', '-is_owner')
+        
+        # 選択中のCompany
+        selected_user_company = UserCompany.objects.filter(
+            user=user, is_selected=True
+        ).select_related('company').first()
+        context['selected_company'] = selected_user_company.company if selected_user_company else None
+        context['selected_user_company'] = selected_user_company
+        
+        # 選択中のFirm
+        selected_user_firm = UserFirm.objects.filter(
+            user=user, is_selected=True
+        ).select_related('firm').first()
+        context['selected_firm'] = selected_user_firm.firm if selected_user_firm else None
+        context['selected_user_firm'] = selected_user_firm
+        
+        # ユーザーの属性を判定
+        context['is_company_user'] = user.is_company_user
+        context['is_financial_consultant'] = user.is_financial_consultant
+        context['is_manager'] = user.is_manager
+        
+        # ユーザーの役割を判定
+        user_roles = []
+        if user.is_company_user:
+            user_roles.append('会社ユーザー')
+        if user.is_financial_consultant:
+            user_roles.append('財務コンサルタント')
+        if user.is_manager:
+            user_roles.append('マネージャー')
+        
+        # Companyオーナーかどうか
+        company_owner_count = UserCompany.objects.filter(user=user, is_owner=True).count()
+        if company_owner_count > 0:
+            user_roles.append(f'Companyオーナー ({company_owner_count}社)')
+        
+        # Firmオーナーかどうか
+        firm_owner_count = UserFirm.objects.filter(user=user, is_owner=True).count()
+        if firm_owner_count > 0:
+            user_roles.append(f'Firmオーナー ({firm_owner_count}社)')
+        
+        # コンサルタントとしてのCompany数
+        consultant_count = UserCompany.objects.filter(user=user, as_consultant=True).count()
+        if consultant_count > 0:
+            user_roles.append(f'コンサルタント ({consultant_count}社)')
+        
+        context['user_roles'] = user_roles if user_roles else ['一般ユーザー']
+        
+        # 統計情報
+        context['total_companies'] = context['user_companies'].count()
+        context['total_firms'] = context['user_firms'].count()
+        
         return context
 
 

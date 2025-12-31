@@ -1,0 +1,175 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'subscription_manage' firm_id=firm.id %}" class="text-muted text-decoration-none">サブスクリプション管理</a></li>
+            <li class="breadcrumb-item active" aria-current="page">請求履歴</li>
+          </ol>
+        </nav>
+      </div>
+      <div>
+        <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-secondary">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 支払い方法 -->
+{% if payment_method %}
+<div class="row mb-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">支払い方法</h5>
+      </div>
+      <div class="card-body">
+        <div class="d-flex align-items-center justify-content-between">
+          <div>
+            {% if payment_method.type == 'card' and payment_method.card %}
+            <p class="mb-1">
+              <i class="ti ti-credit-card me-2"></i>
+              <strong>カード</strong>
+            </p>
+            <p class="text-muted mb-0">
+              **** **** **** {{ payment_method.card.last4 }}
+              ({{ payment_method.card.brand|upper }})
+            </p>
+            {% if payment_method.card.exp_month and payment_method.card.exp_year %}
+            <p class="text-muted small mb-0">
+              有効期限: {{ payment_method.card.exp_month }}/{{ payment_method.card.exp_year }}
+            </p>
+            {% endif %}
+            {% else %}
+            <p class="mb-0 text-muted">支払い方法が設定されていません</p>
+            {% endif %}
+          </div>
+          <div>
+            <a href="{% url 'payment_method_update' firm_id=firm.id %}" class="btn btn-outline-primary">
+              <i class="ti ti-edit me-1"></i>支払い方法を変更
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<!-- 請求書一覧 -->
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">請求書一覧</h5>
+      </div>
+      <div class="card-body">
+        {% if invoices %}
+        <div class="table-responsive">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">請求書番号</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">請求期間</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">金額</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">ステータス</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">発行日</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invoice in invoices %}
+              <tr>
+                <td class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">{{ invoice.number|default:invoice.id }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">
+                    {% if invoice.period_start and invoice.period_end %}
+                    {{ invoice.period_start|date:"Y/m/d" }} 〜 {{ invoice.period_end|date:"Y/m/d" }}
+                    {% else %}
+                    -
+                    {% endif %}
+                  </p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">¥{{ invoice.amount_due|floatformat:0|intcomma }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  {% if invoice.status == 'paid' %}
+                  <span class="badge bg-success">支払済み</span>
+                  {% elif invoice.status == 'open' %}
+                  <span class="badge bg-warning">未払い</span>
+                  {% elif invoice.status == 'void' %}
+                  <span class="badge bg-secondary">無効</span>
+                  {% else %}
+                  <span class="badge bg-danger">{{ invoice.status }}</span>
+                  {% endif %}
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ invoice.created|date:"Y年m月d日" }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex gap-2">
+                    {% if invoice.invoice_pdf %}
+                    <a href="{% url 'billing_invoice_detail' firm_id=firm.id invoice_id=invoice.id %}" 
+                       class="btn btn-sm btn-outline-primary"
+                       title="PDFダウンロード">
+                      <i class="ti ti-download"></i>
+                      <span>PDF</span>
+                    </a>
+                    {% endif %}
+                    {% if invoice.hosted_invoice_url %}
+                    <a href="{{ invoice.hosted_invoice_url }}" 
+                       target="_blank"
+                       class="btn btn-sm btn-outline-info"
+                       title="Stripeで表示">
+                      <i class="ti ti-external-link"></i>
+                      <span>表示</span>
+                    </a>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+          <i class="ti ti-file-off" style="font-size: 48px; color: #ccc;"></i>
+          <p class="text-muted mt-3 mb-0">請求書がありません</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
