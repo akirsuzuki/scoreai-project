@@ -132,7 +132,9 @@
                 <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">有効User数</h6>
                 </th>
-                <th></th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -151,10 +153,23 @@
                   <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
                 </td>
                 <td class="border-bottom-0">
-                  <form method="post" action="{% url 'remove_client' client_id=client.company.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger">アサイン解除</button>
-                  </form>
+                  <div class="d-flex align-items-center gap-2">
+                    {% if not client.is_selected %}
+                    <a href="{% url 'select_company' client.company.id %}" 
+                       class="text-primary text-decoration-none d-flex align-items-center gap-1" 
+                       title="選択"
+                       style="transition: all 0.2s ease-in;">
+                      <i class="ti ti-check" style="font-size: 18px;"></i>
+                      <span class="small fw-semibold">選択</span>
+                    </a>
+                    {% else %}
+                    <span class="badge bg-primary">選択中</span>
+                    {% endif %}
+                    <form method="post" action="{% url 'remove_client' client_id=client.company.id %}" style="display: inline;">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-danger">アサイン解除</button>
+                    </form>
+                  </div>
                 </td>
               </tr>
               {% endfor %}       

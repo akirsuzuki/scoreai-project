@@ -1241,6 +1241,30 @@ class AIConsultationType(models.Model):
         return self.name
 
 
+class AIConsultationFAQ(models.Model):
+    """AI相談のよくある質問"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    consultation_type = models.ForeignKey(
+        AIConsultationType,
+        on_delete=models.CASCADE,
+        related_name='faqs',
+        verbose_name="相談タイプ"
+    )
+    question = models.CharField(max_length=200, verbose_name="質問")
+    order = models.IntegerField(default=0, verbose_name="表示順序")
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['consultation_type', 'order', 'question']
+        verbose_name = 'AI相談よくある質問'
+        verbose_name_plural = 'AI相談よくある質問'
+    
+    def __str__(self):
+        return f"{self.consultation_type.name}: {self.question}"
+
+
 class AIConsultationScript(models.Model):
     """AI相談スクリプト（システム全体用・管理者が編集）"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)

@@ -33,6 +33,7 @@ from .models import (
     AIConsultationScript,
     UserAIConsultationScript,
     AIConsultationHistory,
+    AIConsultationFAQ,
     MeetingMinutesAIScript,
     CloudStorageSetting,
     DocumentFolder,
@@ -327,6 +328,16 @@ class MeetingMinutesAIScriptAdmin(admin.ModelAdmin):
         if not change:  # 新規作成時
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+@admin.register(AIConsultationFAQ)
+class AIConsultationFAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'consultation_type', 'order', 'is_active', 'created_at')
+    list_display_links = ('question',)
+    list_filter = ('consultation_type', 'is_active', 'created_at')
+    search_fields = ('question', 'consultation_type__name')
+    ordering = ('consultation_type', 'order', 'question')
+    list_editable = ('order', 'is_active')
 
 
 @admin.register(AIConsultationHistory)

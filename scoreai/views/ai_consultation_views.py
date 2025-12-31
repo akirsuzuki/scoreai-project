@@ -105,9 +105,17 @@ class AIConsultationView(SelectedCompanyMixin, TemplateView):
         # 利用可能なデータを確認
         available_data = get_consultation_data(consultation_type, self.this_company)
         
+        # よくある質問を取得
+        from ..models import AIConsultationFAQ
+        faqs = AIConsultationFAQ.objects.filter(
+            consultation_type=consultation_type,
+            is_active=True
+        ).order_by('order', 'question')
+        
         context['consultation_type'] = consultation_type
         context['histories'] = histories
         context['available_data'] = available_data
+        context['faqs'] = faqs
         context['title'] = f'{consultation_type.name}'
         context['show_title_card'] = False  # タイトルカードを非表示（テンプレートで独自に表示）
         return context

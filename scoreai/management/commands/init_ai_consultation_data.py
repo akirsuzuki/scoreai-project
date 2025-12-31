@@ -5,7 +5,7 @@ AI相談機能の初期データ投入コマンド
     docker compose exec django python manage.py init_ai_consultation_data
 """
 from django.core.management.base import BaseCommand
-from scoreai.models import AIConsultationType, AIConsultationScript
+from scoreai.models import AIConsultationType, AIConsultationScript, AIConsultationFAQ
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -54,6 +54,12 @@ class Command(BaseCommand):
                 'description': '契約・法務を基に提案',
                 'order': 4,
                 'color': '#9C27B0',
+            },
+            {
+                'name': 'DX',
+                'description': 'デジタル変革・IT導入を基に提案',
+                'order': 5,
+                'color': '#00BCD4',
             },
         ]
 
@@ -249,12 +255,123 @@ class Command(BaseCommand):
             else:
                 self.stdout.write("→ 法律相談のデフォルトスクリプトは既に存在します")
 
+        # DXのデフォルトスクリプト
+        dx_script = """あなたはDX（デジタル変革）の専門家です。
+会社の業種、規模、財務状況を基に、適切なDX施策やIT導入を提案してください。
+返答は日本語で、分かりやすく、具体的な導入方法や効果も含めて説明してください。"""
+
+        dx_template = """【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+
+【決算書データ】
+{fiscal_summary}
+
+【借入情報】
+{debt_info}
+
+【月次推移データ】
+{monthly_data}
+
+【ユーザーの質問】
+{user_message}
+
+上記の情報を基に、以下の点を考慮して回答してください：
+1. 業種・規模に適したDX施策の提案
+2. ITツール・システムの導入提案
+3. 導入による効果とROIの試算
+4. 導入の優先順位とステップ
+5. 補助金・助成金の活用可能性
+
+回答は日本語で、専門的すぎない言葉で説明してください。
+具体的なツール名やサービス名も含めて提案してください。"""
+
+        if consultation_types.get('DX'):
+            script, created = AIConsultationScript.objects.get_or_create(
+                consultation_type=consultation_types['DX'],
+                is_default=True,
+                defaults={
+                    'name': 'デフォルト',
+                    'system_instruction': dx_script,
+                    'default_prompt_template': dx_template,
+                    'is_active': True,
+                    'created_by': superuser,
+                }
+            )
+            if created:
+                self.stdout.write(self.style.SUCCESS("✓ DXのデフォルトスクリプトを作成しました"))
+            else:
+                self.stdout.write("→ DXのデフォルトスクリプトは既に存在します")
+
+        # よくある質問の作成
+        faqs_data = [
+            {
+                'consultation_type_name': '補助金・助成金',
+                'questions': [
+                    {'question': '中小企業省力化投資補助金について教えて', 'order': 1},
+                    {'question': 'IT導入補助金の申請方法を教えて', 'order': 2},
+                    {'question': '補助金の申請期限はいつですか', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': '財務相談',
+                'questions': [
+                    {'question': '今期の着地予測をしてください', 'order': 1},
+                    {'question': '財務状況の改善提案をしてください', 'order': 2},
+                    {'question': '資金繰り表を作成してください', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': '税務相談',
+                'questions': [
+                    {'question': '節税対策を教えて', 'order': 1},
+                    {'question': '消費税の還付について教えて', 'order': 2},
+                    {'question': '税務調査の対策を教えて', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': '法律相談',
+                'questions': [
+                    {'question': '契約書の確認をしてください', 'order': 1},
+                    {'question': '労働法に関する質問', 'order': 2},
+                    {'question': '知的財産権について教えて', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': 'DX',
+                'questions': [
+                    {'question': 'DX施策の提案をしてください', 'order': 1},
+                    {'question': 'ITツールの導入提案をしてください', 'order': 2},
+                    {'question': '業務効率化のためのシステムを教えて', 'order': 3},
+                ]
+            },
+        ]
+        
+        for faq_group in faqs_data:
+            consultation_type = consultation_types.get(faq_group['consultation_type_name'])
+            if consultation_type:
+                for q_data in faq_group['questions']:
+                    faq, created = AIConsultationFAQ.objects.get_or_create(
+                        consultation_type=consultation_type,
+                        question=q_data['question'],
+                        defaults={
+                            'order': q_data['order'],
+                            'is_active': True,
+                        }
+                    )
+                    if created:
+                        self.stdout.write(self.style.SUCCESS(f"✓ よくある質問を作成しました: {consultation_type.name} - {q_data['question']}"))
+                    else:
+                        self.stdout.write(f"→ よくある質問は既に存在します: {consultation_type.name} - {q_data['question']}")
+
         self.stdout.write("=" * 60)
         self.stdout.write(self.style.SUCCESS("初期データ投入が完了しました！"))
         self.stdout.write("=" * 60)
         self.stdout.write(f"\n作成されたデータ:")
         self.stdout.write(f"  相談タイプ: {AIConsultationType.objects.count()}件")
         self.stdout.write(f"  システムスクリプト: {AIConsultationScript.objects.count()}件")
+        self.stdout.write(f"  よくある質問: {AIConsultationFAQ.objects.count()}件")
         self.stdout.write("\n次のステップ:")
         self.stdout.write("  1. サーバーを再起動: docker compose restart django")
         self.stdout.write("  2. AI相談センターにアクセス: http://localhost:8000/ai-consultation/")

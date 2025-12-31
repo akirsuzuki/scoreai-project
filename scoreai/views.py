@@ -2452,7 +2452,7 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         from .utils.plan_limits import check_company_limit
         
         context = super().get_context_data(**kwargs)
-        clients_assigned = UserCompany.objects.filter(user=self.request.user, as_consultant=True)
+        clients_assigned = UserCompany.objects.filter(user=self.request.user, as_consultant=True).select_related('company')
         context['clients_assigned'] = clients_assigned
         context['title'] = 'クライアント一覧'
         
