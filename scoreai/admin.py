@@ -332,12 +332,32 @@ class MeetingMinutesAIScriptAdmin(admin.ModelAdmin):
 
 @admin.register(AIConsultationFAQ)
 class AIConsultationFAQAdmin(admin.ModelAdmin):
-    list_display = ('question', 'consultation_type', 'order', 'is_active', 'created_at')
+    list_display = ('question', 'consultation_type', 'order', 'is_active', 'has_script', 'created_at')
     list_display_links = ('question',)
     list_filter = ('consultation_type', 'is_active', 'created_at')
-    search_fields = ('question', 'consultation_type__name')
+    search_fields = ('question', 'consultation_type__name', 'script')
     ordering = ('consultation_type', 'order', 'question')
     list_editable = ('order', 'is_active')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('consultation_type', 'question', 'order', 'is_active')
+        }),
+        ('スクリプト', {
+            'fields': ('script',),
+            'description': 'この質問専用のシステムプロンプトを設定できます。空の場合は相談タイプのデフォルトスクリプトを使用します。'
+        }),
+        ('メタ情報', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
+        }),
+    )
+    readonly_fields = ('created_at', 'updated_at')
+    
+    def has_script(self, obj):
+        """スクリプトが設定されているかどうかを表示"""
+        return bool(obj.script)
+    has_script.boolean = True
+    has_script.short_description = 'スクリプト有'
 
 
 @admin.register(AIConsultationHistory)
@@ -387,7 +407,7 @@ class DocumentFolderAdmin(admin.ModelAdmin):
 
 @admin.register(FirmPlan)
 class FirmPlanAdmin(admin.ModelAdmin):
-    list_display = ('name', 'plan_type', 'monthly_price', 'max_companies', 'max_ai_consultations_per_month', 'max_ocr_per_month', 'is_active', 'order')
+    list_display = ('name', 'plan_type', 'monthly_price', 'max_companies', 'max_ai_consultations_per_month', 'max_ocr_per_month', 'api_limit', 'is_active', 'order')
     list_display_links = ('name',)
     list_filter = ('plan_type', 'is_active', 'cloud_storage_google_drive', 'cloud_storage_box', 'cloud_storage_dropbox', 'cloud_storage_onedrive')
     search_fields = ('name', 'description')

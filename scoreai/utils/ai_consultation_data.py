@@ -156,11 +156,44 @@ def build_consultation_prompt(
     consultation_type: AIConsultationType,
     user_message: str,
     company_data: Dict[str, Any],
-    user_script: Optional[UserAIConsultationScript] = None
+    user_script: Optional[UserAIConsultationScript] = None,
+    faq_script: Optional[str] = None
 ) -> Tuple[str, Optional[str]]:
-    """相談タイプに応じたプロンプトを構築"""
-    # スクリプトを取得
-    if user_script:
+    """相談タイプに応じたプロンプトを構築
+    
+    Args:
+        consultation_type: 相談タイプ
+        user_message: ユーザーのメッセージ
+        company_data: 会社データ
+        user_script: ユーザー用スクリプト（オプション）
+        faq_script: FAQ用スクリプト（オプション、最優先）
+    
+    Returns:
+        (prompt, system_instruction)のタプル
+    """
+    # スクリプトを取得（FAQ用 → ユーザー用 → システム用の順）
+    if faq_script:
+        # FAQのスクリプトを使用（システムプロンプトのみ）
+        system_instruction = faq_script
+        # テンプレートはシステム用のデフォルトを使用
+        script = AIConsultationScript.objects.filter(
+            consultation_type=consultation_type,
+            is_active=True,
+            is_default=True
+        ).first()
+        if script:
+            template = script.default_prompt_template
+        else:
+            template = """【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+
+【ユーザーの質問】
+{user_message}
+
+上記の情報を基に、具体的で実践的なアドバイスを提供してください。"""
+    elif user_script:
         system_instruction = user_script.system_instruction
         template = user_script.prompt_template
     else:
@@ -175,7 +208,7 @@ def build_consultation_prompt(
             template = script.default_prompt_template
         else:
             # デフォルトのシステムプロンプトとテンプレート
-            system_instruction = f"あなたは経験豊富な{consultation_type.name}の専門家です。与えられた情報に基づいて、実践的で具体的なアドバイスを提供してください。"
+            system_instruction = f"与えられた情報に基づいて、{consultation_type.name}に関する実践的で具体的なアドバイスを提供してください。"
             template = """【会社情報】
 会社名: {company_name}
 業種: {industry}

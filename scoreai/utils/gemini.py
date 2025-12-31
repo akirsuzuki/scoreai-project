@@ -43,7 +43,8 @@ def get_available_models() -> list:
 def get_gemini_response(
     prompt: str,
     system_instruction: Optional[str] = None,
-    model: str = None
+    model: str = None,
+    api_key: Optional[str] = None
 ) -> Optional[str]:
     """
     Gemini APIを使用してテキスト生成
@@ -52,12 +53,17 @@ def get_gemini_response(
         prompt: ユーザーのプロンプト
         system_instruction: システム指示（オプション）
         model: 使用するGeminiモデル（Noneの場合は利用可能なモデルから自動選択）
+        api_key: 使用するAPIキー（Noneの場合はSCOREのデフォルト）
         
     Returns:
         生成されたテキスト、エラー時はNone
     """
     try:
-        initialize_gemini()
+        # APIキーが指定されている場合はそれを使用、そうでない場合はデフォルト
+        if api_key:
+            genai.configure(api_key=api_key)
+        else:
+            initialize_gemini()
         
         # モデルの設定
         generation_config = {
@@ -164,8 +170,7 @@ def get_financial_advice(
         ValueError: APIキーが設定されていない場合
         Exception: その他のAPIエラー
     """
-    system_instruction = """あなたは経験豊富な財務アドバイザーです。
-与えられた財務情報に基づいて、実践的で具体的なアドバイスを提供してください。
+    system_instruction = """与えられた財務情報に基づいて、実践的で具体的なアドバイスを提供してください。
 返答は日本語で、分かりやすく、専門的すぎない言葉で説明してください。"""
     
     # プロンプトを構築

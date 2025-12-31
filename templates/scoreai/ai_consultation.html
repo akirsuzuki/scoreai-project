@@ -1,5 +1,6 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
 {{ title }}
@@ -108,7 +109,108 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+
+/* Markdownコンテンツのスタイル */
+.markdown-content {
+    line-height: 1.6;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2A3547;
+}
+
+.markdown-content h1 { font-size: 1.5rem; }
+.markdown-content h2 { font-size: 1.3rem; }
+.markdown-content h3 { font-size: 1.1rem; }
+
+.markdown-content p {
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.markdown-content li {
+    margin-bottom: 0.25rem;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-bottom: 0.75rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.markdown-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: 'Courier New', monospace;
+}
+
+.markdown-content pre {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.75rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0.75rem;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.markdown-content table th {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+.markdown-content a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+.markdown-content strong {
+    font-weight: 600;
+}
+
+.markdown-content em {
+    font-style: italic;
+}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -157,6 +259,7 @@
                                 type="button" 
                                 class="btn btn-sm btn-outline-primary faq-button" 
                                 data-question="{{ faq.question }}"
+                                data-faq-id="{{ faq.id }}"
                                 style="white-space: normal; text-align: left;"
                             >
                                 <i class="ti ti-question-mark me-1"></i>{{ faq.question }}
@@ -176,19 +279,31 @@
                             </div>
                             <div class="message ai">
                                 <div class="message-avatar">🤖</div>
-                                <div class="message-bubble">
-                                    {{ history.ai_response|linebreaks }}
+                                <div class="message-bubble markdown-content">
+                                    {{ history.ai_response|markdown }}
                                 </div>
                             </div>
                             {% endfor %}
                         </div>
                         
                         <div class="chat-input-container">
+                            <!-- 選択されたFAQを表示する領域 -->
+                            <div id="selectedFaqContainer" class="mb-3" style="display: none;">
+                                <div class="alert alert-info d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <strong>選択された質問:</strong>
+                                        <span id="selectedFaqQuestion"></span>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="clearFaqButton">
+                                        <i class="ti ti-x"></i> クリア
+                                    </button>
+                                </div>
+                            </div>
                             <textarea 
                                 id="chatInput" 
                                 class="chat-input" 
                                 rows="3" 
-                                placeholder="相談内容を入力してください（例: 今期の着地予測をしてください）"
+                                placeholder="追加情報を入力してください（よくある質問を選択した場合は、その質問に追加する情報を入力）"
                             ></textarea>
                             <div class="chat-actions">
                                 <button id="sendButton" class="btn btn-primary chat-button">
@@ -219,9 +334,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="message-bubble">${message}</div>
             `;
         } else {
+            // Markdownをレンダリング
+            let htmlMessage = '';
+            if (typeof marked !== 'undefined') {
+                // marked.jsが利用可能な場合
+                htmlMessage = marked.parse(message);
+            } else {
+                // フォールバック: シンプルなMarkdown変換
+                htmlMessage = message
+                    .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+                    .replace(/`([^`]+)`/g, '<code>$1</code>')
+                    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+                    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+                    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+                    .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+                    .replace(/\n/g, '<br>');
+            }
+            
             messageDiv.innerHTML = `
                 <div class="message-avatar">🤖</div>
-                <div class="message-bubble">${message.replace(/\n/g, '<br>')}</div>
+                <div class="message-bubble markdown-content">${htmlMessage}</div>
             `;
         }
         
@@ -229,8 +362,25 @@ document.addEventListener('DOMContentLoaded', function() {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
+    let currentFaqId = null; // 現在選択されているFAQのID
+    let currentFaqQuestion = null; // 現在選択されているFAQの質問文
+    
     function sendMessage() {
-        const message = chatInput.value.trim();
+        const additionalInfo = chatInput.value.trim();
+        
+        // FAQが選択されている場合、質問と追加情報を組み合わせる
+        let message = '';
+        if (currentFaqId && currentFaqQuestion) {
+            if (additionalInfo) {
+                message = `${currentFaqQuestion}\n\n【追加情報】\n${additionalInfo}`;
+            } else {
+                message = currentFaqQuestion;
+            }
+        } else {
+            // FAQが選択されていない場合は、入力内容をそのまま使用
+            message = additionalInfo;
+        }
+        
         if (!message) return;
         
         // ユーザーメッセージを表示
@@ -241,14 +391,17 @@ document.addEventListener('DOMContentLoaded', function() {
         sendButton.disabled = true;
         loadingIndicator.style.display = 'inline-block';
         
-        // APIリクエスト
+        // APIリクエスト（FAQ IDも送信）
+        const body = `message=${encodeURIComponent(message)}`;
+        const requestBody = currentFaqId ? `${body}&faq_id=${encodeURIComponent(currentFaqId)}` : body;
+        
         fetch('{% url "ai_consultation_api" consultation_type.id %}', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: `message=${encodeURIComponent(message)}`
+            body: requestBody
         })
         .then(response => response.json())
         .then(data => {
@@ -257,6 +410,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (data.success) {
                 addMessage(data.response, false);
+                // 送信後、FAQ選択をクリア
+                clearSelectedFaq();
             } else {
                 addMessage('エラー: ' + (data.error || '不明なエラーが発生しました'), false);
             }
@@ -277,15 +432,57 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // FAQ選択をクリアする関数
+    function clearSelectedFaq() {
+        currentFaqId = null;
+        currentFaqQuestion = null;
+        document.getElementById('selectedFaqContainer').style.display = 'none';
+        document.getElementById('selectedFaqQuestion').textContent = '';
+        // すべてのFAQボタンの選択状態を解除
+        document.querySelectorAll('.faq-button').forEach(btn => {
+            btn.classList.remove('active', 'btn-primary');
+            btn.classList.add('btn-outline-primary');
+        });
+    }
+    
     // よくある質問ボタンのクリックイベント
     document.querySelectorAll('.faq-button').forEach(button => {
         button.addEventListener('click', function() {
             const question = this.getAttribute('data-question');
-            chatInput.value = question;
+            const faqId = this.getAttribute('data-faq-id');
+            
+            // 同じFAQが既に選択されている場合はクリア
+            if (currentFaqId === faqId) {
+                clearSelectedFaq();
+                return;
+            }
+            
+            // FAQを選択
+            currentFaqId = faqId;
+            currentFaqQuestion = question;
+            
+            // 選択状態を表示
+            document.getElementById('selectedFaqQuestion').textContent = question;
+            document.getElementById('selectedFaqContainer').style.display = 'block';
+            
+            // ボタンの選択状態を更新
+            document.querySelectorAll('.faq-button').forEach(btn => {
+                btn.classList.remove('active', 'btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            this.classList.remove('btn-outline-primary');
+            this.classList.add('active', 'btn-primary');
+            
+            // 入力欄をクリアしてフォーカス
+            chatInput.value = '';
             chatInput.focus();
-            // 自動的に送信する場合は以下のコメントを外す
-            // sendMessage();
         });
+    });
+    
+    // クリアボタンのイベント
+    document.getElementById('clearFaqButton').addEventListener('click', function() {
+        clearSelectedFaq();
+        chatInput.focus();
     });
 });
 </script>

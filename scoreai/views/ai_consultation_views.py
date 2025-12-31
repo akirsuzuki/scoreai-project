@@ -6,6 +6,7 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib import messages
 from django.http import JsonResponse
+import json
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.db import transaction
@@ -132,6 +133,7 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
             is_active=True
         )
         user_message = request.POST.get('message', '').strip()
+        faq_id = request.POST.get('faq_id', '').strip()
         
         if not user_message:
             return JsonResponse({
@@ -143,35 +145,73 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
             # データを収集
             company_data = get_consultation_data(consultation_type, self.this_company)
             
-            # スクリプトを取得（ユーザー用 → システム用の順）
-            user_script = UserAIConsultationScript.objects.filter(
-                user=request.user,
-                consultation_type=consultation_type,
-                is_active=True,
-                is_default=True
-            ).first()
+            # FAQのスクリプトを取得（指定されている場合）
+            faq_script = None
+            if faq_id:
+                from ..models import AIConsultationFAQ
+                faq = AIConsultationFAQ.objects.filter(
+                    id=faq_id,
+                    consultation_type=consultation_type,
+                    is_active=True
+                ).first()
+                if faq and faq.script:
+                    faq_script = faq.script
             
+            # スクリプトを取得（FAQ用 → ユーザー用 → システム用の順）
+            user_script = None
             system_script = None
-            if not user_script:
-                system_script = AIConsultationScript.objects.filter(
+            
+            if not faq_script:
+                user_script = UserAIConsultationScript.objects.filter(
+                    user=request.user,
                     consultation_type=consultation_type,
                     is_active=True,
                     is_default=True
                 ).first()
+                
+                if not user_script:
+                    system_script = AIConsultationScript.objects.filter(
+                        consultation_type=consultation_type,
+                        is_active=True,
+                        is_default=True
+                    ).first()
             
             # プロンプトを構築
             prompt, system_instruction = build_consultation_prompt(
                 consultation_type,
                 user_message,
                 company_data,
-                user_script if user_script else None
+                user_script=user_script,
+                faq_script=faq_script
             )
             
-            # AI応答を生成
-            ai_response = get_gemini_response(
-                prompt,
-                system_instruction=system_instruction
+            # 使用するAPIキーを決定
+            from ..utils.api_key_manager import get_api_key_for_ai_consultation, increment_api_count
+            api_key, api_provider, source = get_api_key_for_ai_consultation(
+                self.this_firm,
+                self.this_company,
+                request.user
             )
+            
+            # API利用回数をカウント（Company Userの場合のみ、上限内の場合のみ）
+            if source == 'score':
+                increment_api_count(self.this_firm, user=request.user)
+            
+            # AI応答を生成
+            # 現在はGeminiのみ対応（OpenAI対応は後で追加可能）
+            if api_provider == 'gemini':
+                ai_response = get_gemini_response(
+                    prompt,
+                    system_instruction=system_instruction,
+                    api_key=api_key
+                )
+            else:
+                # OpenAI対応は後で実装
+                logger.error(f"Unsupported API provider: {api_provider}")
+                return JsonResponse({
+                    'success': False,
+                    'error': '現在サポートされていないAPIプロバイダーです。'
+                }, status=500)
             
             if not ai_response:
                 return JsonResponse({
@@ -179,8 +219,8 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                     'error': 'AI応答の生成に失敗しました。'
                 }, status=500)
             
-            # 利用状況をカウント
-            usage_incremented = increment_ai_consultation_count(self.this_firm)
+            # 利用状況をカウント（Company Userの場合のみ）
+            usage_incremented = increment_ai_consultation_count(self.this_firm, user=request.user)
             if not usage_incremented:
                 return JsonResponse({
                     'success': False,
@@ -216,17 +256,35 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 data_snapshot=serializable_data
             )
             
-            return JsonResponse({
+            # JsonResponseに渡す前に、すべてのULIDを文字列に変換
+            response_data = {
                 'success': True,
                 'response': ai_response,
-                'history_id': history.id
-            })
+                'history_id': str(history.id)  # ULIDを文字列に変換
+            }
+            # 念のため、json.dumpsでシリアライズ可能か確認
+            try:
+                json.dumps(response_data, default=str, ensure_ascii=False)
+            except (TypeError, ValueError) as e:
+                logger.error(f"Failed to serialize response_data: {e}")
+                # エラーが発生した場合は、make_json_serializableで処理
+                response_data = make_json_serializable(response_data)
+            
+            return JsonResponse(response_data)
             
         except Exception as e:
             logger.error(f"AI consultation error: {e}", exc_info=True)
+            # エラーメッセージもULIDが含まれている可能性があるため、文字列に変換
+            error_message = str(e)
+            # ULIDオブジェクトが含まれている場合は、さらに処理
+            try:
+                json.dumps({'success': False, 'error': error_message}, default=str)
+            except (TypeError, ValueError):
+                error_message = f'エラーが発生しました: {type(e).__name__}'
+            
             return JsonResponse({
                 'success': False,
-                'error': f'エラーが発生しました: {str(e)}'
+                'error': error_message
             }, status=500)
 
 

@@ -39,6 +39,7 @@ def get_or_create_usage_tracking(firm: Firm, subscription: FirmSubscription = No
         defaults={
             'ai_consultation_count': 0,
             'ocr_count': 0,
+            'api_count': 0,
             'is_reset': False,
         }
     )
@@ -47,16 +48,20 @@ def get_or_create_usage_tracking(firm: Firm, subscription: FirmSubscription = No
 
 
 @transaction.atomic
-def increment_ai_consultation_count(firm: Firm) -> bool:
+def increment_ai_consultation_count(firm: Firm, user=None) -> bool:
     """
-    AI相談回数をインクリメント
+    AI相談回数をインクリメント（Company Userの場合のみ）
     
     Args:
         firm: Firmオブジェクト
+        user: Userオブジェクト（Company Userの場合のみカウント）
     
     Returns:
         成功した場合True、失敗した場合False
     """
+    # Company Userの場合のみカウント
+    if user and not user.is_company_user:
+        return True  # カウントしないが、エラーではない
     try:
         subscription = firm.subscription
     except FirmSubscription.DoesNotExist:
@@ -91,16 +96,20 @@ def increment_ai_consultation_count(firm: Firm) -> bool:
 
 
 @transaction.atomic
-def increment_ocr_count(firm: Firm) -> bool:
+def increment_ocr_count(firm: Firm, user=None) -> bool:
     """
-    OCR読み込み回数をインクリメント
+    OCR読み込み回数をインクリメント（Company Userの場合のみ）
     
     Args:
         firm: Firmオブジェクト
+        user: Userオブジェクト（Company Userの場合のみカウント）
     
     Returns:
         成功した場合True、失敗した場合False
     """
+    # Company Userの場合のみカウント
+    if user and not user.is_company_user:
+        return True  # カウントしないが、エラーではない
     try:
         subscription = firm.subscription
     except FirmSubscription.DoesNotExist:

@@ -86,6 +86,8 @@ class Company(models.Model):
         choices=COMPANY_SIZE_CHOICES,
         default='s',
     )
+    api_key = models.CharField('APIキー', max_length=255, blank=True, null=True, help_text='CompanyのAPIキー（上限超過時に使用、Company Userのみ）')
+    api_provider = models.CharField('APIプロバイダー', max_length=20, choices=[('gemini', 'Google Gemini'), ('openai', 'OpenAI')], blank=True, null=True, help_text='APIキーのプロバイダー')
 
     @property
     def user_count(self):
@@ -120,9 +122,16 @@ class UserCompany(models.Model):
 
 
 class Firm(models.Model):
+    API_PROVIDER_CHOICES = [
+        ('gemini', 'Google Gemini'),
+        ('openai', 'OpenAI'),
+    ]
+    
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='firms')
+    api_key = models.CharField('APIキー', max_length=255, blank=True, null=True, help_text='FirmのAPIキー（上限超過時に使用）')
+    api_provider = models.CharField('APIプロバイダー', max_length=20, choices=API_PROVIDER_CHOICES, blank=True, null=True, help_text='APIキーのプロバイダー')
 
     def __str__(self):
         return self.name
@@ -284,6 +293,7 @@ class FirmPlan(models.Model):
     max_companies = models.IntegerField('最大Company数', default=1, help_text='0の場合は無制限')
     max_ai_consultations_per_month = models.IntegerField('月間AI相談回数上限', default=10, help_text='0の場合は無制限')
     max_ocr_per_month = models.IntegerField('月間OCR読み込み回数上限', default=5, help_text='0の場合は無制限')
+    api_limit = models.IntegerField('API利用上限数', default=30, help_text='FirmによるAPI利用上限数。上限まではSCOREのAPIを使用し、超えたらFirmのAPIキーを使用')
     
     # 機能フラグ
     cloud_storage_google_drive = models.BooleanField('Google Drive連携', default=False)
@@ -420,6 +430,11 @@ class FirmSubscription(models.Model):
         return base
     
     @property
+    def api_limit(self):
+        """API利用上限数（Firmによる）"""
+        return self.plan.api_limit
+    
+    @property
     def is_active_subscription(self):
         """有効なサブスクリプションかどうか"""
         return self.status in ['trial', 'active']
@@ -443,6 +458,7 @@ class FirmUsageTracking(models.Model):
     # 利用状況
     ai_consultation_count = models.IntegerField('AI相談回数', default=0)
     ocr_count = models.IntegerField('OCR読み込み回数', default=0)
+    api_count = models.IntegerField('API利用回数', default=0, help_text='FirmによるAPI利用回数（上限まではSCOREのAPIを使用）')
     
     # リセットフラグ
     is_reset = models.BooleanField('リセット済み', default=False)
@@ -494,6 +510,24 @@ class FirmUsageTracking(models.Model):
         if total == 0:
             return 0
         return min(100, (self.ocr_count / total) * 100)
+    
+    @property
+    def api_remaining(self):
+        """残りのAPI利用回数（Firmによる）"""
+        api_limit = self.subscription.api_limit
+        if api_limit == 0:
+            return None  # 無制限
+        return max(0, api_limit - self.api_count)
+    
+    @property
+    def api_usage_percentage(self):
+        """API利用割合（Firmによる）"""
+        api_limit = self.subscription.api_limit
+        if api_limit == 0:
+            return None
+        if api_limit == 0:
+            return 0
+        return min(100, (self.api_count / api_limit) * 100)
 
 
 class SubscriptionHistory(models.Model):
@@ -1251,6 +1285,7 @@ class AIConsultationFAQ(models.Model):
         verbose_name="相談タイプ"
     )
     question = models.CharField(max_length=200, verbose_name="質問")
+    script = models.TextField(verbose_name="スクリプト", blank=True, null=True, help_text="この質問専用のシステムプロンプト。空の場合は相談タイプのデフォルトスクリプトを使用します。")
     order = models.IntegerField(default=0, verbose_name="表示順序")
     is_active = models.BooleanField(default=True, verbose_name="有効")
     created_at = models.DateTimeField(auto_now_add=True)

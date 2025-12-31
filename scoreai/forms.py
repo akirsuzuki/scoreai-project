@@ -70,7 +70,7 @@ class UserProfileUpdateForm(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'fiscal_month', 'industry_classification', 'industry_subclassification', 'company_size']
+        fields = ['name', 'fiscal_month', 'industry_classification', 'industry_subclassification', 'company_size', 'api_key', 'api_provider']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'fiscal_month': forms.NumberInput(attrs={
@@ -81,6 +81,12 @@ class CompanyForm(forms.ModelForm):
             'industry_classification': forms.Select(attrs={'class': 'form-control'}),
             'industry_subclassification': forms.Select(attrs={'class': 'form-control'}),
             'company_size': forms.Select(attrs={'class': 'form-control'}),
+            'api_key': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'password',
+                'placeholder': 'APIキーを入力（上限超過時に使用）'
+            }),
+            'api_provider': forms.Select(attrs={'class': 'form-control'}),
         }
         labels = {
             'name': '会社名',
@@ -88,6 +94,12 @@ class CompanyForm(forms.ModelForm):
             'industry_classification': '業種分類',
             'industry_subclassification': '業種小分類',
             'company_size': '企業規模',
+            'api_key': 'APIキー',
+            'api_provider': 'APIプロバイダー',
+        }
+        help_texts = {
+            'api_key': '上限超過時に使用するAPIキー（Company Userのみ使用可能）',
+            'api_provider': 'APIキーのプロバイダーを選択',
         }
 
 
@@ -289,9 +301,24 @@ class FirmSettingsForm(forms.ModelForm):
     """Firm設定フォーム"""
     class Meta:
         model = Firm
-        fields = ['name']
+        fields = ['name', 'api_key', 'api_provider']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'api_key': forms.TextInput(attrs={
+                'class': 'form-control',
+                'type': 'password',
+                'placeholder': 'APIキーを入力（上限超過時に使用）'
+            }),
+            'api_provider': forms.Select(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'name': 'Firm名',
+            'api_key': 'APIキー',
+            'api_provider': 'APIプロバイダー',
+        }
+        help_texts = {
+            'api_key': '上限超過時に使用するAPIキー',
+            'api_provider': 'APIキーのプロバイダーを選択',
         }
 
 

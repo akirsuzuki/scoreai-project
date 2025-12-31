@@ -27,6 +27,7 @@ class Command(BaseCommand):
                 'max_companies': 1,
                 'max_ai_consultations_per_month': 10,
                 'max_ocr_per_month': 5,
+                'api_limit': 30,
                 'cloud_storage_google_drive': False,
                 'cloud_storage_box': False,
                 'cloud_storage_dropbox': False,
@@ -56,6 +57,7 @@ class Command(BaseCommand):
                 'max_companies': 5,
                 'max_ai_consultations_per_month': 50,
                 'max_ocr_per_month': 20,
+                'api_limit': 50,
                 'cloud_storage_google_drive': True,
                 'cloud_storage_box': False,
                 'cloud_storage_dropbox': False,
@@ -85,6 +87,7 @@ class Command(BaseCommand):
                 'max_companies': 20,
                 'max_ai_consultations_per_month': 200,
                 'max_ocr_per_month': 100,
+                'api_limit': 100,
                 'cloud_storage_google_drive': True,
                 'cloud_storage_box': True,
                 'cloud_storage_dropbox': True,
@@ -114,6 +117,7 @@ class Command(BaseCommand):
                 'max_companies': 10,  # 基本10社、追加可能
                 'max_ai_consultations_per_month': 500,  # 基本500回、追加可能
                 'max_ocr_per_month': 250,  # 基本250回、追加可能
+                'api_limit': 200,
                 'cloud_storage_google_drive': True,
                 'cloud_storage_box': True,
                 'cloud_storage_dropbox': True,

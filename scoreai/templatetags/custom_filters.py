@@ -17,9 +17,11 @@ def to_thousands(value):
 @register.filter
 def percentage(value, arg):
     try:
+        if value is None or arg is None:
+            return None
         result = (float(value) / float(arg)) * 100
         return f"{result:.2f}%"
-    except (ValueError, ZeroDivisionError):
+    except (ValueError, TypeError, ZeroDivisionError):
         return None
 
 @register.filter
@@ -64,15 +66,19 @@ def average(values):
 @register.filter
 def divide(value, arg):
     try:
+        if value is None or arg is None:
+            return None
         return float(value) / float(arg)
-    except (ValueError, ZeroDivisionError):
+    except (ValueError, TypeError, ZeroDivisionError):
         return None
 
 @register.filter
 def multiply(value, arg):
     try:
+        if value is None or arg is None:
+            return None
         return float(value) * float(arg)
-    except ValueError:
+    except (ValueError, TypeError):
         return None
 
 @register.filter(name='get_by_name')
