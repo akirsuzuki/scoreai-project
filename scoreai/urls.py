@@ -38,6 +38,8 @@ from .views.storage_views import (
     CloudStorageSettingView,
     GoogleDriveOAuthInitView,
     GoogleDriveOAuthCallbackView,
+    BoxOAuthInitView,
+    BoxOAuthCallbackView,
     CloudStorageDisconnectView,
     CloudStorageTestConnectionView,
 )
@@ -93,6 +95,21 @@ from .views.firm_member_views import (
 )
 from .views.assigned_clients_views import (
     AssignedClientsListView,
+)
+from .views.firm_company_limit_views import (
+    FirmCompanyLimitUpdateView,
+)
+from .views.budget_views import (
+    FiscalSummary_YearBudgetCreateView,
+    FiscalSummary_YearBudgetUpdateView,
+    FiscalSummary_MonthBudgetCreateView,
+    FiscalSummary_MonthBudgetUpdateView,
+    BudgetSuggestView,
+    BudgetSuggest_MonthView,
+    BudgetVsActualComparisonView,
+    BudgetVsActualYearlyComparisonView,
+    BudgetVsActualMonthlyComparisonView,
+    BudgetAnalysisView,
 )
 from .views.stripe_webhook_views import StripeWebhookView
 from .views import (
@@ -198,6 +215,17 @@ urlpatterns = [
     path('fiscal_summary_year/<str:pk>/detail/', FiscalSummary_YearDetailView.as_view(), name='fiscal_summary_year_detail'),
     path('fiscal-summary-year/latest/', LatestFiscalSummaryYearDetailView.as_view(), name='latest_fiscal_summary_year_detail'),
     path('fiscal_summary_year/<str:pk>/delete/', FiscalSummary_YearDeleteView.as_view(), name='fiscal_summary_year_delete'),
+    # 予算管理
+    path('fiscal_summary_year/budget/create/', FiscalSummary_YearBudgetCreateView.as_view(), name='fiscal_summary_year_budget_create'),
+    path('fiscal_summary_year/budget/<str:pk>/update/', FiscalSummary_YearBudgetUpdateView.as_view(), name='fiscal_summary_year_budget_update'),
+    path('fiscal_summary_month/budget/create/', FiscalSummary_MonthBudgetCreateView.as_view(), name='fiscal_summary_month_budget_create'),
+    path('fiscal_summary_month/budget/<str:pk>/update/', FiscalSummary_MonthBudgetUpdateView.as_view(), name='fiscal_summary_month_budget_update'),
+    path('budget/suggest/', BudgetSuggestView.as_view(), name='budget_suggest'),
+    path('budget/suggest-month/', BudgetSuggest_MonthView.as_view(), name='budget_suggest_month'),
+    path('budget/vs-actual/', BudgetVsActualComparisonView.as_view(), name='budget_vs_actual_comparison'),
+    path('budget/vs-actual-yearly/', BudgetVsActualYearlyComparisonView.as_view(), name='budget_vs_actual_yearly'),
+    path('budget/vs-actual-monthly/', BudgetVsActualMonthlyComparisonView.as_view(), name='budget_vs_actual_monthly'),
+    path('budget/analysis/', BudgetAnalysisView.as_view(), name='budget_analysis'),
     path('fiscal_summary_month/', FiscalSummary_MonthListView.as_view(), name='fiscal_summary_month_list'),
     path('fiscal_summary_month/create/', FiscalSummary_MonthCreateView.as_view(), name='fiscal_summary_month_create'),
     path('fiscal_summary_month/<str:pk>/update/', FiscalSummary_MonthUpdateView.as_view(), name='fiscal_summary_month_update'),
@@ -259,6 +287,7 @@ urlpatterns = [
     path('security_policy/', SecurityPolicyView.as_view(), name='security_policy'),
     path('firm_clientslist/', ClientsList.as_view(), name='firm_clientslist'),
     path('assigned-clients/', AssignedClientsListView.as_view(), name='assigned_clients_list'),
+    path('firm/<str:firm_id>/company/<str:company_id>/limit/', FirmCompanyLimitUpdateView.as_view(), name='firm_company_limit_update'),
     path('import-financial-institution/', ImportFinancialInstitutionView.as_view(), name='import_financial_institution'),
     path('download/financial_institutions/', download_financial_institutions_csv, name='download_financial_institutions_csv'),
     path('sample/', SampleView.as_view(), name='sample'),
@@ -286,6 +315,8 @@ urlpatterns = [
     path('storage/setting/', CloudStorageSettingView.as_view(), name='storage_setting'),
     path('storage/google-drive/auth/', GoogleDriveOAuthInitView.as_view(), name='storage_google_drive_auth'),
     path('storage/google-drive/callback/', GoogleDriveOAuthCallbackView.as_view(), name='storage_google_drive_callback'),
+    path('storage/box/auth/', BoxOAuthInitView.as_view(), name='storage_box_auth'),
+    path('storage/box/callback/', BoxOAuthCallbackView.as_view(), name='storage_box_callback'),
     path('storage/disconnect/', CloudStorageDisconnectView.as_view(), name='storage_disconnect'),
     path('storage/test-connection/', CloudStorageTestConnectionView.as_view(), name='storage_test_connection'),
     # ストレージファイル管理

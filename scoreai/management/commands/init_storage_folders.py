@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
 from scoreai.models import CloudStorageSetting, DocumentFolder
 from scoreai.utils.storage.google_drive import GoogleDriveAdapter
+from scoreai.utils.storage.box import BoxAdapter
 import logging
 
 User = get_user_model()
@@ -78,6 +79,12 @@ class Command(BaseCommand):
                 # ストレージアダプターを初期化
                 if storage_setting.storage_type == 'google_drive':
                     adapter = GoogleDriveAdapter(
+                        user=storage_setting.user,
+                        access_token=storage_setting.access_token,
+                        refresh_token=storage_setting.refresh_token
+                    )
+                elif storage_setting.storage_type == 'box':
+                    adapter = BoxAdapter(
                         user=storage_setting.user,
                         access_token=storage_setting.access_token,
                         refresh_token=storage_setting.refresh_token

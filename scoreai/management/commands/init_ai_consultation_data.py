@@ -61,6 +61,12 @@ class Command(BaseCommand):
                 'order': 5,
                 'color': '#00BCD4',
             },
+            {
+                'name': '予算策定',
+                'description': '前期実績と借入情報を基に予算を作成',
+                'order': 6,
+                'color': '#FF5722',
+            },
         ]
 
         consultation_types = {}
@@ -299,6 +305,69 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS("✓ DXのデフォルトスクリプトを作成しました"))
             else:
                 self.stdout.write("→ DXのデフォルトスクリプトは既に存在します")
+
+        # 予算策定のデフォルトスクリプト
+        budget_script = """あなたは財務分析の専門家です。前期実績と指定された条件を基に、適切な予算を作成してください。
+予算は現実的で実現可能な数値である必要があります。借入金残高の計算も正確に行ってください。
+返答は必ずJSON形式で返してください。説明文は不要です。"""
+
+        budget_template = """【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+決算月: {fiscal_month}月
+
+【前期実績（{previous_year}年）】
+{previous_fiscal_summary}
+
+【借入金情報（{target_year}年度末予測残高）】
+{debt_info}
+
+【予算策定条件】
+- 対象年度: {target_year}年
+- 売上高成長率: {sales_growth_rate}%
+- 投資予定額: {investment_amount}千円
+- 借入予定額: {borrowing_amount}千円
+- 資本金増加予定額: {capital_increase}千円
+
+上記の情報を基に、{target_year}年度の予算を作成してください。
+予算はJSON形式で返してください。以下のフィールドを含めてください（単位：千円）：
+- sales: 売上高
+- gross_profit: 粗利益
+- operating_profit: 営業利益
+- ordinary_profit: 経常利益
+- net_profit: 当期純利益
+- total_assets: 資産の部合計
+- total_liabilities: 負債の部合計
+- total_net_assets: 純資産の部合計
+- capital_stock: 資本金
+- retained_earnings: 利益剰余金
+- short_term_loans_payable: 短期借入金（借入金情報のtotal_short_term_loansを反映）
+- long_term_loans_payable: 長期借入金（借入金情報のtotal_long_term_loansを反映）
+- total_current_assets: 流動資産合計
+- total_fixed_assets: 固定資産合計（投資予定額を加算）
+- cash_and_deposits: 現金及び預金
+- accounts_receivable: 売上債権
+- inventory: 棚卸資産
+
+JSONのみを返してください。説明文は不要です。"""
+
+        if consultation_types.get('予算策定'):
+            script, created = AIConsultationScript.objects.get_or_create(
+                consultation_type=consultation_types['予算策定'],
+                is_default=True,
+                defaults={
+                    'name': 'デフォルト',
+                    'system_instruction': budget_script,
+                    'default_prompt_template': budget_template,
+                    'is_active': True,
+                    'created_by': superuser,
+                }
+            )
+            if created:
+                self.stdout.write(self.style.SUCCESS("✓ 予算策定のデフォルトスクリプトを作成しました"))
+            else:
+                self.stdout.write("→ 予算策定のデフォルトスクリプトは既に存在します")
 
         # よくある質問の作成
         faqs_data = [

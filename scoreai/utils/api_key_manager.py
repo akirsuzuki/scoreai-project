@@ -89,21 +89,18 @@ def get_api_key_for_ai_consultation(
 
 
 @transaction.atomic
-def increment_api_count(firm: Firm, user: Optional[User] = None) -> bool:
+def increment_api_count(firm: Firm, user: Optional[User] = None, company: Optional['Company'] = None) -> bool:
     """
-    API利用回数をインクリメント（Company Userの場合のみ）
+    API利用回数をインクリメント
     
     Args:
         firm: Firmオブジェクト
-        user: Userオブジェクト（Company Userの場合のみカウント）
+        user: Userオブジェクト
+        company: Companyオブジェクト（Firmユーザーの場合、選択中のCompany）
     
     Returns:
         成功した場合True、失敗した場合False
     """
-    # Company Userの場合のみカウント
-    if user and not user.is_company_user:
-        return True  # カウントしないが、エラーではない
-    
     try:
         subscription = firm.subscription
     except FirmSubscription.DoesNotExist:
@@ -114,6 +111,38 @@ def increment_api_count(firm: Firm, user: Optional[User] = None) -> bool:
     if not subscription.is_active_subscription:
         logger.warning(f"Subscription is not active for firm {firm.id}")
         return False
+    
+    # Firmユーザー（is_company_user=False）の場合、Companyの利用枠を使用できるかチェック
+    if user and not user.is_company_user and company:
+        from ..models import FirmCompany
+        from .usage_tracking import get_or_create_company_usage_tracking
+        
+        # 選択中のCompanyのFirmCompanyを取得
+        firm_company = FirmCompany.objects.filter(
+            firm=firm,
+            company=company,
+            active=True
+        ).first()
+        
+        if firm_company and firm_company.allow_firm_api_usage and firm_company.api_limit > 0:
+            # Companyの利用枠を使用
+            company_usage = get_or_create_company_usage_tracking(company, firm)
+            
+            # Companyの利用枠をチェック
+            if company_usage.api_count >= firm_company.api_limit:
+                logger.warning(f"Company API limit reached for company {company.id} in firm {firm.id}")
+                return False
+            
+            # Companyの利用枠にカウント
+            company_usage.api_count += 1
+            company_usage.save()
+            
+            logger.info(f"Incremented API count for company {company.id} in firm {firm.id} (firm user): {company_usage.api_count}")
+            return True
+    
+    # Company Userの場合のみFirmレベルでカウント
+    if user and not user.is_company_user:
+        return True  # FirmユーザーでCompanyの利用枠を使用できない場合はカウントしない
     
     from .usage_tracking import get_or_create_usage_tracking
     usage_tracking = get_or_create_usage_tracking(firm, subscription)

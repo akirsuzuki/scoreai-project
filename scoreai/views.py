@@ -159,12 +159,16 @@ class FiscalSummary_YearCreateView(SelectedCompanyMixin, TransactionMixin, Creat
 
     def form_valid(self, form):
         form.instance.company = self.this_company
+        # is_budgetはフォームから取得（デフォルトはFalse）
+        if form.cleaned_data.get('is_budget') is None:
+            form.instance.is_budget = False
         messages.success(self.request, f'{form.instance.year}年の決算データが正常に登録されました。' )
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '年次財務サマリー作成'
+        context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
 class FiscalSummary_YearUpdateView(SelectedCompanyMixin, TransactionMixin, UpdateView):
@@ -226,6 +230,12 @@ class FiscalSummary_YearUpdateView(SelectedCompanyMixin, TransactionMixin, Updat
         fiscal_summary_year.save()
         messages.success(self.request, '財務情報が正常に更新されました。')
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '年次財務サマリー編集'
+        context['show_title_card'] = False  # タイトルカードを非表示
+        return context
 
 
 # 既存のget_finance_scoreはviews.utilsからインポート済みのため、ここでは定義しない
@@ -421,8 +431,10 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         page_param = int(self.request.GET.get('page_param', 1))
         years_in_page = int(self.request.GET.get('years_in_page', 5))  # Default to 5 if not specified
 
+        # 実績データのみを取得（is_budget=False）
         queryset = FiscalSummary_Year.objects.filter(
-            company=self.this_company
+            company=self.this_company,
+            is_budget=False  # 実績データのみ
         ).select_related('company').order_by('-year')
         
         if not is_draft:
@@ -437,8 +449,11 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Calculate total pages
-        total_records = FiscalSummary_Year.objects.filter(company=self.this_company).count()
+        # Calculate total pages（実績データのみをカウント）
+        total_records = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            is_budget=False  # 実績データのみ
+        ).count()
         years_in_page = int(self.request.GET.get('years_in_page', 5))
         context['total_pages'] = (total_records + years_in_page - 1) // years_in_page  # Calculate total pages, rounding up
         context['title'] = '年次財務諸表'
@@ -448,7 +463,30 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         context['page_param'] = self.request.GET.get('page_param', 1)
         context['years_in_page'] = years_in_page
 
+        # 予算実績比較データを取得（最新年度）
+        queryset = self.get_queryset()
+        latest_fiscal = queryset.first()
+        if latest_fiscal:
+            latest_year = latest_fiscal.year
+            budget_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=latest_year,
+                is_budget=True
+            ).first()
+            
+            actual_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=latest_year,
+                is_budget=False,
+                is_draft=False
+            ).first()
+        else:
+            budget_year = None
+            actual_year = None
+        
         context['title'] = '決算年次推移'
+        context['budget_year'] = budget_year
+        context['actual_year'] = actual_year
         return context
 
 
@@ -543,23 +581,26 @@ class ImportFiscalSummary_Year(SelectedCompanyMixin, TransactionMixin, FormView)
                 }                
                 
                 if year is not None:
+                    # 実績データ（is_budget=False）のみをチェック
                     existing_data = FiscalSummary_Year.objects.filter(
                         company=self.this_company,
                         year=year,
-                        version='1',
+                        is_budget=False,  # 実績データのみをチェック
                     ).exists()
 
                     if existing_data and not override_flag:
                         messages.error(
                             self.request,
-                            f'{year}年の決算データは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                            f'{year}年の実績データは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
                         )
                         return self.form_invalid(form)
                     else:
+                        defaults['is_budget'] = False  # 実績として設定
+                        # versionは常に1で固定（defaultsに含めない）
                         FiscalSummary_Year.objects.update_or_create(
                             company=self.this_company,
                             year=year,
-                            version='1',
+                            is_budget=False,  # 実績データのみを対象
                             defaults=defaults
                         )
                 else:
@@ -605,6 +646,7 @@ class FiscalSummary_MonthCreateView(SelectedCompanyMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '月次財務サマリー作成'
+        context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
 
@@ -639,6 +681,7 @@ class FiscalSummary_MonthUpdateView(SelectedCompanyMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context['title'] = '月次財務サマリー編集'
         context['fiscal_summary_year'] = self.object.fiscal_summary_year
+        context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
 
@@ -701,8 +744,12 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
     context_object_name = 'fiscal_summary_months'
 
     def get_queryset(self):
+        # 実績データのみを取得（is_budget=False）
         return FiscalSummary_Month.objects.filter(
-            fiscal_summary_year__company=self.this_company
+            fiscal_summary_year__company=self.this_company,
+            fiscal_summary_year__is_budget=False,
+            fiscal_summary_year__is_draft=False,
+            is_budget=False
         ).select_related(
             'fiscal_summary_year',
             'fiscal_summary_year__company'
@@ -755,11 +802,51 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
         fiscal_month = self.this_company.fiscal_month
         months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
 
+        # 予算実績比較データを取得（最新年度）
+        if monthly_data:
+            latest_year = monthly_data[0]['year']
+            budget_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=latest_year,
+                is_budget=True
+            ).first()
+            
+            actual_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=latest_year,
+                is_budget=False,
+                is_draft=False
+            ).first()
+            
+            # 月次予算実績比較データ
+            budget_monthly = []
+            actual_monthly = []
+            if budget_year:
+                budget_monthly = FiscalSummary_Month.objects.filter(
+                    fiscal_summary_year=budget_year,
+                    is_budget=True
+                ).order_by('period')
+            if actual_year:
+                actual_monthly = FiscalSummary_Month.objects.filter(
+                    fiscal_summary_year=actual_year,
+                    is_budget=False
+                ).order_by('period')
+        else:
+            budget_year = None
+            actual_year = None
+            budget_monthly = []
+            actual_monthly = []
+
         context.update({
             'title': '月次PL',
             'monthly_summaries_with_summary': monthly_summaries_with_summary,
             'months_label': months_label,
             'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+            # 予算実績比較データ
+            'budget_year': budget_year,
+            'actual_year': actual_year,
+            'budget_monthly': budget_monthly,
+            'actual_monthly': actual_monthly,
             # 第一レベルなのでタイトルカードを表示（デフォルト）
         })
         return context
@@ -854,9 +941,12 @@ class ImportFiscalSummary_Month(SelectedCompanyMixin, FormView):
                 fiscal_year = int(row['年度'])
                 period = int(row['月度'])
                 
+                # versionは常に1で固定（defaultsに含めない、モデルのdefault=1が適用される）
                 fiscal_summary_year, created = FiscalSummary_Year.objects.get_or_create(
                     company=self.this_company,
-                    year=fiscal_year
+                    year=fiscal_year,
+                    is_budget=False,  # 実績データとして明示的に指定
+                    defaults={}
                 )
                 
                 defaults = {
@@ -911,7 +1001,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
 
     def form_valid(self, form):
         fiscal_year = form.cleaned_data['fiscal_year']
-        csv_file = form.cleaned_data['csv_file']
+        csv_file = form.cleaned_data['file']
         override_flag = form.cleaned_data.get('override_flag', False)
 
         try:
@@ -1011,36 +1101,77 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
             
 
             # 月度データを生成
+            imported_count = 0
+            updated_count = 0
             for month, sales, gross_profit, operating_profit, ordinary_profit in zip(
                 months, sales_data, gross_profit_data, operating_profit_data, ordinary_profit_data
             ):
-                existing_data = FiscalSummary_Month.objects.filter(
+                # 実績データ（is_budget=False）のみをチェック
+                existing_actual = FiscalSummary_Month.objects.filter(
                     fiscal_summary_year=fiscal_year,
-                    period=month
-                ).exists()
+                    period=month,
+                    is_budget=False
+                ).first()
 
-                if existing_data and not override_flag:
+                if existing_actual and not override_flag:
                     messages.error(
                         self.request,
-                        f'{fiscal_year.year}年の{month}月のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                        f'{fiscal_year.year}年の{month}月の実績データは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
                     )
                     return self.form_invalid(form)
                 else:
-                    FiscalSummary_Month.objects.update_or_create(
+                    # 実績データとしてインポート（is_budget=False）
+                    # unique_togetherにis_budgetが含まれているため、予算データとは別レコードとして作成される
+                    obj, created = FiscalSummary_Month.objects.update_or_create(
                         fiscal_summary_year=fiscal_year,
                         period=month,
+                        is_budget=False,  # 実績データのみを対象
                         defaults={
                             'sales': sales,
                             'gross_profit': gross_profit,
                             'operating_profit': operating_profit,
-                            'ordinary_profit': ordinary_profit
+                            'ordinary_profit': ordinary_profit,
                         }
                     )
+                    
+                    if created:
+                        imported_count += 1
+                    else:
+                        updated_count += 1
 
-            messages.success(
-                self.request, 
-                f'CSVファイルが正常にインポートされました。（エンコーディング: {encoding}）'
-            )
+            # 成功メッセージを詳細に表示
+            if imported_count > 0 and updated_count > 0:
+                messages.success(
+                    self.request, 
+                    f'✅ CSVファイルが正常にインポートされました！<br>'
+                    f'<strong>新規登録:</strong> {imported_count}件<br>'
+                    f'<strong>更新:</strong> {updated_count}件<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}',
+                    extra_tags='safe'
+                )
+            elif imported_count > 0:
+                messages.success(
+                    self.request, 
+                    f'✅ CSVファイルが正常にインポートされました！<br>'
+                    f'<strong>新規登録:</strong> {imported_count}件<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}',
+                    extra_tags='safe'
+                )
+            elif updated_count > 0:
+                messages.success(
+                    self.request, 
+                    f'✅ CSVファイルが正常にインポートされました！<br>'
+                    f'<strong>更新:</strong> {updated_count}件<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}',
+                    extra_tags='safe'
+                )
+            else:
+                messages.warning(
+                    self.request, 
+                    f'⚠️ CSVファイルは処理されましたが、データが登録されませんでした。<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}',
+                    extra_tags='safe'
+                )
         except UnicodeDecodeError as e:
             messages.error(
                 self.request, 
@@ -1090,10 +1221,12 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
 class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year_MF.html"
     form_class = MoneyForwardCsvUploadForm_Year
-    success_url = reverse_lazy('fiscal_summary_year_list')
+    success_url = None  # リダイレクトしない
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
+        # 会社の年度を設定
+        form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
         return form
 
     def get_context_data(self, **kwargs):
@@ -1101,9 +1234,19 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
         context['title'] = '残高試算表のインポート（MoneyForwardから）'
         return context
 
+    def form_invalid(self, form):
+        logger.error(f"ImportFiscalSummary_Year_FromMoneyforward: form_invalid called. Errors: {form.errors}")
+        return super().form_invalid(form)
+
     def form_valid(self, form):
-        csv_file = form.cleaned_data['csv_file']
+        logger.info("ImportFiscalSummary_Year_FromMoneyforward: form_valid called")
+        csv_file = form.cleaned_data.get('file')
         override_flag = form.cleaned_data.get('override_flag', False)
+        
+        if not csv_file:
+            messages.error(self.request, 'CSVファイルが選択されていません。')
+            logger.error("ImportFiscalSummary_Year_FromMoneyforward: No file provided")
+            return self.form_invalid(form)
 
         try:
             # エンコーディング自動検出でCSVを読み込む
@@ -1156,21 +1299,32 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
                 logger.error(f"Fiscal year extraction error: {e}", exc_info=True)
                 return self.form_invalid(form)
 
-            # 既に存在する場合は上書きチェック、存在しない場合は新規作成
-            fiscal_summary_years = FiscalSummary_Year.objects.filter(year=fiscal_year, company=self.this_company)
-            if fiscal_summary_years.exists():
+            # 実績データ（is_budget=False）のみをチェック
+            existing_actual = FiscalSummary_Year.objects.filter(
+                year=fiscal_year, 
+                company=self.this_company,
+                is_budget=False  # 実績データのみをチェック
+            ).first()
+            
+            if existing_actual:
                 if not override_flag:
                     messages.error(
                         self.request,
-                        f'{fiscal_year}年のデータは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
+                        f'{fiscal_year}年の実績データは既に存在します。上書きする場合は「既存データを上書きする」を選択してください。'
                     )
                     return self.form_invalid(form)
             else:
-                # Create a new record if none exists
-                FiscalSummary_Year.objects.create(
+                # 実績データが存在しない場合は新規作成（is_budget=Falseを明示的に指定）
+                # unique_togetherにis_budgetが含まれているため、予算データが存在しても
+                # 実績データとして別レコードを作成できる
+                # versionは常に1で固定（defaultsに含めない、モデルのdefault=1が適用される）
+                FiscalSummary_Year.objects.get_or_create(
                     year=fiscal_year,
                     company=self.this_company,
-                    is_draft=True,
+                    is_budget=False,  # 実績データとして明示的に指定
+                    defaults={
+                        'is_draft': True,
+                    }
                 )
 
             current_line = 0 # 行数を取得するための変数
@@ -1302,17 +1456,44 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
                     logger.warning(f"条件に一致しない行（行番号: {current_line}）： {row}")
                     continue
 
-            # データを更新
-            FiscalSummary_Year.objects.update_or_create(
+            # データを更新（実績データとして、is_budget=Falseを明示的に指定）
+            data_dict['is_budget'] = False  # 実績データとして明示的に指定
+            # versionは常に1で固定（defaultsに含めない）
+            fiscal_summary_year, created = FiscalSummary_Year.objects.update_or_create(
                 year=fiscal_year,
                 company=self.this_company,
+                is_budget=False,  # 実績データのみを対象
                 defaults=data_dict
             )
 
             # ループ終了後の処理
             logger.info("CSVファイルの全行を正常に処理しました。")
 
-            messages.success(self.request, 'CSVファイルが正常にインポートされました。下書きデータとして保存されていますので、適宜必要な情報を追加してください。')
+            # 更新された項目数をカウント
+            updated_fields_count = len([k for k, v in data_dict.items() if v != 0])
+            
+            # 成功メッセージを詳細に表示
+            if created:
+                messages.success(
+                    self.request, 
+                    f'✅ CSVファイルが正常にインポートされました！<br>'
+                    f'<strong>年度:</strong> {fiscal_year}年<br>'
+                    f'<strong>新規登録:</strong> 下書きデータとして保存されました<br>'
+                    f'<strong>更新項目数:</strong> {updated_fields_count}項目<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}<br>'
+                    f'<small class="text-muted">適宜必要な情報を追加してください。</small>',
+                    extra_tags='safe'
+                )
+            else:
+                messages.success(
+                    self.request, 
+                    f'✅ CSVファイルが正常にインポートされました！<br>'
+                    f'<strong>年度:</strong> {fiscal_year}年<br>'
+                    f'<strong>更新:</strong> 既存データを更新しました<br>'
+                    f'<strong>更新項目数:</strong> {updated_fields_count}項目<br>'
+                    f'<strong>エンコーディング:</strong> {encoding}',
+                    extra_tags='safe'
+                )
 
         except UnicodeDecodeError as e:
             messages.error(
@@ -1335,7 +1516,13 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
             logger.error(f"CSV processing error: {e}", exc_info=True, extra={'user': self.request.user.id})
             return self.form_invalid(form)
 
-        return super().form_valid(form)
+        # 成功時も同じページに留まり、メッセージを表示する
+        # フォームをリセットして再表示
+        form = self.form_class()
+        # 会社情報をフォームに渡す
+        form.fields['fiscal_year'].queryset = FiscalSummary_Year.objects.filter(company=self.this_company).order_by('-year')
+        context = self.get_context_data(form=form)
+        return render(self.request, self.template_name, context)
 
 
 ##########################################################################

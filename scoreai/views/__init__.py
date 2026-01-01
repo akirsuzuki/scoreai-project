@@ -62,6 +62,18 @@ from .meeting_minutes_ai_views import (
     MeetingMinutesAISaveView,
 )
 
+# Budget views
+from .budget_views import (
+    FiscalSummary_YearBudgetCreateView,
+    FiscalSummary_YearBudgetUpdateView,
+    FiscalSummary_MonthBudgetCreateView,
+    FiscalSummary_MonthBudgetUpdateView,
+    BudgetSuggestView,
+    BudgetSuggest_MonthView,
+    BudgetVsActualComparisonView,
+    BudgetAnalysisView,
+)
+
 # views.pyから必要な関数とビューを再エクスポート（循環インポートを避けるため、遅延インポート）
 # 注意: views.pyがviews/__init__.pyをインポートしないようにする必要がある
 def _import_views_py():
@@ -175,6 +187,7 @@ __all__ = [
     'CompanyInvitationCancelView',
     # Assigned clients
     'AssignedClientsListView',
+    'FirmCompanyLimitUpdateView',
     # Utils
     'get_finance_score',
     'calculate_total_monthly_summaries',
@@ -271,5 +284,16 @@ __all__ = [
     'chat_view',
     # OCR
     'ImportFiscalSummaryFromOcrView',
+    # Budget
+    'FiscalSummary_YearBudgetCreateView',
+    'FiscalSummary_YearBudgetUpdateView',
+    'FiscalSummary_MonthBudgetCreateView',
+    'FiscalSummary_MonthBudgetUpdateView',
+    'BudgetSuggestView',
+    'BudgetSuggest_MonthView',
+    'BudgetVsActualComparisonView',
+    'BudgetVsActualYearlyComparisonView',
+    'BudgetVsActualMonthlyComparisonView',
+    'BudgetAnalysisView',
 ]
 

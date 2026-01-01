@@ -90,6 +90,117 @@
   </div>
 </div>
 
+{% if is_company_manager and usage_info %}
+<div class="row" id="usage-info">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">利用枠・利用状況</h5>
+      </div>
+      <div class="card-body">
+        {% for info in usage_info %}
+        <div class="mb-4 {% if not forloop.last %}border-bottom pb-4{% endif %}">
+          <h6 class="fw-semibold mb-3">{{ info.firm.name }}</h6>
+          <div class="row">
+            <div class="col-md-6">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th colspan="2" class="text-center">API利用枠</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="table-light w-50">割り当て</td>
+                    <td>
+                      {% if info.api_limit > 0 %}
+                        {{ info.api_limit }}
+                      {% else %}
+                        <span class="text-muted">未設定</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">利用数</td>
+                    <td>{{ info.api_used }}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">残り</td>
+                    <td>
+                      {% if info.api_remaining is not None %}
+                        {{ info.api_remaining }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">コンサルタント利用可否</td>
+                    <td>
+                      {% if info.allow_firm_api_usage %}
+                        <span class="badge bg-success">許可</span>
+                      {% else %}
+                        <span class="badge bg-secondary">不可</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="table table-bordered">
+                <thead class="table-light">
+                  <tr>
+                    <th colspan="2" class="text-center">OCR利用枠</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="table-light w-50">割り当て</td>
+                    <td>
+                      {% if info.ocr_limit > 0 %}
+                        {{ info.ocr_limit }}
+                      {% else %}
+                        <span class="text-muted">未設定</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">利用数</td>
+                    <td>{{ info.ocr_used }}</td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">残り</td>
+                    <td>
+                      {% if info.ocr_remaining is not None %}
+                        {{ info.ocr_remaining }}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="table-light">コンサルタント利用可否</td>
+                    <td>
+                      {% if info.allow_firm_ocr_usage %}
+                        <span class="badge bg-success">許可</span>
+                      {% else %}
+                        <span class="badge bg-secondary">不可</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div class="row" id="users">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">

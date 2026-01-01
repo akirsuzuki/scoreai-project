@@ -184,9 +184,11 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
     def _save_financial_statement(self, request, parsed_data, fiscal_year, override_flag):
         """決算書データの保存"""
         # FiscalSummary_Yearの作成または取得
+        # versionは常に1で固定（defaultsに含めない、モデルのdefault=1が適用される）
         fiscal_summary_year, created = FiscalSummary_Year.objects.get_or_create(
             year=fiscal_year,
             company=self.this_company,
+            is_budget=False,  # 実績データとして明示的に指定
             defaults={'is_draft': True}
         )
 
@@ -303,7 +305,7 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
         debt.save()
         
         # 利用状況をカウント
-        usage_incremented = increment_ocr_count(self.this_firm, user=self.request.user)
+        usage_incremented = increment_ocr_count(self.this_firm, user=self.request.user, company=self.this_company)
         if not usage_incremented:
             messages.error(
                 request,
@@ -441,19 +443,24 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
                 logger.info(f"Cloud storage not configured for user {request.user.id} and company {self.this_company.id}")
                 return None
             
-            # Google Driveのみ対応（他のストレージは今後実装）
-            if storage_setting.storage_type != 'google_drive':
+            # ストレージアダプターを初期化
+            if storage_setting.storage_type == 'google_drive':
+                from ..utils.storage.google_drive import GoogleDriveAdapter
+                adapter = GoogleDriveAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+            elif storage_setting.storage_type == 'box':
+                from ..utils.storage.box import BoxAdapter
+                adapter = BoxAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+            else:
                 logger.info(f"Storage type {storage_setting.storage_type} not yet supported")
                 return None
-            
-            # Google Driveアダプターを初期化
-            from ..utils.storage.google_drive import GoogleDriveAdapter
-            
-            adapter = GoogleDriveAdapter(
-                user=request.user,
-                access_token=storage_setting.access_token,
-                refresh_token=storage_setting.refresh_token
-            )
             
             # ファイル名を自動生成
             file_extension = uploaded_file.name.split('.')[-1] if '.' in uploaded_file.name else 'pdf'

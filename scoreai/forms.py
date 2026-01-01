@@ -16,7 +16,10 @@ from .models import (
     AIConsultationScript,
     UserAIConsultationScript,
     Firm,
+    FirmCompany,
+    FirmSubscription,
 )
+from django.db import models
 from django_select2.forms import Select2Widget
 from django.contrib.auth import get_user_model
 
@@ -144,6 +147,12 @@ class MoneyForwardCsvUploadForm_Month(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
+    override_flag = forms.BooleanField(
+        label='既存データを上書きする',
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
@@ -199,9 +208,16 @@ class MoneyForwardCsvUploadForm_Year(forms.Form):
     fiscal_year = forms.ModelChoiceField(
         queryset=FiscalSummary_Year.objects.none(),
         label='年度',
+        required=False,  # CSVから年度を取得するため、必須ではない
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
+    override_flag = forms.BooleanField(
+        label='既存データを上書きする',
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'})
+    )
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
@@ -557,5 +573,94 @@ class MeetingMinutesAIGenerateForm(forms.Form):
                 raise forms.ValidationError({
                     'agenda': f'正しく選択してください。{agenda} は候補にありません。'
                 })
+        
+        return cleaned_data
+
+
+class FirmCompanyLimitForm(forms.ModelForm):
+    """FirmCompanyの利用枠設定フォーム"""
+    class Meta:
+        model = FirmCompany
+        fields = ['api_limit', 'ocr_limit', 'allow_firm_api_usage', 'allow_firm_ocr_usage']
+        widgets = {
+            'api_limit': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 1,
+            }),
+            'ocr_limit': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'min': 0,
+                'step': 1,
+            }),
+            'allow_firm_api_usage': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
+            'allow_firm_ocr_usage': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
+        }
+        labels = {
+            'api_limit': 'API利用枠',
+            'ocr_limit': 'OCR利用枠',
+            'allow_firm_api_usage': 'コンサルタントによるAPI代理利用を許可',
+            'allow_firm_ocr_usage': 'コンサルタントによるOCR代理利用を許可',
+        }
+        help_texts = {
+            'api_limit': 'このCompanyに割り当てるAPI利用枠（0の場合は未割り当て）',
+            'ocr_limit': 'このCompanyに割り当てるOCR利用枠（0の場合は未割り当て）',
+            'allow_firm_api_usage': 'チェックされている場合、コンサルタントがこの会社のAPI利用枠内でAPIを利用可能',
+            'allow_firm_ocr_usage': 'チェックされている場合、コンサルタントがこの会社のOCR利用枠内でOCRを利用可能',
+        }
+    
+    def __init__(self, *args, **kwargs):
+        """フォームの初期化"""
+        self.firm = kwargs.pop('firm', None)
+        super().__init__(*args, **kwargs)
+    
+    def clean(self):
+        """バリデーション"""
+        cleaned_data = super().clean()
+        api_limit = cleaned_data.get('api_limit', 0)
+        ocr_limit = cleaned_data.get('ocr_limit', 0)
+        
+        # プラン制限をチェック（フォームのインスタンスにfirmが設定されている場合）
+        if self.firm:
+            from django.db import models
+            try:
+                subscription = self.firm.subscription
+                plan = subscription.plan
+                
+                # 現在の割り当て合計を取得
+                current_api_total = FirmCompany.objects.filter(
+                    firm=self.firm,
+                    active=True
+                ).exclude(id=self.instance.id if self.instance.id else None).aggregate(
+                    total=models.Sum('api_limit')
+                )['total'] or 0
+                
+                current_ocr_total = FirmCompany.objects.filter(
+                    firm=self.firm,
+                    active=True
+                ).exclude(id=self.instance.id if self.instance.id else None).aggregate(
+                    total=models.Sum('ocr_limit')
+                )['total'] or 0
+                
+                # プラン上限を取得
+                plan_api_limit = subscription.api_limit if subscription.api_limit > 0 else float('inf')
+                plan_ocr_limit = plan.max_ocr_per_month if plan.max_ocr_per_month > 0 else float('inf')
+                
+                # 合計がプラン上限を超えないかチェック
+                if api_limit > 0 and (current_api_total + api_limit) > plan_api_limit:
+                    raise forms.ValidationError({
+                        'api_limit': f'API利用枠の合計がプラン上限（{plan_api_limit}）を超えます。現在の割り当て合計: {current_api_total}'
+                    })
+                
+                if ocr_limit > 0 and (current_ocr_total + ocr_limit) > plan_ocr_limit:
+                    raise forms.ValidationError({
+                        'ocr_limit': f'OCR利用枠の合計がプラン上限（{plan_ocr_limit}）を超えます。現在の割り当て合計: {current_ocr_total}'
+                    })
+            except FirmSubscription.DoesNotExist:
+                pass  # サブスクリプションがない場合はチェックしない
         
         return cleaned_data

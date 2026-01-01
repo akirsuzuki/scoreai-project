@@ -39,7 +39,7 @@ class CloudStorageSettingView(SelectedCompanyMixin, TemplateView):
             context['is_connected'] = storage_setting.is_active and storage_setting.storage_type
             
             # 連携状態の詳細情報を取得（接続テストは手動ボタンでのみ実行）
-            if storage_setting.is_active and storage_setting.storage_type == 'google_drive':
+            if storage_setting.is_active and storage_setting.storage_type in ['google_drive', 'box']:
                 # トークン状態のみ表示（接続テストは手動で実行）
                 context['token_status'] = self._check_token_status(storage_setting)
                 # 接続状態はセッションから取得（手動テストの結果）
@@ -90,6 +90,9 @@ class GoogleDriveOAuthInitView(SelectedCompanyMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Google Drive認証'
         context['company'] = self.this_company
+        context['storage_type'] = 'google_drive'
+        context['storage_name'] = 'Google Drive'
+        context['storage_icon'] = 'fab fa-google'
         
         # OAuth認証URLを生成
         client_id = getattr(settings, 'GOOGLE_DRIVE_CLIENT_ID', '')
@@ -125,6 +128,7 @@ class GoogleDriveOAuthCallbackView(SelectedCompanyMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Google Drive認証中'
         context['company'] = self.this_company
+        context['storage_name'] = 'Google Drive'
         return context
     
     def get(self, request, *args, **kwargs):
@@ -246,6 +250,178 @@ class GoogleDriveOAuthCallbackView(SelectedCompanyMixin, TemplateView):
             return None
 
 
+class BoxOAuthInitView(SelectedCompanyMixin, TemplateView):
+    """Box OAuth認証開始"""
+    template_name = 'scoreai/storage_oauth_init.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Box認証'
+        context['company'] = self.this_company
+        context['storage_type'] = 'box'
+        context['storage_name'] = 'Box'
+        context['storage_icon'] = 'fab fa-box'
+        
+        # OAuth認証URLを生成
+        client_id = getattr(settings, 'BOX_CLIENT_ID', '')
+        redirect_uri = getattr(settings, 'BOX_REDIRECT_URI', '')
+        
+        if not client_id:
+            context['error'] = 'Box OAuth設定が完了していません。管理者に連絡してください。'
+            return context
+        
+        # OAuth認証URLのパラメータ（stateにuser_idとcompany_idを含める）
+        state_data = f"{self.request.user.id}:{self.this_company.id}"
+        oauth_params = {
+            'response_type': 'code',
+            'client_id': client_id,
+            'redirect_uri': redirect_uri,
+            'state': state_data,  # CSRF対策（user_id:company_id）
+        }
+        
+        auth_url = 'https://account.box.com/api/oauth2/authorize?' + urllib.parse.urlencode(oauth_params)
+        context['auth_url'] = auth_url
+        
+        return context
+
+
+class BoxOAuthCallbackView(SelectedCompanyMixin, TemplateView):
+    """Box OAuth認証コールバック"""
+    template_name = 'scoreai/storage_oauth_callback.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Box認証中'
+        context['company'] = self.this_company
+        context['storage_name'] = 'Box'
+        return context
+    
+    def get(self, request, *args, **kwargs):
+        """OAuth認証コールバック処理"""
+        code = request.GET.get('code')
+        state = request.GET.get('state')
+        error = request.GET.get('error')
+        
+        # エラーチェック
+        if error:
+            messages.error(request, f'OAuth認証エラー: {error}')
+            return redirect('storage_setting')
+        
+        # ステートの検証（CSRF対策）
+        # stateは "user_id:company_id" の形式
+        expected_state = f"{request.user.id}:{self.this_company.id}"
+        if state != expected_state:
+            messages.error(request, '認証エラー: 無効なリクエストです。')
+            return redirect('storage_setting')
+        
+        if not code:
+            messages.error(request, '認証コードが取得できませんでした。')
+            return redirect('storage_setting')
+        
+        try:
+            # アクセストークンを取得
+            token_data = self._exchange_code_for_tokens(code)
+            
+            if not token_data:
+                messages.error(request, 'トークンの取得に失敗しました。')
+                return redirect('storage_setting')
+            
+            # ストレージ設定を保存または更新（Company単位）
+            storage_setting, created = CloudStorageSetting.objects.get_or_create(
+                user=request.user,
+                company=self.this_company,
+                defaults={
+                    'storage_type': 'box',
+                    'access_token': token_data.get('access_token', ''),
+                    'refresh_token': token_data.get('refresh_token', ''),
+                    'token_expires_at': timezone.now() + timedelta(seconds=token_data.get('expires_in', 3600)),
+                    'is_active': True,
+                }
+            )
+            
+            if not created:
+                # 既存の設定を更新
+                storage_setting.storage_type = 'box'
+                storage_setting.access_token = token_data.get('access_token', '')
+                if token_data.get('refresh_token'):
+                    storage_setting.refresh_token = token_data.get('refresh_token', '')
+                storage_setting.token_expires_at = timezone.now() + timedelta(seconds=token_data.get('expires_in', 3600))
+                storage_setting.is_active = True
+                storage_setting.save()
+            
+            # 「S-CoreAI」ルートフォルダの作成または取得
+            try:
+                from ..utils.storage.box import BoxAdapter
+                adapter = BoxAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+                
+                # 接続テスト
+                if not adapter.test_connection():
+                    messages.warning(request, 'Boxとの接続テストに失敗しました。設定を確認してください。')
+                    return redirect('storage_setting')
+                
+                # 「S-CoreAI」フォルダを作成または取得
+                if not storage_setting.root_folder_id:
+                    root_folder_info = adapter.get_or_create_folder('S-CoreAI', None)
+                    storage_setting.root_folder_id = root_folder_info['id']
+                    storage_setting.save()
+                    logger.info(f"Created root folder 'S-CoreAI' (ID: {root_folder_info['id']}) for user {request.user.id}")
+                
+                messages.success(
+                    request,
+                    'Boxとの連携が完了しました。あなたのBoxに「S-CoreAI」フォルダが作成されました。'
+                )
+            except ImportError as e:
+                error_msg = str(e)
+                logger.error(f"Box SDK import error: {error_msg}", exc_info=True)
+                messages.error(
+                    request,
+                    'Box SDKがインストールされていません。管理者に連絡してください。'
+                )
+            except Exception as e:
+                logger.error(f"Box connection test or root folder creation error: {e}", exc_info=True)
+                messages.warning(request, f'Boxとの接続テスト中にエラーが発生しました: {str(e)}')
+            
+            return redirect('storage_setting')
+            
+        except Exception as e:
+            logger.error(f"Box OAuth callback error: {e}", exc_info=True)
+            messages.error(request, f'認証処理中にエラーが発生しました: {str(e)}')
+            return redirect('storage_setting')
+    
+    def _exchange_code_for_tokens(self, code: str) -> Dict[str, Any]:
+        """認証コードをトークンに交換"""
+        import requests
+        
+        client_id = getattr(settings, 'BOX_CLIENT_ID', '')
+        client_secret = getattr(settings, 'BOX_CLIENT_SECRET', '')
+        redirect_uri = getattr(settings, 'BOX_REDIRECT_URI', '')
+        
+        if not client_id or not client_secret:
+            logger.error("Box OAuth credentials not configured")
+            return None
+        
+        token_url = 'https://api.box.com/oauth2/token'
+        token_data = {
+            'grant_type': 'authorization_code',
+            'code': code,
+            'client_id': client_id,
+            'client_secret': client_secret,
+            'redirect_uri': redirect_uri,
+        }
+        
+        try:
+            response = requests.post(token_url, data=token_data)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Box token exchange error: {e}", exc_info=True)
+            return None
+
+
 class CloudStorageDisconnectView(SelectedCompanyMixin, TemplateView):
     """クラウドストレージ連携解除"""
     template_name = 'scoreai/storage_disconnect.html'
@@ -322,6 +498,37 @@ class CloudStorageTestConnectionView(SelectedCompanyMixin, TemplateView):
                     messages.success(request, connection_status['message'])
                 else:
                     messages.error(request, connection_status['message'])
+            elif storage_setting.storage_type == 'box':
+                from ..utils.storage.box import BoxAdapter
+                
+                adapter = BoxAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+                
+                # 接続テスト（内部でトークンリフレッシュも試みる）
+                connection_status = self._test_box_connection(storage_setting, adapter)
+                
+                # セッションに保存
+                request.session['last_connection_status'] = connection_status
+                
+                # トークンがリフレッシュされた場合、データベースを更新
+                if adapter.access_token != storage_setting.access_token:
+                    storage_setting.access_token = adapter.access_token
+                    if adapter.refresh_token:
+                        storage_setting.refresh_token = adapter.refresh_token
+                    # 新しいトークンの有効期限を設定（1時間後）
+                    from django.utils import timezone
+                    from datetime import timedelta
+                    storage_setting.token_expires_at = timezone.now() + timedelta(hours=1)
+                    storage_setting.save()
+                    logger.info("Box access token refreshed and saved to database")
+                
+                if connection_status['status'] == 'success':
+                    messages.success(request, connection_status['message'])
+                else:
+                    messages.error(request, connection_status['message'])
             else:
                 messages.info(request, 'このストレージタイプの接続テストはまだ実装されていません。')
                 request.session['last_connection_status'] = {
@@ -344,6 +551,50 @@ class CloudStorageTestConnectionView(SelectedCompanyMixin, TemplateView):
             }
         
         return redirect('storage_setting')
+    
+    def _test_box_connection(self, storage_setting: CloudStorageSetting, adapter) -> Dict[str, Any]:
+        """Box APIへの接続をテスト（内部メソッド）"""
+        try:
+            # 接続テスト（内部でトークンリフレッシュも試みる）
+            is_connected = adapter.test_connection()
+            
+            if is_connected:
+                # ユーザー情報を取得
+                try:
+                    user_data = adapter.get_user_info()
+                    user_info = user_data.get('user', {})
+                    
+                    return {
+                        'status': 'success',
+                        'message': 'Boxへの接続に成功しました',
+                        'user_email': user_info.get('login', '不明'),
+                        'user_name': user_info.get('name', '不明'),
+                        'storage_limit': None,  # Box APIでは直接取得できない
+                        'storage_used': None,
+                    }
+                except Exception as e:
+                    logger.warning(f"Failed to get Box user info: {e}", exc_info=True)
+                    return {
+                        'status': 'success',
+                        'message': 'Boxへの接続に成功しました（詳細情報の取得に失敗）',
+                    }
+            else:
+                return {
+                    'status': 'error',
+                    'message': 'Boxへの接続に失敗しました。トークンの有効期限が切れている可能性があります。',
+                }
+        except Exception as e:
+            logger.error(f"Box connection test error: {e}", exc_info=True)
+            error_message = str(e)
+            # エラーメッセージを簡潔にする
+            if 'invalid' in error_message.lower() or 'expired' in error_message.lower():
+                error_message = 'トークンが無効または期限切れです。再度認証してください。'
+            elif '401' in error_message:
+                error_message = '認証に失敗しました。再度認証してください。'
+            return {
+                'status': 'error',
+                'message': f'接続テスト中にエラーが発生しました: {error_message}',
+            }
     
     def _test_google_drive_connection(self, storage_setting: CloudStorageSetting, adapter) -> Dict[str, Any]:
         """Google Drive APIへの接続をテスト（内部メソッド）"""

@@ -13,6 +13,7 @@ import logging
 from ..mixins import SelectedCompanyMixin, TransactionMixin
 from ..models import CloudStorageSetting, UploadedDocument
 from ..utils.storage.google_drive import GoogleDriveAdapter
+from ..utils.storage.box import BoxAdapter
 from ..utils.ocr import (
     extract_text_from_image,
     extract_text_from_pdf,
@@ -88,16 +89,22 @@ class StorageFileProcessView(SelectedCompanyMixin, TransactionMixin, LoginRequir
                 is_active=True
             )
             
-            if storage_setting.storage_type != 'google_drive':
-                messages.error(request, 'Google Driveのみサポートされています。')
+            # ストレージアダプターを初期化
+            if storage_setting.storage_type == 'google_drive':
+                adapter = GoogleDriveAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+            elif storage_setting.storage_type == 'box':
+                adapter = BoxAdapter(
+                    user=request.user,
+                    access_token=storage_setting.access_token,
+                    refresh_token=storage_setting.refresh_token
+                )
+            else:
+                messages.error(request, f'ストレージタイプ {storage_setting.get_storage_type_display()} はまだサポートされていません。')
                 return redirect('storage_file_list')
-            
-            # Google Driveアダプターを初期化
-            adapter = GoogleDriveAdapter(
-                user=request.user,
-                access_token=storage_setting.access_token,
-                refresh_token=storage_setting.refresh_token
-            )
             
             # ファイル情報を取得
             file_info = adapter.get_file_info(file_id)
@@ -175,9 +182,11 @@ class StorageFileProcessView(SelectedCompanyMixin, TransactionMixin, LoginRequir
         from ..models import FiscalSummary_Year
         
         # FiscalSummary_Yearの作成または取得
+        # versionは常に1で固定（defaultsに含めない、モデルのdefault=1が適用される）
         fiscal_summary_year, created = FiscalSummary_Year.objects.get_or_create(
             year=fiscal_year,
             company=self.this_company,
+            is_budget=False,  # 実績データとして明示的に指定
             defaults={'is_draft': True}
         )
         

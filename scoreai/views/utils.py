@@ -337,9 +337,11 @@ def get_monthly_summaries(
     # Ensure num_years is at least 1
     num_years = max(1, int(num_years))
 
-    # 年度取得
+    # 年度取得（実績データのみ：is_budget=False, is_draft=False）
     latest_years = FiscalSummary_Year.objects.filter(
-        company=this_company
+        company=this_company,
+        is_budget=False,
+        is_draft=False
     ).values_list('year', flat=True).distinct().order_by('-year')[:num_years]
 
     # 取得した年度をリストに変換し、新しい順に並べる
@@ -347,9 +349,13 @@ def get_monthly_summaries(
 
     monthly_summaries = []
     for year in latest_years:
+        # 実績データのみを取得（is_budget=False）
         monthly_data = FiscalSummary_Month.objects.filter(
             fiscal_summary_year__company=this_company,
-            fiscal_summary_year__year=year
+            fiscal_summary_year__year=year,
+            fiscal_summary_year__is_budget=False,
+            fiscal_summary_year__is_draft=False,
+            is_budget=False
         ).select_related('fiscal_summary_year', 'fiscal_summary_year__company').order_by('period')
 
         # 月データを辞書に変換

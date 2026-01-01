@@ -19,16 +19,16 @@
         <a href="{% url 'storage_setting' %}" class="btn btn-secondary">設定画面に戻る</a>
         {% else %}
         <div class="alert alert-info">
-          <h6><i class="fa-solid fa-info-circle"></i> Google Drive認証について</h6>
-          <p>以下のボタンをクリックして、Googleアカウントでログインし、SCORE AIがGoogle Driveにアクセスする権限を許可してください。</p>
+          <h6><i class="fa-solid fa-info-circle"></i> {{ storage_name }}認証について</h6>
+          <p>以下のボタンをクリックして、{{ storage_name }}アカウントでログインし、SCORE AIが{{ storage_name }}にアクセスする権限を許可してください。</p>
         </div>
 
         <div class="alert alert-warning">
           <h6><i class="fa-solid fa-shield-halved"></i> 権限について</h6>
-          <p><strong>Google側で表示される権限確認画面について:</strong></p>
+          <p><strong>{{ storage_name }}側で表示される権限確認画面について:</strong></p>
           <ul class="mb-0">
-            <li>「<strong>SCORE AI</strong>があなたのGoogle Driveにアクセスすることを許可しますか？」という画面が表示されます</li>
-            <li>この画面で「<strong>許可</strong>」をクリックすることで、SCORE AIがあなたのGoogle Driveにアクセスできるようになります</li>
+            <li>「<strong>SCORE AI</strong>があなたの{{ storage_name }}にアクセスすることを許可しますか？」という画面が表示されます</li>
+            <li>この画面で「<strong>許可</strong>」をクリックすることで、SCORE AIがあなたの{{ storage_name }}にアクセスできるようになります</li>
             <li>SCORE AIは、あなたがアップロードしたファイルのみにアクセスします（他のファイルにはアクセスしません）</li>
             <li>いつでも連携を解除できます（設定画面から「連携を解除」ボタンをクリック）</li>
           </ul>
@@ -36,24 +36,24 @@
 
         <div class="text-center mt-4">
           <a href="{{ auth_url }}" class="btn btn-primary btn-lg">
-            <i class="fab fa-google"></i> Googleアカウントで認証
+            <i class="{{ storage_icon }}"></i> {{ storage_name }}アカウントで認証
           </a>
         </div>
 
         <div class="mt-4">
           <h6>認証後の流れ</h6>
           <ol>
-            <li><strong>Googleアカウントでログイン</strong>
+            <li><strong>{{ storage_name }}アカウントでログイン</strong>
               <ul>
-                <li>Googleのログイン画面が表示されます</li>
-                <li>あなたのGoogleアカウントでログインしてください</li>
+                <li>{{ storage_name }}のログイン画面が表示されます</li>
+                <li>あなたの{{ storage_name }}アカウントでログインしてください</li>
               </ul>
             </li>
             <li><strong>アクセス権限を許可</strong>
               <ul>
-                <li>「SCORE AIがあなたのGoogle Driveにアクセスすることを許可しますか？」という画面が表示されます</li>
+                <li>「SCORE AIがあなたの{{ storage_name }}にアクセスすることを許可しますか？」という画面が表示されます</li>
                 <li>この画面で「<strong>許可</strong>」をクリックしてください</li>
-                <li>これにより、SCORE AIがあなたのGoogle Driveにアクセスできるようになります</li>
+                <li>これにより、SCORE AIがあなたの{{ storage_name }}にアクセスできるようになります</li>
               </ul>
             </li>
             <li><strong>自動的に設定画面に戻ります</strong>

@@ -73,7 +73,18 @@
                 <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">有効User数</h6>
                 </th>
-                <th></th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">API利用枠</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">OCR利用枠</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">代理利用許可</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -92,10 +103,52 @@
                   <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
                 </td>
                 <td class="border-bottom-0">
-                  <form method="post" action="{% url 'add_client' client_id=client.company.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-success" {% if not can_add_company %}disabled title="プランの制限により追加できません"{% endif %}>追加</button>
-                  </form>
+                  <p class="mb-0 fw-normal">
+                    {% if client.api_limit > 0 %}
+                      {{ client.api_limit }}
+                    {% else %}
+                      <span class="text-muted">未設定</span>
+                    {% endif %}
+                  </p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">
+                    {% if client.ocr_limit > 0 %}
+                      {{ client.ocr_limit }}
+                    {% else %}
+                      <span class="text-muted">未設定</span>
+                    {% endif %}
+                  </p>
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex align-items-center gap-2">
+                    {% if client.allow_firm_api_usage or client.allow_firm_ocr_usage %}
+                      {% if client.allow_firm_api_usage %}
+                        <span class="badge bg-info">API</span>
+                      {% endif %}
+                      {% if client.allow_firm_ocr_usage %}
+                        <span class="badge bg-success">OCR</span>
+                      {% endif %}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex align-items-center gap-2">
+                    {% get_user_firm_owner user as user_firm_owner %}
+                    {% if user_firm_owner %}
+                    <a href="{% url 'firm_company_limit_update' firm_id=user_firm_owner.firm.id company_id=client.company.id %}" 
+                       class="btn btn-sm btn-primary" 
+                       title="利用枠設定">
+                      <i class="ti ti-settings me-1"></i>設定
+                    </a>
+                    {% endif %}
+                    <form method="post" action="{% url 'add_client' client_id=client.company.id %}" style="display: inline;">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-success" {% if not can_add_company %}disabled title="プランの制限により追加できません"{% endif %}>追加</button>
+                    </form>
+                  </div>
                 </td>
               </tr> 
               {% endfor %}       
@@ -134,12 +187,22 @@
                   <h6 class="fw-semibold mb-0">有効User数</h6>
                 </th>
                 <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">API利用枠</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">OCR利用枠</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">代理利用許可</h6>
+                </th>
+                <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">操作</h6>
                 </th>
               </tr>
             </thead>
             <tbody>
               {% for client in clients_assigned %}
+              {% with firm_company=firm_companies_dict|get_item:client.company.id %}
               <tr>
                 <td class="border-bottom-0">
                     <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
@@ -149,13 +212,47 @@
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">
-                    {% with firm_company=firm_companies_dict|get_item:client.company.id %}
-                      {% if firm_company %}{{ firm_company.start_date|date:"Y年m月d日" }}{% else %}-{% endif %}
-                    {% endwith %}
+                    {% if firm_company %}{{ firm_company.start_date|date:"Y年m月d日" }}{% else %}-{% endif %}
                   </p>
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">
+                    {% if firm_company and firm_company.api_limit > 0 %}
+                      {{ firm_company.api_limit }}
+                    {% else %}
+                      <span class="text-muted">未設定</span>
+                    {% endif %}
+                  </p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">
+                    {% if firm_company and firm_company.ocr_limit > 0 %}
+                      {{ firm_company.ocr_limit }}
+                    {% else %}
+                      <span class="text-muted">未設定</span>
+                    {% endif %}
+                  </p>
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex align-items-center gap-2">
+                    {% if firm_company %}
+                      {% if firm_company.allow_firm_api_usage or firm_company.allow_firm_ocr_usage %}
+                        {% if firm_company.allow_firm_api_usage %}
+                          <span class="badge bg-info">API</span>
+                        {% endif %}
+                        {% if firm_company.allow_firm_ocr_usage %}
+                          <span class="badge bg-success">OCR</span>
+                        {% endif %}
+                      {% else %}
+                        <span class="text-muted">-</span>
+                      {% endif %}
+                    {% else %}
+                      <span class="text-muted">-</span>
+                    {% endif %}
+                  </div>
                 </td>
                 <td class="border-bottom-0">
                   <div class="d-flex align-items-center gap-2">
@@ -177,6 +274,7 @@
                   </div>
                 </td>
               </tr>
+              {% endwith %}
               {% endfor %}       
             </tbody>
           </table>

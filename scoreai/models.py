@@ -331,6 +331,28 @@ class FirmCompany(models.Model):
         blank=True,
         help_text='プランダウングレード時の一時的な保持期間'
     )
+    # Companyごとの利用枠設定
+    api_limit = models.IntegerField(
+        'API利用枠',
+        default=0,
+        help_text='このCompanyに割り当てられたAPI利用枠（0の場合は未割り当て）'
+    )
+    ocr_limit = models.IntegerField(
+        'OCR利用枠',
+        default=0,
+        help_text='このCompanyに割り当てられたOCR利用枠（0の場合は未割り当て）'
+    )
+    # Firmユーザーによる代理利用許可フラグ
+    allow_firm_api_usage = models.BooleanField(
+        'コンサルタントによるAPI代理利用を許可',
+        default=False,
+        help_text='チェックされている場合、コンサルタントがこの会社のAPI利用枠内でAPIを利用可能'
+    )
+    allow_firm_ocr_usage = models.BooleanField(
+        'コンサルタントによるOCR代理利用を許可',
+        default=False,
+        help_text='チェックされている場合、コンサルタントがこの会社のOCR利用枠内でOCRを利用可能'
+    )
 
     def clean(self):
         if self.end_date and self.start_date > self.end_date:
@@ -1178,7 +1200,7 @@ class FiscalSummary_Year(models.Model):
         return None
 
     class Meta:
-        unique_together = ('company', 'year', 'version')
+        unique_together = ('company', 'year', 'is_budget')
         verbose_name = '年次決算情報'
         verbose_name_plural = '年次決算情報'
 
@@ -1214,7 +1236,7 @@ class FiscalSummary_Month(models.Model):
         return 0.0
 
     class Meta:
-        unique_together = ('fiscal_summary_year', 'period')
+        unique_together = ('fiscal_summary_year', 'period', 'is_budget')
         verbose_name = '月次決算情報'
         verbose_name_plural = '月次決算情報'
 

@@ -1,0 +1,184 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">{{ title }}</h4>
+      <div class="d-flex gap-2">
+        <form method="get" class="d-flex gap-2">
+          <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+            {% for y in available_years %}
+              <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
+            {% endfor %}
+          </select>
+        </form>
+        <a href="{% url 'budget_vs_actual_comparison' %}?year={{ year }}" class="btn btn-outline-secondary btn-sm">
+          <i class="ti ti-chart-line me-1"></i>比較レポート
+        </a>
+        <a href="{% url 'fiscal_summary_year_list' %}" class="btn btn-outline-secondary btn-sm">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if error %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-warning">
+      <i class="ti ti-alert-triangle me-2"></i>{{ error }}
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        <h5 class="card-title mb-0">
+          <i class="ti ti-brain me-2"></i>AI分析結果（{{ year }}年）
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>項目</th>
+                <th class="text-end">予算</th>
+                <th class="text-end">実績</th>
+                <th class="text-end">差異</th>
+                <th class="text-end">差異率</th>
+                <th class="text-center">評価</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>売上高</strong></td>
+                <td class="text-end">{{ analysis_result.sales.budget|intcomma }}</td>
+                <td class="text-end">{{ analysis_result.sales.actual|intcomma }}</td>
+                <td class="text-end {% if analysis_result.sales.status == 'good' %}text-success{% elif analysis_result.sales.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.sales.diff|intcomma }}
+                </td>
+                <td class="text-end {% if analysis_result.sales.status == 'good' %}text-success{% elif analysis_result.sales.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.sales.diff_rate|floatformat:2 }}%
+                </td>
+                <td class="text-center">
+                  {% if analysis_result.sales.status == 'good' %}
+                    <span class="badge bg-success">良好</span>
+                  {% elif analysis_result.sales.status == 'bad' %}
+                    <span class="badge bg-danger">要改善</span>
+                  {% else %}
+                    <span class="badge bg-secondary">同水準</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>営業利益</strong></td>
+                <td class="text-end">{{ analysis_result.operating_profit.budget|intcomma }}</td>
+                <td class="text-end">{{ analysis_result.operating_profit.actual|intcomma }}</td>
+                <td class="text-end {% if analysis_result.operating_profit.status == 'good' %}text-success{% elif analysis_result.operating_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.operating_profit.diff|intcomma }}
+                </td>
+                <td class="text-end {% if analysis_result.operating_profit.status == 'good' %}text-success{% elif analysis_result.operating_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.operating_profit.diff_rate|floatformat:2 }}%
+                </td>
+                <td class="text-center">
+                  {% if analysis_result.operating_profit.status == 'good' %}
+                    <span class="badge bg-success">良好</span>
+                  {% elif analysis_result.operating_profit.status == 'bad' %}
+                    <span class="badge bg-danger">要改善</span>
+                  {% else %}
+                    <span class="badge bg-secondary">同水準</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>経常利益</strong></td>
+                <td class="text-end">{{ analysis_result.ordinary_profit.budget|intcomma }}</td>
+                <td class="text-end">{{ analysis_result.ordinary_profit.actual|intcomma }}</td>
+                <td class="text-end {% if analysis_result.ordinary_profit.status == 'good' %}text-success{% elif analysis_result.ordinary_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.ordinary_profit.diff|intcomma }}
+                </td>
+                <td class="text-end {% if analysis_result.ordinary_profit.status == 'good' %}text-success{% elif analysis_result.ordinary_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.ordinary_profit.diff_rate|floatformat:2 }}%
+                </td>
+                <td class="text-center">
+                  {% if analysis_result.ordinary_profit.status == 'good' %}
+                    <span class="badge bg-success">良好</span>
+                  {% elif analysis_result.ordinary_profit.status == 'bad' %}
+                    <span class="badge bg-danger">要改善</span>
+                  {% else %}
+                    <span class="badge bg-secondary">同水準</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>当期純利益</strong></td>
+                <td class="text-end">{{ analysis_result.net_profit.budget|intcomma }}</td>
+                <td class="text-end">{{ analysis_result.net_profit.actual|intcomma }}</td>
+                <td class="text-end {% if analysis_result.net_profit.status == 'good' %}text-success{% elif analysis_result.net_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.net_profit.diff|intcomma }}
+                </td>
+                <td class="text-end {% if analysis_result.net_profit.status == 'good' %}text-success{% elif analysis_result.net_profit.status == 'bad' %}text-danger{% endif %}">
+                  {{ analysis_result.net_profit.diff_rate|floatformat:2 }}%
+                </td>
+                <td class="text-center">
+                  {% if analysis_result.net_profit.status == 'good' %}
+                    <span class="badge bg-success">良好</span>
+                  {% elif analysis_result.net_profit.status == 'bad' %}
+                    <span class="badge bg-danger">要改善</span>
+                  {% else %}
+                    <span class="badge bg-secondary">同水準</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if analysis_result.recommendations %}
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <h5 class="card-title mb-0">
+          <i class="ti ti-lightbulb me-2"></i>改善提案
+        </h5>
+      </div>
+      <div class="card-body">
+        {% for recommendation in analysis_result.recommendations %}
+        <div class="alert alert-{% if recommendation.type == 'success' %}success{% elif recommendation.type == 'warning' %}warning{% else %}info{% endif %}">
+          <h6 class="alert-heading">
+            <i class="ti ti-{% if recommendation.type == 'success' %}check{% elif recommendation.type == 'warning' %}alert-triangle{% else %}info-circle{% endif %} me-2"></i>
+            {{ recommendation.title }}
+          </h6>
+          <p class="mb-0">{{ recommendation.message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+

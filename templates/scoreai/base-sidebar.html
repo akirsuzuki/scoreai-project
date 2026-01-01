@@ -110,6 +110,14 @@
                 <span class="hide-menu">直近年度の月次推移</span>
               </a>
             </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_vs_actual_monthly' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">予算vs実績推移表</span>
+              </a>
+            </li>
           </ul>
         </li>
 
@@ -132,6 +140,14 @@
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
                 <span class="hide-menu">直近決算詳細</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_vs_actual_yearly' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">年次予算vs実績比較</span>
               </a>
             </li>
           </ul>
@@ -256,9 +272,18 @@
         <!-- 2. is_company_user=True かつ is_manager=True かつ is_financial_consultant=False のユーザー -->
         <!-- （is_financial_consultant=True の場合は「クライアント会社レベル設定」に表示されるため除外） -->
         {% if user.is_company_user and user.is_manager and not user.is_financial_consultant %}
+        {% load custom_tags %}
+        {% get_user_selected_company user as selected_company %}
+        {% if selected_company %}
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">設定</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>
+          </a>
         </li>
         
         <li class="sidebar-item">
@@ -279,6 +304,7 @@
           </a>
         </li>
         {% endif %}
+        {% endif %}
         
         <!-- 4. 選択中のCompanyがあるユーザー -->
         {% load custom_tags %}
@@ -288,6 +314,12 @@
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">会社設定</span>
+        </li>
+        
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>
+          </a>
         </li>
         
         <li class="sidebar-item">

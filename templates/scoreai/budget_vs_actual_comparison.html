@@ -1,0 +1,279 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">{{ title }}</h4>
+      <div class="d-flex gap-2">
+        <form method="get" class="d-flex gap-2">
+          <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+            {% for y in available_years %}
+              <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
+            {% endfor %}
+          </select>
+        </form>
+        <a href="{% url 'fiscal_summary_year_list' %}" class="btn btn-outline-secondary btn-sm">
+          <i class="ti ti-arrow-left me-1"></i>戻る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if budget_year or actual_year %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">年次比較（{{ year }}年）</h5>
+      </div>
+      <div class="card-body">
+        {% if budget_year and actual_year %}
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>項目</th>
+                <th class="text-end">予算</th>
+                <th class="text-end">実績</th>
+                <th class="text-end">差異</th>
+                <th class="text-end">差異率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>売上高</strong></td>
+                <td class="text-end">{{ budget_year.sales|intcomma }}</td>
+                <td class="text-end">{{ actual_year.sales|intcomma }}</td>
+                <td class="text-end {% if actual_year.sales > budget_year.sales %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.sales|subtract:budget_year.sales|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.sales > budget_year.sales %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.sales > 0 %}
+                    {{ actual_year.sales|subtract:budget_year.sales|divide:budget_year.sales|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>営業利益</strong></td>
+                <td class="text-end">{{ budget_year.operating_profit|intcomma }}</td>
+                <td class="text-end">{{ actual_year.operating_profit|intcomma }}</td>
+                <td class="text-end {% if actual_year.operating_profit > budget_year.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.operating_profit|subtract:budget_year.operating_profit|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.operating_profit > budget_year.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.operating_profit > 0 %}
+                    {{ actual_year.operating_profit|subtract:budget_year.operating_profit|divide:budget_year.operating_profit|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>経常利益</strong></td>
+                <td class="text-end">{{ budget_year.ordinary_profit|intcomma }}</td>
+                <td class="text-end">{{ actual_year.ordinary_profit|intcomma }}</td>
+                <td class="text-end {% if actual_year.ordinary_profit > budget_year.ordinary_profit %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.ordinary_profit|subtract:budget_year.ordinary_profit|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.ordinary_profit > budget_year.ordinary_profit %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.ordinary_profit > 0 %}
+                    {{ actual_year.ordinary_profit|subtract:budget_year.ordinary_profit|divide:budget_year.ordinary_profit|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>当期純利益</strong></td>
+                <td class="text-end">{{ budget_year.net_profit|intcomma }}</td>
+                <td class="text-end">{{ actual_year.net_profit|intcomma }}</td>
+                <td class="text-end {% if actual_year.net_profit > budget_year.net_profit %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.net_profit|subtract:budget_year.net_profit|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.net_profit > budget_year.net_profit %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.net_profit > 0 %}
+                    {{ actual_year.net_profit|subtract:budget_year.net_profit|divide:budget_year.net_profit|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning">
+          {% if not budget_year %}
+            <i class="ti ti-alert-triangle me-2"></i>{{ year }}年の予算データが見つかりません。
+          {% endif %}
+          {% if not actual_year %}
+            <i class="ti ti-alert-triangle me-2"></i>{{ year }}年の実績データが見つかりません。
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if budget_monthly and actual_monthly %}
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次比較（{{ year }}年）</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="monthlyComparisonChart" height="100"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次比較表</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>月度</th>
+                <th class="text-end">予算売上高</th>
+                <th class="text-end">実績売上高</th>
+                <th class="text-end">差異</th>
+                <th class="text-end">予算営業利益</th>
+                <th class="text-end">実績営業利益</th>
+                <th class="text-end">差異</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for period in "123456789101112"|make_list %}
+                {% with period_num=period|add:0 %}
+                  {% for budget_month in budget_monthly %}
+                    {% if budget_month.period == period_num %}
+                      {% for actual_month in actual_monthly %}
+                        {% if actual_month.period == period_num %}
+                          <tr>
+                            <td>{{ period_num }}月</td>
+                            <td class="text-end">{{ budget_month.sales|intcomma }}</td>
+                            <td class="text-end">{{ actual_month.sales|intcomma }}</td>
+                            <td class="text-end {% if actual_month.sales > budget_month.sales %}text-success{% else %}text-danger{% endif %}">
+                              {{ actual_month.sales|subtract:budget_month.sales|intcomma }}
+                            </td>
+                            <td class="text-end">{{ budget_month.operating_profit|intcomma }}</td>
+                            <td class="text-end">{{ actual_month.operating_profit|intcomma }}</td>
+                            <td class="text-end {% if actual_month.operating_profit > budget_month.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                              {{ actual_month.operating_profit|subtract:budget_month.operating_profit|intcomma }}
+                            </td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                  {% endfor %}
+                {% endwith %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const monthlyData = {
+  labels: [{% for period in "123456789101112"|make_list %}'{{ period }}月'{% if not forloop.last %},{% endif %}{% endfor %}],
+  budget: [
+    {% for period in "123456789101112"|make_list %}
+      {% with period_num=period|add:0 %}
+        {% for budget_month in budget_monthly %}
+          {% if budget_month.period == period_num %}{{ budget_month.sales }}{% endif %}
+        {% empty %}0{% endfor %}
+        {% if not forloop.last %},{% endif %}
+      {% endwith %}
+    {% endfor %}
+  ],
+  actual: [
+    {% for period in "123456789101112"|make_list %}
+      {% with period_num=period|add:0 %}
+        {% for actual_month in actual_monthly %}
+          {% if actual_month.period == period_num %}{{ actual_month.sales }}{% endif %}
+        {% empty %}0{% endfor %}
+        {% if not forloop.last %},{% endif %}
+      {% endwith %}
+    {% endfor %}
+  ]
+};
+
+const ctx = document.getElementById('monthlyComparisonChart').getContext('2d');
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: monthlyData.labels,
+    datasets: [
+      {
+        label: '予算',
+        data: monthlyData.budget,
+        borderColor: 'rgb(93, 135, 255)',
+        backgroundColor: 'rgba(93, 135, 255, 0.1)',
+        tension: 0.4,
+      },
+      {
+        label: '実績',
+        data: monthlyData.actual,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+        tension: 0.4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true
+      }
+    }
+  }
+});
+</script>
+{% endif %}
+
+{% else %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="alert alert-info">
+      <i class="ti ti-info-circle me-2"></i>
+      予算または実績データが見つかりません。先にデータを登録してください。
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
+
+

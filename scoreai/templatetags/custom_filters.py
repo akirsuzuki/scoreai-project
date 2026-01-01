@@ -81,6 +81,15 @@ def multiply(value, arg):
     except (ValueError, TypeError):
         return None
 
+@register.filter
+def subtract(value, arg):
+    try:
+        if value is None or arg is None:
+            return None
+        return float(value) - float(arg)
+    except (ValueError, TypeError):
+        return None
+
 @register.filter(name='get_by_name')
 def get_by_name(queryset, name):
     return queryset.filter(name=name).first()

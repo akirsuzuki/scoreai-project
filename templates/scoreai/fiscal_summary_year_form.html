@@ -224,6 +224,14 @@
             <div class="col-sm-3">
               {{ form.year|add_class:"form-control" }}
             </div>
+            <div class="col-sm-3">
+              <div class="form-check">
+                {{ form.is_budget|add_class:"form-check-input" }}
+                <label class="form-check-label" for="{{ form.is_budget.id_for_label }}">
+                  {{ form.is_budget.label }}
+                </label>
+              </div>
+            </div>
             <div class="col-sm-4">
               <div class="form-check">
                 {{ form.is_draft|add_class:"form-check-input" }}

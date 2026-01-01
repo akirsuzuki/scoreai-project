@@ -9,7 +9,7 @@ from django.views import generic
 import logging
 
 from ..mixins import SelectedCompanyMixin
-from ..models import Debt
+from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,
@@ -98,6 +98,35 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             )
         ]
 
+        # 予算実績比較データを取得
+        current_year = timezone.now().year
+        budget_year = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            year=current_year,
+            is_budget=True
+        ).first()
+        
+        actual_year = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            year=current_year,
+            is_budget=False,
+            is_draft=False
+        ).first()
+        
+        # 月次予算実績比較データ
+        budget_monthly = []
+        actual_monthly = []
+        if budget_year:
+            budget_monthly = FiscalSummary_Month.objects.filter(
+                fiscal_summary_year=budget_year,
+                is_budget=True
+            ).order_by('period')
+        if actual_year:
+            actual_monthly = FiscalSummary_Month.objects.filter(
+                fiscal_summary_year=actual_year,
+                is_budget=False
+            ).order_by('period')
+
         context.update({
             'title': 'ダッシュボード',
             'show_title_card': False,  # ダッシュボードではタイトルカードを非表示
@@ -111,6 +140,11 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             'debt_list_byBank': debt_list_byBank,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'weighted_average_interest': weighted_average_interest,
+            # 予算実績比較データ
+            'budget_year': budget_year,
+            'actual_year': actual_year,
+            'budget_monthly': budget_monthly,
+            'actual_monthly': actual_monthly,
         })
         return context
 

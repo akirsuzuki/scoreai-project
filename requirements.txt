@@ -28,3 +28,6 @@ pdf2image
 chardet
 stripe
 markdown
+boxsdk
+openpyxl
+reportlab

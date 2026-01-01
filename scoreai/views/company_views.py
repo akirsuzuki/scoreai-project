@@ -31,6 +31,10 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
         Returns:
             コンテキストデータの辞書
         """
+        from ..models import FirmCompany, CompanyUsageTracking, UserFirm
+        from django.utils import timezone
+        from django.db.models import Sum
+        
         context = super().get_context_data(**kwargs)
         context['title'] = f'{self.object.name} の詳細'
         context['user_count'] = self.object.user_count
@@ -41,12 +45,55 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
         
         # 現在のユーザーがこのCompanyのOwnerかどうかを判定
         if self.request.user.is_authenticated:
-            context['is_company_owner'] = UserCompany.objects.filter(
+            user_company = UserCompany.objects.filter(
                 user=self.request.user,
                 company=self.object,
-                is_owner=True,
                 active=True
-            ).exists()
+            ).first()
+            
+            context['is_company_owner'] = user_company.is_owner if user_company else False
+            # Userモデルのis_managerフィールドを使用（UserCompanyにはis_managerフィールドがない）
+            context['is_company_manager'] = (user_company and self.request.user.is_manager) if user_company else False
+            
+            # is_managerの場合、利用枠情報を取得
+            if user_company and self.request.user.is_manager:
+                # このCompanyに関連するFirmCompanyを取得
+                firm_companies = FirmCompany.objects.filter(
+                    company=self.object,
+                    active=True
+                ).select_related('firm')
+                
+                context['firm_companies'] = firm_companies
+                
+                # 各Firmごとの利用状況を取得
+                usage_info = []
+                now = timezone.now()
+                current_year = now.year
+                current_month = now.month
+                
+                for firm_company in firm_companies:
+                    # 現在の月の利用状況を取得
+                    usage_tracking = CompanyUsageTracking.objects.filter(
+                        company=self.object,
+                        firm=firm_company.firm,
+                        year=current_year,
+                        month=current_month
+                    ).first()
+                    
+                    usage_info.append({
+                        'firm_company': firm_company,
+                        'firm': firm_company.firm,
+                        'api_limit': firm_company.api_limit,
+                        'ocr_limit': firm_company.ocr_limit,
+                        'allow_firm_api_usage': firm_company.allow_firm_api_usage,
+                        'allow_firm_ocr_usage': firm_company.allow_firm_ocr_usage,
+                        'api_used': usage_tracking.api_count if usage_tracking else 0,
+                        'ocr_used': usage_tracking.ocr_count if usage_tracking else 0,
+                        'api_remaining': max(0, firm_company.api_limit - (usage_tracking.api_count if usage_tracking else 0)) if firm_company.api_limit > 0 else None,
+                        'ocr_remaining': max(0, firm_company.ocr_limit - (usage_tracking.ocr_count if usage_tracking else 0)) if firm_company.ocr_limit > 0 else None,
+                    })
+                
+                context['usage_info'] = usage_info
         else:
             context['is_company_owner'] = False
         

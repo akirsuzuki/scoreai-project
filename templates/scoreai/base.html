@@ -54,13 +54,18 @@
         <div class="messages">
             {% for message in messages %}
             <div 
-                class="alert 
+                class="alert alert-dismissible fade show
                        {% if message.tags == 'error' %}alert-danger
-                       {% elif message.tags == 'success' %}alert-primary
+                       {% elif message.tags == 'success' %}alert-success
                        {% else %}alert-warning
                        {% endif %}" 
                 role="alert">
-                {{ message }}
+                {% if 'safe' in message.tags %}
+                    {{ message|safe }}
+                {% else %}
+                    {{ message }}
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             {% endfor %}
         </div>

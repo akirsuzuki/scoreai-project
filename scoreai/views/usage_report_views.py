@@ -11,12 +11,36 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 import csv
 import json
+import io
 
 from ..models import Firm, FirmUsageTracking, FirmCompany, AIConsultationHistory, Company
 from ..mixins import ErrorHandlingMixin, FirmOwnerMixin
 import logging
 
 logger = logging.getLogger(__name__)
+
+# Excelエクスポート用
+try:
+    from openpyxl import Workbook
+    from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+    from openpyxl.utils import get_column_letter
+    OPENPYXL_AVAILABLE = True
+except ImportError:
+    OPENPYXL_AVAILABLE = False
+    logger.warning("openpyxl is not installed. Excel export will not be available.")
+
+# PDFエクスポート用
+try:
+    from reportlab.lib import colors
+    from reportlab.lib.pagesizes import A4, letter
+    from reportlab.lib.units import inch
+    from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT
+    REPORTLAB_AVAILABLE = True
+except ImportError:
+    REPORTLAB_AVAILABLE = False
+    logger.warning("reportlab is not installed. PDF export will not be available.")
 
 
 class UsageReportView(FirmOwnerMixin, TemplateView):
@@ -217,15 +241,149 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
 class UsageReportExportView(FirmOwnerMixin, TemplateView):
     """利用状況レポートのエクスポートビュー"""
     
-    def get(self, request, firm_id, format='csv'):
-        """CSVまたはExcel形式でエクスポート"""
+    def get(self, request, firm_id):
+        """CSV、Excel、またはPDF形式でエクスポート"""
+        format_type = request.GET.get('format', 'csv')
         months = int(request.GET.get('months', 6))
         months = max(1, min(months, 24))
         
-        if format == 'csv':
+        if format_type == 'csv':
             return self._export_csv(months)
+        elif format_type == 'excel':
+            if not OPENPYXL_AVAILABLE:
+                return JsonResponse({'error': 'Excel export is not available. Please install openpyxl.'}, status=400)
+            return self._export_excel(months)
+        elif format_type == 'pdf':
+            if not REPORTLAB_AVAILABLE:
+                return JsonResponse({'error': 'PDF export is not available. Please install reportlab.'}, status=400)
+            return self._export_pdf(months)
         else:
-            return JsonResponse({'error': 'Unsupported format'}, status=400)
+            return JsonResponse({'error': 'Unsupported format. Use csv, excel, or pdf.'}, status=400)
+    
+    def _get_usage_data(self, months: int) -> Dict[str, Any]:
+        """利用状況データを取得（UsageReportViewと同じロジック）"""
+        now = timezone.now()
+        labels = []
+        ai_consultation = []
+        ocr = []
+        
+        seen_months = set()
+        month_data_list = []
+        
+        current_year = now.year
+        current_month = now.month
+        
+        for i in range(months):
+            target_year = current_year
+            target_month = current_month - i
+            
+            while target_month <= 0:
+                target_month += 12
+                target_year -= 1
+            
+            month_key = (target_year, target_month)
+            if month_key in seen_months:
+                continue
+            seen_months.add(month_key)
+            
+            usage = FirmUsageTracking.objects.filter(
+                firm=self.firm,
+                year=target_year,
+                month=target_month
+            ).first()
+            
+            ai_count = usage.ai_consultation_count if usage else 0
+            ocr_count = usage.ocr_count if usage else 0
+            
+            month_data_list.append({
+                'year': target_year,
+                'month': target_month,
+                'label': f"{target_year}年{target_month}月",
+                'ai_consultation': ai_count,
+                'ocr': ocr_count,
+            })
+        
+        month_data_list.sort(key=lambda x: (x['year'], x['month']))
+        
+        for month_data in month_data_list:
+            labels.append(month_data['label'])
+            ai_consultation.append(month_data['ai_consultation'])
+            ocr.append(month_data['ocr'])
+        
+        return {
+            'labels': labels,
+            'ai_consultation': ai_consultation,
+            'ocr': ocr,
+            'table_data': month_data_list,
+        }
+    
+    def _get_company_usage_summary(self, months: int) -> list:
+        """各Companyごとの利用数サマリーを取得（UsageReportViewと同じロジック）"""
+        now = timezone.now()
+        
+        firm_companies = FirmCompany.objects.filter(
+            firm=self.firm,
+            active=True
+        ).select_related('company')
+        
+        current_year = now.year
+        current_month = now.month
+        
+        oldest_year = current_year
+        oldest_month = current_month - (months - 1)
+        
+        while oldest_month <= 0:
+            oldest_month += 12
+            oldest_year -= 1
+        
+        company_usage_list = []
+        
+        for firm_company in firm_companies:
+            company = firm_company.company
+            
+            total_ai_count = 0
+            seen_months = set()
+            
+            for i in range(months):
+                target_year = current_year
+                target_month = current_month - i
+                
+                while target_month <= 0:
+                    target_month += 12
+                    target_year -= 1
+                
+                month_key = (target_year, target_month)
+                if month_key in seen_months:
+                    continue
+                seen_months.add(month_key)
+                
+                _, last_day = monthrange(target_year, target_month)
+                month_start = timezone.make_aware(datetime(target_year, target_month, 1))
+                month_end = timezone.make_aware(datetime(target_year, target_month, last_day, 23, 59, 59))
+                
+                ai_count = AIConsultationHistory.objects.filter(
+                    company=company,
+                    created_at__gte=month_start,
+                    created_at__lte=month_end,
+                    user__is_company_user=True
+                ).count()
+                
+                total_ai_count += ai_count
+            
+            ocr_count = 0
+            total_count = total_ai_count + ocr_count
+            
+            if total_count > 0:
+                company_usage_list.append({
+                    'company_id': str(company.id),
+                    'company_name': company.name,
+                    'ai_consultation': total_ai_count,
+                    'ocr': ocr_count,
+                    'total': total_count,
+                })
+        
+        company_usage_list.sort(key=lambda x: x['total'], reverse=True)
+        return company_usage_list
     
     def _export_csv(self, months: int) -> HttpResponse:
         """CSV形式でエクスポート"""
@@ -240,32 +398,215 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
         # ヘッダー
         writer.writerow(['年月', 'AI相談回数', 'OCR読み込み回数'])
         
-        # データ
-        now = timezone.now()
-        for i in range(months - 1, -1, -1):
-            target_date = now - timedelta(days=30 * i)
-            year = target_date.year
-            month = target_date.month
-            
-            usage = FirmUsageTracking.objects.filter(
-                firm=self.firm,
-                year=year,
-                month=month
-            ).first()
-            
-            if usage:
+        # データを取得
+        usage_data = self._get_usage_data(months)
+        
+        # データ行
+        for month_data in usage_data['table_data']:
+            writer.writerow([
+                month_data['label'],
+                month_data['ai_consultation'],
+                month_data['ocr'],
+            ])
+        
+        # Company別利用状況
+        company_usage = self._get_company_usage_summary(months)
+        if company_usage:
+            writer.writerow([])  # 空行
+            writer.writerow(['Company別利用状況'])
+            writer.writerow(['Company名', 'AI相談回数', 'OCR読み込み回数', '合計'])
+            for company in company_usage:
                 writer.writerow([
-                    f"{year}年{month}月",
-                    usage.ai_consultation_count,
-                    usage.ocr_count,
-                ])
-            else:
-                writer.writerow([
-                    f"{year}年{month}月",
-                    0,
-                    0,
+                    company['company_name'],
+                    company['ai_consultation'],
+                    company['ocr'],
+                    company['total'],
                 ])
         
+        return response
+    
+    def _export_excel(self, months: int) -> HttpResponse:
+        """Excel形式でエクスポート"""
+        wb = Workbook()
+        ws = wb.active
+        ws.title = "利用状況レポート"
+        
+        # スタイル定義
+        header_fill = PatternFill(start_color="366092", end_color="366092", fill_type="solid")
+        header_font = Font(bold=True, color="FFFFFF", size=12)
+        title_font = Font(bold=True, size=14)
+        border = Border(
+            left=Side(style='thin'),
+            right=Side(style='thin'),
+            top=Side(style='thin'),
+            bottom=Side(style='thin')
+        )
+        center_alignment = Alignment(horizontal='center', vertical='center')
+        
+        # タイトル
+        ws.merge_cells('A1:C1')
+        title_cell = ws['A1']
+        title_cell.value = f"{self.firm.name} - 利用状況レポート（過去{months}ヶ月）"
+        title_cell.font = title_font
+        title_cell.alignment = center_alignment
+        
+        # ヘッダー
+        headers = ['年月', 'AI相談回数', 'OCR読み込み回数']
+        for col, header in enumerate(headers, start=1):
+            cell = ws.cell(row=3, column=col)
+            cell.value = header
+            cell.fill = header_fill
+            cell.font = header_font
+            cell.alignment = center_alignment
+            cell.border = border
+        
+        # データを取得
+        usage_data = self._get_usage_data(months)
+        
+        # データ行
+        for row_idx, month_data in enumerate(usage_data['table_data'], start=4):
+            ws.cell(row=row_idx, column=1, value=month_data['label']).border = border
+            ws.cell(row=row_idx, column=2, value=month_data['ai_consultation']).border = border
+            ws.cell(row=row_idx, column=3, value=month_data['ocr']).border = border
+        
+        # 列幅の調整
+        ws.column_dimensions['A'].width = 15
+        ws.column_dimensions['B'].width = 15
+        ws.column_dimensions['C'].width = 18
+        
+        # Company別利用状況
+        company_usage = self._get_company_usage_summary(months)
+        if company_usage:
+            start_row = len(usage_data['table_data']) + 6
+            ws.merge_cells(f'A{start_row}:D{start_row}')
+            title_cell = ws[f'A{start_row}']
+            title_cell.value = "Company別利用状況"
+            title_cell.font = title_font
+            title_cell.alignment = center_alignment
+            
+            # Company別ヘッダー
+            company_headers = ['Company名', 'AI相談回数', 'OCR読み込み回数', '合計']
+            for col, header in enumerate(company_headers, start=1):
+                cell = ws.cell(row=start_row + 2, column=col)
+                cell.value = header
+                cell.fill = header_fill
+                cell.font = header_font
+                cell.alignment = center_alignment
+                cell.border = border
+            
+            # Company別データ
+            for row_idx, company in enumerate(company_usage, start=start_row + 3):
+                ws.cell(row=row_idx, column=1, value=company['company_name']).border = border
+                ws.cell(row=row_idx, column=2, value=company['ai_consultation']).border = border
+                ws.cell(row=row_idx, column=3, value=company['ocr']).border = border
+                ws.cell(row=row_idx, column=4, value=company['total']).border = border
+            
+            ws.column_dimensions['D'].width = 12
+        
+        # レスポンスを作成
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+        response['Content-Disposition'] = f'attachment; filename="usage_report_{self.firm.id}_{timezone.now().strftime("%Y%m%d")}.xlsx"'
+        
+        wb.save(response)
+        return response
+    
+    def _export_pdf(self, months: int) -> HttpResponse:
+        """PDF形式でエクスポート"""
+        buffer = io.BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=72, leftMargin=72, topMargin=72, bottomMargin=18)
+        
+        # スタイル定義
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=16,
+            textColor=colors.HexColor('#366092'),
+            spaceAfter=30,
+            alignment=TA_CENTER
+        )
+        heading_style = ParagraphStyle(
+            'CustomHeading',
+            parent=styles['Heading2'],
+            fontSize=12,
+            textColor=colors.HexColor('#366092'),
+            spaceAfter=12,
+            spaceBefore=12
+        )
+        
+        # ストーリー（PDFの内容）を構築
+        story = []
+        
+        # タイトル
+        title = Paragraph(f"{self.firm.name} - 利用状況レポート（過去{months}ヶ月）", title_style)
+        story.append(title)
+        story.append(Spacer(1, 0.2*inch))
+        
+        # データを取得
+        usage_data = self._get_usage_data(months)
+        
+        # 利用状況一覧テーブル
+        story.append(Paragraph("利用状況一覧", heading_style))
+        
+        table_data = [['年月', 'AI相談回数', 'OCR読み込み回数']]
+        for month_data in usage_data['table_data']:
+            table_data.append([
+                month_data['label'],
+                str(month_data['ai_consultation']),
+                str(month_data['ocr']),
+            ])
+        
+        table = Table(table_data, colWidths=[2*inch, 2*inch, 2*inch])
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#366092')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+            ('GRID', (0, 0), (-1, -1), 1, colors.black),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
+        ]))
+        story.append(table)
+        story.append(Spacer(1, 0.3*inch))
+        
+        # Company別利用状況
+        company_usage = self._get_company_usage_summary(months)
+        if company_usage:
+            story.append(Paragraph("Company別利用状況", heading_style))
+            
+            company_table_data = [['Company名', 'AI相談回数', 'OCR読み込み回数', '合計']]
+            for company in company_usage:
+                company_table_data.append([
+                    company['company_name'],
+                    str(company['ai_consultation']),
+                    str(company['ocr']),
+                    str(company['total']),
+                ])
+            
+            company_table = Table(company_table_data, colWidths=[2.5*inch, 1.5*inch, 1.5*inch, 1*inch])
+            company_table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#366092')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 10),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
+            ]))
+            story.append(company_table)
+        
+        # PDFを生成
+        doc.build(story)
+        
+        # レスポンスを作成
+        response = HttpResponse(buffer.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="usage_report_{self.firm.id}_{timezone.now().strftime("%Y%m%d")}.pdf"'
         return response
 
 

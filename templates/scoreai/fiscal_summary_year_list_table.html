@@ -151,7 +151,24 @@
         </nav>
       </div>
       <div class="card-footer text-end">
-        <a href="{% url 'fiscal_summary_year_create' %}" class="btn btn-primary">新規決算データ作成</a>
+        <div class="btn-group" role="group">
+          <a href="{% url 'fiscal_summary_year_create' %}" class="btn btn-primary">新規決算データ作成</a>
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'fiscal_summary_year_budget_create' %}">
+              <i class="ti ti-calendar-dollar me-2"></i>予算データ作成
+            </a></li>
+            <li><a class="dropdown-item" href="{% url 'budget_suggest' %}">
+              <i class="ti ti-sparkles me-2"></i>AI予算サジェスト
+            </a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="{% url 'budget_vs_actual_comparison' %}">
+              <i class="ti ti-chart-line me-2"></i>予算実績比較
+            </a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

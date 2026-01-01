@@ -1,0 +1,100 @@
+{% load humanize %}
+{% load custom_filters %}
+
+{% if budget_year or actual_year %}
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">
+          予算実績比較{% if budget_year %}{{ budget_year.year }}年{% elif actual_year %}{{ actual_year.year }}年{% endif %}
+        </h5>
+      </div>
+      <div class="card-body">
+        {% if budget_year and actual_year %}
+        <div class="table-responsive">
+          <table class="table table-bordered table-sm">
+            <thead class="table-light">
+              <tr>
+                <th>項目</th>
+                <th class="text-end">予算</th>
+                <th class="text-end">実績</th>
+                <th class="text-end">差異</th>
+                <th class="text-end">差異率</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>売上高</strong></td>
+                <td class="text-end">{{ budget_year.sales|intcomma }}</td>
+                <td class="text-end">{{ actual_year.sales|intcomma }}</td>
+                <td class="text-end {% if actual_year.sales > budget_year.sales %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.sales|subtract:budget_year.sales|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.sales > budget_year.sales %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.sales > 0 %}
+                    {{ actual_year.sales|subtract:budget_year.sales|divide:budget_year.sales|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>営業利益</strong></td>
+                <td class="text-end">{{ budget_year.operating_profit|intcomma }}</td>
+                <td class="text-end">{{ actual_year.operating_profit|intcomma }}</td>
+                <td class="text-end {% if actual_year.operating_profit > budget_year.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.operating_profit|subtract:budget_year.operating_profit|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.operating_profit > budget_year.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.operating_profit > 0 %}
+                    {{ actual_year.operating_profit|subtract:budget_year.operating_profit|divide:budget_year.operating_profit|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td><strong>経常利益</strong></td>
+                <td class="text-end">{{ budget_year.ordinary_profit|intcomma }}</td>
+                <td class="text-end">{{ actual_year.ordinary_profit|intcomma }}</td>
+                <td class="text-end {% if actual_year.ordinary_profit > budget_year.ordinary_profit %}text-success{% else %}text-danger{% endif %}">
+                  {{ actual_year.ordinary_profit|subtract:budget_year.ordinary_profit|intcomma }}
+                </td>
+                <td class="text-end {% if actual_year.ordinary_profit > budget_year.ordinary_profit %}text-success{% else %}text-danger{% endif %}">
+                  {% if budget_year.ordinary_profit > 0 %}
+                    {{ actual_year.ordinary_profit|subtract:budget_year.ordinary_profit|divide:budget_year.ordinary_profit|multiply:100|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="text-end mt-3">
+          {% if budget_year or actual_year %}
+          <a href="{% url 'budget_vs_actual_comparison' %}?year={% if budget_year %}{{ budget_year.year }}{% else %}{{ actual_year.year }}{% endif %}" class="btn btn-sm btn-outline-primary">
+            <i class="ti ti-chart-line me-1"></i>詳細比較を見る
+          </a>
+          <a href="{% url 'budget_analysis' %}?year={% if budget_year %}{{ budget_year.year }}{% else %}{{ actual_year.year }}{% endif %}" class="btn btn-sm btn-outline-info ms-2">
+            <i class="ti ti-brain me-1"></i>AI分析
+          </a>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="alert alert-info">
+          {% if not budget_year %}
+            <i class="ti ti-info-circle me-2"></i>予算データが見つかりません。
+          {% endif %}
+          {% if not actual_year %}
+            <i class="ti ti-info-circle me-2"></i>実績データが見つかりません。
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+

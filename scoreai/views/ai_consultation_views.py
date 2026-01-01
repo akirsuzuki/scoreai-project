@@ -252,15 +252,17 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 request.user
             )
             
-            # API利用回数をカウント（Company Userの場合のみ、上限内の場合のみ）
+            # API利用回数をカウント
             from ..utils.usage_tracking import increment_company_api_count
             if source == 'score':
-                increment_api_count(self.this_firm, user=request.user)
-                # CompanyごとのAPI利用回数もカウント
-                increment_company_api_count(self.this_company, self.this_firm, user=request.user)
+                increment_api_count(self.this_firm, user=request.user, company=self.this_company)
+                # Company Userの場合、CompanyごとのAPI利用回数もカウント
+                if request.user.is_company_user:
+                    increment_company_api_count(self.this_company, self.this_firm, user=request.user)
             elif source == 'company':
                 # CompanyのAPIキーを使用した場合もCompanyレベルでカウント
-                increment_company_api_count(self.this_company, self.this_firm, user=request.user)
+                if request.user.is_company_user:
+                    increment_company_api_count(self.this_company, self.this_firm, user=request.user)
             # FirmのAPIキーを使用した場合はFirmレベルでカウントしない（既に上限を超えているため）
             
             # AI応答を生成

@@ -127,13 +127,13 @@ class FiscalSummary_MonthInline(admin.TabularInline):
 
 @admin.register(FiscalSummary_Year)
 class FiscalSummary_YearAdmin(admin.ModelAdmin):
-    list_display = ('id', 'company', 'year', 'version')
-    list_filter = ('year', 'company')
+    list_display = ('id', 'company', 'year', 'version', 'is_budget', 'is_draft')
+    list_filter = ('year', 'company', 'is_budget', 'is_draft')
     search_fields = ('company__name', 'company__code', 'year')
     
     fieldsets = (
         ('基本情報', {
-            'fields': ('company', 'year', 'version')
+            'fields': ('company', 'year', 'version', 'is_budget', 'is_draft')
         }),
         ('BS情報', {
             'fields': (
@@ -169,9 +169,9 @@ class FiscalSummary_YearAdmin(admin.ModelAdmin):
 
 @admin.register(FiscalSummary_Month)
 class FiscalSummary_MonthAdmin(admin.ModelAdmin):
-    list_display = ('fiscal_summary_year', 'period', 'sales', 'gross_profit', 'operating_profit', 'ordinary_profit')
+    list_display = ('fiscal_summary_year', 'period', 'is_budget', 'sales', 'gross_profit', 'operating_profit', 'ordinary_profit')
     list_display_links = ('fiscal_summary_year', 'period')
-    list_filter = ('fiscal_summary_year__year', 'fiscal_summary_year__company', 'period')
+    list_filter = ('fiscal_summary_year__year', 'fiscal_summary_year__company', 'period', 'is_budget')
     search_fields = ('fiscal_summary_year__company__name', 'fiscal_summary_year__year')
     ordering = ('-fiscal_summary_year__year', 'fiscal_summary_year__company', 'period')
 

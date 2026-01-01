@@ -21,6 +21,9 @@ Google Gemini API、Vision API、Drive APIの設定方法
 ### [Google Drive連携セットアップガイド](./setup/GOOGLE_DRIVE_SETUP.md)
 Google Driveとの連携設定とOAuth認証の手順
 
+### [Box API設定ガイド](./setup/BOX_API_SETUP.md)
+Box APIの設定とOAuth認証の手順
+
 ### [初期データ投入ガイド](./setup/INITIAL_DATA.md)
 AI相談機能、フォルダ構造、Google Driveフォルダの初期化方法
 
