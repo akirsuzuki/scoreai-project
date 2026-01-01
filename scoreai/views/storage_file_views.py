@@ -40,10 +40,11 @@ class StorageFileListView(SelectedCompanyMixin, LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'ストレージファイル一覧'
         
-        # ストレージ設定を取得
+        # ストレージ設定を取得（選択中のCompanyに基づく）
         try:
             storage_setting = CloudStorageSetting.objects.get(
                 user=self.request.user,
+                company=self.this_company,
                 is_active=True
             )
             context['storage_setting'] = storage_setting
@@ -80,9 +81,10 @@ class StorageFileProcessView(SelectedCompanyMixin, TransactionMixin, LoginRequir
                 uploaded_doc = None
                 document_type = request.POST.get('document_type', 'financial_statement')
             
-            # ストレージ設定を取得
+            # ストレージ設定を取得（選択中のCompanyに基づく）
             storage_setting = CloudStorageSetting.objects.get(
                 user=request.user,
+                company=self.this_company,
                 is_active=True
             )
             

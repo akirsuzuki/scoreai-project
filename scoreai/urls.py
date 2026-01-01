@@ -9,6 +9,10 @@ from .views import (
     UserProfileUpdateView,
     CompanyDetailView,
     CompanyUpdateView,
+    CompanyMemberListView,
+    CompanyMemberInviteView,
+    CompanyMemberDeleteView,
+    CompanyInvitationCancelView,
     select_company,
     load_industry_subclassifications,
     ImportFiscalSummaryFromOcrView,
@@ -86,6 +90,9 @@ from .views.firm_member_views import (
     FirmMemberInviteView,
     FirmMemberUpdateView,
     FirmInvitationCancelView,
+)
+from .views.assigned_clients_views import (
+    AssignedClientsListView,
 )
 from .views.stripe_webhook_views import StripeWebhookView
 from .views import (
@@ -174,6 +181,10 @@ urlpatterns = [
     path('add_client/<str:client_id>/', add_client, name='add_client'),
     path('remove_client/<str:client_id>/', remove_client, name='remove_client'),
     path('company/<str:id>/', CompanyDetailView.as_view(), name='company_detail'),
+    path('company/<str:company_id>/members/', CompanyMemberListView.as_view(), name='company_member_list'),
+    path('company/<str:company_id>/members/invite/', CompanyMemberInviteView.as_view(), name='company_member_invite'),
+    path('company/<str:company_id>/members/<str:member_id>/delete/', CompanyMemberDeleteView.as_view(), name='company_member_delete'),
+    path('company/<str:company_id>/invitations/<str:invitation_id>/cancel/', CompanyInvitationCancelView.as_view(), name='company_invitation_cancel'),
     path('company/<str:id>/update/', CompanyUpdateView.as_view(), name='company_update'),
     path('ajax/load-industry-subclassifications/', load_industry_subclassifications, name='ajax_load_industry_subclassifications'),
     path('select_company/<str:this_company>/', select_company, name='select_company'),
@@ -247,6 +258,7 @@ urlpatterns = [
     path('legal_notice/', LegalNoticeView.as_view(), name='legal_notice'),
     path('security_policy/', SecurityPolicyView.as_view(), name='security_policy'),
     path('firm_clientslist/', ClientsList.as_view(), name='firm_clientslist'),
+    path('assigned-clients/', AssignedClientsListView.as_view(), name='assigned_clients_list'),
     path('import-financial-institution/', ImportFinancialInstitutionView.as_view(), name='import_financial_institution'),
     path('download/financial_institutions/', download_financial_institutions_csv, name='download_financial_institutions_csv'),
     path('sample/', SampleView.as_view(), name='sample'),

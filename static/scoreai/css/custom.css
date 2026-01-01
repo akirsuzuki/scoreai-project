@@ -301,6 +301,110 @@
   vertical-align: middle;
 }
 
+/* ============================================
+   Modernizeテーマ準拠 - ヘルプページスタイル
+   ============================================ */
+
+/* カテゴリフィルターボタン */
+.btn-filter {
+  background-color: #ffffff;
+  color: #2A3547;
+  border: 1px solid #e0e0e0;
+  padding: 8px 16px;
+  border-radius: 7px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease-in;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-filter:hover {
+  background-color: #F6F9FC;
+  border-color: #5D87FF;
+  color: #5D87FF;
+}
+
+.btn-filter-active {
+  background-color: #5D87FF;
+  color: #ffffff;
+  border-color: #5D87FF;
+}
+
+.btn-filter-active:hover {
+  background-color: #4d77e6;
+  border-color: #4d77e6;
+  color: #ffffff;
+}
+
+/* ヘルプカード - Modernize Notesスタイル */
+.help-card {
+  cursor: pointer;
+  border-left: 4px solid transparent !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.help-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.help-card-title {
+  color: #2A3547;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.help-category-badge {
+  font-size: 11px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.help-card-arrow {
+  font-size: 18px;
+  color: #5D87FF;
+}
+
+/* カテゴリごとの色定義 */
+.help-category-ai_usage {
+  border-left-color: #5D87FF !important;
+}
+
+.help-category-ai_usage .help-category-badge {
+  background-color: #5D87FF !important;
+  color: #ffffff !important;
+}
+
+.help-category-data_entry {
+  border-left-color: #13DEB9 !important;
+}
+
+.help-category-data_entry .help-category-badge {
+  background-color: #13DEB9 !important;
+  color: #ffffff !important;
+}
+
+.help-category-login {
+  border-left-color: #FFAE1F !important;
+}
+
+.help-category-login .help-category-badge {
+  background-color: #FFAE1F !important;
+  color: #ffffff !important;
+}
+
+.help-category-others {
+  border-left-color: #6C757D !important;
+}
+
+.help-category-others .help-category-badge {
+  background-color: #6C757D !important;
+  color: #ffffff !important;
+}
+
 /* ボタン内のアイコン - 整列 */
 .btn {
   display: inline-flex;

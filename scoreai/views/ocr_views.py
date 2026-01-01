@@ -430,14 +430,15 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
             UploadedDocumentオブジェクト、またはNone（保存失敗時）
         """
         try:
-            # クラウドストレージ設定を取得
+            # クラウドストレージ設定を取得（選択中のCompanyに基づく）
             try:
                 storage_setting = CloudStorageSetting.objects.get(
                     user=request.user,
+                    company=self.this_company,
                     is_active=True
                 )
             except CloudStorageSetting.DoesNotExist:
-                logger.info(f"Cloud storage not configured for user {request.user.id}")
+                logger.info(f"Cloud storage not configured for user {request.user.id} and company {self.this_company.id}")
                 return None
             
             # Google Driveのみ対応（他のストレージは今後実装）

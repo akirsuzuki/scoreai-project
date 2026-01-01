@@ -1,11 +1,13 @@
 from django.contrib import admin
 from .models import (
+    CompanyUsageTracking,
     User,
     Company,
     UserCompany,
     Firm,
     UserFirm,
     FirmInvitation,
+    CompanyInvitation,
     FirmCompany,
     FirmPlan,
     FirmSubscription,
@@ -97,6 +99,15 @@ class FirmInvitationAdmin(admin.ModelAdmin):
     list_display_links = ('firm', 'email')
     search_fields = ('firm__name', 'email', 'invited_by__username')
     list_filter = ('firm__name', 'is_accepted', 'is_owner', 'invited_at')
+    ordering = ('-invited_at',)
+
+
+@admin.register(CompanyInvitation)
+class CompanyInvitationAdmin(admin.ModelAdmin):
+    list_display = ('company', 'email', 'invited_by', 'is_owner', 'is_manager', 'invited_at', 'is_accepted')
+    list_display_links = ('company', 'email')
+    search_fields = ('company__name', 'email', 'invited_by__username')
+    list_filter = ('company__name', 'is_accepted', 'is_owner', 'is_manager', 'invited_at')
     ordering = ('-invited_at',)
 
 
@@ -295,11 +306,11 @@ class AIConsultationScriptAdmin(admin.ModelAdmin):
 
 @admin.register(UserAIConsultationScript)
 class UserAIConsultationScriptAdmin(admin.ModelAdmin):
-    list_display = ('name', 'user', 'consultation_type', 'is_default', 'is_active', 'updated_at')
+    list_display = ('name', 'user', 'company', 'consultation_type', 'is_default', 'is_active', 'updated_at')
     list_display_links = ('name',)
-    list_filter = ('consultation_type', 'is_default', 'is_active')
-    search_fields = ('name', 'user__username', 'consultation_type__name')
-    ordering = ('user', 'consultation_type', 'is_default', 'name')
+    list_filter = ('company', 'consultation_type', 'is_default', 'is_active')
+    search_fields = ('name', 'user__username', 'company__name', 'consultation_type__name')
+    ordering = ('user', 'company', 'consultation_type', 'is_default', 'name')
     readonly_fields = ('created_at', 'updated_at')
 
 
@@ -372,15 +383,15 @@ class AIConsultationHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(CloudStorageSetting)
 class CloudStorageSettingAdmin(admin.ModelAdmin):
-    list_display = ('user', 'storage_type', 'is_active', 'created_at', 'updated_at')
-    list_display_links = ('user',)
-    list_filter = ('storage_type', 'is_active', 'created_at')
-    search_fields = ('user__username', 'user__email')
+    list_display = ('user', 'company', 'storage_type', 'is_active', 'created_at', 'updated_at')
+    list_display_links = ('user', 'company')
+    list_filter = ('storage_type', 'is_active', 'company', 'created_at')
+    search_fields = ('user__username', 'user__email', 'company__name')
     ordering = ('-updated_at',)
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
         ('基本情報', {
-            'fields': ('user', 'storage_type', 'is_active')
+            'fields': ('user', 'company', 'storage_type', 'is_active')
         }),
         ('認証情報', {
             'fields': ('access_token', 'refresh_token', 'token_expires_at'),
@@ -467,9 +478,29 @@ class FirmSubscriptionAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(CompanyUsageTracking)
+class CompanyUsageTrackingAdmin(admin.ModelAdmin):
+    list_display = ('company', 'firm', 'year', 'month', 'ai_consultation_count', 'ocr_count', 'api_count', 'is_reset', 'created_at')
+    list_filter = ('firm', 'year', 'month', 'is_reset')
+    search_fields = ('company__name', 'firm__name')
+    ordering = ('-year', '-month', 'company__name')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('company', 'firm', 'year', 'month')
+        }),
+        ('利用状況', {
+            'fields': ('ai_consultation_count', 'ocr_count', 'api_count')
+        }),
+        ('その他', {
+            'fields': ('is_reset', 'created_at', 'updated_at')
+        }),
+    )
+
+
 @admin.register(FirmUsageTracking)
 class FirmUsageTrackingAdmin(admin.ModelAdmin):
-    list_display = ('firm', 'subscription', 'year', 'month', 'ai_consultation_count', 'ocr_count', 'is_reset')
+    list_display = ('firm', 'subscription', 'year', 'month', 'ai_consultation_count', 'ocr_count', 'api_count', 'is_reset')
     list_display_links = ('firm',)
     list_filter = ('year', 'month', 'is_reset', 'subscription__plan')
     search_fields = ('firm__name',)

@@ -237,6 +237,87 @@ class FirmInvitation(models.Model):
         return f"{self.firm.name} - {self.email} ({status})"
 
 
+class CompanyInvitation(models.Model):
+    """Companyへの招待を管理するモデル"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='invitations', verbose_name='Company')
+    email = models.EmailField('メールアドレス')
+    invited_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_company_invitations', verbose_name='招待者')
+    is_owner = models.BooleanField('オーナー権限', default=False)
+    is_manager = models.BooleanField('マネージャー権限', default=False)
+    invited_at = models.DateTimeField('招待日時', auto_now_add=True)
+    accepted_at = models.DateTimeField('承認日時', null=True, blank=True)
+    is_accepted = models.BooleanField('承認済み', default=False)
+    
+    class Meta:
+        unique_together = ('company', 'email', 'is_accepted')
+        verbose_name = 'Company招待'
+        verbose_name_plural = 'Company招待'
+        ordering = ['-invited_at']
+    
+    def save(self, *args, **kwargs):
+        """保存時にis_acceptedがTrueになった場合、UserCompanyレコードを作成"""
+        # 既存のレコードがある場合、is_acceptedの変更を確認
+        if self.pk:
+            try:
+                old_instance = CompanyInvitation.objects.get(pk=self.pk)
+                # is_acceptedがFalseからTrueに変更された場合
+                if not old_instance.is_accepted and self.is_accepted:
+                    self._create_user_company()
+            except CompanyInvitation.DoesNotExist:
+                pass
+        else:
+            # 新規作成時でis_acceptedがTrueの場合
+            if self.is_accepted:
+                self._create_user_company()
+        
+        # accepted_atを設定
+        if self.is_accepted and not self.accepted_at:
+            self.accepted_at = timezone.now()
+        
+        super().save(*args, **kwargs)
+    
+    def _create_user_company(self):
+        """UserCompanyレコードを作成"""
+        # メールアドレスからユーザーを検索
+        try:
+            user = User.objects.get(email=self.email)
+            
+            # 既にUserCompanyレコードが存在するか確認
+            existing_user_company = UserCompany.objects.filter(
+                user=user,
+                company=self.company
+            ).first()
+            
+            if existing_user_company:
+                # 既存のレコードがある場合は更新
+                existing_user_company.active = True
+                existing_user_company.is_owner = self.is_owner
+                existing_user_company.is_selected = False
+                existing_user_company.save()
+            else:
+                # 新規作成
+                UserCompany.objects.create(
+                    user=user,
+                    company=self.company,
+                    active=True,
+                    is_owner=self.is_owner,
+                    is_selected=False
+                )
+            
+            # Userモデルのis_managerを更新（UserCompanyにはis_managerフィールドがないため）
+            if self.is_manager:
+                user.is_manager = True
+                user.save()
+        except User.DoesNotExist:
+            # ユーザーが存在しない場合は何もしない（新規ユーザー招待の場合）
+            pass
+    
+    def __str__(self):
+        status = '承認済み' if self.is_accepted else '招待中'
+        return f"{self.company.name} - {self.email} ({status})"
+
+
 class FirmCompany(models.Model):
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='firm_companies')
@@ -528,6 +609,37 @@ class FirmUsageTracking(models.Model):
         if api_limit == 0:
             return 0
         return min(100, (self.api_count / api_limit) * 100)
+
+
+class CompanyUsageTracking(models.Model):
+    """Companyの月次利用状況追跡"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='usage_tracking', verbose_name='Company')
+    firm = models.ForeignKey(Firm, on_delete=models.CASCADE, related_name='company_usage_tracking', verbose_name='Firm')
+    
+    # 追跡期間
+    year = models.IntegerField('年')
+    month = models.IntegerField('月', validators=[MinValueValidator(1), MaxValueValidator(12)])
+    
+    # 利用状況
+    ai_consultation_count = models.IntegerField('AI相談回数', default=0)
+    ocr_count = models.IntegerField('OCR読み込み回数', default=0)
+    api_count = models.IntegerField('API利用回数', default=0, help_text='CompanyによるAPI利用回数')
+    
+    # リセットフラグ
+    is_reset = models.BooleanField('リセット済み', default=False)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Company利用状況'
+        verbose_name_plural = 'Company利用状況'
+        unique_together = ('company', 'firm', 'year', 'month')
+        ordering = ['-year', '-month']
+    
+    def __str__(self):
+        return f"{self.company.name} - {self.firm.name} - {self.year}年{self.month}月"
 
 
 class SubscriptionHistory(models.Model):
@@ -1336,6 +1448,15 @@ class UserAIConsultationScript(models.Model):
         related_name='ai_scripts',
         verbose_name="ユーザー"
     )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='ai_scripts',
+        verbose_name="Company",
+        null=True,
+        blank=True,
+        help_text="このスクリプトが紐づくCompany。Companyに属するUserはこのスクリプトを共有できます。"
+    )
     consultation_type = models.ForeignKey(
         AIConsultationType,
         on_delete=models.CASCADE,
@@ -1353,10 +1474,11 @@ class UserAIConsultationScript(models.Model):
     class Meta:
         verbose_name = 'AI相談スクリプト（ユーザー）'
         verbose_name_plural = 'AI相談スクリプト（ユーザー）'
-        unique_together = [['user', 'consultation_type', 'is_default']]
+        unique_together = [['user', 'company', 'consultation_type', 'is_default']]
     
     def __str__(self):
-        return f"{self.user.username} - {self.consultation_type.name} - {self.name}"
+        company_name = self.company.name if self.company else "個人"
+        return f"{self.user.username} - {company_name} - {self.consultation_type.name} - {self.name}"
 
 
 class MeetingMinutesAIScript(models.Model):
@@ -1396,7 +1518,7 @@ class MeetingMinutesAIScript(models.Model):
 
 
 class CloudStorageSetting(models.Model):
-    """クラウドストレージ設定（ユーザーごと）"""
+    """クラウドストレージ設定（ユーザー×Companyごと）"""
     STORAGE_CHOICES = [
         ('google_drive', 'Google Drive'),
         ('box', 'Box'),
@@ -1405,11 +1527,17 @@ class CloudStorageSetting(models.Model):
     ]
     
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='cloud_storage_setting',
+        related_name='cloud_storage_settings',
         verbose_name="ユーザー"
+    )
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='cloud_storage_settings',
+        verbose_name="Company"
     )
     storage_type = models.CharField(
         "ストレージタイプ",
@@ -1429,9 +1557,10 @@ class CloudStorageSetting(models.Model):
     class Meta:
         verbose_name = 'クラウドストレージ設定'
         verbose_name_plural = 'クラウドストレージ設定'
+        unique_together = ('user', 'company')
     
     def __str__(self):
-        return f"{self.user.username} - {self.get_storage_type_display() or '未設定'}"
+        return f"{self.user.username} - {self.company.name} - {self.get_storage_type_display() or '未設定'}"
 
 
 class DocumentFolder(models.Model):

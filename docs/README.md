@@ -26,6 +26,12 @@ AI相談機能、フォルダ構造、Google Driveフォルダの初期化方法
 
 ## 機能仕様 (`features/`)
 
+### [Firmユーザー向け機能一覧](./features/FIRM_USER_FEATURES.md)
+Firmユーザー向けの実装済み機能と今後の実装予定機能
+
+### [Company制限実装計画](./features/COMPANY_LIMIT_IMPLEMENTATION_PLAN.md)
+プランダウングレード時のCompany制限管理の実装計画
+
 ### [OCR機能仕様](./features/OCR_FEATURE_SPEC.md)
 決算書OCR読み込み機能の詳細仕様
 
@@ -76,4 +82,6 @@ Python/Djangoベストプラクティス準拠度の分析レポート
 ### コードレビュー・改善向け
 1. [改善実施状況](./development/IMPROVEMENTS.md)
 2. [ベストプラクティス分析](./development/BEST_PRACTICES_ANALYSIS.md)
+3. [コード整合性レビューレポート](./CODE_REVIEW_REPORT.md)
+4. [実装状況サマリー](./IMPLEMENTATION_STATUS.md)
 

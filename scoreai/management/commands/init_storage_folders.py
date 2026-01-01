@@ -21,6 +21,11 @@ class Command(BaseCommand):
             help='特定のユーザーIDのみ初期化する（指定しない場合は全ユーザー）',
         )
         parser.add_argument(
+            '--company-id',
+            type=str,
+            help='特定のCompany IDのみ初期化する（指定しない場合は全Company）',
+        )
+        parser.add_argument(
             '--storage-type',
             type=str,
             default='google_drive',
@@ -29,20 +34,20 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         user_id = options.get('user_id')
+        company_id = options.get('company_id')
         storage_type = options.get('storage_type', 'google_drive')
-        
-        # 対象ユーザーを取得
-        if user_id:
-            users = User.objects.filter(id=user_id)
-        else:
-            users = User.objects.all()
         
         # ストレージ設定を取得
         storage_settings = CloudStorageSetting.objects.filter(
-            user__in=users,
             storage_type=storage_type,
             is_active=True
         )
+        
+        if user_id:
+            storage_settings = storage_settings.filter(user_id=user_id)
+        
+        if company_id:
+            storage_settings = storage_settings.filter(company_id=company_id)
         
         if not storage_settings.exists():
             self.stdout.write(
@@ -63,10 +68,10 @@ class Command(BaseCommand):
             )
             return
         
-        # 各ユーザーのストレージにフォルダを作成
+        # 各ユーザー×Companyのストレージにフォルダを作成
         for storage_setting in storage_settings:
             self.stdout.write(
-                f'ユーザー {storage_setting.user.username} の{storage_setting.get_storage_type_display()}を初期化中...'
+                f'ユーザー {storage_setting.user.username} - Company {storage_setting.company.name} の{storage_setting.get_storage_type_display()}を初期化中...'
             )
             
             try:

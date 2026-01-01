@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from .models import (
     Company,
+    UserCompany,
     IndustryClassification,
     IndustrySubClassification,
     FiscalSummary_Year,
@@ -347,8 +348,9 @@ class UserAIConsultationScriptForm(forms.ModelForm):
     """AIスクリプトフォーム（ユーザー用）"""
     class Meta:
         model = UserAIConsultationScript
-        fields = ['consultation_type', 'name', 'system_instruction', 'prompt_template', 'is_default', 'is_active']
+        fields = ['company', 'consultation_type', 'name', 'system_instruction', 'prompt_template', 'is_default', 'is_active']
         widgets = {
+            'company': forms.Select(attrs={'class': 'form-control'}),
             'consultation_type': forms.Select(attrs={'class': 'form-control'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'system_instruction': forms.Textarea(attrs={'rows': 10, 'class': 'form-control'}),
@@ -358,10 +360,30 @@ class UserAIConsultationScriptForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        self.selected_company = kwargs.pop('selected_company', None)
         super().__init__(*args, **kwargs)
         self.fields['consultation_type'].queryset = AIConsultationType.objects.filter(is_active=True).order_by('order')
         self.fields['system_instruction'].help_text = 'AIの役割や振る舞いを定義するシステムプロンプト'
         self.fields['prompt_template'].help_text = 'プロンプトテンプレート。利用可能な変数: {user_message}（ユーザーの質問）, {company_name}（会社名）, {industry}（業種）, {size}（規模）, {fiscal_summary}（決算書データ・JSON）, {debt_info}（借入情報・JSON）, {monthly_data}（月次推移データ・JSON）。使用例はフォーム下部を参照してください。'
+        
+        # Companyフィールドの設定
+        if self.user:
+            user_companies = UserCompany.objects.filter(
+                user=self.user,
+                active=True
+            ).select_related('company')
+            self.fields['company'].queryset = Company.objects.filter(
+                id__in=[uc.company.id for uc in user_companies]
+            ).order_by('name')
+            self.fields['company'].required = False
+            self.fields['company'].help_text = 'このスクリプトを共有するCompanyを選択してください。選択中のCompanyが自動的に設定されます。'
+            
+            # 新規作成時は選択中のCompanyをデフォルト値に設定
+            if not self.instance.pk and self.selected_company:
+                self.fields['company'].initial = self.selected_company
+        else:
+            self.fields['company'].queryset = Company.objects.none()
 
 
 class CloudStorageSettingForm(forms.ModelForm):
@@ -397,6 +419,27 @@ class FirmMemberInviteForm(forms.Form):
         required=False,
         widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         help_text='チェックすると、オーナー権限を付与します。'
+    )
+
+
+class CompanyMemberInviteForm(forms.Form):
+    """Companyメンバー招待フォーム"""
+    email = forms.EmailField(
+        label='メールアドレス',
+        widget=forms.EmailInput(attrs={'class': 'form-control'}),
+        help_text='招待するユーザーのメールアドレスを入力してください。'
+    )
+    is_owner = forms.BooleanField(
+        label='オーナー権限を付与',
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='チェックすると、オーナー権限を付与します。'
+    )
+    is_manager = forms.BooleanField(
+        label='マネージャー権限を付与',
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='チェックすると、マネージャー権限を付与します。'
     )
 
 

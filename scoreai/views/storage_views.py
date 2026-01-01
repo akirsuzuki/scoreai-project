@@ -20,17 +20,21 @@ from ..forms import CloudStorageSettingForm
 logger = logging.getLogger(__name__)
 
 
-class CloudStorageSettingView(LoginRequiredMixin, TemplateView):
+class CloudStorageSettingView(SelectedCompanyMixin, TemplateView):
     """クラウドストレージ設定画面"""
     template_name = 'scoreai/storage_setting.html'
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = 'クラウドストレージ設定'
+        context['company'] = self.this_company
         
-        # 既存の設定を取得
+        # 既存の設定を取得（選択中のCompanyに基づく）
         try:
-            storage_setting = CloudStorageSetting.objects.get(user=self.request.user)
+            storage_setting = CloudStorageSetting.objects.get(
+                user=self.request.user,
+                company=self.this_company
+            )
             context['storage_setting'] = storage_setting
             context['is_connected'] = storage_setting.is_active and storage_setting.storage_type
             
@@ -78,13 +82,14 @@ class CloudStorageSettingView(LoginRequiredMixin, TemplateView):
         return token_status
 
 
-class GoogleDriveOAuthInitView(LoginRequiredMixin, TemplateView):
+class GoogleDriveOAuthInitView(SelectedCompanyMixin, TemplateView):
     """Google Drive OAuth認証開始"""
     template_name = 'scoreai/storage_oauth_init.html'
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = 'Google Drive認証'
+        context['company'] = self.this_company
         
         # OAuth認証URLを生成
         client_id = getattr(settings, 'GOOGLE_DRIVE_CLIENT_ID', '')
@@ -94,7 +99,8 @@ class GoogleDriveOAuthInitView(LoginRequiredMixin, TemplateView):
             context['error'] = 'Google Drive OAuth設定が完了していません。管理者に連絡してください。'
             return context
         
-        # OAuth認証URLのパラメータ
+        # OAuth認証URLのパラメータ（stateにuser_idとcompany_idを含める）
+        state_data = f"{self.request.user.id}:{self.this_company.id}"
         oauth_params = {
             'client_id': client_id,
             'redirect_uri': redirect_uri,
@@ -102,7 +108,7 @@ class GoogleDriveOAuthInitView(LoginRequiredMixin, TemplateView):
             'scope': 'https://www.googleapis.com/auth/drive.file',
             'access_type': 'offline',
             'prompt': 'consent',  # リフレッシュトークンを取得するために必要
-            'state': str(self.request.user.id),  # CSRF対策
+            'state': state_data,  # CSRF対策（user_id:company_id）
         }
         
         auth_url = 'https://accounts.google.com/o/oauth2/v2/auth?' + urllib.parse.urlencode(oauth_params)
@@ -111,13 +117,14 @@ class GoogleDriveOAuthInitView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
+class GoogleDriveOAuthCallbackView(SelectedCompanyMixin, TemplateView):
     """Google Drive OAuth認証コールバック"""
     template_name = 'scoreai/storage_oauth_callback.html'
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = 'Google Drive認証中'
+        context['company'] = self.this_company
         return context
     
     def get(self, request, *args, **kwargs):
@@ -132,7 +139,9 @@ class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
             return redirect('storage_setting')
         
         # ステートの検証（CSRF対策）
-        if state != str(request.user.id):
+        # stateは "user_id:company_id" の形式
+        expected_state = f"{request.user.id}:{self.this_company.id}"
+        if state != expected_state:
             messages.error(request, '認証エラー: 無効なリクエストです。')
             return redirect('storage_setting')
         
@@ -148,9 +157,10 @@ class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
                 messages.error(request, 'トークンの取得に失敗しました。')
                 return redirect('storage_setting')
             
-            # ストレージ設定を保存または更新
+            # ストレージ設定を保存または更新（Company単位）
             storage_setting, created = CloudStorageSetting.objects.get_or_create(
                 user=request.user,
+                company=self.this_company,
                 defaults={
                     'storage_type': 'google_drive',
                     'access_token': token_data.get('access_token', ''),
@@ -236,19 +246,23 @@ class GoogleDriveOAuthCallbackView(LoginRequiredMixin, TemplateView):
             return None
 
 
-class CloudStorageDisconnectView(LoginRequiredMixin, TemplateView):
+class CloudStorageDisconnectView(SelectedCompanyMixin, TemplateView):
     """クラウドストレージ連携解除"""
     template_name = 'scoreai/storage_disconnect.html'
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = 'クラウドストレージ連携解除'
+        context['company'] = self.this_company
         return context
     
     def post(self, request, *args, **kwargs):
         """連携解除処理"""
         try:
-            storage_setting = CloudStorageSetting.objects.get(user=request.user)
+            storage_setting = CloudStorageSetting.objects.get(
+                user=request.user,
+                company=self.this_company
+            )
             storage_setting.is_active = False
             storage_setting.save()
             messages.success(request, 'クラウドストレージとの連携を解除しました。')
@@ -258,13 +272,16 @@ class CloudStorageDisconnectView(LoginRequiredMixin, TemplateView):
         return redirect('storage_setting')
 
 
-class CloudStorageTestConnectionView(LoginRequiredMixin, TemplateView):
+class CloudStorageTestConnectionView(SelectedCompanyMixin, TemplateView):
     """クラウドストレージ接続テスト"""
     
     def post(self, request, *args, **kwargs):
         """接続テスト処理"""
         try:
-            storage_setting = CloudStorageSetting.objects.get(user=request.user)
+            storage_setting = CloudStorageSetting.objects.get(
+                user=request.user,
+                company=self.this_company
+            )
             
             if not storage_setting.is_active:
                 messages.warning(request, '連携が無効になっています。')

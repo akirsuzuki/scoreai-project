@@ -20,6 +20,8 @@
                                 <tr>
                                     <th>相談タイプ</th>
                                     <th>スクリプト名</th>
+                                    <th>Company</th>
+                                    <th>作成者</th>
                                     <th>デフォルト</th>
                                     <th>有効</th>
                                     <th>更新日時</th>
@@ -31,6 +33,20 @@
                                 <tr>
                                     <td>{{ script.consultation_type.name }}</td>
                                     <td>{{ script.name }}</td>
+                                    <td>
+                                        {% if script.company %}
+                                        <span class="badge bg-info">{{ script.company.name }}</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">個人</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if script.user == user %}
+                                        <span class="badge bg-primary">自分</span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">{{ script.user.username }}</span>
+                                        {% endif %}
+                                    </td>
                                     <td>
                                         {% if script.is_default %}
                                         <span class="badge bg-success">デフォルト</span>
@@ -48,7 +64,9 @@
                                     <td>{{ script.updated_at|date:"Y-m-d H:i" }}</td>
                                     <td>
                                         <a href="{% url 'user_ai_script_edit' script.pk %}" class="btn btn-sm btn-outline-primary">編集</a>
+                                        {% if script.user == user %}
                                         <a href="{% url 'user_ai_script_delete' script.pk %}" class="btn btn-sm btn-outline-danger">削除</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}

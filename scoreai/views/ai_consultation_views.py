@@ -113,10 +113,34 @@ class AIConsultationView(SelectedCompanyMixin, TemplateView):
             is_active=True
         ).order_by('order', 'question')
         
+        # マイスクリプトを取得（自分が作成したもの + 選択中のCompanyに紐づくもの）
+        from ..models import UserCompany
+        from django.db.models import Q
+        
+        company_user_ids = None
+        if self.this_company:
+            company_user_ids = list(UserCompany.objects.filter(
+                company=self.this_company,
+                active=True
+            ).values_list('user_id', flat=True))
+        
+        script_query = Q(
+            consultation_type=consultation_type,
+            is_active=True
+        ) & (
+            Q(user=self.request.user) |  # 自分が作成したスクリプト
+            (Q(company=self.this_company) & Q(user_id__in=company_user_ids) if self.this_company and company_user_ids else Q(pk__isnull=True))  # Companyに紐づくスクリプト
+        )
+        
+        user_scripts = UserAIConsultationScript.objects.filter(
+            script_query
+        ).select_related('user', 'company').order_by('-is_default', '-created_at')
+        
         context['consultation_type'] = consultation_type
         context['histories'] = histories
         context['available_data'] = available_data
         context['faqs'] = faqs
+        context['user_scripts'] = user_scripts
         context['title'] = f'{consultation_type.name}'
         context['show_title_card'] = False  # タイトルカードを非表示（テンプレートで独自に表示）
         return context
@@ -157,18 +181,53 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 if faq and faq.script:
                     faq_script = faq.script
             
-            # スクリプトを取得（FAQ用 → ユーザー用 → システム用の順）
+            # スクリプトを取得（FAQ用 → 選択されたスクリプト → ユーザー用 → システム用の順）
             user_script = None
             system_script = None
             
+            # 選択されたスクリプトIDを取得
+            selected_script_id = request.POST.get('script_id', '').strip()
+            
             if not faq_script:
-                user_script = UserAIConsultationScript.objects.filter(
-                    user=request.user,
-                    consultation_type=consultation_type,
-                    is_active=True,
-                    is_default=True
-                ).first()
+                # 選択されたスクリプトがある場合はそれを使用
+                if selected_script_id:
+                    try:
+                        user_script = UserAIConsultationScript.objects.filter(
+                            id=selected_script_id,
+                            consultation_type=consultation_type,
+                            is_active=True
+                        ).first()
+                    except (ValueError, UserAIConsultationScript.DoesNotExist):
+                        pass
                 
+                # 選択されたスクリプトがない場合、デフォルトスクリプトを取得
+                if not user_script:
+                    from ..models import UserCompany
+                    from django.db.models import Q
+                    
+                    # 選択中のCompanyに属するUserのIDを取得
+                    company_user_ids = None
+                    if self.this_company:
+                        company_user_ids = list(UserCompany.objects.filter(
+                            company=self.this_company,
+                            active=True
+                        ).values_list('user_id', flat=True))
+                    
+                    # ユーザー独自のスクリプトを取得（自分が作成したもの + Companyに紐づくもの）
+                    script_query = Q(
+                        consultation_type=consultation_type,
+                        is_active=True,
+                        is_default=True
+                    ) & (
+                        Q(user=request.user) |  # 自分が作成したスクリプト
+                        (Q(company=self.this_company) & Q(user_id__in=company_user_ids) if self.this_company and company_user_ids else Q(pk__isnull=True))  # Companyに紐づくスクリプト
+                    )
+                    
+                    user_script = UserAIConsultationScript.objects.filter(
+                        script_query
+                    ).order_by('-created_at').first()
+                
+                # デフォルトスクリプトも見つからない場合はシステムスクリプトを使用
                 if not user_script:
                     system_script = AIConsultationScript.objects.filter(
                         consultation_type=consultation_type,
@@ -194,8 +253,15 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
             )
             
             # API利用回数をカウント（Company Userの場合のみ、上限内の場合のみ）
+            from ..utils.usage_tracking import increment_company_api_count
             if source == 'score':
                 increment_api_count(self.this_firm, user=request.user)
+                # CompanyごとのAPI利用回数もカウント
+                increment_company_api_count(self.this_company, self.this_firm, user=request.user)
+            elif source == 'company':
+                # CompanyのAPIキーを使用した場合もCompanyレベルでカウント
+                increment_company_api_count(self.this_company, self.this_firm, user=request.user)
+            # FirmのAPIキーを使用した場合はFirmレベルでカウントしない（既に上限を超えているため）
             
             # AI応答を生成
             # 現在はGeminiのみ対応（OpenAI対応は後で追加可能）

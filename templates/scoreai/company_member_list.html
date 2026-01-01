@@ -1,0 +1,269 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script>
+function handleDeleteSubmit(form, event, username) {
+  // 確認ダイアログを表示
+  if (!confirm(username + ' をメンバーから削除してもよろしいですか？')) {
+    // キャンセルの場合は何もしない
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
+  
+  // 確認が取れた場合のみ、ボタンを処理中状態にする
+  const button = form.querySelector('.delete-btn');
+  if (button && !button.disabled) {
+    const originalHTML = button.innerHTML;
+    button.disabled = true;
+    button.innerHTML = '<i class="ti ti-loader-2"></i><span>処理中...</span>';
+    
+    // フォーム送信が失敗した場合に備えて、一定時間後に元に戻す
+    setTimeout(function() {
+      if (button.disabled) {
+        button.disabled = false;
+        button.innerHTML = originalHTML;
+      }
+    }, 10000); // 10秒後にタイムアウト
+  }
+  
+  return true;
+}
+
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- 統計情報 -->
+<div class="row mb-4">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1">
+            <h6 class="text-muted mb-1">総メンバー数</h6>
+            <h4 class="fw-semibold mb-0">{{ total_members }}</h4>
+          </div>
+          <div class="ms-auto">
+            <i class="ti ti-users fs-8 text-primary"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1">
+            <h6 class="text-muted mb-1">アクティブメンバー</h6>
+            <h4 class="fw-semibold mb-0">{{ active_members }}</h4>
+          </div>
+          <div class="ms-auto">
+            <i class="ti ti-user-check fs-8 text-success"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="flex-grow-1">
+            <h6 class="text-muted mb-1">オーナー数</h6>
+            <h4 class="fw-semibold mb-0">{{ owner_count }}</h4>
+          </div>
+          <div class="ms-auto">
+            <i class="ti ti-crown fs-8 text-warning"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header d-flex align-items-center justify-content-between">
+        <h5 class="card-title fw-semibold mb-0">メンバー一覧</h5>
+        <a href="{% url 'company_member_invite' company_id=company.id %}" class="btn btn-primary">
+          <i class="ti ti-user-plus me-2"></i>
+          <span>メンバーを招待</span>
+        </a>
+      </div>
+      <div class="card-body p-4">
+        <div class="table-responsive">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">ユーザー名</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">メールアドレス</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">権限</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">ステータス</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for member in members %}
+              <tr>
+                <td class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">{{ member.user.username }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ member.user.email }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  {% if member.is_owner %}
+                  <span class="badge bg-warning">オーナー</span>
+                  {% else %}
+                  <span class="badge bg-secondary">メンバー</span>
+                  {% endif %}
+                </td>
+                <td class="border-bottom-0">
+                  {% if member.active %}
+                  <span class="badge bg-success">アクティブ</span>
+                  {% else %}
+                  <span class="badge bg-danger">非アクティブ</span>
+                  {% endif %}
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex gap-2">
+                    <!-- 削除 -->
+                    <form method="post" action="{% url 'company_member_delete' company_id=company.id member_id=member.id %}" style="display: inline;"
+                          class="no-auto-loading"
+                          onsubmit="return handleDeleteSubmit(this, event, '{{ member.user.username }}');">
+                      {% csrf_token %}
+                      <button type="submit" class="btn btn-sm btn-outline-danger delete-btn"
+                              {% if member.is_owner and owner_count <= 1 %}disabled title="最後のオーナーは削除できません"{% endif %}>
+                        <i class="ti ti-trash"></i>
+                        <span>削除</span>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center py-4">
+                  <p class="text-muted mb-0">メンバーが登録されていません。</p>
+                  <a href="{% url 'company_member_invite' company_id=company.id %}" class="btn btn-primary mt-3">
+                    <i class="ti ti-user-plus me-2"></i>
+                    <span>メンバーを招待</span>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="{% url 'company_member_invite' company_id=company.id %}" class="btn btn-primary">
+          <i class="ti ti-user-plus me-2"></i>
+          <span>メンバーを招待</span>
+        </a>
+        <a href="{% url 'company_detail' company.id %}" class="btn btn-outline-secondary ms-2">戻る</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 招待中のメンバー -->
+<div class="row mt-4">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-0">
+          <i class="ti ti-mail me-2"></i>招待中のメンバー
+        </h5>
+      </div>
+      <div class="card-body p-4">
+        {% if pending_invitations %}
+        <div class="table-responsive">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">メールアドレス</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">権限</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">招待日時</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">招待者</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for invitation in pending_invitations %}
+              <tr>
+                <td class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">{{ invitation.email }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  {% if invitation.is_owner %}
+                  <span class="badge bg-warning">オーナー</span>
+                  {% elif invitation.is_manager %}
+                  <span class="badge bg-info">マネージャー</span>
+                  {% else %}
+                  <span class="badge bg-secondary">メンバー</span>
+                  {% endif %}
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ invitation.invited_at|date:"Y年m月d日 H:i" }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ invitation.invited_by.username }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <form method="post" action="{% url 'company_invitation_cancel' company_id=company.id invitation_id=invitation.id %}" style="display: inline;"
+                        onsubmit="return confirm('{{ invitation.email }} への招待をキャンセルしてもよろしいですか？');">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="ti ti-x"></i>
+                      <span>キャンセル</span>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+          <i class="ti ti-mail-off" style="font-size: 48px; color: #ccc;"></i>
+          <p class="text-muted mt-3 mb-0">招待中のメンバーはいません</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

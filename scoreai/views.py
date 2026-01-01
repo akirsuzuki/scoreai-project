@@ -2452,8 +2452,6 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         from .utils.plan_limits import check_company_limit
         
         context = super().get_context_data(**kwargs)
-        clients_assigned = UserCompany.objects.filter(user=self.request.user, as_consultant=True).select_related('company')
-        context['clients_assigned'] = clients_assigned
         context['title'] = 'クライアント一覧'
         
         # Firmを取得してプラン制限情報を追加
@@ -2461,12 +2459,43 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context['user_firm'] = user_firm  # テンプレートで使用するため追加
         
         if user_firm:
+            # 選択中のFirmに属するCompanyのIDを取得
+            firm_company_ids = FirmCompany.objects.filter(
+                firm=user_firm.firm,
+                active=True
+            ).values_list('company_id', flat=True)
+            
+            # 自分がアサインされているクライアント（as_consultant=True）を取得
+            # かつ、そのCompanyが選択中のFirmに属しているもの
+            clients_assigned = UserCompany.objects.filter(
+                user=self.request.user,
+                as_consultant=True,
+                active=True,
+                company_id__in=firm_company_ids
+            ).select_related('company').prefetch_related(
+                'company__firm_companies'
+            ).order_by('company__name').distinct()
+            
+            # FirmCompanyの情報を取得してコンテキストに追加
+            # テンプレートでstart_dateを取得できるようにする
+            firm_companies_dict = {
+                fc.company_id: fc
+                for fc in FirmCompany.objects.filter(
+                    firm=user_firm.firm,
+                    company_id__in=firm_company_ids,
+                    active=True
+                )
+            }
+            context['firm_companies_dict'] = firm_companies_dict
+            context['clients_assigned'] = clients_assigned
+            
             is_allowed, current_count, max_allowed = check_company_limit(user_firm.firm)
             context['current_company_count'] = current_count
             context['max_companies'] = max_allowed
             context['is_unlimited'] = max_allowed == 0
             context['can_add_company'] = is_allowed
         else:
+            context['clients_assigned'] = UserCompany.objects.none()
             context['current_company_count'] = 0
             context['max_companies'] = 0
             context['is_unlimited'] = True

@@ -20,15 +20,13 @@
           <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
             <li class="breadcrumb-item"><a href="{% url 'subscription_manage' firm_id=firm.id %}" class="text-muted text-decoration-none">サブスクリプション管理</a></li>
-            <li class="breadcrumb-item active" aria-current="page">利用状況レポート</li>
+            <li class="breadcrumb-item"><a href="{% url 'usage_report' firm_id=firm.id %}" class="text-muted text-decoration-none">利用状況レポート</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ company.name }}</li>
           </ol>
         </nav>
       </div>
       <div class="d-flex gap-2">
-        <a href="{% url 'usage_report_export' firm_id=firm.id %}?months={{ months }}" class="btn btn-outline-primary">
-          <i class="ti ti-download me-1"></i>CSVエクスポート
-        </a>
-        <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-secondary">
+        <a href="{% url 'usage_report' firm_id=firm.id %}" class="btn btn-secondary">
           <i class="ti ti-arrow-left me-1"></i>戻る
         </a>
       </div>
@@ -41,7 +39,7 @@
     <div class="card">
       <div class="card-header">
         <div class="d-flex justify-content-between align-items-center">
-          <h5 class="card-title mb-0 fw-semibold">利用状況グラフ</h5>
+          <h5 class="card-title mb-0 fw-semibold">{{ company.name }} - 利用状況グラフ</h5>
           <div class="d-flex align-items-center gap-2">
             <label for="months" class="form-label mb-0">表示期間:</label>
             <select id="months" class="form-select form-select-sm" style="width: 100px;" onchange="updateMonths(this.value)">
@@ -103,66 +101,6 @@
     </div>
   </div>
 </div>
-
-{% if company_usage %}
-<div class="row mt-4">
-  <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">Company別利用状況（過去{{ months }}ヶ月）</h5>
-      </div>
-      <div class="card-body">
-        <div class="table-responsive">
-          <table class="table text-nowrap mb-0 align-middle">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Company名</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">AI相談回数</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">OCR読み込み回数</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">合計</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">操作</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for company in company_usage %}
-              <tr>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">{{ company.company_name }}</h6>
-                </td>
-                <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">{{ company.ai_consultation|intcomma }}</p>
-                </td>
-                <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">{{ company.ocr|intcomma }}</p>
-                </td>
-                <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">{{ company.total|intcomma }}</p>
-                </td>
-                <td class="border-bottom-0">
-                  <a href="{% url 'company_usage_report' firm_id=firm.id company_id=company.company_id %}" class="btn btn-sm btn-outline-primary">
-                    詳細
-                  </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
 
 <script>
 const chartData = {{ chart_data|safe }};

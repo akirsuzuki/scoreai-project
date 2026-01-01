@@ -52,28 +52,42 @@
 - **URL**: `/firm_clientslist/`
 - **ビュー**: `ClientsList`
 - **機能**:
-  - Firmに紐づくCompany一覧の表示
-  - プラン制限情報の表示（現在数/上限）
-  - 制限に達した場合の警告表示
-  - プランアップグレードへのリンク
+  - Firmに属するCompany一覧の表示
+  - プラン制限情報の表示
+  - Company追加機能（プラン制限チェック付き）
+  - アサインされているクライアント一覧の表示（選択中のFirmに属するもののみ）
 
-#### 2.2 クライアント追加・削除
-- **URL**: `/add_client/<client_id>/`, `/remove_client/<client_id>/`
+#### 2.2 アサイン一覧
+- **URL**: `/assigned-clients/`
+- **ビュー**: `AssignedClientsListView`
 - **機能**:
-  - クライアントの追加（プラン制限チェック付き）
-  - クライアントの削除（アサイン解除）
-  - プラン制限に達している場合のエラーメッセージ
+  - 自分がアサインされているクライアント一覧の表示（選択中のFirmに属するもののみ）
+  - 各クライアントの選択機能
 
-### 3. 利用状況追跡
+### 3. スタッフ管理
 
-#### 3.1 月次利用状況の記録
-- **モデル**: `FirmUsageTracking`
+#### 3.1 Firmメンバー管理
+- **URL**: `/firm/<firm_id>/members/`
+- **ビュー**: `FirmMemberListView`, `FirmMemberInviteView`, `FirmMemberDeleteView`, `FirmInvitationCancelView`
 - **機能**:
-  - AI相談回数の記録
-  - OCR読み込み回数の記録
-  - 月次リセット機能（管理コマンド）
+  - ✅ メンバー一覧の表示
+  - ✅ メンバーの追加・削除
+  - ✅ 権限の設定（オーナー、メンバー）
+  - ✅ メンバーの招待機能（メール招待）
+  - ✅ メンバーのアクティブ/非アクティブ管理
+  - ✅ 招待中のメンバー一覧表示
 
-#### 3.2 利用状況の表示
+### 4. 利用状況追跡
+
+#### 4.1 月次利用状況の記録
+- **モデル**: `FirmUsageTracking`, `CompanyUsageTracking`
+- **機能**:
+  - AI相談回数の記録（Company Userのみ）
+  - OCR読み込み回数の記録（Company Userのみ）
+  - API利用回数の記録（Firm/Companyレベル）
+  - 月次リセット機能（管理コマンド `reset_monthly_usage`）
+
+#### 4.2 利用状況の表示
 - **表示場所**: サブスクリプション管理ページ
 - **機能**:
   - 現在月の利用状況表示
@@ -81,23 +95,25 @@
   - 残り回数の表示
   - 制限に近づいた場合の警告表示
 
-#### 3.3 利用状況の自動追跡
+#### 4.3 利用状況の自動追跡
 - **実装場所**: `scoreai/utils/usage_tracking.py`
 - **機能**:
-  - AI相談実行時の自動カウント
-  - OCR処理実行時の自動カウント
+  - AI相談実行時の自動カウント（Company Userのみ）
+  - OCR処理実行時の自動カウント（Company Userのみ）
+  - API利用回数の自動カウント（Firm/Companyレベル）
   - 制限チェック機能
 
-### 4. 権限管理
+### 5. 権限管理
 
-#### 4.1 Firmオーナー権限チェック
-- **Mixin**: `FirmOwnerMixin`
+#### 5.1 Firmオーナー権限チェック
+- **Mixin**: `FirmOwnerMixin` (`scoreai/mixins.py`)
 - **機能**:
   - Firmオーナーのみがアクセス可能な機能の保護
   - プラン管理機能へのアクセス制御
   - サブスクリプション管理へのアクセス制御
+  - スタッフ管理へのアクセス制御
 
-#### 4.2 ユーザー属性の管理
+#### 5.2 ユーザー属性の管理
 - **モデル**: `UserFirm`
 - **機能**:
   - Firmへのユーザー追加
@@ -105,9 +121,19 @@
   - アクティブ/非アクティブの管理
   - 選択中のFirmの管理
 
-### 5. データモデル
+#### 5.3 Companyメンバー管理
+- **URL**: `/company/<company_id>/members/`
+- **ビュー**: `CompanyMemberListView`, `CompanyMemberInviteView`, `CompanyMemberDeleteView`
+- **機能**:
+  - Companyに所属するメンバー一覧の表示
+  - メンバーの招待（メール招待）
+  - メンバーの削除（非アクティブ化）
+  - オーナー権限・マネージャー権限の設定
+  - 招待中のメンバー一覧表示
 
-#### 5.1 Firm関連モデル
+### 6. データモデル
+
+#### 6.1 Firm関連モデル
 - **Firm**: Firmの基本情報
 - **UserFirm**: ユーザーとFirmの関連
 - **FirmCompany**: FirmとCompanyの関連
@@ -121,80 +147,89 @@
 
 ### 優先度: 高
 
-#### 1. Firmメンバー管理機能
-- **概要**: Firmに所属するユーザーの管理
+#### 1. ✅ Firmメンバー管理機能（実装済み）
+- **URL**: `/firm/<firm_id>/members/`
+- **ビュー**: `FirmMemberListView`, `FirmMemberInviteView`, `FirmMemberDeleteView`, `FirmInvitationCancelView`
 - **機能**:
-  - メンバー一覧の表示
-  - メンバーの追加・削除
-  - 権限の設定（オーナー、メンバー）
-  - メンバーの招待機能（メール招待）
-  - メンバーのアクティブ/非アクティブ管理
-- **URL例**: `/firm/<firm_id>/members/`
-- **実装場所**: 新規ビュー `FirmMemberListView`, `FirmMemberInviteView`
+  - ✅ メンバー一覧の表示
+  - ✅ メンバーの追加・削除
+  - ✅ 権限の設定（オーナー、メンバー）
+  - ✅ メンバーの招待機能（メール招待）
+  - ✅ メンバーのアクティブ/非アクティブ管理
+  - ✅ 招待中のメンバー一覧表示
 
-#### 2. プランダウングレード時の処理
-- **概要**: プランを下げる際の超過Company処理
+#### 2. ✅ プランダウングレード時の処理（実装済み）
+- **実装場所**: `scoreai/utils/plan_downgrade.py`, `scoreai/utils/plan_limits.py`
 - **機能**:
-  - グレース期間の設定（例: 30日間）
-  - 超過Companyの警告表示
-  - 自動的なCompany無効化（グレース期間後）
-  - ダウングレード前の確認画面
-- **実装場所**: `scoreai/utils/plan_limits.py` の拡張
+  - ✅ グレース期間の設定（`FirmCompany.grace_period_end`）
+  - ✅ 超過Companyの警告表示（通知機能と連携）
+  - ✅ 自動的なCompany無効化（グレース期間後、Stripe Webhookで処理）
+  - ✅ ダウングレード前の確認画面（Stripe Checkoutで処理）
+  - ✅ グレース期間終了の通知
 
-#### 3. 利用状況の詳細レポート
-- **概要**: より詳細な利用状況の可視化
+#### 3. ✅ 利用状況の詳細レポート（実装済み）
+- **URL**: `/firm/<firm_id>/usage/report/`
+- **ビュー**: `UsageReportView`, `CompanyUsageReportView`
 - **機能**:
-  - 月次利用状況のグラフ表示
-  - 過去数ヶ月の利用状況の比較
-  - Company別の利用状況表示
-  - エクスポート機能（CSV/Excel）
-- **URL例**: `/firm/<firm_id>/usage/report/`
+  - ✅ 月次利用状況のグラフ表示（Chart.js使用）
+  - ✅ 過去数ヶ月の利用状況の比較（1-24ヶ月選択可能）
+  - ✅ Company別の利用状況表示
+  - ✅ Company別の詳細レポート（`/firm/<firm_id>/companies/<company_id>/usage/`）
+  - ⏳ エクスポート機能（CSV/Excel）は未実装
 
-#### 4. 請求履歴の表示
-- **概要**: Stripeからの請求履歴の表示
+#### 4. ✅ 請求履歴の表示（実装済み）
+- **URL**: `/firm/<firm_id>/billing/history/`
+- **ビュー**: `BillingHistoryView`, `BillingInvoiceDetailView`, `PaymentMethodUpdateView`
 - **機能**:
-  - 過去の請求書一覧
-  - 請求書の詳細表示
-  - 請求書のダウンロード（PDF）
-  - 支払い方法の管理
-- **URL例**: `/firm/<firm_id>/billing/history/`
-- **実装場所**: 新規ビュー `BillingHistoryView`
+  - ✅ 過去の請求書一覧（Stripe Invoice）
+  - ✅ 請求書の詳細表示
+  - ✅ 請求書のダウンロード（PDF、Stripeから直接）
+  - ✅ 支払い方法の管理（Stripe Checkout経由）
 
 ### 優先度: 中
 
-#### 5. Firm設定管理
-- **概要**: Firmの基本設定の管理
+#### 5. ✅ Firm設定管理（部分実装）
+- **URL**: `/firm/<firm_id>/settings/`
+- **ビュー**: `FirmSettingsView`
 - **機能**:
-  - Firm名の変更
-  - Firmの説明・プロフィール設定
-  - 通知設定
-  - データ保持期間の設定
-- **URL例**: `/firm/<firm_id>/settings/`
+  - ✅ Firm名の変更
+  - ✅ APIキー・APIプロバイダーの設定（Firm/Companyレベル）
+  - ⏳ Firmの説明・プロフィール設定（未実装）
+  - ⏳ 通知設定（未実装）
+  - ⏳ データ保持期間の設定（未実装）
 
-#### 6. 通知機能
-- **概要**: 重要なイベントの通知
+#### 6. ✅ 通知機能（実装済み）
+- **URL**: `/firm/<firm_id>/notifications/`
+- **ビュー**: `NotificationListView`, `NotificationDetailView`, `NotificationMarkReadView`, `NotificationMarkAllReadView`
+- **モデル**: `FirmNotification`
 - **機能**:
-  - プラン制限に近づいた場合の通知
-  - 支払い失敗時の通知
-  - サブスクリプション更新の通知
-  - メンバー招待の通知
-- **実装場所**: 新規アプリ `notifications` または既存アプリに統合
+  - ✅ プラン制限に近づいた場合の通知
+  - ✅ 支払い失敗時の通知
+  - ✅ サブスクリプション更新の通知
+  - ✅ メンバー招待の通知
+  - ✅ プランダウングレード時の通知
+  - ✅ グレース期間終了の通知
+  - ✅ 未読通知数の表示（ヘッダーアイコン）
 
-#### 7. Company別の利用状況表示
-- **概要**: 各Companyの利用状況を個別に表示
+#### 7. ✅ Company別の利用状況表示（実装済み）
+- **URL**: `/firm/<firm_id>/companies/<company_id>/usage/`
+- **ビュー**: `CompanyUsageReportView`
 - **機能**:
-  - Company別のAI相談回数
-  - Company別のOCR読み込み回数
-  - Company別の利用状況グラフ
-- **URL例**: `/firm/<firm_id>/companies/<company_id>/usage/`
+  - ✅ Company別のAI相談回数
+  - ✅ Company別のOCR読み込み回数
+  - ✅ Company別の利用状況グラフ（Chart.js使用）
+  - ✅ 月次利用状況の一覧表示
+  - ✅ 表示期間の選択（3/6/12/24ヶ月）
 
-#### 8. プラン変更履歴
-- **概要**: 過去のプラン変更履歴の表示
+#### 8. ✅ プラン変更履歴（実装済み）
+- **URL**: `/firm/<firm_id>/subscription/history/`
+- **ビュー**: `SubscriptionHistoryView`
+- **モデル**: `SubscriptionHistory`
 - **機能**:
-  - プラン変更の日時と内容
-  - 変更理由の記録
-  - 変更前後の比較
-- **URL例**: `/firm/<firm_id>/subscription/history/`
+  - ✅ プラン変更の日時と内容
+  - ✅ 変更前後のプラン比較
+  - ✅ Stripeイベントとの連携（`customer.subscription.updated`）
+  - ⏳ 変更理由の記録（未実装）
 
 ### 優先度: 低（将来実装）
 
@@ -258,18 +293,18 @@
 ### Phase 1: 基盤機能の拡張（1-2ヶ月）
 1. ✅ プラン・サブスクリプション管理（実装済み）
 2. ✅ 利用状況追跡（実装済み）
-3. 🔄 Firmメンバー管理機能（実装中）
-4. 🔄 プランダウングレード時の処理（実装中）
+3. ✅ Firmメンバー管理機能（実装済み）
+4. ✅ プランダウングレード時の処理（実装済み：グレース期間、警告、自動無効化）
 
 ### Phase 2: 可視化・レポート機能（2-3ヶ月）
-5. 利用状況の詳細レポート
-6. 請求履歴の表示
-7. Company別の利用状況表示
-8. プラン変更履歴
+5. ✅ 利用状況の詳細レポート（実装済み）
+6. ✅ 請求履歴の表示（実装済み）
+7. ✅ Company別の利用状況表示（実装済み）
+8. ✅ プラン変更履歴（実装済み）
 
 ### Phase 3: 設定・通知機能（1-2ヶ月）
-9. Firm設定管理
-10. 通知機能
+9. ✅ Firm設定管理（部分実装：Firm名、APIキー設定）
+10. ✅ 通知機能（実装済み）
 
 ### Phase 4: 高度な機能（3-6ヶ月）
 11. API連携機能

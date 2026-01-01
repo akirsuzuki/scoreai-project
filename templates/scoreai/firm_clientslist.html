@@ -1,5 +1,6 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}
 {{ title }}
@@ -147,7 +148,11 @@
                   <p class="mb-0 fw-normal">{{ client.company.fiscal_month}}月</p>
                 </td>
                 <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">{{ client.start_date }}</p>
+                  <p class="mb-0 fw-normal">
+                    {% with firm_company=firm_companies_dict|get_item:client.company.id %}
+                      {% if firm_company %}{{ firm_company.start_date|date:"Y年m月d日" }}{% else %}-{% endif %}
+                    {% endwith %}
+                  </p>
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>

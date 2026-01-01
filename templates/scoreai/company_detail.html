@@ -80,6 +80,11 @@
       </div>
       <div class="card-footer text-end">
         <a href="{% url 'company_update' company.id %}" class="btn btn-primary">編集</a>
+        {% if is_company_owner %}
+          <a href="{% url 'company_member_list' company_id=company.id %}" class="btn btn-outline-primary ms-2">
+            <i class="ti ti-users me-1"></i>メンバー管理
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>

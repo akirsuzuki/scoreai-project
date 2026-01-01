@@ -3,7 +3,7 @@
 """
 from django.utils import timezone
 from django.db import transaction
-from ..models import Firm, FirmSubscription, FirmUsageTracking
+from ..models import Firm, FirmSubscription, FirmUsageTracking, Company, CompanyUsageTracking
 import logging
 
 logger = logging.getLogger(__name__)
@@ -140,5 +140,74 @@ def increment_ocr_count(firm: Firm, user=None) -> bool:
     usage_tracking.save()
     
     logger.info(f"Incremented OCR count for firm {firm.id}: {usage_tracking.ocr_count}")
+    return True
+
+
+def get_or_create_company_usage_tracking(company: Company, firm: Firm) -> CompanyUsageTracking:
+    """
+    現在の月のCompany利用状況追跡を取得または作成
+    
+    Args:
+        company: Companyオブジェクト
+        firm: Firmオブジェクト
+    
+    Returns:
+        CompanyUsageTrackingオブジェクト
+    """
+    now = timezone.now()
+    year = now.year
+    month = now.month
+    
+    usage_tracking, created = CompanyUsageTracking.objects.get_or_create(
+        company=company,
+        firm=firm,
+        year=year,
+        month=month,
+        defaults={
+            'ai_consultation_count': 0,
+            'ocr_count': 0,
+            'api_count': 0,
+            'is_reset': False,
+        }
+    )
+    
+    return usage_tracking
+
+
+@transaction.atomic
+def increment_company_api_count(company: Company, firm: Firm, user=None) -> bool:
+    """
+    CompanyのAPI利用回数をインクリメント（Company Userの場合のみ）
+    
+    Args:
+        company: Companyオブジェクト
+        firm: Firmオブジェクト
+        user: Userオブジェクト（Company Userの場合のみカウント）
+    
+    Returns:
+        成功した場合True、失敗した場合False
+    """
+    # Company Userの場合のみカウント
+    if user and not user.is_company_user:
+        return True  # カウントしないが、エラーではない
+    
+    try:
+        subscription = firm.subscription
+    except FirmSubscription.DoesNotExist:
+        logger.warning(f"Subscription not found for firm {firm.id}")
+        return False
+    
+    # 利用制限をチェック
+    if not subscription.is_active_subscription:
+        logger.warning(f"Subscription is not active for firm {firm.id}")
+        return False
+    
+    usage_tracking = get_or_create_company_usage_tracking(company, firm)
+    
+    # カウントをインクリメント
+    usage_tracking.api_count += 1
+    usage_tracking.save()
+    
+    logger.info(f"Incremented Company API count for company {company.id} in firm {firm.id}: {usage_tracking.api_count}")
     return True
 

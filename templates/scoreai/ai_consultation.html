@@ -250,6 +250,21 @@
                         </ul>
                     </div>
                     
+                    {% if user_scripts %}
+                    <div class="mb-3">
+                        <h6>【マイスクリプト】</h6>
+                        <select id="scriptSelect" class="form-select form-select-sm" style="max-width: 400px;">
+                            <option value="">デフォルトスクリプトを使用</option>
+                            {% for script in user_scripts %}
+                            <option value="{{ script.id }}" {% if script.is_default %}selected{% endif %}>
+                                {{ script.name }}{% if script.user != user %} ({{ script.user.username }}){% endif %}{% if script.company %} - {{ script.company.name }}{% endif %}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted d-block mt-1">スクリプトを選択すると、そのスクリプトの設定でAIが回答します。</small>
+                    </div>
+                    {% endif %}
+                    
                     {% if faqs %}
                     <div class="mb-3">
                         <h6>【よくある質問】</h6>
@@ -391,9 +406,19 @@ document.addEventListener('DOMContentLoaded', function() {
         sendButton.disabled = true;
         loadingIndicator.style.display = 'inline-block';
         
-        // APIリクエスト（FAQ IDも送信）
+        // 選択されたスクリプトIDを取得
+        const scriptSelect = document.getElementById('scriptSelect');
+        const selectedScriptId = scriptSelect ? scriptSelect.value : '';
+        
+        // APIリクエスト（FAQ IDとスクリプトIDも送信）
         const body = `message=${encodeURIComponent(message)}`;
-        const requestBody = currentFaqId ? `${body}&faq_id=${encodeURIComponent(currentFaqId)}` : body;
+        let requestBody = body;
+        if (currentFaqId) {
+            requestBody += `&faq_id=${encodeURIComponent(currentFaqId)}`;
+        }
+        if (selectedScriptId) {
+            requestBody += `&script_id=${encodeURIComponent(selectedScriptId)}`;
+        }
         
         fetch('{% url "ai_consultation_api" consultation_type.id %}', {
             method: 'POST',

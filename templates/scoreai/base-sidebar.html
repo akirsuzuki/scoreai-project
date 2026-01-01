@@ -280,26 +280,14 @@
         </li>
         {% endif %}
         
-        <!-- 3. is_financial_consultant=True かつ is_manager=False のユーザー -->
-        {% if user.is_financial_consultant and not user.is_manager %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Consultantメニュー</span>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
-          </a>
-        </li>
-        {% endif %}
-        
-        <!-- 4. is_financial_consultant=True かつ is_manager=True のユーザー -->
-        {% if user.is_financial_consultant and user.is_manager %}
+        <!-- 4. 選択中のCompanyがあるユーザー -->
+        {% load custom_tags %}
+        {% get_user_selected_company user as selected_company %}
+        {% if selected_company %}
         <!-- クライアント会社レベル設定 -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">クライアント会社レベル設定</span>
+          <span class="hide-menu">会社設定</span>
         </li>
         
         <li class="sidebar-item">
@@ -319,22 +307,31 @@
             <span class="hide-menu"><i class="ti ti-files me-2"></i>ストレージファイル</span>
           </a>
         </li>
+        {% endif %}
         
-        <!-- Consultantメニュー -->
+        <!-- 5. is_financial_consultant=True のユーザー（Consultant設定） -->
+        {% if user.is_financial_consultant %}
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Consultantメニュー</span>
+          <span class="hide-menu">コンサルタント設定</span>
         </li>
         
+        <!-- アサイン一覧：is_financial_consultant=True のユーザー全員が見れる -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'assigned_clients_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-list me-2"></i>アサイン一覧</span>
+          </a>
+        </li>
+        
+        <!-- クライアント一覧、スタッフ管理、プラン：Firmのオーナーのみ -->
+        {% get_user_firm_owner user as user_firm_owner %}
+        {% if user_firm_owner %}
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
             <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
           </a>
         </li>
         
-        {% load custom_tags %}
-        {% get_user_firm_owner user as user_firm_owner %}
-        {% if user_firm_owner %}
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
             <span class="hide-menu"><i class="ti ti-id me-2"></i>スタッフ管理</span>

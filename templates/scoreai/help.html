@@ -12,32 +12,34 @@
     <!-- カテゴリフィルター -->
     <div class="d-flex align-items-center gap-2 flex-wrap mb-4">
       <a href="{% url 'help' %}" 
-         class="btn d-flex align-items-center gap-2" 
-         style="{% if not selected_category %}background-color: #5D87FF; color: #ffffff; border: 1px solid #5D87FF;{% else %}background-color: #ffffff; color: #2A3547; border: 1px solid #e0e0e0;{% endif %} padding: 8px 16px; border-radius: 7px; font-weight: 500; text-decoration: none; transition: all 0.2s ease-in;">
+         class="btn btn-filter {% if not selected_category %}btn-filter-active{% endif %}">
         <i class="ti ti-list"></i>
         <span>全て</span>
       </a>
       {% for cat in categories %}
       <a href="{% url 'help' %}?category={{ cat.value }}" 
-         class="btn d-flex align-items-center gap-2"
-         style="{% if selected_category == cat.value %}background-color: #5D87FF; color: #ffffff; border: 1px solid #5D87FF;{% else %}background-color: #ffffff; color: #2A3547; border: 1px solid #e0e0e0;{% endif %} padding: 8px 16px; border-radius: 7px; font-weight: 500; text-decoration: none; transition: all 0.2s ease-in;">
+         class="btn btn-filter {% if selected_category == cat.value %}btn-filter-active{% endif %}">
         <i class="{{ cat.icon }}"></i>
         <span>{{ cat.label }}</span>
       </a>
       {% endfor %}
     </div>
 
-    <!-- ヘルプカードグリッド -->
+    <!-- ヘルプカードグリッド - Modernize Notesスタイル -->
     <div class="row g-3">
       {% for item in help_items %}
       <div class="col-md-6 col-lg-4">
-        <div class="card border h-100" style="cursor: pointer; border-left: 4px solid #5D87FF; transition: all 0.2s ease-in;" onclick="window.location.href='{% url 'help_detail' item.pk %}'" onmouseover="this.style.boxShadow='0 2px 8px rgba(0,0,0,0.1)';" onmouseout="this.style.boxShadow='none';">
-          <div class="card-body">
-            <h6 class="fw-semibold mb-2" style="color: #2A3547; font-size: 16px;">{{ item.title }}</h6>
-            <p class="text-muted mb-2 small" style="line-height: 1.6; color: #5A6A85; font-size: 13px;">{{ item.content|truncatewords:30|linebreaks }}</p>
+        <div class="card border help-card help-category-{{ item.category }} h-100" 
+             onclick="window.location.href='{% url 'help_detail' item.pk %}'">
+          <div class="card-body d-flex flex-column">
+            <h6 class="fw-semibold mb-3 help-card-title">
+              {{ item.title }}
+            </h6>
             <div class="d-flex align-items-center justify-content-between mt-auto pt-2">
-              <span class="badge bg-light text-dark" style="font-size: 11px; padding: 4px 8px; border-radius: 4px;">{{ item.get_category_display }}</span>
-              <i class="ti ti-arrow-right text-primary" style="font-size: 18px;"></i>
+              <span class="badge help-category-badge">
+                {{ item.get_category_display }}
+              </span>
+              <i class="ti ti-arrow-right help-card-arrow"></i>
             </div>
           </div>
         </div>

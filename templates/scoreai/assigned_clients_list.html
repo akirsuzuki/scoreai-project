@@ -1,0 +1,96 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div>
+        <h4 class="fw-semibold mb-1">{{ title }}</h4>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title }}</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-4">アサインされているクライアント</h5>
+      </div>
+      <div class="card-body p-4">
+        {% if assigned_clients %}
+        <div class="table-responsive">
+          <table class="table text-nowrap mb-0 align-middle">
+            <thead class="text-dark fs-4">
+              <tr>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">会社名</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">会計年度</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">有効User数</h6>
+                </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for client in assigned_clients %}
+              <tr>
+                <td class="border-bottom-0">
+                  <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ client.company.fiscal_month }}月</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ client.company.user_count }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <div class="d-flex align-items-center gap-2">
+                    {% if not client.is_selected %}
+                    <a href="{% url 'select_company' client.company.id %}" 
+                       class="btn btn-sm btn-primary" 
+                       title="選択">
+                      <i class="ti ti-check me-1"></i>選択
+                    </a>
+                    {% else %}
+                    <span class="badge bg-primary">選択中</span>
+                    {% endif %}
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-4">
+          <i class="ti ti-users-off" style="font-size: 48px; color: #ccc;"></i>
+          <p class="text-muted mt-3 mb-0">アサインされているクライアントがありません</p>
+        </div>
+        {% endif %}
+      </div>
+      <div class="card-footer">
+        <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

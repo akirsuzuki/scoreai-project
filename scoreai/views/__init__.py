@@ -22,6 +22,19 @@ from .company_views import (
     load_industry_subclassifications,
 )
 
+# Company member views
+from .company_member_views import (
+    CompanyMemberListView,
+    CompanyMemberInviteView,
+    CompanyMemberDeleteView,
+    CompanyInvitationCancelView,
+)
+
+# Assigned clients views
+from .assigned_clients_views import (
+    AssignedClientsListView,
+)
+
 # Utils
 from .utils import (
     get_finance_score,
@@ -155,6 +168,13 @@ __all__ = [
     'CompanyDetailView',
     'CompanyUpdateView',
     'load_industry_subclassifications',
+    # Company member
+    'CompanyMemberListView',
+    'CompanyMemberInviteView',
+    'CompanyMemberDeleteView',
+    'CompanyInvitationCancelView',
+    # Assigned clients
+    'AssignedClientsListView',
     # Utils
     'get_finance_score',
     'calculate_total_monthly_summaries',

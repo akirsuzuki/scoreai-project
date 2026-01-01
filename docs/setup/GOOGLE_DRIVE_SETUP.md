@@ -119,18 +119,22 @@ export GOOGLE_DRIVE_REDIRECT_URI='https://yourdomain.com/storage/google-drive/ca
    - アプリケーション全体で1つの設定
    - すべてのユーザーがこの設定を使用してGoogle認証を行う
 
-2. **各ユーザーのアクセストークン（ユーザーごと）**
-   - 各ユーザーが自分のGoogleアカウントで認証
-   - 認証後、各ユーザーのアクセストークン/リフレッシュトークンが`CloudStorageSetting`モデルに保存される
-   - ユーザーごとに異なるGoogle Driveアカウントと連携可能
+2. **各ユーザー×Companyのアクセストークン（Company単位）**
+   - 各ユーザーが選択中のCompanyに基づいてGoogleアカウントで認証
+   - 認証後、各ユーザー×Companyのアクセストークン/リフレッシュトークンが`CloudStorageSetting`モデルに保存される
+   - **重要**: 同じユーザーが異なるCompanyに属している場合、Companyごとに異なるGoogle Driveアカウントと連携可能
+   - 例: ユーザーAがCompany XとCompany Yに属している場合、Company X用とCompany Y用で異なるGoogle Driveアカウントを設定可能
 
 ### 動作の流れ
 
 1. **管理者**: Google Cloud ConsoleでOAuth2クライアントID/シークレットを作成し、`local_settings.py`に設定
-2. **各ユーザー**: `/storage/setting/`にアクセスして「Google Driveと連携」をクリック
-3. **各ユーザー**: 自分のGoogleアカウントでログインして認証
-4. **システム**: 各ユーザーのアクセストークンを`CloudStorageSetting`に保存
-5. **各ユーザー**: 自分のGoogle Driveアカウントのファイルにアクセス可能
+2. **各ユーザー**: 選択中のCompanyを確認してから`/storage/setting/`にアクセス
+3. **各ユーザー**: 「Google Driveと連携」をクリック
+4. **各ユーザー**: 自分のGoogleアカウントでログインして認証
+5. **システム**: ユーザー×選択中のCompanyのアクセストークンを`CloudStorageSetting`に保存
+6. **各ユーザー**: 選択中のCompanyに紐づくGoogle Driveアカウントのファイルにアクセス可能
+
+**注意**: Companyを切り替えた場合、そのCompany用の設定が表示されます。異なるCompanyには異なるGoogle Driveアカウントを連携できます。
 
 ## テスト手順
 

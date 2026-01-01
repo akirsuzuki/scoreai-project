@@ -8,6 +8,7 @@ from django.db import transaction
 import logging
 
 from ..models import Firm, FirmSubscription, FirmUsageTracking, Company, User
+from .usage_tracking import increment_company_api_count
 
 logger = logging.getLogger(__name__)
 

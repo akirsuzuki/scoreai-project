@@ -38,6 +38,18 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
             company=self.object,
             active=True
         ).select_related('user', 'company')
+        
+        # 現在のユーザーがこのCompanyのOwnerかどうかを判定
+        if self.request.user.is_authenticated:
+            context['is_company_owner'] = UserCompany.objects.filter(
+                user=self.request.user,
+                company=self.object,
+                is_owner=True,
+                active=True
+            ).exists()
+        else:
+            context['is_company_owner'] = False
+        
         return context
 
 

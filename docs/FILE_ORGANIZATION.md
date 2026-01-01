@@ -67,7 +67,14 @@ MDファイルを目的別に分類し、重複を統合・削除しました。
 
 ### プロジェクトルートに残ったファイル
 
-なし（すべて整理済み）
+以下のファイルはプロジェクトルートに残しています（ビジネス関連ドキュメント）：
+- `MARKETING_STRATEGY.md`: マーケティング戦略
+- `PRICING_PLAN_PROPOSAL.md`: 価格プラン提案
+
+以下のファイルは`docs/archive/`に移動しました：
+- `GOOGLE_DRIVE_API_ENABLE.md`
+- `GOOGLE_DRIVE_OAUTH_FIX.md`
+- `GOOGLE_DRIVE_TEST_GUIDE.md`
 
 ## ディレクトリ構造
 
