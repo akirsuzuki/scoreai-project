@@ -29,7 +29,8 @@ class NotificationListView(FirmOwnerMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = '通知一覧'
+        context['title'] = '通知'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # 未読通知数
@@ -66,7 +67,8 @@ class NotificationDetailView(FirmOwnerMixin, DetailView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = self.object.title
+        context['title'] = '通知'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
 

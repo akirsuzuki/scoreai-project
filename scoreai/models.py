@@ -914,9 +914,18 @@ class Debt(models.Model):
 
 
 class MeetingMinutes(models.Model):
+    CATEGORY_CHOICES = [
+        ('meeting', '打ち合わせ'),
+        ('shareholders', '株主総会'),
+        ('board', '取締役会'),
+        ('management', '経営会議/執行役員会'),
+        ('other', 'その他'),
+    ]
+    
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     meeting_date = models.DateField("ミーティング日")
+    category = models.CharField("カテゴリ", max_length=20, choices=CATEGORY_CHOICES, default='meeting')
     created_at = models.DateTimeField("作成日", auto_now_add=True)
     updated_at = models.DateTimeField("更新日", auto_now=True)
     notes = models.TextField("ミーティングノート")

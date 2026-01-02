@@ -11,9 +11,10 @@ from django.db.models import Q, Max
 from django.utils import timezone
 from datetime import datetime
 
-from ..models import FiscalSummary_Year, FiscalSummary_Month, Company
+from ..models import FiscalSummary_Year, FiscalSummary_Month, Company, UserAIConsultationScript, AIConsultationType, UserCompany
 from ..forms import FiscalSummary_YearForm, FiscalSummary_MonthForm
 from ..mixins import SelectedCompanyMixin, TransactionMixin
+from django.db.models import Q
 import logging
 
 logger = logging.getLogger(__name__)
@@ -51,8 +52,9 @@ class FiscalSummary_YearBudgetCreateView(SelectedCompanyMixin, TransactionMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '年次予算作成'
+        context['title'] = '予算管理'
         context['is_budget'] = True
+        context['show_title_card'] = False
         return context
 
 
@@ -76,7 +78,7 @@ class FiscalSummary_YearBudgetUpdateView(SelectedCompanyMixin, TransactionMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '年次予算更新'
+        context['title'] = '予算管理'
         context['is_budget'] = True
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
@@ -136,7 +138,7 @@ class FiscalSummary_MonthBudgetCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次予算作成'
+        context['title'] = '予算管理'
         context['is_budget'] = True
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
@@ -172,7 +174,7 @@ class FiscalSummary_MonthBudgetUpdateView(SelectedCompanyMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次予算更新'
+        context['title'] = '予算管理'
         context['is_budget'] = True
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
@@ -186,8 +188,27 @@ class BudgetVsActualComparisonView(SelectedCompanyMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         company = self.this_company
         
-        # 年度を取得（デフォルトは最新年度）
-        year = int(self.request.GET.get('year', timezone.now().year))
+        # 利用可能な年度を取得（予算または実績データが存在する年度）
+        available_years_list = list(FiscalSummary_Year.objects.filter(
+            company=company
+        ).values_list('year', flat=True).distinct().order_by('-year'))
+        
+        # デフォルト年度を取得
+        default_year = None
+        if available_years_list:
+            default_year = available_years_list[0]
+        else:
+            default_year = timezone.now().year
+        
+        # 年度を取得
+        year_param = self.request.GET.get('year')
+        if year_param:
+            try:
+                year = int(year_param)
+            except ValueError:
+                year = default_year
+        else:
+            year = default_year
         
         # 予算データを取得
         budget_year = FiscalSummary_Year.objects.filter(
@@ -196,13 +217,12 @@ class BudgetVsActualComparisonView(SelectedCompanyMixin, TemplateView):
             is_budget=True
         ).first()
         
-        # 実績データを取得
+        # 実績データを取得（is_draftの条件を緩和）
         actual_year = FiscalSummary_Year.objects.filter(
             company=company,
             year=year,
-            is_budget=False,
-            is_draft=False
-        ).first()
+            is_budget=False
+        ).order_by('-is_draft').first()
         
         # 月次データを取得
         budget_monthly = []
@@ -220,16 +240,169 @@ class BudgetVsActualComparisonView(SelectedCompanyMixin, TemplateView):
                 is_budget=False
             ).order_by('period')
         
+        # BS（貸借対照表）データを計算
+        bs_indicators = {}
+        bs_chart_data = {
+            'labels': [],
+            'budget': [],
+            'actual': [],
+        }
+        
+        if budget_year and actual_year:
+            # 資産の部
+            bs_indicators['cash_and_deposits'] = {
+                'budget': budget_year.cash_and_deposits,
+                'actual': actual_year.cash_and_deposits,
+                'diff': actual_year.cash_and_deposits - budget_year.cash_and_deposits,
+                'diff_rate': ((actual_year.cash_and_deposits - budget_year.cash_and_deposits) / budget_year.cash_and_deposits * 100) if budget_year.cash_and_deposits != 0 else 0,
+            }
+            
+            bs_indicators['accounts_receivable'] = {
+                'budget': budget_year.accounts_receivable if budget_year else 0,
+                'actual': actual_year.accounts_receivable,
+                'diff': (actual_year.accounts_receivable - budget_year.accounts_receivable) if budget_year else None,
+                'diff_rate': ((actual_year.accounts_receivable - budget_year.accounts_receivable) / budget_year.accounts_receivable * 100) if budget_year and budget_year.accounts_receivable != 0 else None,
+            }
+            
+            bs_indicators['inventory'] = {
+                'budget': budget_year.inventory if budget_year else 0,
+                'actual': actual_year.inventory,
+                'diff': (actual_year.inventory - budget_year.inventory) if budget_year else None,
+                'diff_rate': ((actual_year.inventory - budget_year.inventory) / budget_year.inventory * 100) if budget_year and budget_year.inventory != 0 else None,
+            }
+            
+            bs_indicators['total_current_assets'] = {
+                'budget': budget_year.total_current_assets if budget_year else 0,
+                'actual': actual_year.total_current_assets,
+                'diff': (actual_year.total_current_assets - budget_year.total_current_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_current_assets - budget_year.total_current_assets) / budget_year.total_current_assets * 100) if budget_year and budget_year.total_current_assets != 0 else None,
+            }
+            
+            bs_indicators['total_fixed_assets'] = {
+                'budget': budget_year.total_fixed_assets if budget_year else 0,
+                'actual': actual_year.total_fixed_assets,
+                'diff': (actual_year.total_fixed_assets - budget_year.total_fixed_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_fixed_assets - budget_year.total_fixed_assets) / budget_year.total_fixed_assets * 100) if budget_year and budget_year.total_fixed_assets != 0 else None,
+            }
+            
+            bs_indicators['total_assets'] = {
+                'budget': budget_year.total_assets if budget_year else 0,
+                'actual': actual_year.total_assets,
+                'diff': (actual_year.total_assets - budget_year.total_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_assets - budget_year.total_assets) / budget_year.total_assets * 100) if budget_year and budget_year.total_assets != 0 else None,
+            }
+            
+            # 負債の部
+            bs_indicators['accounts_payable'] = {
+                'budget': budget_year.accounts_payable if budget_year else 0,
+                'actual': actual_year.accounts_payable,
+                'diff': (actual_year.accounts_payable - budget_year.accounts_payable) if budget_year else None,
+                'diff_rate': ((actual_year.accounts_payable - budget_year.accounts_payable) / budget_year.accounts_payable * 100) if budget_year and budget_year.accounts_payable != 0 else None,
+            }
+            
+            bs_indicators['short_term_loans_payable'] = {
+                'budget': budget_year.short_term_loans_payable if budget_year else 0,
+                'actual': actual_year.short_term_loans_payable,
+                'diff': (actual_year.short_term_loans_payable - budget_year.short_term_loans_payable) if budget_year else None,
+                'diff_rate': ((actual_year.short_term_loans_payable - budget_year.short_term_loans_payable) / budget_year.short_term_loans_payable * 100) if budget_year and budget_year.short_term_loans_payable != 0 else None,
+            }
+            
+            bs_indicators['total_current_liabilities'] = {
+                'budget': budget_year.total_current_liabilities if budget_year else 0,
+                'actual': actual_year.total_current_liabilities,
+                'diff': (actual_year.total_current_liabilities - budget_year.total_current_liabilities) if budget_year else None,
+                'diff_rate': ((actual_year.total_current_liabilities - budget_year.total_current_liabilities) / budget_year.total_current_liabilities * 100) if budget_year and budget_year.total_current_liabilities != 0 else None,
+            }
+            
+            bs_indicators['long_term_loans_payable'] = {
+                'budget': budget_year.long_term_loans_payable if budget_year else 0,
+                'actual': actual_year.long_term_loans_payable,
+                'diff': (actual_year.long_term_loans_payable - budget_year.long_term_loans_payable) if budget_year else None,
+                'diff_rate': ((actual_year.long_term_loans_payable - budget_year.long_term_loans_payable) / budget_year.long_term_loans_payable * 100) if budget_year and budget_year.long_term_loans_payable != 0 else None,
+            }
+            
+            bs_indicators['total_liabilities'] = {
+                'budget': budget_year.total_liabilities if budget_year else 0,
+                'actual': actual_year.total_liabilities,
+                'diff': (actual_year.total_liabilities - budget_year.total_liabilities) if budget_year else None,
+                'diff_rate': ((actual_year.total_liabilities - budget_year.total_liabilities) / budget_year.total_liabilities * 100) if budget_year and budget_year.total_liabilities != 0 else None,
+            }
+            
+            # 純資産の部
+            bs_indicators['capital_stock'] = {
+                'budget': budget_year.capital_stock if budget_year else 0,
+                'actual': actual_year.capital_stock,
+                'diff': (actual_year.capital_stock - budget_year.capital_stock) if budget_year else None,
+                'diff_rate': ((actual_year.capital_stock - budget_year.capital_stock) / budget_year.capital_stock * 100) if budget_year and budget_year.capital_stock != 0 else None,
+            }
+            
+            bs_indicators['retained_earnings'] = {
+                'budget': budget_year.retained_earnings if budget_year else 0,
+                'actual': actual_year.retained_earnings,
+                'diff': (actual_year.retained_earnings - budget_year.retained_earnings) if budget_year else None,
+                'diff_rate': ((actual_year.retained_earnings - budget_year.retained_earnings) / budget_year.retained_earnings * 100) if budget_year and budget_year.retained_earnings != 0 else None,
+            }
+            
+            bs_indicators['total_net_assets'] = {
+                'budget': budget_year.total_net_assets if budget_year else 0,
+                'actual': actual_year.total_net_assets,
+                'diff': (actual_year.total_net_assets - budget_year.total_net_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_net_assets - budget_year.total_net_assets) / budget_year.total_net_assets * 100) if budget_year and budget_year.total_net_assets != 0 else None,
+            }
+            
+            # BSグラフ用データ
+            bs_chart_data = {
+                'labels': ['現金及び預金', '売上債権', '棚卸資産', '流動資産合計', '固定資産合計', '資産合計', '仕入債務', '短期借入金', '流動負債合計', '長期借入金', '負債合計', '資本金', '利益剰余金', '純資産合計'],
+                'budget': [
+                    budget_year.cash_and_deposits if budget_year else None,
+                    budget_year.accounts_receivable if budget_year else None,
+                    budget_year.inventory if budget_year else None,
+                    budget_year.total_current_assets if budget_year else None,
+                    budget_year.total_fixed_assets if budget_year else None,
+                    budget_year.total_assets if budget_year else None,
+                    budget_year.accounts_payable if budget_year else None,
+                    budget_year.short_term_loans_payable if budget_year else None,
+                    budget_year.total_current_liabilities if budget_year else None,
+                    budget_year.long_term_loans_payable if budget_year else None,
+                    budget_year.total_liabilities if budget_year else None,
+                    budget_year.capital_stock if budget_year else None,
+                    budget_year.retained_earnings if budget_year else None,
+                    budget_year.total_net_assets if budget_year else None,
+                ],
+                'actual': [
+                    actual_year.cash_and_deposits,
+                    actual_year.accounts_receivable,
+                    actual_year.inventory,
+                    actual_year.total_current_assets,
+                    actual_year.total_fixed_assets,
+                    actual_year.total_assets,
+                    actual_year.accounts_payable,
+                    actual_year.short_term_loans_payable,
+                    actual_year.total_current_liabilities,
+                    actual_year.long_term_loans_payable,
+                    actual_year.total_liabilities,
+                    actual_year.capital_stock,
+                    actual_year.retained_earnings,
+                    actual_year.total_net_assets,
+                ],
+            }
+        
+        # グラフデータをJSON形式に変換
+        import json
+        bs_chart_data_json = json.dumps(bs_chart_data)
+        
         context.update({
-            'title': '予算実績比較',
+            'title': '予算管理',
+            'show_title_card': False,
             'year': year,
             'budget_year': budget_year,
             'actual_year': actual_year,
             'budget_monthly': budget_monthly,
             'actual_monthly': actual_monthly,
-            'available_years': FiscalSummary_Year.objects.filter(
-                company=company
-            ).values_list('year', flat=True).distinct().order_by('-year'),
+            'bs_indicators': bs_indicators,
+            'bs_chart_data': bs_chart_data,
+            'bs_chart_data_json': bs_chart_data_json,
+            'available_years': available_years_list,
         })
         
         return context
@@ -279,86 +452,86 @@ class BudgetVsActualYearlyComparisonView(SelectedCompanyMixin, TemplateView):
             is_budget=False
         ).order_by('-is_draft').first()
         
-        # 経営指標を計算
+        # 経営指標を計算（予算がなくても実績があれば表示）
         financial_indicators = {}
-        if budget_year and actual_year:
+        if actual_year:  # 実績があれば表示
             # 売上高関連
             financial_indicators['sales'] = {
-                'budget': budget_year.sales,
+                'budget': budget_year.sales if budget_year else 0,
                 'actual': actual_year.sales,
-                'diff': actual_year.sales - budget_year.sales,
-                'diff_rate': ((actual_year.sales - budget_year.sales) / budget_year.sales * 100) if budget_year.sales > 0 else 0,
+                'diff': (actual_year.sales - budget_year.sales) if budget_year else None,
+                'diff_rate': ((actual_year.sales - budget_year.sales) / budget_year.sales * 100) if budget_year and budget_year.sales > 0 else None,
             }
             
             # 利益関連
             financial_indicators['gross_profit'] = {
-                'budget': budget_year.gross_profit,
+                'budget': budget_year.gross_profit if budget_year else 0,
                 'actual': actual_year.gross_profit,
-                'diff': actual_year.gross_profit - budget_year.gross_profit,
-                'diff_rate': ((actual_year.gross_profit - budget_year.gross_profit) / budget_year.gross_profit * 100) if budget_year.gross_profit != 0 else 0,
+                'diff': (actual_year.gross_profit - budget_year.gross_profit) if budget_year else None,
+                'diff_rate': ((actual_year.gross_profit - budget_year.gross_profit) / budget_year.gross_profit * 100) if budget_year and budget_year.gross_profit != 0 else None,
             }
             
             financial_indicators['operating_profit'] = {
-                'budget': budget_year.operating_profit,
+                'budget': budget_year.operating_profit if budget_year else 0,
                 'actual': actual_year.operating_profit,
-                'diff': actual_year.operating_profit - budget_year.operating_profit,
-                'diff_rate': ((actual_year.operating_profit - budget_year.operating_profit) / budget_year.operating_profit * 100) if budget_year.operating_profit != 0 else 0,
+                'diff': (actual_year.operating_profit - budget_year.operating_profit) if budget_year else None,
+                'diff_rate': ((actual_year.operating_profit - budget_year.operating_profit) / budget_year.operating_profit * 100) if budget_year and budget_year.operating_profit != 0 else None,
             }
             
             financial_indicators['ordinary_profit'] = {
-                'budget': budget_year.ordinary_profit,
+                'budget': budget_year.ordinary_profit if budget_year else 0,
                 'actual': actual_year.ordinary_profit,
-                'diff': actual_year.ordinary_profit - budget_year.ordinary_profit,
-                'diff_rate': ((actual_year.ordinary_profit - budget_year.ordinary_profit) / budget_year.ordinary_profit * 100) if budget_year.ordinary_profit != 0 else 0,
+                'diff': (actual_year.ordinary_profit - budget_year.ordinary_profit) if budget_year else None,
+                'diff_rate': ((actual_year.ordinary_profit - budget_year.ordinary_profit) / budget_year.ordinary_profit * 100) if budget_year and budget_year.ordinary_profit != 0 else None,
             }
             
             financial_indicators['net_profit'] = {
-                'budget': budget_year.net_profit,
+                'budget': budget_year.net_profit if budget_year else 0,
                 'actual': actual_year.net_profit,
-                'diff': actual_year.net_profit - budget_year.net_profit,
-                'diff_rate': ((actual_year.net_profit - budget_year.net_profit) / budget_year.net_profit * 100) if budget_year.net_profit != 0 else 0,
+                'diff': (actual_year.net_profit - budget_year.net_profit) if budget_year else None,
+                'diff_rate': ((actual_year.net_profit - budget_year.net_profit) / budget_year.net_profit * 100) if budget_year and budget_year.net_profit != 0 else None,
             }
             
             # 経営指標
             financial_indicators['gross_profit_margin'] = {
-                'budget': float(budget_year.gross_profit_margin) if budget_year.gross_profit_margin else 0,
+                'budget': float(budget_year.gross_profit_margin) if budget_year and budget_year.gross_profit_margin else 0,
                 'actual': float(actual_year.gross_profit_margin) if actual_year.gross_profit_margin else 0,
-                'diff': (float(actual_year.gross_profit_margin) if actual_year.gross_profit_margin else 0) - (float(budget_year.gross_profit_margin) if budget_year.gross_profit_margin else 0),
+                'diff': (float(actual_year.gross_profit_margin) if actual_year.gross_profit_margin else 0) - (float(budget_year.gross_profit_margin) if budget_year and budget_year.gross_profit_margin else 0) if budget_year else None,
             }
             
             financial_indicators['operating_profit_margin'] = {
-                'budget': float(budget_year.operating_profit_margin) if budget_year.operating_profit_margin else 0,
+                'budget': float(budget_year.operating_profit_margin) if budget_year and budget_year.operating_profit_margin else 0,
                 'actual': float(actual_year.operating_profit_margin) if actual_year.operating_profit_margin else 0,
-                'diff': (float(actual_year.operating_profit_margin) if actual_year.operating_profit_margin else 0) - (float(budget_year.operating_profit_margin) if budget_year.operating_profit_margin else 0),
+                'diff': (float(actual_year.operating_profit_margin) if actual_year.operating_profit_margin else 0) - (float(budget_year.operating_profit_margin) if budget_year and budget_year.operating_profit_margin else 0) if budget_year else None,
             }
             
             financial_indicators['ROA'] = {
-                'budget': float(budget_year.ROA) if budget_year.ROA else 0,
+                'budget': float(budget_year.ROA) if budget_year and budget_year.ROA else 0,
                 'actual': float(actual_year.ROA) if actual_year.ROA else 0,
-                'diff': (float(actual_year.ROA) if actual_year.ROA else 0) - (float(budget_year.ROA) if budget_year.ROA else 0),
+                'diff': (float(actual_year.ROA) if actual_year.ROA else 0) - (float(budget_year.ROA) if budget_year and budget_year.ROA else 0) if budget_year else None,
             }
             
             financial_indicators['equity_ratio'] = {
-                'budget': float(budget_year.equity_ratio) if budget_year.equity_ratio else 0,
+                'budget': float(budget_year.equity_ratio) if budget_year and budget_year.equity_ratio else 0,
                 'actual': float(actual_year.equity_ratio) if actual_year.equity_ratio else 0,
-                'diff': (float(actual_year.equity_ratio) if actual_year.equity_ratio else 0) - (float(budget_year.equity_ratio) if budget_year.equity_ratio else 0),
+                'diff': (float(actual_year.equity_ratio) if actual_year.equity_ratio else 0) - (float(budget_year.equity_ratio) if budget_year and budget_year.equity_ratio else 0) if budget_year else None,
             }
             
             financial_indicators['current_ratio'] = {
-                'budget': float(budget_year.current_ratio) if budget_year.current_ratio else 0,
+                'budget': float(budget_year.current_ratio) if budget_year and budget_year.current_ratio else 0,
                 'actual': float(actual_year.current_ratio) if actual_year.current_ratio else 0,
-                'diff': (float(actual_year.current_ratio) if actual_year.current_ratio else 0) - (float(budget_year.current_ratio) if budget_year.current_ratio else 0),
+                'diff': (float(actual_year.current_ratio) if actual_year.current_ratio else 0) - (float(budget_year.current_ratio) if budget_year and budget_year.current_ratio else 0) if budget_year else None,
             }
             
             # グラフ用データ
             chart_data = {
                 'labels': ['売上高', '粗利益', '営業利益', '経常利益', '当期純利益'],
                 'budget': [
-                    budget_year.sales,
-                    budget_year.gross_profit,
-                    budget_year.operating_profit,
-                    budget_year.ordinary_profit,
-                    budget_year.net_profit,
+                    budget_year.sales if budget_year else None,
+                    budget_year.gross_profit if budget_year else None,
+                    budget_year.operating_profit if budget_year else None,
+                    budget_year.ordinary_profit if budget_year else None,
+                    budget_year.net_profit if budget_year else None,
                 ],
                 'actual': [
                     actual_year.sales,
@@ -373,11 +546,11 @@ class BudgetVsActualYearlyComparisonView(SelectedCompanyMixin, TemplateView):
             indicators_chart_data = {
                 'labels': ['売上総利益率', '営業利益率', 'ROA', '自己資本比率', '流動比率'],
                 'budget': [
-                    float(budget_year.gross_profit_margin) if budget_year.gross_profit_margin else 0,
-                    float(budget_year.operating_profit_margin) if budget_year.operating_profit_margin else 0,
-                    float(budget_year.ROA) if budget_year.ROA else 0,
-                    float(budget_year.equity_ratio) if budget_year.equity_ratio else 0,
-                    float(budget_year.current_ratio) if budget_year.current_ratio else 0,
+                    float(budget_year.gross_profit_margin) if budget_year and budget_year.gross_profit_margin else None,
+                    float(budget_year.operating_profit_margin) if budget_year and budget_year.operating_profit_margin else None,
+                    float(budget_year.ROA) if budget_year and budget_year.ROA else None,
+                    float(budget_year.equity_ratio) if budget_year and budget_year.equity_ratio else None,
+                    float(budget_year.current_ratio) if budget_year and budget_year.current_ratio else None,
                 ],
                 'actual': [
                     float(actual_year.gross_profit_margin) if actual_year.gross_profit_margin else 0,
@@ -393,123 +566,123 @@ class BudgetVsActualYearlyComparisonView(SelectedCompanyMixin, TemplateView):
             
             # 資産の部
             bs_indicators['cash_and_deposits'] = {
-                'budget': budget_year.cash_and_deposits,
+                'budget': budget_year.cash_and_deposits if budget_year else 0,
                 'actual': actual_year.cash_and_deposits,
-                'diff': actual_year.cash_and_deposits - budget_year.cash_and_deposits,
-                'diff_rate': ((actual_year.cash_and_deposits - budget_year.cash_and_deposits) / budget_year.cash_and_deposits * 100) if budget_year.cash_and_deposits != 0 else 0,
+                'diff': (actual_year.cash_and_deposits - budget_year.cash_and_deposits) if budget_year else None,
+                'diff_rate': ((actual_year.cash_and_deposits - budget_year.cash_and_deposits) / budget_year.cash_and_deposits * 100) if budget_year and budget_year.cash_and_deposits != 0 else None,
             }
             
             bs_indicators['accounts_receivable'] = {
-                'budget': budget_year.accounts_receivable,
+                'budget': budget_year.accounts_receivable if budget_year else 0,
                 'actual': actual_year.accounts_receivable,
-                'diff': actual_year.accounts_receivable - budget_year.accounts_receivable,
-                'diff_rate': ((actual_year.accounts_receivable - budget_year.accounts_receivable) / budget_year.accounts_receivable * 100) if budget_year.accounts_receivable != 0 else 0,
+                'diff': (actual_year.accounts_receivable - budget_year.accounts_receivable) if budget_year else None,
+                'diff_rate': ((actual_year.accounts_receivable - budget_year.accounts_receivable) / budget_year.accounts_receivable * 100) if budget_year and budget_year.accounts_receivable != 0 else None,
             }
             
             bs_indicators['inventory'] = {
-                'budget': budget_year.inventory,
+                'budget': budget_year.inventory if budget_year else 0,
                 'actual': actual_year.inventory,
-                'diff': actual_year.inventory - budget_year.inventory,
-                'diff_rate': ((actual_year.inventory - budget_year.inventory) / budget_year.inventory * 100) if budget_year.inventory != 0 else 0,
+                'diff': (actual_year.inventory - budget_year.inventory) if budget_year else None,
+                'diff_rate': ((actual_year.inventory - budget_year.inventory) / budget_year.inventory * 100) if budget_year and budget_year.inventory != 0 else None,
             }
             
             bs_indicators['total_current_assets'] = {
-                'budget': budget_year.total_current_assets,
+                'budget': budget_year.total_current_assets if budget_year else 0,
                 'actual': actual_year.total_current_assets,
-                'diff': actual_year.total_current_assets - budget_year.total_current_assets,
-                'diff_rate': ((actual_year.total_current_assets - budget_year.total_current_assets) / budget_year.total_current_assets * 100) if budget_year.total_current_assets != 0 else 0,
+                'diff': (actual_year.total_current_assets - budget_year.total_current_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_current_assets - budget_year.total_current_assets) / budget_year.total_current_assets * 100) if budget_year and budget_year.total_current_assets != 0 else None,
             }
             
             bs_indicators['total_fixed_assets'] = {
-                'budget': budget_year.total_fixed_assets,
+                'budget': budget_year.total_fixed_assets if budget_year else 0,
                 'actual': actual_year.total_fixed_assets,
-                'diff': actual_year.total_fixed_assets - budget_year.total_fixed_assets,
-                'diff_rate': ((actual_year.total_fixed_assets - budget_year.total_fixed_assets) / budget_year.total_fixed_assets * 100) if budget_year.total_fixed_assets != 0 else 0,
+                'diff': (actual_year.total_fixed_assets - budget_year.total_fixed_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_fixed_assets - budget_year.total_fixed_assets) / budget_year.total_fixed_assets * 100) if budget_year and budget_year.total_fixed_assets != 0 else None,
             }
             
             bs_indicators['total_assets'] = {
-                'budget': budget_year.total_assets,
+                'budget': budget_year.total_assets if budget_year else 0,
                 'actual': actual_year.total_assets,
-                'diff': actual_year.total_assets - budget_year.total_assets,
-                'diff_rate': ((actual_year.total_assets - budget_year.total_assets) / budget_year.total_assets * 100) if budget_year.total_assets != 0 else 0,
+                'diff': (actual_year.total_assets - budget_year.total_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_assets - budget_year.total_assets) / budget_year.total_assets * 100) if budget_year and budget_year.total_assets != 0 else None,
             }
             
             # 負債の部
             bs_indicators['accounts_payable'] = {
-                'budget': budget_year.accounts_payable,
+                'budget': budget_year.accounts_payable if budget_year else 0,
                 'actual': actual_year.accounts_payable,
-                'diff': actual_year.accounts_payable - budget_year.accounts_payable,
-                'diff_rate': ((actual_year.accounts_payable - budget_year.accounts_payable) / budget_year.accounts_payable * 100) if budget_year.accounts_payable != 0 else 0,
+                'diff': (actual_year.accounts_payable - budget_year.accounts_payable) if budget_year else None,
+                'diff_rate': ((actual_year.accounts_payable - budget_year.accounts_payable) / budget_year.accounts_payable * 100) if budget_year and budget_year.accounts_payable != 0 else None,
             }
             
             bs_indicators['short_term_loans_payable'] = {
-                'budget': budget_year.short_term_loans_payable,
+                'budget': budget_year.short_term_loans_payable if budget_year else 0,
                 'actual': actual_year.short_term_loans_payable,
-                'diff': actual_year.short_term_loans_payable - budget_year.short_term_loans_payable,
-                'diff_rate': ((actual_year.short_term_loans_payable - budget_year.short_term_loans_payable) / budget_year.short_term_loans_payable * 100) if budget_year.short_term_loans_payable != 0 else 0,
+                'diff': (actual_year.short_term_loans_payable - budget_year.short_term_loans_payable) if budget_year else None,
+                'diff_rate': ((actual_year.short_term_loans_payable - budget_year.short_term_loans_payable) / budget_year.short_term_loans_payable * 100) if budget_year and budget_year.short_term_loans_payable != 0 else None,
             }
             
             bs_indicators['total_current_liabilities'] = {
-                'budget': budget_year.total_current_liabilities,
+                'budget': budget_year.total_current_liabilities if budget_year else 0,
                 'actual': actual_year.total_current_liabilities,
-                'diff': actual_year.total_current_liabilities - budget_year.total_current_liabilities,
-                'diff_rate': ((actual_year.total_current_liabilities - budget_year.total_current_liabilities) / budget_year.total_current_liabilities * 100) if budget_year.total_current_liabilities != 0 else 0,
+                'diff': (actual_year.total_current_liabilities - budget_year.total_current_liabilities) if budget_year else None,
+                'diff_rate': ((actual_year.total_current_liabilities - budget_year.total_current_liabilities) / budget_year.total_current_liabilities * 100) if budget_year and budget_year.total_current_liabilities != 0 else None,
             }
             
             bs_indicators['long_term_loans_payable'] = {
-                'budget': budget_year.long_term_loans_payable,
+                'budget': budget_year.long_term_loans_payable if budget_year else 0,
                 'actual': actual_year.long_term_loans_payable,
-                'diff': actual_year.long_term_loans_payable - budget_year.long_term_loans_payable,
-                'diff_rate': ((actual_year.long_term_loans_payable - budget_year.long_term_loans_payable) / budget_year.long_term_loans_payable * 100) if budget_year.long_term_loans_payable != 0 else 0,
+                'diff': (actual_year.long_term_loans_payable - budget_year.long_term_loans_payable) if budget_year else None,
+                'diff_rate': ((actual_year.long_term_loans_payable - budget_year.long_term_loans_payable) / budget_year.long_term_loans_payable * 100) if budget_year and budget_year.long_term_loans_payable != 0 else None,
             }
             
             bs_indicators['total_liabilities'] = {
-                'budget': budget_year.total_liabilities,
+                'budget': budget_year.total_liabilities if budget_year else 0,
                 'actual': actual_year.total_liabilities,
-                'diff': actual_year.total_liabilities - budget_year.total_liabilities,
-                'diff_rate': ((actual_year.total_liabilities - budget_year.total_liabilities) / budget_year.total_liabilities * 100) if budget_year.total_liabilities != 0 else 0,
+                'diff': (actual_year.total_liabilities - budget_year.total_liabilities) if budget_year else None,
+                'diff_rate': ((actual_year.total_liabilities - budget_year.total_liabilities) / budget_year.total_liabilities * 100) if budget_year and budget_year.total_liabilities != 0 else None,
             }
             
             # 純資産の部
             bs_indicators['capital_stock'] = {
-                'budget': budget_year.capital_stock,
+                'budget': budget_year.capital_stock if budget_year else 0,
                 'actual': actual_year.capital_stock,
-                'diff': actual_year.capital_stock - budget_year.capital_stock,
-                'diff_rate': ((actual_year.capital_stock - budget_year.capital_stock) / budget_year.capital_stock * 100) if budget_year.capital_stock != 0 else 0,
+                'diff': (actual_year.capital_stock - budget_year.capital_stock) if budget_year else None,
+                'diff_rate': ((actual_year.capital_stock - budget_year.capital_stock) / budget_year.capital_stock * 100) if budget_year and budget_year.capital_stock != 0 else None,
             }
             
             bs_indicators['retained_earnings'] = {
-                'budget': budget_year.retained_earnings,
+                'budget': budget_year.retained_earnings if budget_year else 0,
                 'actual': actual_year.retained_earnings,
-                'diff': actual_year.retained_earnings - budget_year.retained_earnings,
-                'diff_rate': ((actual_year.retained_earnings - budget_year.retained_earnings) / budget_year.retained_earnings * 100) if budget_year.retained_earnings != 0 else 0,
+                'diff': (actual_year.retained_earnings - budget_year.retained_earnings) if budget_year else None,
+                'diff_rate': ((actual_year.retained_earnings - budget_year.retained_earnings) / budget_year.retained_earnings * 100) if budget_year and budget_year.retained_earnings != 0 else None,
             }
             
             bs_indicators['total_net_assets'] = {
-                'budget': budget_year.total_net_assets,
+                'budget': budget_year.total_net_assets if budget_year else 0,
                 'actual': actual_year.total_net_assets,
-                'diff': actual_year.total_net_assets - budget_year.total_net_assets,
-                'diff_rate': ((actual_year.total_net_assets - budget_year.total_net_assets) / budget_year.total_net_assets * 100) if budget_year.total_net_assets != 0 else 0,
+                'diff': (actual_year.total_net_assets - budget_year.total_net_assets) if budget_year else None,
+                'diff_rate': ((actual_year.total_net_assets - budget_year.total_net_assets) / budget_year.total_net_assets * 100) if budget_year and budget_year.total_net_assets != 0 else None,
             }
             
             # BSグラフ用データ
             bs_chart_data = {
                 'labels': ['現金及び預金', '売上債権', '棚卸資産', '流動資産合計', '固定資産合計', '資産合計', '仕入債務', '短期借入金', '流動負債合計', '長期借入金', '負債合計', '資本金', '利益剰余金', '純資産合計'],
                 'budget': [
-                    budget_year.cash_and_deposits,
-                    budget_year.accounts_receivable,
-                    budget_year.inventory,
-                    budget_year.total_current_assets,
-                    budget_year.total_fixed_assets,
-                    budget_year.total_assets,
-                    budget_year.accounts_payable,
-                    budget_year.short_term_loans_payable,
-                    budget_year.total_current_liabilities,
-                    budget_year.long_term_loans_payable,
-                    budget_year.total_liabilities,
-                    budget_year.capital_stock,
-                    budget_year.retained_earnings,
-                    budget_year.total_net_assets,
+                    budget_year.cash_and_deposits if budget_year else None,
+                    budget_year.accounts_receivable if budget_year else None,
+                    budget_year.inventory if budget_year else None,
+                    budget_year.total_current_assets if budget_year else None,
+                    budget_year.total_fixed_assets if budget_year else None,
+                    budget_year.total_assets if budget_year else None,
+                    budget_year.accounts_payable if budget_year else None,
+                    budget_year.short_term_loans_payable if budget_year else None,
+                    budget_year.total_current_liabilities if budget_year else None,
+                    budget_year.long_term_loans_payable if budget_year else None,
+                    budget_year.total_liabilities if budget_year else None,
+                    budget_year.capital_stock if budget_year else None,
+                    budget_year.retained_earnings if budget_year else None,
+                    budget_year.total_net_assets if budget_year else None,
                 ],
                 'actual': [
                     actual_year.cash_and_deposits,
@@ -554,6 +727,7 @@ class BudgetVsActualYearlyComparisonView(SelectedCompanyMixin, TemplateView):
         
         context.update({
             'title': '年次予算vs実績比較',
+            'show_title_card': False,
             'year': year,
             'budget_year': budget_year,
             'actual_year': actual_year,
@@ -770,7 +944,8 @@ class BudgetVsActualMonthlyComparisonView(SelectedCompanyMixin, TemplateView):
         logger.info(f"BudgetVsActualMonthlyComparisonView: year={year}, monthly_comparison_count={len(monthly_comparison)}")
         
         context.update({
-            'title': '月次予算vs実績推移表',
+            'title': '予算vs実績推移表',
+            'show_title_card': False,
             'year': year,
             'monthly_comparison': monthly_comparison,
             'chart_data': chart_data,
@@ -822,6 +997,13 @@ class BudgetSuggestForm(forms.Form):
         required=False,
         help_text='資本金の増加予定額を入力してください'
     )
+    user_script = forms.ModelChoiceField(
+        queryset=UserAIConsultationScript.objects.none(),
+        label='マイスクリプト',
+        required=False,
+        help_text='使用するマイスクリプトを選択してください（オプション）',
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
 
 class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
@@ -829,6 +1011,47 @@ class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = 'scoreai/budget_suggest.html'
     form_class = BudgetSuggestForm
     success_url = reverse_lazy('fiscal_summary_year_list')
+
+    def get_form(self, form_class=None):
+        """フォームを取得し、マイスクリプトのquerysetを設定"""
+        form = super().get_form(form_class)
+        
+        # 相談タイプ「予算策定」を取得
+        try:
+            budget_consultation_type = AIConsultationType.objects.filter(
+                name='予算策定',
+                is_active=True
+            ).first()
+        except AIConsultationType.DoesNotExist:
+            budget_consultation_type = None
+        
+        if budget_consultation_type:
+            # 選択中のCompanyに属するUserのIDを取得
+            company_user_ids = None
+            if self.this_company:
+                company_user_ids = list(UserCompany.objects.filter(
+                    company=self.this_company,
+                    active=True
+                ).values_list('user_id', flat=True))
+            
+            # マイスクリプトを取得（自分が作成したもの + Companyに紐づくもの）
+            script_query = Q(
+                consultation_type=budget_consultation_type,
+                is_active=True
+            ) & (
+                Q(user=self.request.user) |  # 自分が作成したスクリプト
+                (Q(company=self.this_company) & Q(user_id__in=company_user_ids) if self.this_company and company_user_ids else Q(pk__isnull=True))  # Companyに紐づくスクリプト
+            )
+            
+            user_scripts = UserAIConsultationScript.objects.filter(
+                script_query
+            ).select_related('user', 'company').order_by('-is_default', '-created_at')
+            
+            form.fields['user_script'].queryset = user_scripts
+        else:
+            form.fields['user_script'].queryset = UserAIConsultationScript.objects.none()
+        
+        return form
 
     def get_initial(self):
         initial = super().get_initial()
@@ -846,7 +1069,8 @@ class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '予算サジェスト（AI生成）'
+        context['title'] = 'AI予算策定（年次）'
+        context['show_title_card'] = False
         
         # 前期実績を取得
         company = self.this_company
@@ -867,6 +1091,7 @@ class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
         investment_amount = form.cleaned_data.get('investment_amount', 0)
         borrowing_amount = form.cleaned_data.get('borrowing_amount', 0)
         capital_increase = form.cleaned_data.get('capital_increase', 0)
+        user_script = form.cleaned_data.get('user_script')
         
         # 前期実績を取得
         previous_year = target_year - 1
@@ -892,7 +1117,8 @@ class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
                 sales_growth_rate,
                 investment_amount,
                 borrowing_amount,
-                capital_increase
+                capital_increase,
+                user_script=user_script
             )
             
             # 予算データを作成
@@ -1015,7 +1241,7 @@ class BudgetSuggest_MonthView(SelectedCompanyMixin, TransactionMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次予算作成（年次予算から）'
+        context['title'] = 'AI予算策定（月次）'
         context['show_title_card'] = False
         
         # 前年の実績データを取得（方法2で使用）
@@ -1306,14 +1532,23 @@ class BudgetAnalysisView(SelectedCompanyMixin, TemplateView):
         ).first()
         
         if not budget_year or not actual_year:
-            context['error'] = '予算または実績データが見つかりません。'
+            context.update({
+                'error': '予算または実績データが見つかりません。',
+                'title': '予算分析',
+                'show_title_card': False,
+                'year': year,
+                'available_years': FiscalSummary_Year.objects.filter(
+                    company=company
+                ).values_list('year', flat=True).distinct().order_by('-year'),
+            })
             return context
         
         # AI分析を実行
         analysis_result = self._analyze_budget_vs_actual(budget_year, actual_year)
         
         context.update({
-            'title': '予算実績AI分析',
+            'title': '予算分析',
+            'show_title_card': False,
             'year': year,
             'budget_year': budget_year,
             'actual_year': actual_year,

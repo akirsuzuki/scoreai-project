@@ -273,6 +273,13 @@ class StockEventLineForm(forms.ModelForm):
         model = StockEventLine
         fields = '__all__'
         exclude = ['stock_event']
+        widgets = {
+            'stakeholder': forms.Select(attrs={'class': 'form-control'}),
+            'share_quantity': forms.NumberInput(attrs={'class': 'form-control'}),
+            'share_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'acquisition_price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'memo': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
+        }
 
 
 class CsvUploadForm(forms.Form):
@@ -294,9 +301,10 @@ class MeetingMinutesForm(forms.ModelForm):
     )
     class Meta:
         model = MeetingMinutes
-        fields = ['company', 'created_by', 'meeting_date', 'notes']
+        fields = ['company', 'created_by', 'meeting_date', 'category', 'notes']
         widgets = {
             'meeting_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
             # 'notes' widget is overridden by the CharField above
         }
 

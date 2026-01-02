@@ -75,21 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div>
-        <h4 class="fw-semibold mb-1">{{ title }}</h4>
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="{% url 'index' %}" class="text-muted text-decoration-none">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'meeting_minutes_list' %}" class="text-muted text-decoration-none">ノート一覧</a></li>
-            <li class="breadcrumb-item active" aria-current="page">AI議事録生成</li>
-          </ol>
-        </nav>
-      </div>
-      <div>
-        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-secondary">
-          <i class="ti ti-arrow-left me-1"></i>戻る
-        </a>
-      </div>
+      <h4 class="fw-semibold mb-0">AI議事録生成</h4>
+      <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-secondary">
+        <i class="ti ti-arrow-left me-1"></i>戻る
+      </a>
     </div>
   </div>
 </div>

@@ -34,6 +34,7 @@ class AdminAIScriptListView(UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'AIスクリプト管理（システム）'
+        context['show_title_card'] = False
         context['consultation_types'] = AIConsultationType.objects.filter(is_active=True).order_by('order')
         return context
 
@@ -55,7 +56,8 @@ class AdminAIScriptCreateView(UserPassesTestMixin, CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'AIスクリプト作成（システム）'
+        context['title'] = 'AIスクリプト管理（システム）'
+        context['show_title_card'] = False
         return context
 
 
@@ -75,7 +77,8 @@ class AdminAIScriptUpdateView(UserPassesTestMixin, UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'AIスクリプト編集（システム）'
+        context['title'] = 'AIスクリプト管理（システム）'
+        context['show_title_card'] = False
         return context
 
 
@@ -94,7 +97,8 @@ class AdminAIScriptDeleteView(UserPassesTestMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'AIスクリプト削除確認（システム）'
+        context['title'] = 'AIスクリプト管理（システム）'
+        context['show_title_card'] = False
         return context
 
 
@@ -132,6 +136,7 @@ class UserAIScriptListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'マイスクリプト'
+        context['show_title_card'] = False
         context['consultation_types'] = AIConsultationType.objects.filter(is_active=True).order_by('order')
         context['selected_company'] = self.this_company
         return context
@@ -160,7 +165,8 @@ class UserAIScriptCreateView(SelectedCompanyMixin, CreateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'マイスクリプト作成'
+        context['title'] = 'マイスクリプト'
+        context['show_title_card'] = False
         context['selected_company'] = self.this_company
         return context
 
@@ -213,7 +219,8 @@ class UserAIScriptUpdateView(SelectedCompanyMixin, UpdateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'マイスクリプト編集'
+        context['title'] = 'マイスクリプト'
+        context['show_title_card'] = False
         context['selected_company'] = self.this_company
         return context
 
@@ -234,6 +241,7 @@ class UserAIScriptDeleteView(SelectedCompanyMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'マイスクリプト削除確認'
+        context['title'] = 'マイスクリプト'
+        context['show_title_card'] = False
         return context
 

@@ -61,7 +61,8 @@ class CompanyMemberListView(LoginRequiredMixin, ErrorHandlingMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Companyメンバー管理'
+        context['title'] = '会社メンバー管理'
+        context['show_title_card'] = False
         context['company'] = self.company
         
         # 統計情報
@@ -110,7 +111,8 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'メンバー招待'
+        context['title'] = '会社メンバー管理'
+        context['show_title_card'] = False
         context['company'] = self.company
         return context
     

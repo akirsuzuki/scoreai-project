@@ -9,7 +9,11 @@
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">ノート一覧</h4>
+      <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-primary btn-sm">ノート一覧</a>
+        <a href="{% url 'meeting_minutes_create' %}" class="btn btn-outline-primary btn-sm">新規ノート作成</a>
+      </div>
     </div>
   </div>
 </div>
@@ -39,6 +43,7 @@
                 <thead class="table-light">
                     <tr>
                         <th>ミーティング日</th>
+                        <th>カテゴリ</th>
                         <th>内容</th>
                         <th>作成ユーザー</th>
                         <th>操作</th>
@@ -48,6 +53,7 @@
                     {% for meeting in meeting_minutes %}
                     <tr>
                         <td>{{ meeting.meeting_date|date:"Y-m-d" }}</td>
+                        <td>{{ meeting.get_category_display }}</td>
                         <td>
                             <span class="notes-preview" data-full-notes="{{ meeting.notes }}">{{ meeting.notes|truncatechars:30 }}</span>
                         </td>

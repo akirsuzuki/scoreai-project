@@ -44,7 +44,8 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = '決算書OCR読み込み'
+        context['title'] = 'OCR読み込み'
+        context['show_title_card'] = False
         
         # プレビューデータがセッションに保存されている場合は取得
         if 'ocr_preview_data' in self.request.session:

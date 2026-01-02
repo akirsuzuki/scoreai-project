@@ -40,6 +40,7 @@ class StorageFileListView(SelectedCompanyMixin, LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context['title'] = 'ストレージファイル一覧'
+        context['show_title_card'] = False
         
         # ストレージ設定を取得（選択中のCompanyに基づく）
         try:

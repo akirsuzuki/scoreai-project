@@ -26,7 +26,8 @@ class CloudStorageSettingView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'クラウドストレージ設定'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         
         # 既存の設定を取得（選択中のCompanyに基づく）
@@ -88,7 +89,8 @@ class GoogleDriveOAuthInitView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Google Drive認証'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         context['storage_type'] = 'google_drive'
         context['storage_name'] = 'Google Drive'
@@ -126,7 +128,8 @@ class GoogleDriveOAuthCallbackView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Google Drive認証中'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         context['storage_name'] = 'Google Drive'
         return context
@@ -256,7 +259,8 @@ class BoxOAuthInitView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Box認証'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         context['storage_type'] = 'box'
         context['storage_name'] = 'Box'
@@ -291,7 +295,8 @@ class BoxOAuthCallbackView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Box認証中'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         context['storage_name'] = 'Box'
         return context
@@ -428,7 +433,8 @@ class CloudStorageDisconnectView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context['title'] = 'クラウドストレージ連携解除'
+        context['title'] = 'クラウドストレージ'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         return context
     

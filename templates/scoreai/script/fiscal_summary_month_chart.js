@@ -1,6 +1,7 @@
 <script>
   const monthlySummaries = {{ monthly_summaries|safe }}.reverse();
   const monthsLabel = {{ months_label|safe }};
+  const budgetChartData = {{ budget_chart_data|safe }};
   const salesData = [];
   const grossProfitData = [];
   const operatingProfitData = [];
@@ -39,6 +40,44 @@
       fill: false,
     });
   });
+  
+  // 予算データを追加（最新年度の予算のみ）
+  const latestYear = {% if latest_year %}{{ latest_year }}{% else %}null{% endif %};
+  const budgetYear = latestYear || (monthlySummaries.length > 0 ? monthlySummaries[0].year : null);
+  if (budgetYear && budgetChartData && (budgetChartData.sales.some(v => v > 0) || budgetChartData.gross_profit.some(v => v > 0) || budgetChartData.operating_profit.some(v => v > 0))) {
+    salesData.push({
+      label: `${budgetYear} 売上高（予算）`,
+      data: budgetChartData.sales,
+      borderColor: 'rgba(75, 192, 192, 0.5)',
+      backgroundColor: 'rgba(75, 192, 192, 0.1)',
+      borderDash: [5, 5],
+      borderWidth: 2,
+      fill: false,
+      type: 'line',
+    });
+
+    grossProfitData.push({
+      label: `${budgetYear} 粗利益（予算）`,
+      data: budgetChartData.gross_profit,
+      borderColor: 'rgba(255, 99, 132, 0.5)',
+      backgroundColor: 'rgba(255, 99, 132, 0.1)',
+      borderDash: [5, 5],
+      borderWidth: 2,
+      fill: false,
+      type: 'line',
+    });
+
+    operatingProfitData.push({
+      label: `${budgetYear} 営業利益（予算）`,
+      data: budgetChartData.operating_profit,
+      borderColor: 'rgba(255, 206, 86, 0.5)',
+      backgroundColor: 'rgba(255, 206, 86, 0.1)',
+      borderDash: [5, 5],
+      borderWidth: 2,
+      fill: false,
+      type: 'line',
+    });
+  }
 
   const ctx = document.getElementById('salesChart').getContext('2d');
   const salesChart = new Chart(ctx, {

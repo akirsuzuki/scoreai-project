@@ -36,7 +36,8 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
         from django.db.models import Sum
         
         context = super().get_context_data(**kwargs)
-        context['title'] = f'{self.object.name} の詳細'
+        context['title'] = '会社詳細'
+        context['show_title_card'] = False
         context['user_count'] = self.object.user_count
         context['users'] = UserCompany.objects.filter(
             company=self.object,
@@ -149,7 +150,8 @@ class CompanyUpdateView(SelectedCompanyMixin, UpdateView):
             コンテキストデータの辞書
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = '会社情報編集'
+        context['title'] = '会社詳細'
+        context['show_title_card'] = False
         return context
 
 

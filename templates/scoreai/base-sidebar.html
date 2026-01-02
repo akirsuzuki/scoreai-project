@@ -1,4 +1,6 @@
 {% load static %}
+{% load custom_tags %}
+{% load plan_features_tags %}
 <!-- Sidebar Start -->
 <aside class="left-sidebar">
   <!-- Sidebar scroll-->
@@ -14,6 +16,7 @@
     <!-- Sidebar navigation-->
     <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
       <ul id="sidebarnav">
+        <!-- セクション1: Home -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Home</span>
@@ -24,23 +27,127 @@
           </a>
         </li>
         
+        <!-- セクション2: AI相談 -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">AI相談</span>
         </li>
-        
         <li class="sidebar-item ai-consultation-center">
           <a class="sidebar-link" href="{% url 'ai_consultation_center' %}" aria-expanded="false">
             <span class="hide-menu">AI相談センター</span>
-            <span class="badge bg-danger rounded-pill ms-auto" style="font-size: 10px;">NEW</span>
           </a>
         </li>
         
+        <!-- セクション3: 財務管理 -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">Management</span>
+          <span class="hide-menu">財務管理</span>
         </li>
-
+        
+        <!-- 月次PL -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseMonthlyPL" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">月次PL</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseMonthlyPL" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">月次PL一覧（3期比較）</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">月次PL一覧（直近年度）</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_vs_actual_monthly' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">予算vs実績推移表</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- 年次財務諸表 -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseAnnualFinancials" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">年次財務諸表</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseAnnualFinancials" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">決算年次推移</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">直近決算詳細</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_vs_actual_yearly' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">年次予算vs実績比較</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- 予算管理 -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseBudgetManagement" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">予算管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseBudgetManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'budget_suggest' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">AI予算策定（年次）</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_suggest_month' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">AI予算策定（月次）</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'budget_analysis' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">予算分析</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- セクション4: 借入管理 -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">借入管理</span>
+        </li>
         <li class="sidebar-item">
           <a class="sidebar-link" href="#collapseBorrowingManagement" data-bs-toggle="collapse" aria-expanded="false">
             <span class="hide-menu">借入管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
@@ -83,76 +190,19 @@
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">新規借入</span>
+                <span class="hide-menu">新規借入登録</span>
               </a>
             </li>
           </ul>
         </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="#collapseMonthlyPL" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">月次PL</span><i class="fa-solid fa-angles-right ms-auto"></i>
-          </a>
-          <ul id="collapseMonthlyPL" class="collapse first-level" data-bs-parent="#sidebarnav">
-            <li class="sidebar-item">
-              <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">3期比較の月次推移</span>
-              </a>
-            </li>
-
-            <li class="sidebar-item">
-              <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">直近年度の月次推移</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'budget_vs_actual_monthly' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">予算vs実績推移表</span>
-              </a>
-            </li>
-          </ul>
+        
+        <!-- セクション5: その他データ -->
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">その他データ</span>
         </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="#collapseAnnualFinancials" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">年次財務諸表</span><i class="fa-solid fa-angles-right ms-auto"></i>
-          </a>
-          <ul id="collapseAnnualFinancials" class="collapse first-level" data-bs-parent="#sidebarnav">
-            <li class="sidebar-item">
-              <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">決算年次推移</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">直近決算詳細</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'budget_vs_actual_yearly' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">年次予算vs実績比較</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-
+        
+        <!-- 株主情報 -->
         <li class="sidebar-item">
           <a class="sidebar-link" href="#collapseShareholderInformation" data-bs-toggle="collapse" aria-expanded="false">
             <span class="hide-menu">株主情報</span><i class="fa-solid fa-angles-right ms-auto"></i>
@@ -176,26 +226,11 @@
             </li>
           </ul>
         </li>
-
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="#collapseLocalBenchmark" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">ローカルベンチマーク</span><i class="fa-solid fa-angles-right ms-auto"></i>
-          </a>
-          <ul id="collapseLocalBenchmark" class="collapse first-level" data-bs-parent="#sidebarnav">
-            <li class="sidebar-item">
-              <a href="{% url 'industry_benchmark_list' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">業界別ベンチマーク一覧</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-
+        
+        <!-- ノート（議事録） -->
         <li class="sidebar-item">
           <a class="sidebar-link" href="#collapseMeetingMinutes" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">ノート</span><i class="fa-solid fa-angles-right ms-auto"></i>
+            <span class="hide-menu">ノート（議事録）</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
           <ul id="collapseMeetingMinutes" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
@@ -211,29 +246,47 @@
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">新規ノート</span>
+                <span class="hide-menu">新規ノート作成</span>
               </a>
             </li>
-            {% if user.is_financial_consultant %}
-            {% load custom_tags plan_features_tags %}
-            {% get_user_firm_owner user as user_firm_owner %}
-            {% if user_firm_owner %}
-            {% check_plan_feature_access_tag user_firm_owner.firm 'starter' as plan_check %}
-            {% if plan_check.0 %}
-            <li class="sidebar-item">
-              <a href="{% url 'meeting_minutes_ai_generate' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu"><i class="ti ti-sparkles me-1"></i>AI議事録生成</span>
-              </a>
-            </li>
-            {% endif %}
-            {% endif %}
+            {% get_user_selected_company user as selected_company %}
+            {% if selected_company %}
+              {% get_company_firm_for_plan_check selected_company as company_firm %}
+              {% if company_firm %}
+                {% check_plan_feature_access_tag company_firm 'starter' as plan_check %}
+                {% if plan_check.0 %}
+                <li class="sidebar-item">
+                  <a href="{% url 'meeting_minutes_ai_generate' %}" class="sidebar-link">
+                    <div class="round-16 d-flex align-items-center justify-content-center">
+                      &emsp;<i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                    <span class="hide-menu"><i class="ti ti-sparkles me-1"></i>AI議事録生成</span>
+                  </a>
+                </li>
+                {% endif %}
+              {% endif %}
             {% endif %}
           </ul>
         </li>
-
+        
+        <!-- ローカルベンチマーク -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseLocalBenchmark" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">ローカルベンチマーク</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseLocalBenchmark" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'industry_benchmark_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">業界別ベンチマーク一覧</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- セクション6: データ取り込み -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">データ取り込み</span>
@@ -269,143 +322,181 @@
           </a>
         </li>
         
-        <!-- 2. is_company_user=True かつ is_manager=True かつ is_financial_consultant=False のユーザー -->
-        <!-- （is_financial_consultant=True の場合は「クライアント会社レベル設定」に表示されるため除外） -->
-        {% if user.is_company_user and user.is_manager and not user.is_financial_consultant %}
-        {% load custom_tags %}
-        {% get_user_selected_company user as selected_company %}
-        {% if selected_company %}
+        <!-- セクション7: 設定 -->
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">設定</span>
         </li>
         
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-script me-2"></i>マイスクリプト</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'storage_setting' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-cloud me-2"></i>クラウドストレージ</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'storage_file_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-files me-2"></i>ストレージファイル</span>
-          </a>
-        </li>
-        {% endif %}
-        {% endif %}
-        
-        <!-- 4. 選択中のCompanyがあるユーザー -->
-        {% load custom_tags %}
-        {% get_user_selected_company user as selected_company %}
-        {% if selected_company %}
-        <!-- クライアント会社レベル設定 -->
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">会社設定</span>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-script me-2"></i>マイスクリプト</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'storage_setting' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-cloud me-2"></i>クラウドストレージ</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'storage_file_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-files me-2"></i>ストレージファイル</span>
-          </a>
-        </li>
-        {% endif %}
-        
-        <!-- 5. is_financial_consultant=True のユーザー（Consultant設定） -->
-        {% if user.is_financial_consultant %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">コンサルタント設定</span>
-        </li>
-        
-        <!-- アサイン一覧：is_financial_consultant=True のユーザー全員が見れる -->
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'assigned_clients_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-list me-2"></i>アサイン一覧</span>
-          </a>
-        </li>
-        
-        <!-- クライアント一覧、スタッフ管理、プラン：Firmのオーナーのみ -->
-        {% get_user_firm_owner user as user_firm_owner %}
-        {% if user_firm_owner %}
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'firm_clientslist' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-users me-2"></i>クライアント一覧</span>
-          </a>
-        </li>
-        
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-id me-2"></i>スタッフ管理</span>
-          </a>
-        </li>
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-credit-card me-2"></i>プラン</span>
-          </a>
-        </li>
-        {% endif %}
-        {% endif %}
-        
-        <!-- 設定（全ユーザー共通） -->
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">ユーザー設定</span>
-        </li>
-        
+        <!-- プロフィール（全ユーザー共通） -->
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'user_profile' %}" aria-expanded="false">
             <span class="hide-menu"><i class="ti ti-user me-2"></i>プロフィール</span>
           </a>
         </li>
         
-        {% if user.is_superuser %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">管理者</span>
-        </li>
+        <!-- 会社設定（選択中のCompanyがある場合） -->
+        {% get_user_selected_company user as selected_company %}
+        {% if selected_company %}
+        <!-- 会社詳細（Company Userのみ、is_manager=Trueの場合のみ編集可能） -->
+        {% if user.is_company_user and user.is_manager %}
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'admin_ai_script_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-settings me-2"></i>AIスクリプト管理</span>
+          <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>
           </a>
         </li>
+        
+        <!-- 会社メンバー管理（Company Userのみ、is_manager=Trueの場合のみ） -->
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
-            <span class="hide-menu"><i class="ti ti-shield me-2"></i>管理画面</span>
+          <a class="sidebar-link" href="{% url 'company_member_list' company_id=selected_company.id %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-users me-2"></i>会社メンバー管理</span>
           </a>
         </li>
         {% endif %}
         
+        <!-- マイスクリプト（選択中のCompanyがある場合） -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'user_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-script me-2"></i>マイスクリプト</span>
+          </a>
+        </li>
+        
+        <!-- クラウドストレージ（選択中のCompanyがある場合） -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseCloudStorage" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-cloud me-2"></i>クラウドストレージ</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseCloudStorage" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'storage_setting' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">ストレージ設定</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'storage_file_list' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">ストレージファイル一覧</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+        
+        <!-- セクション8: コンサルタント機能（Firm Userのみ） -->
+        {% if user.is_financial_consultant %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">コンサルタント機能</span>
+        </li>
+        
+        <!-- アサイン一覧（全Firm User） -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'assigned_clients_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-list me-2"></i>アサイン一覧</span>
+          </a>
+        </li>
+        
+        <!-- クライアント管理（Firm Ownerのみ） -->
+        {% get_user_firm_owner user as user_firm_owner %}
+        {% if user_firm_owner %}
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseClientManagement" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">クライアント管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseClientManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'firm_clientslist' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">クライアント一覧</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">スタッフ管理</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">プラン・サブスクリプション</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'usage_report' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">利用状況レポート</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">請求管理</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'subscription_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">サブスクリプション履歴</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'firm_settings' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">Firm設定</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">通知</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+        {% endif %}
+        
+        <!-- セクション9: 管理者機能（Superuserのみ） -->
+        {% if user.is_superuser %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">管理者機能</span>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'admin_ai_script_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-settings me-2"></i>AIスクリプト管理（システム）</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'admin:index' %}" aria-expanded="false" target="_blank">
+            <span class="hide-menu"><i class="ti ti-shield me-2"></i>Django管理画面</span>
+          </a>
+        </li>
+        {% endif %}
+        
+        <!-- その他 -->
         <li class="nav-small-cap mt-4">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">その他</span>
@@ -416,7 +507,7 @@
             <span class="hide-menu"><i class="ti ti-info-circle me-2"></i>SCore_AIについて</span>
           </a>
         </li>
+      </ul>
     </nav>
   </div>
 </aside>
-

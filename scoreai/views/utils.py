@@ -8,8 +8,11 @@ from decimal import Decimal
 from datetime import datetime
 import calendar
 import random
+import logging
 
 from django.db.models import QuerySet, Max
+
+logger = logging.getLogger(__name__)
 from ..models import (
     Company,
     Debt,
@@ -337,11 +340,10 @@ def get_monthly_summaries(
     # Ensure num_years is at least 1
     num_years = max(1, int(num_years))
 
-    # 年度取得（実績データのみ：is_budget=False, is_draft=False）
+    # 年度取得（実績データのみ：is_budget=False、下書きも含む）
     latest_years = FiscalSummary_Year.objects.filter(
         company=this_company,
-        is_budget=False,
-        is_draft=False
+        is_budget=False
     ).values_list('year', flat=True).distinct().order_by('-year')[:num_years]
 
     # 取得した年度をリストに変換し、新しい順に並べる
@@ -349,38 +351,68 @@ def get_monthly_summaries(
 
     monthly_summaries = []
     for year in latest_years:
-        # 実績データのみを取得（is_budget=False）
+        # 実績データのみを取得（is_budget=False、下書きも含む）
+        # 同じ期間に複数のレコードがある場合、非下書きを優先し、実績データのみを取得
+        # 予算データを確実に除外するため、明示的にis_budget=Falseをチェック
         monthly_data = FiscalSummary_Month.objects.filter(
             fiscal_summary_year__company=this_company,
             fiscal_summary_year__year=year,
-            fiscal_summary_year__is_budget=False,
-            fiscal_summary_year__is_draft=False,
-            is_budget=False
-        ).select_related('fiscal_summary_year', 'fiscal_summary_year__company').order_by('period')
+            fiscal_summary_year__is_budget=False,  # 年度が実績であること
+            is_budget=False  # 月次データが実績であること
+        ).select_related('fiscal_summary_year', 'fiscal_summary_year__company').order_by('-fiscal_summary_year__is_draft', 'period')
 
-        # 月データを辞書に変換
-        monthly_data_dict = {month.period: {
-            'id': month.id,
-            'sales': float(month.sales),
-            'gross_profit': float(month.gross_profit),
-            'operating_profit': float(month.operating_profit),
-            'ordinary_profit': float(month.ordinary_profit),
-            'gross_profit_rate': float(month.gross_profit_rate),
-            'operating_profit_rate': float(month.operating_profit_rate),
-            'ordinary_profit_rate': float(month.ordinary_profit_rate),
-        } for month in monthly_data}
+        # 月データを辞書に変換（同じ期間に複数のレコードがある場合、最初の1つ（非下書き優先）のみを使用）
+        # 予算データ（is_budget=True）は確実に除外（念のため二重チェック）
+        monthly_data_dict = {}
+        for month in monthly_data:
+            # 予算データを確実に除外（二重チェック）
+            # select_relatedで取得しているので、fiscal_summary_yearは既にロードされている
+            if month.is_budget is True:
+                logger.warning(f"予算データがフィルタを通過しました: month.id={month.id}, month.is_budget={month.is_budget}, fiscal_summary_year.is_budget={month.fiscal_summary_year.is_budget if hasattr(month, 'fiscal_summary_year') else 'N/A'}")
+                continue
+            if hasattr(month, 'fiscal_summary_year') and month.fiscal_summary_year.is_budget is True:
+                logger.warning(f"予算年度のデータがフィルタを通過しました: month.id={month.id}, fiscal_summary_year.is_budget={month.fiscal_summary_year.is_budget}")
+                continue
+            # 既に同じ期間のデータが存在する場合はスキップ（非下書きが優先される）
+            if month.period and month.period not in monthly_data_dict:
+                monthly_data_dict[month.period] = {
+                    'id': month.id,
+                    'sales': float(month.sales) if month.sales is not None else 0.0,
+                    'gross_profit': float(month.gross_profit) if month.gross_profit is not None else 0.0,
+                    'operating_profit': float(month.operating_profit) if month.operating_profit is not None else 0.0,
+                    'ordinary_profit': float(month.ordinary_profit) if month.ordinary_profit is not None else 0.0,
+                    'gross_profit_rate': float(month.gross_profit_rate) if month.gross_profit_rate is not None else 0.0,
+                    'operating_profit_rate': float(month.operating_profit_rate) if month.operating_profit_rate is not None else 0.0,
+                    'ordinary_profit_rate': float(month.ordinary_profit_rate) if month.ordinary_profit_rate is not None else 0.0,
+                    'is_budget': month.is_budget,  # 予算データかどうかのフラグを保持
+                }
 
 
         # 12ヶ月分のデータを作成
+        # 決算月を考慮して表示月を計算
+        from ..models import Company
+        company = this_company
+        fiscal_month = company.fiscal_month if hasattr(company, 'fiscal_month') else 1
+        
         full_month_data = []
         actual_months_count = 0  # 実際のデータがある月のカウント
         for period in range(1, 13):
+            # 決算月を基準に表示月を計算（period=1が決算月の次の月）
+            display_month = (fiscal_month + period - 1) % 12
+            if display_month == 0:
+                display_month = 12
+            
             if period in monthly_data_dict:
-                full_month_data.append({**monthly_data_dict[period], 'period': period})
+                full_month_data.append({
+                    **monthly_data_dict[period], 
+                    'period': period,
+                    'display_month': display_month
+                })
                 actual_months_count += 1
             else:
                 full_month_data.append({
                     'period': period,
+                    'display_month': display_month,
                     'id': f'temp_{random.randint(10000, 99999)}',
                     'sales': 0,
                     'gross_profit': 0,
@@ -389,6 +421,7 @@ def get_monthly_summaries(
                     'gross_profit_rate': 0,
                     'operating_profit_rate': 0,
                     'ordinary_profit_rate': 0,
+                    'is_budget': False,  # データが存在しない場合は実績として扱う
                 })
 
         monthly_summaries.append({

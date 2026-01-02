@@ -14,28 +14,41 @@
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">月次PL推移表</h4>
+      <h4 class="fw-semibold mb-0">月次PL</h4>
       <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn {% if request.GET.years == '3' or not request.GET.years %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">3期比較の月次推移</a>
-        <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="btn {% if request.GET.years == '1' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">直近年度の月次推移</a>
+        <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn {% if request.GET.years == '3' or not request.GET.years %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">月次PL一覧（3期比較）</a>
+        <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="btn {% if request.GET.years == '1' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">月次PL一覧（直近年度）</a>
       </div>
     </div>
   </div>
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">
-        <h5 class="card-title mb-0">月次PL推移表</h5>
+        <h5 class="card-title mb-0 fw-semibold">{% if request.GET.years == '1' %}月次PL一覧（直近年度）{% else %}月次PL一覧（3期比較）{% endif %}</h5>
       </div>
       <div class="card-body">
         {% for summary in monthly_summaries_with_summary.monthly_data %}
         <div class="table-responsive">
-          <h5 class="table-title">{{ summary.year }}年度</h5>
+          <h5 class="mb-3 fw-semibold">{{ summary.year }}年度</h5>
           <table class="table table-hover" id="fiscal-summary-table-{{ forloop.counter }}">
             <thead class="table-light">
               <tr>
                 <th></th>
-                {% for month in months_label %}
-                <th class="text-center">{{ month }}月</th>
+                {% for amount in summary.data %}
+                <th class="text-center">
+                  {% if amount.display_month %}
+                    {{ amount.display_month }}月
+                  {% else %}
+                    {% with month_index=forloop.counter0 %}
+                      {% with month_label=months_label|get_list_item:month_index %}
+                        {% if month_label %}{{ month_label }}月{% else %}{{ amount.period }}月{% endif %}
+                      {% endwith %}
+                    {% endwith %}
+                  {% endif %}
+                  {% if amount.is_budget %}
+                  <i class="ti ti-alert-circle text-warning ms-1" title="予算データ" style="font-size: 0.9em;"></i>
+                  {% endif %}
+                </th>
                 {% endfor %}
                 <th>Total</th>
               </tr>
@@ -44,46 +57,46 @@
               <tr>
                 <td style="writing-mode: vertical-rl; text-orientation: center;">売上高</td>
                 {% for amount in summary.data %}
-                <td class="text-end equal-width">{{ amount.sales|floatformat:0|intcomma }}</td>
+                <td class="text-end equal-width">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.sales|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_sales|floatformat:0|intcomma }}</td>
               </tr>
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.gross_profit|floatformat:0|intcomma }}</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.gross_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_gross_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.gross_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.gross_profit_rate|floatformat:1 }}%{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_gross_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.operating_profit|floatformat:0|intcomma }}</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.operating_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_operating_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.operating_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.operating_profit_rate|floatformat:1 }}%{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_operating_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
                 <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.ordinary_profit|floatformat:0|intcomma }}</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.ordinary_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_ordinary_profit|floatformat:0|intcomma }}</td>
               </tr>
               <tr class="bg-light">
                 {% for amount in summary.data %}
-                <td class="text-end">{{ amount.ordinary_profit_rate|floatformat:1 }}%</td>
+                <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.ordinary_profit_rate|floatformat:1 }}%{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_ordinary_profit_rate|floatformat:1 }}%</td>
               </tr>

@@ -12,5 +12,6 @@ class AboutLinksView(SelectedCompanyMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'SCore_AIについて'
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         return context
 

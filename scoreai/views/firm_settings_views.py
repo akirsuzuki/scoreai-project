@@ -40,6 +40,7 @@ class FirmSettingsView(FirmOwnerMixin, UpdateView):
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         context['title'] = 'Firm設定'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
     

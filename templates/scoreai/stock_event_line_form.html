@@ -1,31 +1,136 @@
 {% extends "scoreai/base.html" %}
+{% load widget_tweaks %}
 
 {% block title %}
-{{title}}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  $(document).ready(function() {
+    // Select2の初期化
+    $('#id_stakeholder').select2({
+      theme: 'bootstrap-5',
+      width: '100%'
+    });
+  });
+</script>
 {% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col-lg-12 d-flex align-items-strech">
-        <div class="card w-100">
-            <form method="post">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    {% if object %}株式イベント明細の編集
-                    {% else %}株式イベント明細の追加
-                    {% endif %}
-                </h5>
-            </div>
-            <div class="card-body">
-                {% csrf_token %}
-                {{ form.as_p }}
-            </div>
-            <div class="card-footer text-end">
-                <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
-                <button type="submit" class="btn btn-primary">保存</button>
-            </div>
-        </form>
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <form method="post" class="needs-validation" novalidate>
+        {% csrf_token %}
+        
+        <div class="card-header">
+          <h5 class="card-title mb-0 fw-semibold">
+            {% if object %}株式イベント明細の編集
+            {% else %}株式イベント明細の追加
+            {% endif %}
+          </h5>
         </div>
+        
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Stakeholder Field -->
+            <div class="col-md-6">
+              <label for="{{ form.stakeholder.id_for_label }}" class="form-label">
+                {{ form.stakeholder.label }}
+                {% if form.stakeholder.field.required %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              {{ form.stakeholder|add_class:"form-control" }}
+              {% if form.stakeholder.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.stakeholder.errors }}
+                </div>
+              {% endif %}
+              {% if form.stakeholder.help_text %}
+                <small class="form-text text-muted">{{ form.stakeholder.help_text }}</small>
+              {% endif %}
+            </div>
+
+            <!-- Share Quantity Field -->
+            <div class="col-md-6">
+              <label for="{{ form.share_quantity.id_for_label }}" class="form-label">
+                {{ form.share_quantity.label }}
+                {% if form.share_quantity.field.required %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              {{ form.share_quantity|add_class:"form-control" }}
+              {% if form.share_quantity.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.share_quantity.errors }}
+                </div>
+              {% endif %}
+              {% if form.share_quantity.help_text %}
+                <small class="form-text text-muted">{{ form.share_quantity.help_text }}</small>
+              {% endif %}
+            </div>
+
+            <!-- Share Type Field -->
+            <div class="col-md-6">
+              <label for="{{ form.share_type.id_for_label }}" class="form-label">
+                {{ form.share_type.label }}
+                {% if form.share_type.field.required %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              {{ form.share_type|add_class:"form-control" }}
+              {% if form.share_type.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.share_type.errors }}
+                </div>
+              {% endif %}
+              {% if form.share_type.help_text %}
+                <small class="form-text text-muted">{{ form.share_type.help_text }}</small>
+              {% endif %}
+            </div>
+
+            <!-- Acquisition Price Field -->
+            <div class="col-md-6">
+              <label for="{{ form.acquisition_price.id_for_label }}" class="form-label">
+                {{ form.acquisition_price.label }}
+                {% if form.acquisition_price.field.required %}<span class="text-danger">*</span>{% endif %}
+              </label>
+              {{ form.acquisition_price|add_class:"form-control" }}
+              {% if form.acquisition_price.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.acquisition_price.errors }}
+                </div>
+              {% endif %}
+              {% if form.acquisition_price.help_text %}
+                <small class="form-text text-muted">{{ form.acquisition_price.help_text }}</small>
+              {% endif %}
+            </div>
+
+            <!-- Memo Field -->
+            <div class="col-md-12">
+              <label for="{{ form.memo.id_for_label }}" class="form-label">
+                {{ form.memo.label }}
+              </label>
+              {{ form.memo|add_class:"form-control" }}
+              {% if form.memo.errors %}
+                <div class="text-danger small mt-1">
+                  {{ form.memo.errors }}
+                </div>
+              {% endif %}
+              {% if form.memo.help_text %}
+                <small class="form-text text-muted">{{ form.memo.help_text }}</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        
+        <div class="card-footer text-end">
+          <button type="button" class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
 {% endblock %}

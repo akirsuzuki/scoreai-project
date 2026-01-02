@@ -41,7 +41,8 @@ class AnnouncementListView(SelectedCompanyMixin, LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Blog'
+        context['title'] = 'お知らせ'
+        context['show_title_card'] = False
         context['categories'] = BlogCategory.objects.filter(is_active=True).order_by('order', 'name')
         context['selected_category'] = self.request.GET.get('category', '')
         context['search_query'] = self.request.GET.get('q', '')
@@ -62,7 +63,8 @@ class AnnouncementDetailView(SelectedCompanyMixin, LoginRequiredMixin, DetailVie
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         announcement = self.object
-        context['title'] = announcement.title
+        context['title'] = 'お知らせ'
+        context['show_title_card'] = False
         
         # 関連記事（同じカテゴリーの最新記事）
         if announcement.categories.exists():

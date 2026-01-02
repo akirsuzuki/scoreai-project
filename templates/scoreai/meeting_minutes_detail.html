@@ -94,6 +94,17 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-primary btn-sm">ノート一覧</a>
+        <a href="{% url 'meeting_minutes_create' %}" class="btn btn-outline-primary btn-sm">新規ノート作成</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
     <div class="col-lg-8">
         <div class="card h-100">
             <div class="card-header">
@@ -118,6 +129,7 @@
             </div>
             <div class="card-body">
                 <p><strong>ミーティング日:</strong> {{ meeting_minutes.meeting_date }}</p>
+                <p><strong>カテゴリ:</strong> {{ meeting_minutes.get_category_display }}</p>
                 <p><strong>作成日:</strong> {{ meeting_minutes.created_at }}</p>
                 <p><strong>作成ユーザー:</strong> {{ meeting_minutes.created_by }}</p>
             </div>

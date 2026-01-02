@@ -53,6 +53,17 @@ def get_item(dictionary, key):
     return dictionary.get(str(key))
 
 @register.filter
+def get_list_item(list_obj, index):
+    """リストの要素をインデックスで取得"""
+    try:
+        index = int(index)
+        if 0 <= index < len(list_obj):
+            return list_obj[index]
+    except (ValueError, TypeError, IndexError):
+        pass
+    return None
+
+@register.filter
 def sum(values):
     return sum(values)
 

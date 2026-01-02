@@ -15,8 +15,11 @@
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">{{ title }}</h4>
-      <div class="d-flex gap-2">
+      <h4 class="fw-semibold mb-0">年次財務諸表</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
+        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
+        <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-primary btn-sm">年次予算vs実績比較</a>
         <form method="get" class="d-flex gap-2">
           <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
             {% for y in available_years %}
@@ -24,15 +27,12 @@
             {% endfor %}
           </select>
         </form>
-        <a href="{% url 'fiscal_summary_year_list' %}" class="btn btn-outline-secondary btn-sm">
-          <i class="ti ti-arrow-left me-1"></i>戻る
-        </a>
       </div>
     </div>
   </div>
 </div>
 
-{% if budget_year and actual_year %}
+{% if actual_year %}
 <!-- PL比較 -->
 <div class="row">
   <div class="col-lg-12">
@@ -57,33 +57,53 @@
                 <td><strong>売上高</strong></td>
                 <td class="text-end">{{ financial_indicators.sales.budget|intcomma }}</td>
                 <td class="text-end">{{ financial_indicators.sales.actual|intcomma }}</td>
-                <td class="text-end {% if financial_indicators.sales.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.sales.diff|intcomma }}
+                <td class="text-end {% if financial_indicators.sales.diff is not None %}{% if financial_indicators.sales.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.sales.diff is not None %}
+                    {{ financial_indicators.sales.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if financial_indicators.sales.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.sales.diff_rate|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.sales.diff_rate is not None %}{% if financial_indicators.sales.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.sales.diff_rate is not None %}
+                    {{ financial_indicators.sales.diff_rate|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
               <tr>
                 <td><strong>粗利益</strong></td>
                 <td class="text-end">{{ financial_indicators.gross_profit.budget|intcomma }}</td>
                 <td class="text-end">{{ financial_indicators.gross_profit.actual|intcomma }}</td>
-                <td class="text-end {% if financial_indicators.gross_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.gross_profit.diff|intcomma }}
+                <td class="text-end {% if financial_indicators.gross_profit.diff is not None %}{% if financial_indicators.gross_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.gross_profit.diff is not None %}
+                    {{ financial_indicators.gross_profit.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if financial_indicators.gross_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.gross_profit.diff_rate|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.gross_profit.diff_rate is not None %}{% if financial_indicators.gross_profit.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.gross_profit.diff_rate is not None %}
+                    {{ financial_indicators.gross_profit.diff_rate|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
               <tr>
                 <td><strong>営業利益</strong></td>
                 <td class="text-end">{{ financial_indicators.operating_profit.budget|intcomma }}</td>
                 <td class="text-end">{{ financial_indicators.operating_profit.actual|intcomma }}</td>
-                <td class="text-end {% if financial_indicators.operating_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.operating_profit.diff|intcomma }}
+                <td class="text-end {% if financial_indicators.operating_profit.diff is not None %}{% if financial_indicators.operating_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.operating_profit.diff is not None %}
+                    {{ financial_indicators.operating_profit.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if financial_indicators.operating_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if financial_indicators.operating_profit.budget != 0 %}
+                <td class="text-end {% if financial_indicators.operating_profit.diff_rate is not None %}{% if financial_indicators.operating_profit.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.operating_profit.diff_rate is not None %}
                     {{ financial_indicators.operating_profit.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -94,11 +114,15 @@
                 <td><strong>経常利益</strong></td>
                 <td class="text-end">{{ financial_indicators.ordinary_profit.budget|intcomma }}</td>
                 <td class="text-end">{{ financial_indicators.ordinary_profit.actual|intcomma }}</td>
-                <td class="text-end {% if financial_indicators.ordinary_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.ordinary_profit.diff|intcomma }}
+                <td class="text-end {% if financial_indicators.ordinary_profit.diff is not None %}{% if financial_indicators.ordinary_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.ordinary_profit.diff is not None %}
+                    {{ financial_indicators.ordinary_profit.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if financial_indicators.ordinary_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if financial_indicators.ordinary_profit.budget != 0 %}
+                <td class="text-end {% if financial_indicators.ordinary_profit.diff_rate is not None %}{% if financial_indicators.ordinary_profit.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.ordinary_profit.diff_rate is not None %}
                     {{ financial_indicators.ordinary_profit.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -109,11 +133,15 @@
                 <td><strong>当期純利益</strong></td>
                 <td class="text-end">{{ financial_indicators.net_profit.budget|intcomma }}</td>
                 <td class="text-end">{{ financial_indicators.net_profit.actual|intcomma }}</td>
-                <td class="text-end {% if financial_indicators.net_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.net_profit.diff|intcomma }}
+                <td class="text-end {% if financial_indicators.net_profit.diff is not None %}{% if financial_indicators.net_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.net_profit.diff is not None %}
+                    {{ financial_indicators.net_profit.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if financial_indicators.net_profit.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if financial_indicators.net_profit.budget != 0 %}
+                <td class="text-end {% if financial_indicators.net_profit.diff_rate is not None %}{% if financial_indicators.net_profit.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.net_profit.diff_rate is not None %}
                     {{ financial_indicators.net_profit.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -159,32 +187,48 @@
                 <td><strong>営業利益率（%）</strong></td>
                 <td class="text-end">{{ financial_indicators.operating_profit_margin.budget|floatformat:2 }}%</td>
                 <td class="text-end">{{ financial_indicators.operating_profit_margin.actual|floatformat:2 }}%</td>
-                <td class="text-end {% if financial_indicators.operating_profit_margin.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.operating_profit_margin.diff|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.operating_profit_margin.diff is not None %}{% if financial_indicators.operating_profit_margin.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.operating_profit_margin.diff is not None %}
+                    {{ financial_indicators.operating_profit_margin.diff|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
               <tr>
                 <td><strong>ROA（総資本経常利益率）（%）</strong></td>
                 <td class="text-end">{{ financial_indicators.ROA.budget|floatformat:2 }}%</td>
                 <td class="text-end">{{ financial_indicators.ROA.actual|floatformat:2 }}%</td>
-                <td class="text-end {% if financial_indicators.ROA.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.ROA.diff|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.ROA.diff is not None %}{% if financial_indicators.ROA.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.ROA.diff is not None %}
+                    {{ financial_indicators.ROA.diff|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
               <tr>
                 <td><strong>自己資本比率（%）</strong></td>
                 <td class="text-end">{{ financial_indicators.equity_ratio.budget|floatformat:2 }}%</td>
                 <td class="text-end">{{ financial_indicators.equity_ratio.actual|floatformat:2 }}%</td>
-                <td class="text-end {% if financial_indicators.equity_ratio.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.equity_ratio.diff|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.equity_ratio.diff is not None %}{% if financial_indicators.equity_ratio.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.equity_ratio.diff is not None %}
+                    {{ financial_indicators.equity_ratio.diff|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
               <tr>
                 <td><strong>流動比率（%）</strong></td>
                 <td class="text-end">{{ financial_indicators.current_ratio.budget|floatformat:2 }}%</td>
                 <td class="text-end">{{ financial_indicators.current_ratio.actual|floatformat:2 }}%</td>
-                <td class="text-end {% if financial_indicators.current_ratio.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ financial_indicators.current_ratio.diff|floatformat:2 }}%
+                <td class="text-end {% if financial_indicators.current_ratio.diff is not None %}{% if financial_indicators.current_ratio.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if financial_indicators.current_ratio.diff is not None %}
+                    {{ financial_indicators.current_ratio.diff|floatformat:2 }}%
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
               </tr>
             </tbody>
@@ -222,11 +266,15 @@
                 <td><strong>現金及び預金</strong></td>
                 <td class="text-end">{{ bs_indicators.cash_and_deposits.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.cash_and_deposits.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.cash_and_deposits.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.cash_and_deposits.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.cash_and_deposits.diff is not None %}{% if bs_indicators.cash_and_deposits.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.cash_and_deposits.diff is not None %}
+                    {{ bs_indicators.cash_and_deposits.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if bs_indicators.cash_and_deposits.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.cash_and_deposits.budget != 0 %}
+                <td class="text-end {% if bs_indicators.cash_and_deposits.diff_rate is not None %}{% if bs_indicators.cash_and_deposits.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.cash_and_deposits.diff_rate is not None %}
                     {{ bs_indicators.cash_and_deposits.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -237,11 +285,15 @@
                 <td><strong>売上債権</strong></td>
                 <td class="text-end">{{ bs_indicators.accounts_receivable.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.accounts_receivable.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.accounts_receivable.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.accounts_receivable.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.accounts_receivable.diff is not None %}{% if bs_indicators.accounts_receivable.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.accounts_receivable.diff is not None %}
+                    {{ bs_indicators.accounts_receivable.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if bs_indicators.accounts_receivable.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.accounts_receivable.budget != 0 %}
+                <td class="text-end {% if bs_indicators.accounts_receivable.diff_rate is not None %}{% if bs_indicators.accounts_receivable.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.accounts_receivable.diff_rate is not None %}
                     {{ bs_indicators.accounts_receivable.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -252,11 +304,15 @@
                 <td><strong>棚卸資産</strong></td>
                 <td class="text-end">{{ bs_indicators.inventory.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.inventory.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.inventory.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.inventory.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.inventory.diff is not None %}{% if bs_indicators.inventory.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.inventory.diff is not None %}
+                    {{ bs_indicators.inventory.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
-                <td class="text-end {% if bs_indicators.inventory.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.inventory.budget != 0 %}
+                <td class="text-end {% if bs_indicators.inventory.diff_rate is not None %}{% if bs_indicators.inventory.diff_rate >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.inventory.diff_rate is not None %}
                     {{ bs_indicators.inventory.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -267,11 +323,15 @@
                 <td><strong>流動資産合計</strong></td>
                 <td class="text-end">{{ bs_indicators.total_current_assets.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.total_current_assets.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.total_current_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.total_current_assets.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.total_current_assets.diff is not None %}{% if bs_indicators.total_current_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.total_current_assets.diff is not None %}
+                    {{ bs_indicators.total_current_assets.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_current_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.total_current_assets.budget != 0 %}
+                  {% if bs_indicators.total_current_assets.diff_rate is not None %}
                     {{ bs_indicators.total_current_assets.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -282,11 +342,15 @@
                 <td><strong>固定資産合計</strong></td>
                 <td class="text-end">{{ bs_indicators.total_fixed_assets.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.total_fixed_assets.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.total_fixed_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.total_fixed_assets.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.total_fixed_assets.diff is not None %}{% if bs_indicators.total_fixed_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.total_fixed_assets.diff is not None %}
+                    {{ bs_indicators.total_fixed_assets.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_fixed_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.total_fixed_assets.budget != 0 %}
+                  {% if bs_indicators.total_fixed_assets.diff_rate is not None %}
                     {{ bs_indicators.total_fixed_assets.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -297,11 +361,15 @@
                 <td><strong>資産の部合計</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_assets.budget|intcomma }}</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_assets.actual|intcomma }}</strong></td>
-                <td class="text-end {% if bs_indicators.total_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  <strong>{{ bs_indicators.total_assets.diff|intcomma }}</strong>
+                <td class="text-end {% if bs_indicators.total_assets.diff is not None %}{% if bs_indicators.total_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.total_assets.diff is not None %}
+                    <strong>{{ bs_indicators.total_assets.diff|intcomma }}</strong>
+                  {% else %}
+                    <strong>-</strong>
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.total_assets.budget != 0 %}
+                  {% if bs_indicators.total_assets.diff_rate is not None %}
                     <strong>{{ bs_indicators.total_assets.diff_rate|floatformat:2 }}%</strong>
                   {% else %}
                     -
@@ -315,11 +383,15 @@
                 <td><strong>仕入債務</strong></td>
                 <td class="text-end">{{ bs_indicators.accounts_payable.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.accounts_payable.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.accounts_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {{ bs_indicators.accounts_payable.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.accounts_payable.diff is not None %}{% if bs_indicators.accounts_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}{% endif %}">
+                  {% if bs_indicators.accounts_payable.diff is not None %}
+                    {{ bs_indicators.accounts_payable.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.accounts_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {% if bs_indicators.accounts_payable.budget != 0 %}
+                  {% if bs_indicators.accounts_payable.diff_rate is not None %}
                     {{ bs_indicators.accounts_payable.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -330,11 +402,15 @@
                 <td><strong>短期借入金</strong></td>
                 <td class="text-end">{{ bs_indicators.short_term_loans_payable.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.short_term_loans_payable.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.short_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {{ bs_indicators.short_term_loans_payable.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.short_term_loans_payable.diff is not None %}{% if bs_indicators.short_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}{% endif %}">
+                  {% if bs_indicators.short_term_loans_payable.diff is not None %}
+                    {{ bs_indicators.short_term_loans_payable.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.short_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {% if bs_indicators.short_term_loans_payable.budget != 0 %}
+                  {% if bs_indicators.short_term_loans_payable.diff_rate is not None %}
                     {{ bs_indicators.short_term_loans_payable.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -345,11 +421,15 @@
                 <td><strong>流動負債合計</strong></td>
                 <td class="text-end">{{ bs_indicators.total_current_liabilities.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.total_current_liabilities.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.total_current_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {{ bs_indicators.total_current_liabilities.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.total_current_liabilities.diff is not None %}{% if bs_indicators.total_current_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}{% endif %}">
+                  {% if bs_indicators.total_current_liabilities.diff is not None %}
+                    {{ bs_indicators.total_current_liabilities.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_current_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {% if bs_indicators.total_current_liabilities.budget != 0 %}
+                  {% if bs_indicators.total_current_liabilities.diff_rate is not None %}
                     {{ bs_indicators.total_current_liabilities.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -360,11 +440,15 @@
                 <td><strong>長期借入金</strong></td>
                 <td class="text-end">{{ bs_indicators.long_term_loans_payable.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.long_term_loans_payable.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.long_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {{ bs_indicators.long_term_loans_payable.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.long_term_loans_payable.diff is not None %}{% if bs_indicators.long_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}{% endif %}">
+                  {% if bs_indicators.long_term_loans_payable.diff is not None %}
+                    {{ bs_indicators.long_term_loans_payable.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.long_term_loans_payable.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {% if bs_indicators.long_term_loans_payable.budget != 0 %}
+                  {% if bs_indicators.long_term_loans_payable.diff_rate is not None %}
                     {{ bs_indicators.long_term_loans_payable.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -375,11 +459,15 @@
                 <td><strong>負債の部合計</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_liabilities.budget|intcomma }}</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_liabilities.actual|intcomma }}</strong></td>
-                <td class="text-end {% if bs_indicators.total_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  <strong>{{ bs_indicators.total_liabilities.diff|intcomma }}</strong>
+                <td class="text-end {% if bs_indicators.total_liabilities.diff is not None %}{% if bs_indicators.total_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}{% endif %}">
+                  {% if bs_indicators.total_liabilities.diff is not None %}
+                    <strong>{{ bs_indicators.total_liabilities.diff|intcomma }}</strong>
+                  {% else %}
+                    <strong>-</strong>
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_liabilities.diff >= 0 %}text-danger{% else %}text-success{% endif %}">
-                  {% if bs_indicators.total_liabilities.budget != 0 %}
+                  {% if bs_indicators.total_liabilities.diff_rate is not None %}
                     <strong>{{ bs_indicators.total_liabilities.diff_rate|floatformat:2 }}%</strong>
                   {% else %}
                     -
@@ -393,11 +481,15 @@
                 <td><strong>資本金</strong></td>
                 <td class="text-end">{{ bs_indicators.capital_stock.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.capital_stock.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.capital_stock.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.capital_stock.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.capital_stock.diff is not None %}{% if bs_indicators.capital_stock.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.capital_stock.diff is not None %}
+                    {{ bs_indicators.capital_stock.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.capital_stock.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.capital_stock.budget != 0 %}
+                  {% if bs_indicators.capital_stock.diff_rate is not None %}
                     {{ bs_indicators.capital_stock.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -408,11 +500,15 @@
                 <td><strong>利益剰余金</strong></td>
                 <td class="text-end">{{ bs_indicators.retained_earnings.budget|intcomma }}</td>
                 <td class="text-end">{{ bs_indicators.retained_earnings.actual|intcomma }}</td>
-                <td class="text-end {% if bs_indicators.retained_earnings.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {{ bs_indicators.retained_earnings.diff|intcomma }}
+                <td class="text-end {% if bs_indicators.retained_earnings.diff is not None %}{% if bs_indicators.retained_earnings.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.retained_earnings.diff is not None %}
+                    {{ bs_indicators.retained_earnings.diff|intcomma }}
+                  {% else %}
+                    -
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.retained_earnings.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.retained_earnings.budget != 0 %}
+                  {% if bs_indicators.retained_earnings.diff_rate is not None %}
                     {{ bs_indicators.retained_earnings.diff_rate|floatformat:2 }}%
                   {% else %}
                     -
@@ -423,11 +519,15 @@
                 <td><strong>純資産の部合計</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_net_assets.budget|intcomma }}</strong></td>
                 <td class="text-end"><strong>{{ bs_indicators.total_net_assets.actual|intcomma }}</strong></td>
-                <td class="text-end {% if bs_indicators.total_net_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  <strong>{{ bs_indicators.total_net_assets.diff|intcomma }}</strong>
+                <td class="text-end {% if bs_indicators.total_net_assets.diff is not None %}{% if bs_indicators.total_net_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}{% endif %}">
+                  {% if bs_indicators.total_net_assets.diff is not None %}
+                    <strong>{{ bs_indicators.total_net_assets.diff|intcomma }}</strong>
+                  {% else %}
+                    <strong>-</strong>
+                  {% endif %}
                 </td>
                 <td class="text-end {% if bs_indicators.total_net_assets.diff >= 0 %}text-success{% else %}text-danger{% endif %}">
-                  {% if bs_indicators.total_net_assets.budget != 0 %}
+                  {% if bs_indicators.total_net_assets.diff_rate is not None %}
                     <strong>{{ bs_indicators.total_net_assets.diff_rate|floatformat:2 }}%</strong>
                   {% else %}
                     -

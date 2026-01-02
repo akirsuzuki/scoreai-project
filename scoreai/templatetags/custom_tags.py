@@ -53,4 +53,19 @@ def get_user_selected_firm(user):
     return user_firm.firm if user_firm else None
 
 
+@register.simple_tag
+def get_company_firm_for_plan_check(company):
+    """Companyが属するFirmを取得（プランチェック用）"""
+    if not company:
+        return None
+    
+    from scoreai.models import FirmCompany
+    firm_company = FirmCompany.objects.filter(
+        company=company,
+        active=True
+    ).select_related('firm', 'firm__subscription', 'firm__subscription__plan').first()
+    
+    return firm_company.firm if firm_company else None
+
+
 # custom_filter側でget_itemを定義済みなので、こちらは使わない。使用箇所がわかったらHTMLを修正してこちらを削除。

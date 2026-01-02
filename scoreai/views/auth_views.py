@@ -94,7 +94,8 @@ class UserProfileView(SelectedCompanyMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         username = user.username
-        context['title'] = f'{username}のユーザー情報'
+        context['title'] = 'プロフィール'
+        context['show_title_card'] = False
         
         # ユーザーの基本情報
         context['user'] = user
@@ -201,7 +202,8 @@ class UserProfileUpdateView(SelectedCompanyMixin, UpdateView):
             コンテキストデータの辞書
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = 'プロフィール更新'
+        context['title'] = 'プロフィール'
+        context['show_title_card'] = False
         context['user_companies'] = UserCompany.objects.filter(
             user=self.request.user
         ).select_related('company')

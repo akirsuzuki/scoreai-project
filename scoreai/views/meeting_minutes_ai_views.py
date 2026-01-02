@@ -63,6 +63,7 @@ class MeetingMinutesAIGenerateView(SelectedCompanyMixin, LoginRequiredMixin, Err
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         context['title'] = 'AI議事録生成'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         return context
     
@@ -155,7 +156,8 @@ class MeetingMinutesAIResultView(SelectedCompanyMixin, LoginRequiredMixin, Error
             messages.error(self.request, '生成された議事録が見つかりません。最初からやり直してください。')
             return redirect('meeting_minutes_ai_generate')
         
-        context['title'] = 'AI議事録生成結果'
+        context['title'] = 'AI議事録生成'
+        context['show_title_card'] = False
         context['company'] = self.this_company
         context['generated_minutes'] = generated_minutes
         context['meeting_title'] = meeting_title

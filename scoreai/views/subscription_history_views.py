@@ -30,7 +30,8 @@ class SubscriptionHistoryView(FirmOwnerMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'プラン変更履歴'
+        context['title'] = 'サブスクリプション履歴'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
 

@@ -28,7 +28,8 @@ class BillingHistoryView(FirmOwnerMixin, TemplateView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = '請求履歴'
+        context['title'] = '請求管理'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # サブスクリプションを取得
@@ -178,7 +179,8 @@ class PaymentMethodSuccessView(FirmOwnerMixin, TemplateView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = '支払い方法更新完了'
+        context['title'] = '請求管理'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
 

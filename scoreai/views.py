@@ -167,7 +167,7 @@ class FiscalSummary_YearCreateView(SelectedCompanyMixin, TransactionMixin, Creat
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '年次財務サマリー作成'
+        context['title'] = '年次財務諸表'
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
@@ -233,7 +233,7 @@ class FiscalSummary_YearUpdateView(SelectedCompanyMixin, TransactionMixin, Updat
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '年次財務サマリー編集'
+        context['title'] = '年次財務諸表'
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
@@ -258,7 +258,8 @@ class FiscalSummary_YearDeleteView(SelectedCompanyMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '決算データ削除確認'
+        context['title'] = '年次財務諸表'
+        context['show_title_card'] = False
         return context
 
 
@@ -399,7 +400,7 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
         # ベンチマーク指数を取得
         benchmark_index = get_benchmark_index(self.this_company.industry_classification, self.this_company.industry_subclassification, self.this_company.company_size, self.object.year)
         context['benchmark_index'] = benchmark_index
-        context['title'] = '年次決算情報'
+        context['title'] = '年次財務諸表'
         context['show_title_card'] = False  # 第二レベルなのでタイトルカードを非表示
 
         return context
@@ -456,9 +457,6 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         ).count()
         years_in_page = int(self.request.GET.get('years_in_page', 5))
         context['total_pages'] = (total_records + years_in_page - 1) // years_in_page  # Calculate total pages, rounding up
-        context['title'] = '年次財務諸表'
-        # 第一レベルなのでタイトルカードを表示
-
         # Add page_param and years_in_page to the context
         context['page_param'] = self.request.GET.get('page_param', 1)
         context['years_in_page'] = years_in_page
@@ -484,7 +482,8 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
             budget_year = None
             actual_year = None
         
-        context['title'] = '決算年次推移'
+        context['title'] = '年次財務諸表'
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         context['budget_year'] = budget_year
         context['actual_year'] = actual_year
         return context
@@ -497,7 +496,8 @@ class ImportFiscalSummary_Year(SelectedCompanyMixin, TransactionMixin, FormView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '年度別財務サマリーのインポート'
+        context['title'] = '年次決算'
+        context['show_title_card'] = False
         return context
 
     def form_valid(self, form):
@@ -645,7 +645,7 @@ class FiscalSummary_MonthCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務サマリー作成'
+        context['title'] = '月次PL'
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
 
@@ -670,6 +670,13 @@ class FiscalSummary_MonthUpdateView(SelectedCompanyMixin, UpdateView):
             raise PermissionDenied("このデータを更新する権限がありません。")
         return obj
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        # 編集時はfiscal_summary_yearを読み取り専用にする
+        if self.object:
+            form.fields['fiscal_summary_year'].disabled = True
+        return form
+
     def form_valid(self, form):
         # fiscal_summary_yearの変更を防ぐ
         form.instance.fiscal_summary_year = self.object.fiscal_summary_year
@@ -679,7 +686,7 @@ class FiscalSummary_MonthUpdateView(SelectedCompanyMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務サマリー編集'
+        context['title'] = '月次PL'
         context['fiscal_summary_year'] = self.object.fiscal_summary_year
         context['show_title_card'] = False  # タイトルカードを非表示
         return context
@@ -710,7 +717,8 @@ class FiscalSummary_MonthDeleteView(SelectedCompanyMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務サマリー削除確認'
+        context['title'] = '月次PL'
+        context['show_title_card'] = False
         return context
 
 class FiscalSummary_MonthDetailView(SelectedCompanyMixin, DetailView):
@@ -735,7 +743,8 @@ class FiscalSummary_MonthDetailView(SelectedCompanyMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次財務詳細'
+        context['title'] = '月次PL'
+        context['show_title_card'] = False
         return context
 
 class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
@@ -744,16 +753,15 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
     context_object_name = 'fiscal_summary_months'
 
     def get_queryset(self):
-        # 実績データのみを取得（is_budget=False）
+        # 実績データのみを取得（is_budget=False、下書きも含む）
         return FiscalSummary_Month.objects.filter(
             fiscal_summary_year__company=self.this_company,
             fiscal_summary_year__is_budget=False,
-            fiscal_summary_year__is_draft=False,
             is_budget=False
         ).select_related(
             'fiscal_summary_year',
             'fiscal_summary_year__company'
-        ).order_by('-fiscal_summary_year__year', 'period')
+        ).order_by('-fiscal_summary_year__year', '-fiscal_summary_year__is_draft', 'period')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -814,9 +822,8 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
             actual_year = FiscalSummary_Year.objects.filter(
                 company=self.this_company,
                 year=latest_year,
-                is_budget=False,
-                is_draft=False
-            ).first()
+                is_budget=False
+            ).order_by('-is_draft').first()  # 下書きも含め、非下書きを優先
             
             # 月次予算実績比較データ
             budget_monthly = []
@@ -839,6 +846,7 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
 
         context.update({
             'title': '月次PL',
+            'show_title_card': False,  # タイトルカードを非表示（他のページと統一）
             'monthly_summaries_with_summary': monthly_summaries_with_summary,
             'months_label': months_label,
             'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
@@ -847,7 +855,6 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
             'actual_year': actual_year,
             'budget_monthly': budget_monthly,
             'actual_monthly': actual_monthly,
-            # 第一レベルなのでタイトルカードを表示（デフォルト）
         })
         return context
 
@@ -915,7 +922,8 @@ class ImportFiscalSummary_Month(SelectedCompanyMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次推移PLのインポート'
+        context['title'] = '月次PL'
+        context['show_title_card'] = False
         return context
 
     def form_valid(self, form):
@@ -995,7 +1003,8 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '月次推移PLのインポート（MoneyForwardから）'
+        context['title'] = '月次PL'
+        context['show_title_card'] = False
         context['fiscal_years'] = FiscalSummary_Year.objects.filter(company=self.this_company)
         return context
 
@@ -1231,7 +1240,8 @@ class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '残高試算表のインポート（MoneyForwardから）'
+        context['title'] = '年次決算'
+        context['show_title_card'] = False
         return context
 
     def form_invalid(self, form):
@@ -1557,6 +1567,7 @@ class DebtCreateView(SelectedCompanyMixin, TransactionMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '新規借入登録'
+        context['show_title_card'] = False
         return context
 
 
@@ -1576,13 +1587,14 @@ class DebtDetailView(SelectedCompanyMixin, DetailView):
         debt_list_sameBank = [debt for debt in debt_list if debt['financial_institution'] == self_debt.financial_institution]
 
         context.update({            
-            'title': '借入詳細',
+            'title': '借入管理',
             'debt_list': debt_list_sameBank,
             'debt_list_totals': debt_list_totals,
             'debt_list_rescheduled': debt_list_rescheduled,
             'debt_list_finished': debt_list_finished,
             'debt_list_nodisplay': debt_list_nodisplay,
             'today': timezone.now().date(),
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1621,7 +1633,8 @@ class DebtUpdateView(SelectedCompanyMixin, TransactionMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['debt'] = self.object
-        context['title'] = '借入情報編集'
+        context['title'] = '借入管理'
+        context['show_title_card'] = False
         return context
 
 
@@ -1638,7 +1651,8 @@ class DebtDeleteView(SelectedCompanyMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '借入削除確認'
+        context['title'] = '借入管理'
+        context['show_title_card'] = False
         return context
 
 class DebtsAllListView(SelectedCompanyMixin, ListView):
@@ -1732,6 +1746,7 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
             'debt_list_nodisplay': debt_list_nodisplay,
             'weighted_average_interest': weighted_average_interest,
             'today': timezone.now().date(),
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1749,11 +1764,11 @@ class DebtsByBankListView(SelectedCompanyMixin, ListView):
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
 
         context.update({
-            'title': '金融機関別借入一覧',
+            'title': '借入管理',
             'debt_list': debt_list,
             'debt_list_totals': debt_list_totals,
             'debt_list_byBank': debt_list_byBank,
-            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1800,13 +1815,13 @@ class DebtsByBankDetailListView(SelectedCompanyMixin, ListView):
 
         from django.utils import timezone
         context.update({
-            'title': f'{financial_institution.short_name if financial_institution else "金融機関"} - 借入一覧',
+            'title': '借入管理',
             'financial_institution': financial_institution,
             'debt_list': filtered_debt_list,
             'debt_list_totals': debt_list_totals,
             'bank_totals': bank_totals,
             'today': timezone.now().date(),
-            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1823,11 +1838,11 @@ class DebtsBySecuredTypeListView(SelectedCompanyMixin, ListView):
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
 
         context.update({
-            'title': '保証別借入一覧',
+            'title': '借入管理',
             'debt_list_totals': debt_list_totals,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'debt_list_byBankAndSecuredType': debt_list_byBankAndSecuredType,
-            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1874,13 +1889,13 @@ class DebtsBySecuredTypeDetailListView(SelectedCompanyMixin, ListView):
 
         from django.utils import timezone
         context.update({
-            'title': f'{secured_type.name if secured_type else "保証タイプ"} - 借入一覧',
+            'title': '借入管理',
             'secured_type': secured_type,
             'debt_list': filtered_debt_list,
             'debt_list_totals': debt_list_totals,
             'secured_type_totals': secured_type_totals,
             'today': timezone.now().date(),
-            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1894,9 +1909,9 @@ class DebtsArchivedListView(SelectedCompanyMixin, ListView):
         context = super().get_context_data(**kwargs)
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
         context.update({
-            'title': 'アーカイブ済み借入一覧',
+            'title': '借入管理',
             'debt_list_nodisplay': debt_list_nodisplay,
-            'show_title_card': False,  # 第二レベルなのでタイトルカードを非表示
+            'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
 
@@ -1933,7 +1948,8 @@ class MeetingMinutesCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '新規ミーティングノート作成'
+        context['title'] = '新規ノート作成'
+        context['show_title_card'] = False
         return context
 
 class MeetingMinutesUpdateView(SelectedCompanyMixin, UpdateView):
@@ -1957,7 +1973,8 @@ class MeetingMinutesUpdateView(SelectedCompanyMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'ミーティングノート編集'
+        context['title'] = 'ノート（議事録）'
+        context['show_title_card'] = False
         return context
 
 
@@ -1988,8 +2005,8 @@ class MeetingMinutesListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company_id'] = self.this_company.id
-        context['title'] = 'ノート'
-        # 第一レベルなのでタイトルカードを表示（デフォルト）
+        context['title'] = 'ノート（議事録）'
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         return context
         
 
@@ -2002,7 +2019,8 @@ class MeetingMinutesDetailView(SelectedCompanyMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company_id'] = self.this_company.id
-        context['title'] = 'ノート詳細' 
+        context['title'] = 'ノート（議事録）'
+        context['show_title_card'] = False
         # 現在の議事録を取得
         current_meeting = self.object
         
@@ -2030,7 +2048,8 @@ class MeetingMinutesDeleteView(SelectedCompanyMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company_id'] = self.this_company.id
-        context['title'] = 'ノート削除確認'
+        context['title'] = 'ノート（議事録）'
+        context['show_title_card'] = False
         return context
 
 
@@ -2050,7 +2069,8 @@ class Stakeholder_nameCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '新規株主名登録'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         return context
 
 class Stakeholder_nameUpdateView(SelectedCompanyMixin, UpdateView):
@@ -2076,7 +2096,8 @@ class Stakeholder_nameUpdateView(SelectedCompanyMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['stakeholder_name'] = self.object
-        context['title'] = '株主情報編集'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         return context
 
 class Stakeholder_nameListView(SelectedCompanyMixin, ListView):
@@ -2092,7 +2113,7 @@ class Stakeholder_nameListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '株主情報'
-        # 第一レベルなのでタイトルカードを表示（デフォルト）
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         return context
 
 class Stakeholder_nameDeleteView(SelectedCompanyMixin, DeleteView):
@@ -2104,6 +2125,12 @@ class Stakeholder_nameDeleteView(SelectedCompanyMixin, DeleteView):
         response = super().form_valid(form)
         messages.success(self.request, '株主名を削除しました。')
         return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
+        return context
 
 
 class Stakeholder_nameDetailView(SelectedCompanyMixin, DetailView):
@@ -2118,7 +2145,8 @@ class Stakeholder_nameDetailView(SelectedCompanyMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株主詳細'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         context['company_id'] = self.this_company.id
         return context
 
@@ -2152,7 +2180,8 @@ class StockEventCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株式発行作成'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         return context
 
 
@@ -2180,7 +2209,8 @@ class StockEventUpdateView(SelectedCompanyMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株式発行編集'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         context['fiscal_summary_year'] = self.object.fiscal_summary_year
         return context
 
@@ -2197,7 +2227,8 @@ class StockEventListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update({
-            'title': '株式発行一覧',
+            'title': '株主情報',
+            'show_title_card': False,  # タイトルカードを非表示（他のページと統一）
         })
         return context
 
@@ -2217,7 +2248,8 @@ class StockEventDetailView(SelectedCompanyMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株式発行詳細'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         # これに紐づくStockEventLineのデータを取得し、contextに含める
         context['stock_event_line'] = self.object.details.all()
         return context
@@ -2246,7 +2278,8 @@ class StockEventDeleteView(SelectedCompanyMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株式発行削除確認'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         return context
 
 
@@ -2279,7 +2312,8 @@ class StockEventLineCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株式イベント明細の追加'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         context['stock_event'] = self.stock_event
         return context
 
@@ -2299,6 +2333,7 @@ class StockEventLineUpdateView(SelectedCompanyMixin, UpdateView):
         obj = super(UpdateView, self).get_object(queryset)
         if obj.stock_event.fiscal_summary_year.company != self.this_company:
             raise PermissionDenied("この株式発行明細データを更新する権限がありません。")
+        return obj
 
     def form_valid(self, form):
         # fiscal_summary_yearの変更を防ぐ
@@ -2310,7 +2345,8 @@ class StockEventLineUpdateView(SelectedCompanyMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['stock_event'] = self.object.stock_event
-        context['title'] = '株式イベント明細の編集'
+        context['title'] = '株主情報'
+        context['show_title_card'] = False
         return context
 
 ##########################################################################
@@ -2327,7 +2363,8 @@ class ImportFinancialInstitutionView(LoginRequiredMixin, DetailView):
     #     return super().dispatch(*args, **kwargs)
 
     def get(self, request):
-        return render(request, self.template_name)
+        context = {'title': '金融機関インポート'}
+        return render(request, self.template_name, context)
 
     @transaction.atomic
     def post(self, request):
@@ -2416,6 +2453,12 @@ class ImportIndustryClassificationView(LoginRequiredMixin, FormView):
     form_class = IndustryClassificationImportForm
     success_url = reverse_lazy('industry_classification_list')  # 適切なURLに変更してください
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
+        return context
+
     def form_valid(self, form):
         csv_file = form.cleaned_data['csv_file']
         if not csv_file.name.endswith('.csv'):
@@ -2454,11 +2497,23 @@ class IndustryClassificationListView(LoginRequiredMixin, ListView):
     template_name = 'scoreai/industry_classification_list.html'
     context_object_name = 'industry_classifications'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
+        return context
+
 
 class ImportIndustrySubClassificationView(FormView):
     form_class = IndustrySubClassificationImportForm
     template_name = 'scoreai/industry_subclassification_import.html'
     success_url = reverse_lazy('industry_subclassification_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
+        return context
 
     def form_valid(self, form):
         csv_file = form.cleaned_data['csv_file']
@@ -2488,11 +2543,23 @@ class IndustrySubClassificationListView(ListView):
     template_name = 'scoreai/industry_subclassification_list.html'
     context_object_name = 'industry_subclassifications'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
+        return context
+
 
 class ImportIndustryBenchmarkView(LoginRequiredMixin, FormView):
     template_name = 'scoreai/import_industry_benchmark.html'
     form_class = IndustryBenchmarkImportForm
     success_url = reverse_lazy('industry_benchmark_list')  # 適切なリスト表示のURLに変更してください
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
+        return context
 
     def form_valid(self, form):
         csv_file = form.cleaned_data['csv_file']
@@ -2612,7 +2679,8 @@ class IndustryBenchmarkListView(LoginRequiredMixin, ListView):
         context['industry_subclassifications'] = IndustrySubClassification.objects.all()
         context['indicators'] = IndustryIndicator.objects.all()
         context['company_size_choices'] = dict(IndustryBenchmark.COMPANY_SIZE_CHOICES).items()
-        context['title'] = '業界別ベンチマーク一覧'
+        context['title'] = 'ローカルベンチマーク'
+        context['show_title_card'] = False
         return context
 
 
@@ -2640,6 +2708,7 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         
         context = super().get_context_data(**kwargs)
         context['title'] = 'クライアント一覧'
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         
         # Firmを取得してプラン制限情報を追加
         user_firm = UserFirm.objects.filter(user=self.request.user, is_selected=True).first()
@@ -2760,6 +2829,7 @@ class AboutView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'About'
+        context['show_title_card'] = False
         return context
 
 class NewsListView(generic.TemplateView):
@@ -2768,6 +2838,7 @@ class NewsListView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'お知らせ'
+        context['show_title_card'] = False
         return context
 
 class CompanyProfileView(generic.TemplateView):
@@ -2776,6 +2847,7 @@ class CompanyProfileView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '会社概要'
+        context['show_title_card'] = False
         return context
 
 class HelpView(generic.ListView):
@@ -2795,6 +2867,7 @@ class HelpView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'ヘルプ'
+        context['show_title_card'] = False
         context['selected_category'] = self.request.GET.get('category', '')
         # カテゴリの選択肢を定義
         context['categories'] = [
@@ -2815,6 +2888,7 @@ class HelpDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = self.object.title
+        context['show_title_card'] = False
         return context
 
 class ManualView(generic.TemplateView):
@@ -2823,6 +2897,7 @@ class ManualView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'マニュアル'
+        context['show_title_card'] = False
         return context
 
 class TermsOfServiceView(generic.TemplateView):
@@ -2831,6 +2906,7 @@ class TermsOfServiceView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '利用規約'
+        context['show_title_card'] = False
         return context
 
 class PrivacyPolicyView(generic.TemplateView):
@@ -2839,6 +2915,7 @@ class PrivacyPolicyView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'プライバシーポリシー'
+        context['show_title_card'] = False
         return context
 
 class LegalNoticeView(generic.TemplateView):
@@ -2847,6 +2924,7 @@ class LegalNoticeView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '特定商取引法に基づく表示'
+        context['show_title_card'] = False
         return context
 
 class SecurityPolicyView(generic.TemplateView):
@@ -2855,6 +2933,7 @@ class SecurityPolicyView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'セキュリティポリシー'
+        context['show_title_card'] = False
         return context
 
 
@@ -2864,6 +2943,7 @@ class SampleView(generic.TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Sample Page'
+        context['show_title_card'] = False
         return context
 
 

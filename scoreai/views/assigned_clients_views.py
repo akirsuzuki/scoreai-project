@@ -48,6 +48,7 @@ class AssignedClientsListView(LoginRequiredMixin, ErrorHandlingMixin, ListView):
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         context['title'] = 'アサイン一覧'
+        context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         
         # 選択中のFirmを取得
         user_firm = UserFirm.objects.filter(

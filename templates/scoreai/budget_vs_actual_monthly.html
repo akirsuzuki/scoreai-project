@@ -15,8 +15,11 @@
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">{{ title }}</h4>
-      <div class="d-flex gap-2">
+      <h4 class="fw-semibold mb-0">月次PL</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn btn-outline-primary btn-sm">月次PL一覧（3期比較）</a>
+        <a href="{% url 'fiscal_summary_month_list' %}?years=1" class="btn btn-outline-primary btn-sm">月次PL一覧（直近年度）</a>
+        <a href="{% url 'budget_vs_actual_monthly' %}" class="btn btn-primary btn-sm">予算vs実績推移表</a>
         <form method="get" class="d-flex gap-2">
           <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
             {% for y in available_years %}
@@ -24,9 +27,6 @@
             {% endfor %}
           </select>
         </form>
-        <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-outline-secondary btn-sm">
-          <i class="ti ti-arrow-left me-1"></i>戻る
-        </a>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">月次予算vs実績推移表（{{ year }}年）</h5>
+        <h5 class="card-title mb-0 fw-semibold">予算vs実績推移表（{{ year }}年）</h5>
       </div>
       <div class="card-body">
         {% if monthly_comparison %}

@@ -36,7 +36,8 @@ class PlanListView(FirmOwnerMixin, ListView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'プラン一覧'
+        context['title'] = 'プラン・サブスクリプション'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # 現在のサブスクリプションを取得
@@ -60,7 +61,8 @@ class PlanDetailView(FirmOwnerMixin, DetailView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = f'{self.object.name} - プラン詳細'
+        context['title'] = 'プラン・サブスクリプション'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # 現在のサブスクリプションを取得
@@ -95,7 +97,8 @@ class SubscriptionManageView(FirmOwnerMixin, TemplateView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'サブスクリプション管理'
+        context['title'] = 'プラン・サブスクリプション'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # 現在のサブスクリプションを取得
@@ -258,7 +261,8 @@ class SubscriptionSuccessView(FirmOwnerMixin, TemplateView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'サブスクリプション登録完了'
+        context['title'] = 'プラン・サブスクリプション'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
 
@@ -270,7 +274,8 @@ class SubscriptionCancelView(FirmOwnerMixin, TemplateView):
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
-        context['title'] = 'サブスクリプション登録キャンセル'
+        context['title'] = 'プラン・サブスクリプション'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         return context
 

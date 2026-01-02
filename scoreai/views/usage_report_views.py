@@ -51,6 +51,7 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
         """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         context['title'] = '利用状況レポート'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         
         # 表示する月数を取得（デフォルト: 6ヶ月）
@@ -631,7 +632,8 @@ class CompanyUsageReportView(FirmOwnerMixin, TemplateView):
             from django.http import Http404
             raise Http404("Company not found")
         
-        context['title'] = f'{company.company.name} - 利用状況'
+        context['title'] = '利用状況レポート'
+        context['show_title_card'] = False
         context['firm'] = self.firm
         context['company'] = company.company
         

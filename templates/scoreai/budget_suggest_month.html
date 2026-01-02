@@ -16,9 +16,12 @@
 <div class="row">
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">{{ title }}</h4>
-      <div class="d-flex gap-2">
-        <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-outline-secondary">
+      <h4 class="fw-semibold mb-0">予算管理</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'budget_suggest' %}" class="btn btn-outline-primary btn-sm">AI予算策定（年次）</a>
+        <a href="{% url 'budget_suggest_month' %}" class="btn btn-primary btn-sm">AI予算策定（月次）</a>
+        <a href="{% url 'budget_analysis' %}" class="btn btn-outline-primary btn-sm">予算分析</a>
+        <a href="{% url 'fiscal_summary_month_list' %}" class="btn btn-outline-secondary btn-sm">
           <i class="ti ti-arrow-left me-1"></i>戻る
         </a>
       </div>
@@ -31,7 +34,7 @@
     <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0 fw-semibold">
-          月次予算作成（年次予算から）
+          AI予算策定（月次）
         </h5>
       </div>
       <form method="post">
