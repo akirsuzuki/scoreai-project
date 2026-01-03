@@ -148,8 +148,6 @@
 
 ## コード整合性
 
-詳細は [コード整合性レビューレポート](./CODE_REVIEW_REPORT.md) を参照してください。
-
 ### 確認済み項目
 - ✅ CloudStorageSettingのCompany単位管理への変更がすべての箇所で一貫している
 - ✅ すべてのビューで`SelectedCompanyMixin`が正しく使用されている
