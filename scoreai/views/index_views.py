@@ -198,6 +198,19 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
                     budget_chart_data['sales'][month.period - 1] = float(month.sales or 0)
                     budget_chart_data['gross_profit'][month.period - 1] = float(month.gross_profit or 0)
                     budget_chart_data['operating_profit'][month.period - 1] = float(month.operating_profit or 0)
+        
+        # 実績データをチャート用に整形（最新年度の実績のみ）
+        actual_chart_data = {
+            'sales': [0] * 12,
+            'gross_profit': [0] * 12,
+            'operating_profit': [0] * 12,
+        }
+        if actual_monthly:
+            for month in actual_monthly:
+                if month.period and 1 <= month.period <= 12:
+                    actual_chart_data['sales'][month.period - 1] = float(month.sales or 0)
+                    actual_chart_data['gross_profit'][month.period - 1] = float(month.gross_profit or 0)
+                    actual_chart_data['operating_profit'][month.period - 1] = float(month.operating_profit or 0)
 
         context.update({
             'title': 'ダッシュボード',
@@ -218,6 +231,7 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             'budget_monthly': budget_monthly,
             'actual_monthly': actual_monthly,
             'budget_chart_data': budget_chart_data,  # チャート用の予算データ
+            'actual_chart_data': actual_chart_data,  # チャート用の実績データ
             'latest_year': latest_year,  # チャートで予算の年度を表示するために追加
         })
         return context

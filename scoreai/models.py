@@ -1214,7 +1214,8 @@ class FiscalSummary_Year(models.Model):
         verbose_name_plural = '年次決算情報'
 
     def __str__(self):
-        return f"{self.company.name} - {self.year}"
+        budget_label = "予算" if self.is_budget else "実績"
+        return f"{self.company.name} - {self.year}年 ({budget_label})"
         
 
 class FiscalSummary_Month(models.Model):
@@ -1395,6 +1396,63 @@ class Help(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Manual(models.Model):
+    """マニュアルモデル - 操作手順をステップバイステップで説明"""
+    USER_TYPE_CHOICES = [
+        ('company_admin', '会社ユーザー（管理者）'),
+        ('company_user', '会社ユーザー（一般）'),
+        ('firm_admin', 'Firmユーザー（管理者）'),
+        ('firm_user', 'Firmユーザー（一般）'),
+    ]
+    
+    CATEGORY_CHOICES = [
+        ('getting_started', 'はじめに'),
+        ('dashboard', 'ダッシュボード'),
+        ('financial_management', '財務管理'),
+        ('budget_management', '予算管理'),
+        ('debt_management', '借入管理'),
+        ('ai_consultation', 'AI相談'),
+        ('data_import', 'データ取り込み'),
+        ('other_data', 'その他データ'),
+        ('settings', '設定'),
+    ]
+    
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user_type = models.CharField(
+        "ユーザータイプ",
+        max_length=20,
+        choices=USER_TYPE_CHOICES,
+        help_text="このマニュアルが対象とするユーザータイプ"
+    )
+    category = models.CharField(
+        "カテゴリ",
+        max_length=50,
+        choices=CATEGORY_CHOICES,
+        help_text="マニュアルのカテゴリ"
+    )
+    order = models.IntegerField(
+        "表示順序",
+        default=0,
+        help_text="同じカテゴリ内での表示順序（小さい順）"
+    )
+    title = models.CharField("タイトル", max_length=255)
+    content = models.TextField("内容", help_text="Markdown形式で記述可能")
+    is_active = models.BooleanField("有効", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'マニュアル'
+        verbose_name_plural = 'マニュアル'
+        ordering = ['user_type', 'category', 'order', 'id']
+        indexes = [
+            models.Index(fields=['user_type', 'category', 'order']),
+        ]
+    
+    def __str__(self):
+        return f"{self.get_user_type_display()} - {self.get_category_display()} - {self.title}"
 
 
 # AI相談機能関連のモデル

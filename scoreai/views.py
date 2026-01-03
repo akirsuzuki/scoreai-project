@@ -59,6 +59,7 @@ from .models import (
     IndustryBenchmark,
     TechnicalTerm,
     Help,
+    Manual,
 )
 from .forms import (
     CustomUserCreationForm,
@@ -380,6 +381,74 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        # スコアが未計算の場合、自動的に計算する
+        fiscal_summary_year = self.object
+        needs_save = False
+        
+        # 必要な情報を取得
+        year = fiscal_summary_year.year
+        industry_classification = fiscal_summary_year.company.industry_classification
+        industry_subclassification = fiscal_summary_year.company.industry_subclassification
+        company_size = fiscal_summary_year.company.company_size
+        
+        # 各指標の値を取得
+        indicator_values = {
+            'sales_growth_rate': fiscal_summary_year.sales_growth_rate,
+            'operating_profit_margin': fiscal_summary_year.operating_profit_margin,
+            'labor_productivity': fiscal_summary_year.labor_productivity,
+            'EBITDA_interest_bearing_debt_ratio': fiscal_summary_year.EBITDA_interest_bearing_debt_ratio,
+            'operating_working_capital_turnover_period': fiscal_summary_year.operating_working_capital_turnover_period,
+            'equity_ratio': fiscal_summary_year.equity_ratio,
+        }
+        
+        # 各指標のスコアを計算して更新（スコアが0またはNoneの場合のみ）
+        for indicator_name, value in indicator_values.items():
+            if value is not None:
+                # 現在のスコアを取得
+                current_score = None
+                if indicator_name == 'sales_growth_rate':
+                    current_score = fiscal_summary_year.score_sales_growth_rate
+                elif indicator_name == 'operating_profit_margin':
+                    current_score = fiscal_summary_year.score_operating_profit_margin
+                elif indicator_name == 'labor_productivity':
+                    current_score = fiscal_summary_year.score_labor_productivity
+                elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                    current_score = fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio
+                elif indicator_name == 'operating_working_capital_turnover_period':
+                    current_score = fiscal_summary_year.score_operating_working_capital_turnover_period
+                elif indicator_name == 'equity_ratio':
+                    current_score = fiscal_summary_year.score_equity_ratio
+                
+                # スコアが0またはNoneの場合のみ計算
+                if current_score is None or current_score == 0:
+                    score = get_finance_score(
+                        year,
+                        industry_classification,
+                        industry_subclassification,
+                        company_size,
+                        indicator_name,
+                        value
+                    )
+                    if score is not None:
+                        if indicator_name == 'sales_growth_rate':
+                            fiscal_summary_year.score_sales_growth_rate = score
+                        elif indicator_name == 'operating_profit_margin':
+                            fiscal_summary_year.score_operating_profit_margin = score
+                        elif indicator_name == 'labor_productivity':
+                            fiscal_summary_year.score_labor_productivity = score
+                        elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                            fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio = score
+                        elif indicator_name == 'operating_working_capital_turnover_period':
+                            fiscal_summary_year.score_operating_working_capital_turnover_period = score
+                        elif indicator_name == 'equity_ratio':
+                            fiscal_summary_year.score_equity_ratio = score
+                        needs_save = True
+        
+        # スコアを更新した場合は保存
+        if needs_save:
+            fiscal_summary_year.save()
+        
         # 前年のデータを取得してcontextに追加
         # previous_year = self.object.year - 1
         previous_data = FiscalSummary_Year.objects.filter(
@@ -636,10 +705,21 @@ class FiscalSummary_MonthCreateView(SelectedCompanyMixin, CreateView):
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         company = self.this_company
-        form.fields['fiscal_summary_year'].queryset = FiscalSummary_Year.objects.filter(company=company)
+        queryset = FiscalSummary_Year.objects.filter(company=company)
+        form.fields['fiscal_summary_year'].queryset = queryset
+        
+        # 選択肢の表示名に予算/実績を追加
+        form.fields['fiscal_summary_year'].label_from_instance = lambda obj: f"{obj.company.name} - {obj.year}年 ({'予算' if obj.is_budget else '実績'})"
+        
+        # is_budgetフィールドを非表示（自動制御のため）
+        form.fields['is_budget'].widget = forms.HiddenInput()
+        
         return form
 
     def form_valid(self, form):
+        # 選択したFiscalSummary_Yearのis_budgetに基づいて、FiscalSummary_Monthのis_budgetを自動設定
+        selected_year = form.cleaned_data['fiscal_summary_year']
+        form.instance.is_budget = selected_year.is_budget
         form.instance.fiscal_summary_year.company = self.this_company
         return super().form_valid(form)
 
@@ -2891,12 +2971,124 @@ class HelpDetailView(generic.DetailView):
         context['show_title_card'] = False
         return context
 
-class ManualView(generic.TemplateView):
-    template_name = 'scoreai/manual.html'
-
+class ManualListView(SelectedCompanyMixin, generic.ListView):
+    """マニュアル一覧ページ"""
+    model = Manual
+    template_name = 'scoreai/manual_list.html'
+    context_object_name = 'manuals'
+    
+    def get_queryset(self):
+        # ユーザータイプを判定
+        user = self.request.user
+        if user.is_company_user:
+            if user.is_manager:
+                user_type = 'company_admin'
+            else:
+                user_type = 'company_user'
+        elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            if user.is_manager:
+                user_type = 'firm_admin'
+            else:
+                user_type = 'firm_user'
+        else:
+            # デフォルトは会社ユーザー（一般）
+            user_type = 'company_user'
+        
+        queryset = Manual.objects.filter(
+            user_type=user_type,
+            is_active=True
+        ).order_by('category', 'order', 'id')
+        
+        return queryset
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'マニュアル'
+        context['show_title_card'] = False
+        
+        # カテゴリごとにグループ化
+        manuals_by_category = {}
+        for manual in context['manuals']:
+            category = manual.get_category_display()
+            if category not in manuals_by_category:
+                manuals_by_category[category] = []
+            manuals_by_category[category].append(manual)
+        
+        context['manuals_by_category'] = manuals_by_category
+        
+        # ユーザータイプを表示用に取得
+        user = self.request.user
+        if user.is_company_user:
+            if user.is_manager:
+                user_type_display = '会社ユーザー（管理者）'
+            else:
+                user_type_display = '会社ユーザー（一般）'
+        elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            if user.is_manager:
+                user_type_display = 'Firmユーザー（管理者）'
+            else:
+                user_type_display = 'Firmユーザー（一般）'
+        else:
+            user_type_display = '会社ユーザー（一般）'
+        
+        context['user_type_display'] = user_type_display
+        
+        return context
+
+
+class ManualDetailView(SelectedCompanyMixin, generic.DetailView):
+    """マニュアル詳細ページ"""
+    model = Manual
+    template_name = 'scoreai/manual_detail.html'
+    context_object_name = 'manual'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = self.object.title
+        context['show_title_card'] = False
+        
+        # 前後のマニュアルを取得（同じカテゴリ、同じユーザータイプ）
+        manual = self.object
+        prev_manual = Manual.objects.filter(
+            user_type=manual.user_type,
+            category=manual.category,
+            is_active=True,
+            order__lt=manual.order
+        ).order_by('-order', '-id').first()
+        
+        if not prev_manual:
+            prev_manual = Manual.objects.filter(
+                user_type=manual.user_type,
+                is_active=True,
+                category__lt=manual.category
+            ).order_by('-category', '-order', '-id').first()
+        
+        next_manual = Manual.objects.filter(
+            user_type=manual.user_type,
+            category=manual.category,
+            is_active=True,
+            order__gt=manual.order
+        ).order_by('order', 'id').first()
+        
+        if not next_manual:
+            next_manual = Manual.objects.filter(
+                user_type=manual.user_type,
+                is_active=True,
+                category__gt=manual.category
+            ).order_by('category', 'order', 'id').first()
+        
+        context['prev_manual'] = prev_manual
+        context['next_manual'] = next_manual
+        
+        return context
+
+
+class FAQView(generic.TemplateView):
+    template_name = 'scoreai/faq.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'よくある質問'
         context['show_title_card'] = False
         return context
 

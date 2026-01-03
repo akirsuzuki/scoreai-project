@@ -1,0 +1,58 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">{{ title }}</h4>
+      <a href="{% url 'manual_list' %}" class="btn btn-outline-primary btn-sm">
+        <i class="ti ti-arrow-left me-1"></i>マニュアル一覧に戻る
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title mb-0 fw-semibold">{{ manual.title }}</h5>
+            <small class="text-muted">{{ manual.get_category_display }} - {{ manual.get_user_type_display }}</small>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="manual-content">
+          {{ manual.content|linebreaks }}
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-flex justify-content-between">
+          <div>
+            {% if prev_manual %}
+            <a href="{% url 'manual_detail' prev_manual.id %}" class="btn btn-outline-secondary btn-sm">
+              <i class="ti ti-arrow-left me-1"></i>前のマニュアル: {{ prev_manual.title|truncatewords:5 }}
+            </a>
+            {% endif %}
+          </div>
+          <div>
+            {% if next_manual %}
+            <a href="{% url 'manual_detail' next_manual.id %}" class="btn btn-outline-primary btn-sm">
+              次のマニュアル: {{ next_manual.title|truncatewords:5 }} <i class="ti ti-arrow-right ms-1"></i>
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

@@ -31,6 +31,7 @@ from .models import (
     IndustryBenchmark,
     TechnicalTerm,
     Help,
+    Manual,
     AIConsultationType,
     AIConsultationScript,
     UserAIConsultationScript,
@@ -171,9 +172,48 @@ class FiscalSummary_YearAdmin(admin.ModelAdmin):
 class FiscalSummary_MonthAdmin(admin.ModelAdmin):
     list_display = ('fiscal_summary_year', 'period', 'is_budget', 'sales', 'gross_profit', 'operating_profit', 'ordinary_profit')
     list_display_links = ('fiscal_summary_year', 'period')
-    list_filter = ('fiscal_summary_year__year', 'fiscal_summary_year__company', 'period', 'is_budget')
+    list_filter = ('fiscal_summary_year__year', 'fiscal_summary_year__company', 'period', 'is_budget', 'fiscal_summary_year__is_budget')
     search_fields = ('fiscal_summary_year__company__name', 'fiscal_summary_year__year')
     ordering = ('-fiscal_summary_year__year', 'fiscal_summary_year__company', 'period')
+    
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('fiscal_summary_year', 'period', 'is_budget')
+        }),
+        ('PL情報', {
+            'fields': ('sales', 'gross_profit', 'operating_profit', 'ordinary_profit')
+        }),
+    )
+    
+    readonly_fields = ('fiscal_summary_year_display',)
+    
+    def fiscal_summary_year_display(self, obj):
+        """Fiscal Summary Yearの表示（予算/実績を含む）"""
+        if obj.fiscal_summary_year:
+            budget_label = "予算" if obj.fiscal_summary_year.is_budget else "実績"
+            return format_html(
+                '<strong>{}</strong> - {}年 ({})',
+                obj.fiscal_summary_year.company.name,
+                obj.fiscal_summary_year.year,
+                budget_label
+            )
+        return "-"
+    fiscal_summary_year_display.short_description = '年度（予算/実績）'
+    
+    def get_fieldsets(self, request, obj=None):
+        """編集画面でfiscal_summary_year_displayを表示"""
+        fieldsets = list(super().get_fieldsets(request, obj))
+        if obj:  # 編集時のみ
+            # fiscal_summary_year_displayを追加して表示
+            fieldsets[0][1]['fields'] = ('fiscal_summary_year_display', 'fiscal_summary_year', 'period', 'is_budget')
+        return fieldsets
+    
+    def get_readonly_fields(self, request, obj=None):
+        """編集時はfiscal_summary_yearを読み取り専用にする"""
+        readonly = list(super().get_readonly_fields(request, obj))
+        if obj:  # 編集時
+            readonly.append('fiscal_summary_year')
+        return readonly
 
 @admin.register(FinancialInstitution)
 class FinancialInstitutionAdmin(admin.ModelAdmin):
@@ -284,6 +324,23 @@ class HelpAdmin(admin.ModelAdmin):
     list_display = ('title', 'category')
     list_display_links = ('title', 'category')
     ordering = ('category', 'title')
+
+
+@admin.register(Manual)
+class ManualAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user_type', 'category', 'order', 'is_active')
+    list_display_links = ('title',)
+    list_filter = ('user_type', 'category', 'is_active')
+    search_fields = ('title', 'content')
+    ordering = ('user_type', 'category', 'order', 'id')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('user_type', 'category', 'order', 'title', 'is_active')
+        }),
+        ('内容', {
+            'fields': ('content',)
+        }),
+    )
 
 
 @admin.register(AIConsultationType)

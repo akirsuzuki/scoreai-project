@@ -1,0 +1,212 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">{{ title }}</h4>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0 fw-semibold">{{ title }}</h5>
+      </div>
+      <div class="card-body">
+        <div class="accordion" id="faqAccordion">
+          <!-- FAQ 1 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq1">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-expanded="true" aria-controls="collapse1">
+                Q1. 月次PLデータと年次財務諸表データの違いは何ですか？
+              </button>
+            </h2>
+            <div id="collapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                <strong>月次PLデータ</strong>は、各月の損益計算書（PL）情報を入力するものです。売上高、粗利益、営業利益、経常利益などの月次データを管理します。<br><br>
+                <strong>年次財務諸表データ</strong>は、年度単位の貸借対照表（BS）と損益計算書（PL）の完全な情報を入力するものです。月次データとは独立して管理され、年度の合計値やBS情報を含みます。<br><br>
+                現仕様では、月次データと年次データの自動連携機能はありません。それぞれ別途入力してください。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq2">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                Q2. 予算データと実績データはどのように区別されますか？
+              </button>
+            </h2>
+            <div id="collapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                予算データと実績データは、<strong>is_budget</strong>フラグで区別されます。<br><br>
+                <strong>予算データ（is_budget=True）</strong>：将来の計画や目標値を入力するデータです。予算vs実績比較や予算分析に使用されます。<br><br>
+                <strong>実績データ（is_budget=False）</strong>：実際の取引や決算結果を入力するデータです。ダッシュボードや財務分析の基準となります。<br><br>
+                同じ年度・同じ月度でも、予算と実績は別々のレコードとして保存されます。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq3">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-expanded="false" aria-controls="collapse3">
+                Q3. CSVインポートで既存データを上書きするにはどうすればよいですか？
+              </button>
+            </h2>
+            <div id="collapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                CSVインポート画面で<strong>「既存データを上書きする」</strong>チェックボックスにチェックを入れてからアップロードしてください。<br><br>
+                チェックを入れない場合、既存データと重複するレコードがあるとエラーになります。上書きモードでは、同じ年度・月度・予算/実績区分のデータが存在する場合、新しいデータで置き換えられます。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq4">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                Q4. AI相談機能はどのように使いますか？
+              </button>
+            </h2>
+            <div id="collapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                AI相談機能は、財務データを基にしたAI分析やアドバイスを提供します。<br><br>
+                <strong>使い方：</strong><br>
+                1. サイドバーの「AI相談センター」をクリック<br>
+                2. 相談タイプ（予算策定、財務分析など）を選択<br>
+                3. 必要に応じてマイスクリプトを選択（カスタマイズ可能）<br>
+                4. 質問や相談内容を入力して送信<br><br>
+                AIは、入力された財務データ（売上、利益、借入状況など）を自動的に分析し、回答を生成します。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq5">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse5" aria-expanded="false" aria-controls="collapse5">
+                Q5. 借入管理で複数の借入を登録するにはどうすればよいですか？
+              </button>
+            </h2>
+            <div id="collapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                借入管理では、金融機関ごと、または担保タイプごとに複数の借入を登録できます。<br><br>
+                <strong>登録方法：</strong><br>
+                1. サイドバーの「借入管理」をクリック<br>
+                2. 「新規登録」ボタンをクリック<br>
+                3. 金融機関、借入金額、金利、返済条件などを入力<br>
+                4. 保存後、同じ手順で次の借入を登録<br><br>
+                各借入は独立して管理され、ダッシュボードで合計値や平均金利が表示されます。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 6 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq6">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse6" aria-expanded="false" aria-controls="collapse6">
+                Q6. 決算月が5月の場合、月次データの表示順序はどうなりますか？
+              </button>
+            </h2>
+            <div id="collapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                決算月が5月の場合、会計年度は6月から始まります。<br><br>
+                月次データの表示は、決算月を考慮して自動的に調整されます。例えば、決算月が5月の場合、6月が年度の最初の月として表示され、5月が年度の最後の月として表示されます。<br><br>
+                決算月の設定は、会社プロフィールで変更できます。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 7 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq7">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse7" aria-expanded="false" aria-controls="collapse7">
+                Q7. 予算vs実績比較ページでデータが表示されない場合はどうすればよいですか？
+              </button>
+            </h2>
+            <div id="collapse7" class="accordion-collapse collapse" aria-labelledby="faq7" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                予算vs実績比較ページでデータが表示されない場合、以下の点を確認してください：<br><br>
+                <strong>確認事項：</strong><br>
+                1. 対象年度に予算データ（is_budget=True）が登録されているか<br>
+                2. 対象年度に実績データ（is_budget=False）が登録されているか<br>
+                3. 年次ドロップダウンで正しい年度を選択しているか<br><br>
+                月次比較ページでは、年次データがなくても月次データのみで表示されます。年次比較ページでは、予算と実績の両方の年次データが必要です。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 8 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq8">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse8" aria-expanded="false" aria-controls="collapse8">
+                Q8. 会社ユーザーとFirmユーザーの違いは何ですか？
+              </button>
+            </h2>
+            <div id="collapse8" class="accordion-collapse collapse" aria-labelledby="faq8" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                <strong>会社ユーザー</strong>は、特定の会社の財務データを管理するユーザーです。自社のデータを入力・閲覧・分析できます。<br><br>
+                <strong>Firmユーザー</strong>は、複数の会社を管理するコンサルティング会社や会計事務所などのユーザーです。複数のクライアント企業のデータを一元管理できます。<br><br>
+                権限として、管理者（is_manager=True）と一般ユーザーがあり、管理者はより多くの機能にアクセスできます。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 9 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq9">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse9" aria-expanded="false" aria-controls="collapse9">
+                Q9. データの単位は何ですか？
+              </button>
+            </h2>
+            <div id="collapse9" class="accordion-collapse collapse" aria-labelledby="faq9" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                システム内のすべての金額データは<strong>千円単位</strong>で入力・表示されます。<br><br>
+                例えば、1,000,000円を入力する場合は「1000」と入力してください。画面には「1000千円」と表示されます。<br><br>
+                借入金額、売上高、利益、資産・負債など、すべての金額フィールドが千円単位です。
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ 10 -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="faq10">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse10" aria-expanded="false" aria-controls="collapse10">
+                Q10. マニュアルとヘルプの違いは何ですか？
+              </button>
+            </h2>
+            <div id="collapse10" class="accordion-collapse collapse" aria-labelledby="faq10" data-bs-parent="#faqAccordion">
+              <div class="accordion-body">
+                <strong>マニュアル</strong>は、操作手順をステップバイステップで説明するガイドです。初めて使う方でも順番に読むことで、一通りの操作ができるようになります。ユーザータイプ（会社ユーザー/管理者、Firmユーザー/管理者）別に整理されています。<br><br>
+                <strong>ヘルプ</strong>は、トラブルシューティングやエラー解決、技術的なサポート情報を提供します。特定の問題やエラーが発生した際に参照してください。<br><br>
+                <strong>よくある質問（FAQ）</strong>は、マニュアルを補足する内容で、よくある質問と回答をまとめています。
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'manual_list' %}" class="btn btn-primary me-2">
+          <i class="ti ti-book me-1"></i>マニュアルを見る
+        </a>
+        <a href="{% url 'help' %}" class="btn btn-outline-secondary">
+          <i class="ti ti-help me-1"></i>ヘルプを見る
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

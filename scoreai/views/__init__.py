@@ -152,7 +152,9 @@ NewsListView = _views_py.NewsListView
 CompanyProfileView = _views_py.CompanyProfileView
 HelpView = _views_py.HelpView
 HelpDetailView = _views_py.HelpDetailView
-ManualView = _views_py.ManualView
+ManualListView = _views_py.ManualListView
+ManualDetailView = _views_py.ManualDetailView
+FAQView = _views_py.FAQView
 TermsOfServiceView = _views_py.TermsOfServiceView
 PrivacyPolicyView = _views_py.PrivacyPolicyView
 LegalNoticeView = _views_py.LegalNoticeView
@@ -273,7 +275,9 @@ __all__ = [
     'CompanyProfileView',
     'HelpView',
     'HelpDetailView',
-    'ManualView',
+    'ManualListView',
+    'ManualDetailView',
+    'FAQView',
     'TermsOfServiceView',
     'PrivacyPolicyView',
     'LegalNoticeView',

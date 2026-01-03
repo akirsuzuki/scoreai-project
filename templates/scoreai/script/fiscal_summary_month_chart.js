@@ -2,6 +2,7 @@
   const monthlySummaries = {{ monthly_summaries|safe }}.reverse();
   const monthsLabel = {{ months_label|safe }};
   const budgetChartData = {{ budget_chart_data|safe }};
+  const actualChartData = {{ actual_chart_data|safe }};
   const salesData = [];
   const grossProfitData = [];
   const operatingProfitData = [];
@@ -78,6 +79,8 @@
       type: 'line',
     });
   }
+  
+  // 実績データは monthlySummaries に既に含まれているため、ここでは追加しない
 
   const ctx = document.getElementById('salesChart').getContext('2d');
   const salesChart = new Chart(ctx, {

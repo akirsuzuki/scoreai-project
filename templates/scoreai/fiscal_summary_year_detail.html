@@ -75,32 +75,32 @@
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">現金預金合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.cash_and_deposits|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.cash_and_deposits|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">売掛金</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.accounts_receivable|intcomma }}
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.accounts_receivable|intcomma }}千円
                               </p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">棚卸資産</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.inventory|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.inventory|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">短期貸付金</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.short_term_loans_receivable|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.short_term_loans_receivable|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">その他流動資産</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_current_assets|intcomma }}
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_current_assets|intcomma }}千円
                               </p>
                             </div>
                           </div>
@@ -108,7 +108,7 @@
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">流動資産合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_current_assets|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_current_assets|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -129,13 +129,13 @@
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">土地</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.land|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.land|intcomma }}千円</p>
                                 </div>
                               </div>
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">建物</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.buildings|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.buildings|intcomma }}千円</p>
                                 </div>
                               </div>
                               <div class="mb-2 row">
@@ -147,26 +147,26 @@
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">車両運搬具</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.vehicles|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.vehicles|intcomma }}千円</p>
                                 </div>
                               </div>
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">減価償却累計額</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.accumulated_depreciation|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.accumulated_depreciation|intcomma }}千円</p>
                                 </div>
                               </div>
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">その他有形固定資産</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.other_tangible_fixed_assets|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.other_tangible_fixed_assets|intcomma }}千円</p>
                                 </div>
                               </div>
                             </div>
                             <div class="mb-2 row mt-3">
                               <label class="col-sm-6 col-form-label fw-bold">有形固定資産合計</label>
                               <div class="col-sm-6">
-                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_tangible_fixed_assets|intcomma }}</p>
+                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_tangible_fixed_assets|intcomma }}千円</p>
                               </div>
                             </div>
                           </div>
@@ -182,20 +182,20 @@
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">のれん</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.goodwill|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.goodwill|intcomma }}千円</p>
                                 </div>
                               </div>
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">その他無形固定資産</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_intangible_assets|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_intangible_assets|intcomma }}千円</p>
                                 </div>
                               </div>
                             </div>
                             <div class="mb-2 row mt-3">
                               <label class="col-sm-6 col-form-label fw-bold">無形固定資産合計</label>
                               <div class="col-sm-6">
-                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_intangible_assets|intcomma }}</p>
+                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_intangible_assets|intcomma }}千円</p>
                               </div>
                             </div>
                           </div>
@@ -211,14 +211,14 @@
                               <div class="mb-2 row">
                                 <label class="col-sm-6 col-form-label">長期貸付金</label>
                                 <div class="col-sm-6">
-                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.long_term_loans_receivable|intcomma }}</p>
+                                  <p class="form-control-plaintext text-end">{{fiscal_summary_year.long_term_loans_receivable|intcomma }}千円</p>
                                 </div>
                               </div>
                             </div>
                             <div class="mb-2 row mt-3">
                               <label class="col-sm-6 col-form-label fw-bold">投資その他の資産合計</label>
                               <div class="col-sm-6">
-                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.investment_other_assets|intcomma }}</p>
+                                <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.investment_other_assets|intcomma }}千円</p>
                               </div>
                             </div>
                           </div>
@@ -228,7 +228,7 @@
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">固定資産合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_fixed_assets|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_fixed_assets|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -243,7 +243,7 @@
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">繰延資産合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.deferred_assets|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.deferred_assets|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -253,7 +253,7 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">資産の部合計</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_assets|intcomma }}</p>
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_assets|intcomma }}千円</p>
                       </div>
                     </div>
                   </div>
@@ -269,7 +269,7 @@
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">仕入債務</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.accounts_payable|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.accounts_payable|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
@@ -281,14 +281,14 @@
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">その他流動負債</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.other_current_liabilities|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.other_current_liabilities|intcomma }}千円</p>
                             </div>
                           </div>
                         </div>
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">流動負債合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_current_liabilities|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{fiscal_summary_year.total_current_liabilities|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -308,14 +308,14 @@
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">その他固定負債</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_long_term_liabilities|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_long_term_liabilities|intcomma }}千円</p>
                             </div>
                           </div>
                         </div>
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">固定負債合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_long_term_liabilities|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_long_term_liabilities|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -325,7 +325,7 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">負債の部合計</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_liabilities|intcomma }}
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_liabilities|intcomma }}千円
                         </p>
                       </div>
                     </div>
@@ -339,37 +339,37 @@
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">資本金合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.capital_stock|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.capital_stock|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">資本剰余金合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.capital_surplus|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.capital_surplus|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">利益剰余金合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.retained_earnings|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.retained_earnings|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">株主資本合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.total_stakeholder_equity|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.total_stakeholder_equity|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">評価・換算差額等合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.valuation_and_translation_adjustment|intcomma }}</p>
+                              <p class="form-control-plaintext text-end">{{fiscal_summary_year.valuation_and_translation_adjustment|intcomma }}千円</p>
                             </div>
                           </div>
                           <div class="mb-2 row">
                             <label class="col-sm-6 col-form-label">新株予約権合計</label>
                             <div class="col-sm-6">
-                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.new_shares_reserve|intcomma }}
+                              <p class="form-control-plaintext text-end">{{ fiscal_summary_year.new_shares_reserve|intcomma }}千円
                               </p>
                             </div>
                           </div>
@@ -377,7 +377,7 @@
                         <div class="mb-2 row mt-3">
                           <label class="col-sm-6 col-form-label fw-bold">純資産の部合計</label>
                           <div class="col-sm-6">
-                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_net_assets|intcomma }}</p>
+                            <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.total_net_assets|intcomma }}千円</p>
                           </div>
                         </div>
                       </div>
@@ -394,7 +394,7 @@
                   <div class="col-md-6">
                     <div class="mb-3">
                       <label class="form-label">役員貸付金/借入金（千円）</label>
-                      <p class="form-control-plaintext text-end">{{ fiscal_summary_year.directors_loan|intcomma }}</p>
+                      <p class="form-control-plaintext text-end">{{ fiscal_summary_year.directors_loan|intcomma }}千円</p>
                     </div>
                   </div>
                   <div class="col-md-6">
@@ -421,25 +421,25 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">売上高合計</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.sales|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.sales|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">売上原価</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.cost_of_sales|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.cost_of_sales|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label ps-5">売上原価に含まれる減価償却費</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.depreciation_cogs|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.depreciation_cogs|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">売上総利益</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.gross_profit|intcomma }}</p>
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.gross_profit|intcomma }}千円</p>
                       </div>
                     </div>
                   </div>
@@ -452,38 +452,38 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">販売費及び一般管理費</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.selling_general_admin_expenses|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.selling_general_admin_expenses|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label ps-5">役員報酬</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.directors_compensation|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.directors_compensation|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label ps-5">給与・雑給</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.payroll_expense|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.payroll_expense|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label ps-5">減価償却費</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.depreciation_expense|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.depreciation_expense|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label ps-5">その他の償却額</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_amortization_expense|intcomma }}
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_amortization_expense|intcomma }}千円
                         </p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">営業利益</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.operating_profit|intcomma }}
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.operating_profit|intcomma }}千円
                         </p>
                       </div>
                     </div>
@@ -499,31 +499,31 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">営業外収益合計</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_income|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_income|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">営業外で計上された償却費</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{fiscal_summary_year.non_operating_amortization_expense|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{fiscal_summary_year.non_operating_amortization_expense|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">支払利息</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.interest_expense|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.interest_expense|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">営業外損失合計</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_loss|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.other_loss|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">経常利益</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.ordinary_profit|intcomma }}</p>
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.ordinary_profit|intcomma }}千円</p>
                       </div>
                     </div>
                   </div>
@@ -536,25 +536,25 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">特別利益</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.extraordinary_income|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.extraordinary_income|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">特別損失</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.extraordinary_loss|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.extraordinary_loss|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">法人税等</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.income_taxes|intcomma }}</p>
+                        <p class="form-control-plaintext text-end">{{ fiscal_summary_year.income_taxes|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label fw-bold">当期純利益</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.net_profit|intcomma }}</p>
+                        <p class="form-control-plaintext fw-bold text-end">{{ fiscal_summary_year.net_profit|intcomma }}千円</p>
                       </div>
                     </div>
                   </div>
@@ -572,7 +572,7 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">繰越欠損金</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext">{{ fiscal_summary_year.tax_loss_carryforward|intcomma }}</p>
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.tax_loss_carryforward|intcomma }}千円</p>
                       </div>
                     </div>
                     <div class="mb-3 row">
@@ -586,7 +586,7 @@
                     <div class="mb-3 row">
                       <label class="col-sm-6 col-form-label">期末発行済み株式数</label>
                       <div class="col-sm-6">
-                        <p class="form-control-plaintext">{{ fiscal_summary_year.issued_shares_EOY|intcomma }}</p>
+                        <p class="form-control-plaintext">{{ fiscal_summary_year.issued_shares_EOY|intcomma }}千円</p>
                       </div>
                     </div>
                   </div>
