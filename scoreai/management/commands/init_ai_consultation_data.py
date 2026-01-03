@@ -67,6 +67,18 @@ class Command(BaseCommand):
                 'order': 6,
                 'color': '#FF5722',
             },
+            {
+                'name': '人事相談',
+                'description': '人事・労務に関する相談に対応',
+                'order': 7,
+                'color': '#E91E63',
+            },
+            {
+                'name': '戦略壁打ち',
+                'description': '経営戦略や事業計画についての相談に対応',
+                'order': 8,
+                'color': '#795548',
+            },
         ]
 
         consultation_types = {}
@@ -369,6 +381,101 @@ JSONのみを返してください。説明文は不要です。"""
             else:
                 self.stdout.write("→ 予算策定のデフォルトスクリプトは既に存在します")
 
+        # 人事相談のデフォルトスクリプト
+        hr_script = """会社の状況を基に、人事・労務に関する適切なアドバイスを提供してください。
+返答は日本語で、分かりやすく、具体的な対応方法も含めて説明してください。
+労働法規に準拠したアドバイスを心がけてください。"""
+
+        hr_template = """【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+
+【決算書データ】
+{fiscal_summary}
+
+【ユーザーの質問】
+{user_message}
+
+上記の情報を基に、以下の点を考慮して回答してください：
+1. 人事・労務に関する具体的なアドバイス
+2. 労働法規に準拠した対応方法
+3. 注意すべき法的リスク
+4. 推奨される対応手順
+5. 必要に応じて専門家への相談を推奨
+
+回答は日本語で、専門的すぎない言葉で説明してください。
+重要な法的判断が必要な場合は、専門家（社会保険労務士、弁護士など）への相談を強く推奨してください。"""
+
+        if consultation_types.get('人事相談'):
+            script, created = AIConsultationScript.objects.get_or_create(
+                consultation_type=consultation_types['人事相談'],
+                is_default=True,
+                defaults={
+                    'name': 'デフォルト',
+                    'system_instruction': hr_script,
+                    'default_prompt_template': hr_template,
+                    'is_active': True,
+                    'created_by': superuser,
+                }
+            )
+            if created:
+                self.stdout.write(self.style.SUCCESS("✓ 人事相談のデフォルトスクリプトを作成しました"))
+            else:
+                self.stdout.write("→ 人事相談のデフォルトスクリプトは既に存在します")
+
+        # 戦略壁打ちのデフォルトスクリプト
+        strategy_script = """あなたは経営戦略の専門家です。会社の財務状況、業種、規模を基に、経営戦略や事業計画についての相談に対応してください。
+返答は日本語で、分かりやすく、実践的で具体的なアドバイスを提供してください。
+経営者の視点に立ち、戦略的な思考を促すような回答を心がけてください。"""
+
+        strategy_template = """【会社情報】
+会社名: {company_name}
+業種: {industry}
+規模: {size}
+
+【決算書データ】
+{fiscal_summary}
+
+【借入情報】
+{debt_info}
+
+【月次推移データ】
+{monthly_data}
+
+【議事録データ】
+{meeting_minutes}
+
+【ユーザーの質問】
+{user_message}
+
+上記の情報を基に、以下の点を考慮して回答してください：
+1. 会社の現状分析（強み・弱み・機会・脅威）
+2. 経営戦略や事業計画に関する具体的な提案
+3. 優先すべきアクションとその理由
+4. リスク要因と対策
+5. 中長期的な視点からのアドバイス
+
+回答は日本語で、専門的すぎない言葉で説明してください。
+経営者の視点に立ち、実践的で実行可能な提案を心がけてください。"""
+
+        if consultation_types.get('戦略壁打ち'):
+            script, created = AIConsultationScript.objects.get_or_create(
+                consultation_type=consultation_types['戦略壁打ち'],
+                is_default=True,
+                defaults={
+                    'name': 'デフォルト',
+                    'system_instruction': strategy_script,
+                    'default_prompt_template': strategy_template,
+                    'is_active': True,
+                    'created_by': superuser,
+                }
+            )
+            if created:
+                self.stdout.write(self.style.SUCCESS("✓ 戦略壁打ちのデフォルトスクリプトを作成しました"))
+            else:
+                self.stdout.write("→ 戦略壁打ちのデフォルトスクリプトは既に存在します")
+
         # よくある質問の作成
         faqs_data = [
             {
@@ -409,6 +516,22 @@ JSONのみを返してください。説明文は不要です。"""
                     {'question': 'DX施策の提案をしてください', 'order': 1},
                     {'question': 'ITツールの導入提案をしてください', 'order': 2},
                     {'question': '業務効率化のためのシステムを教えて', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': '人事相談',
+                'questions': [
+                    {'question': '採用計画の立て方を教えて', 'order': 1},
+                    {'question': '評価制度の設計について相談したい', 'order': 2},
+                    {'question': '労働時間管理の方法を教えて', 'order': 3},
+                ]
+            },
+            {
+                'consultation_type_name': '戦略壁打ち',
+                'questions': [
+                    {'question': '事業計画の見直しについて相談したい', 'order': 1},
+                    {'question': '新規事業の立ち上げについて相談したい', 'order': 2},
+                    {'question': '経営戦略の方向性について相談したい', 'order': 3},
                 ]
             },
         ]
