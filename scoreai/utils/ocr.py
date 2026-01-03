@@ -51,13 +51,81 @@ def initialize_vision_client() -> Optional[vision.ImageAnnotatorClient]:
         return None
 
 
-def extract_text_from_image(image_file) -> Optional[str]:
+def preprocess_image(image_file) -> BytesIO:
+    """
+    画像の前処理（回転、コントラスト調整、ノイズ除去）
+    
+    Args:
+        image_file: アップロードされた画像ファイル
+        
+    Returns:
+        処理済み画像のBytesIO
+    """
+    try:
+        from PIL import ImageEnhance, ImageFilter
+        
+        # 画像を読み込む
+        img = Image.open(image_file)
+        image_file.seek(0)  # ファイルポインタをリセット
+        
+        # 1. 自動回転（EXIF情報から）
+        try:
+            if hasattr(img, '_getexif') and img._getexif():
+                exif = img._getexif()
+                orientation = exif.get(274)  # Orientation tag
+                if orientation == 3:
+                    img = img.rotate(180, expand=True)
+                elif orientation == 6:
+                    img = img.rotate(270, expand=True)
+                elif orientation == 8:
+                    img = img.rotate(90, expand=True)
+        except Exception:
+            pass  # EXIF情報がない場合はスキップ
+        
+        # 2. グレースケール変換（カラー画像の場合、OCR精度向上のため）
+        if img.mode not in ('L', '1'):  # グレースケールまたはモノクロでない場合
+            img = img.convert('L')
+        
+        # 3. コントラスト調整（OCR精度向上のため）
+        try:
+            enhancer = ImageEnhance.Contrast(img)
+            img = enhancer.enhance(1.3)  # コントラストを1.3倍
+        except Exception:
+            pass
+        
+        # 4. シャープネス調整
+        try:
+            enhancer = ImageEnhance.Sharpness(img)
+            img = enhancer.enhance(1.1)  # シャープネスを1.1倍
+        except Exception:
+            pass
+        
+        # 5. 解像度の確認（警告のみ、変更はしない）
+        if img.size[0] < 1000 or img.size[1] < 1000:
+            logger.warning(f"Low resolution image detected: {img.size}. OCR accuracy may be reduced.")
+        
+        # BytesIOに変換
+        output = BytesIO()
+        img.save(output, format='PNG', dpi=(300, 300))
+        output.seek(0)
+        return output
+        
+    except Exception as e:
+        logger.warning(f"Image preprocessing error: {e}. Using original image.")
+        # エラー時は元の画像を返す
+        image_file.seek(0)
+        return image_file
+
+
+def extract_text_from_image(image_file, use_document_detection=True, preprocess=True) -> Optional[str]:
     """
     画像からテキストを抽出（OCR）
     
     Args:
         image_file: アップロードされた画像ファイル
-        
+        use_document_detection: Document Text Detection APIを使用するか（表形式に適している）
+        preprocess: 画像の前処理を実行するか
+    
     Returns:
         抽出されたテキスト、エラー時はNone
     """
@@ -66,29 +134,55 @@ def extract_text_from_image(image_file) -> Optional[str]:
         if not client:
             return None
         
-        # 画像を読み込む
-        image_content = image_file.read()
-        image_file.seek(0)  # ファイルポインタをリセット
+        # 画像の前処理（オプション）
+        if preprocess:
+            processed_image = preprocess_image(image_file)
+            image_content = processed_image.read()
+            processed_image.seek(0)
+        else:
+            image_content = image_file.read()
+            image_file.seek(0)  # ファイルポインタをリセット
         
         image = vision.Image(content=image_content)
         
-        # OCRを実行
-        response = client.text_detection(image=image)
-        texts = response.text_annotations
-        
-        if texts:
-            # 最初の要素は全テキストを含む
-            return texts[0].description
+        # OCRを実行（Document Text Detection APIを使用）
+        if use_document_detection:
+            # Document Text Detection API（表形式の文書に最適）
+            response = client.document_text_detection(
+                image=image,
+                image_context={
+                    'language_hints': ['ja']  # 日本語を優先
+                }
+            )
+            
+            # Document Text Detection APIの結果からテキストを抽出
+            if response.full_text_annotation:
+                return response.full_text_annotation.text
+            else:
+                logger.warning("Document Text Detection APIの結果が空です")
+                # フォールバック: text_detectionを試す
+                response = client.text_detection(image=image)
+                texts = response.text_annotations
+                if texts:
+                    return texts[0].description
         else:
-            logger.warning("OCR結果が空です")
-            return None
+            # 従来のtext_detection API
+            response = client.text_detection(image=image)
+            texts = response.text_annotations
+            
+            if texts:
+                # 最初の要素は全テキストを含む
+                return texts[0].description
+        
+        logger.warning("OCR結果が空です")
+        return None
             
     except Exception as e:
         logger.error(f"OCR error: {e}", exc_info=True)
         return None
 
 
-def extract_text_from_pdf(pdf_file) -> Optional[str]:
+def extract_text_from_pdf(pdf_file, use_document_detection=True, preprocess=True) -> Optional[str]:
     """
     PDFからテキストを抽出（OCR）
     
@@ -97,7 +191,9 @@ def extract_text_from_pdf(pdf_file) -> Optional[str]:
     
     Args:
         pdf_file: アップロードされたPDFファイル
-        
+        use_document_detection: Document Text Detection APIを使用するか
+        preprocess: 画像の前処理を実行するか
+    
     Returns:
         抽出されたテキスト、エラー時はNone
     """
@@ -108,8 +204,8 @@ def extract_text_from_pdf(pdf_file) -> Optional[str]:
         pdf_content = pdf_file.read()
         pdf_file.seek(0)  # ファイルポインタをリセット
         
-        # PDFを画像に変換
-        images = convert_from_bytes(pdf_content)
+        # PDFを画像に変換（DPIを高めに設定して精度向上）
+        images = convert_from_bytes(pdf_content, dpi=300)
         
         # 各ページからテキストを抽出
         all_texts = []
@@ -118,21 +214,50 @@ def extract_text_from_pdf(pdf_file) -> Optional[str]:
         if not client:
             return None
         
-        for image_pil in images:
+        for page_num, image_pil in enumerate(images, 1):
+            logger.info(f"Processing PDF page {page_num}/{len(images)}")
+            
             # PIL Imageをbytesに変換
             img_byte_arr = BytesIO()
-            image_pil.save(img_byte_arr, format='PNG')
-            img_byte_arr = img_byte_arr.getvalue()
+            image_pil.save(img_byte_arr, format='PNG', dpi=(300, 300))
+            img_byte_arr.seek(0)
+            
+            # 画像の前処理（オプション）
+            if preprocess:
+                processed_image = preprocess_image(img_byte_arr)
+                img_content = processed_image.read()
+            else:
+                img_content = img_byte_arr.getvalue()
             
             # OCRを実行
-            image = vision.Image(content=img_byte_arr)
-            response = client.text_detection(image=image)
-            texts = response.text_annotations
+            image = vision.Image(content=img_content)
             
-            if texts:
-                all_texts.append(texts[0].description)
+            if use_document_detection:
+                # Document Text Detection APIを使用
+                response = client.document_text_detection(
+                    image=image,
+                    image_context={
+                        'language_hints': ['ja']  # 日本語を優先
+                    }
+                )
+                
+                if response.full_text_annotation:
+                    all_texts.append(response.full_text_annotation.text)
+                else:
+                    # フォールバック: text_detectionを試す
+                    response = client.text_detection(image=image)
+                    texts = response.text_annotations
+                    if texts:
+                        all_texts.append(texts[0].description)
+            else:
+                # 従来のtext_detection API
+                response = client.text_detection(image=image)
+                texts = response.text_annotations
+                
+                if texts:
+                    all_texts.append(texts[0].description)
         
-        return "\n\n".join(all_texts) if all_texts else None
+        return "\n\n--- ページ区切り ---\n\n".join(all_texts) if all_texts else None
         
     except ImportError:
         logger.error("pdf2imageライブラリがインストールされていません。pip install pdf2imageを実行してください。")
@@ -142,7 +267,7 @@ def extract_text_from_pdf(pdf_file) -> Optional[str]:
         return None
 
 
-def parse_financial_statement_from_text(text: str) -> Dict[str, Any]:
+def parse_financial_statement_from_text(text: str, use_ai: bool = False) -> Dict[str, Any]:
     """
     OCRで抽出したテキストから決算書データをパース
     
@@ -224,6 +349,84 @@ def parse_financial_statement_from_text(text: str) -> Dict[str, Any]:
                     continue
     
     return parsed_data
+
+
+def parse_financial_statement_with_ai(text: str) -> Dict[str, Any]:
+    """
+    Gemini APIを使用して決算書データをパース（高精度）
+    
+    Args:
+        text: OCRで抽出したテキスト
+        
+    Returns:
+        パースされた決算書データの辞書
+    """
+    try:
+        from ..utils.gemini import get_gemini_response_with_tokens
+        import json
+        import re
+        
+        # テキストが長すぎる場合は最初の8000文字のみ使用
+        text_to_analyze = text[:8000] if len(text) > 8000 else text
+        
+        prompt = f"""
+以下の決算書のOCRテキストから、決算書データを抽出してください。
+JSON形式で返答してください。数値は千円単位で返してください。
+
+OCRテキスト:
+{text_to_analyze}
+
+抽出する項目（存在する場合のみ）:
+- year: 年度（西暦、整数、例: 2024）
+- sales: 売上高（千円、整数）
+- gross_profit: 売上総利益（千円、整数）
+- operating_profit: 営業利益（千円、整数）
+- ordinary_profit: 経常利益（千円、整数）
+- net_profit: 当期純利益（千円、整数）
+- total_assets: 総資産（千円、整数）
+- total_liabilities: 総負債（千円、整数）
+- total_net_assets: 純資産合計（千円、整数）
+- capital_stock: 資本金（千円、整数）
+- retained_earnings: 利益剰余金（千円、整数）
+
+JSON形式で返答してください。存在しない項目はnullを返してください。
+例: {{"year": 2024, "sales": 1000000, "operating_profit": 50000, ...}}
+"""
+        
+        system_instruction = """あなたは財務データ抽出の専門家です。
+OCRテキストから正確に数値を抽出し、JSON形式で返答してください。
+数値の単位（円、千円、万円など）を正しく変換してください。
+数値にカンマが含まれている場合は除去してください。"""
+        
+        response_text, _, _, _ = get_gemini_response_with_tokens(
+            prompt=prompt,
+            system_instruction=system_instruction,
+            model='gemini-1.5-flash'  # 軽量で高速
+        )
+        
+        if not response_text:
+            logger.warning("AIパースが失敗しました。正規表現パースにフォールバックします。")
+            return parse_financial_statement_from_text(text, use_ai=False)
+        
+        # JSONをパース
+        # JSON部分を抽出（```json ... ``` または { ... }）
+        json_match = re.search(r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}', response_text, re.DOTALL)
+        if json_match:
+            try:
+                parsed_data = json.loads(json_match.group(0))
+                logger.info(f"AIパース成功: {len(parsed_data)}項目を抽出")
+                return parsed_data
+            except json.JSONDecodeError as e:
+                logger.warning(f"JSONパースエラー: {e}. 正規表現パースにフォールバックします。")
+                return parse_financial_statement_from_text(text, use_ai=False)
+        else:
+            logger.warning("AIレスポンスからJSONが見つかりませんでした。正規表現パースにフォールバックします。")
+            return parse_financial_statement_from_text(text, use_ai=False)
+            
+    except Exception as e:
+        logger.error(f"AIパースエラー: {e}", exc_info=True)
+        # エラー時は正規表現パースにフォールバック
+        return parse_financial_statement_from_text(text, use_ai=False)
 
 
 def parse_loan_contract_from_text(text: str) -> Dict[str, Any]:

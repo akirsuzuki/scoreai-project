@@ -50,11 +50,72 @@
 </div>
 {% endif %}
 
+<!-- 未割り当て利用枠の警告表示 -->
+{% if is_firm_manager and user_firm %}
+  {% if unassigned_api_limit and unassigned_api_limit > 0 or unassigned_ocr_limit and unassigned_ocr_limit > 0 %}
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="alert alert-warning d-flex align-items-center justify-content-between flex-wrap gap-2" role="alert">
+        <div>
+          <i class="ti ti-alert-triangle me-2"></i>
+          <strong>未割り当ての利用枠があります:</strong>
+          {% if unassigned_api_limit and unassigned_api_limit > 0 %}
+            <span class="badge bg-warning text-dark ms-2">API: {{ unassigned_api_limit }}回未割り当て</span>
+          {% endif %}
+          {% if unassigned_ocr_limit and unassigned_ocr_limit > 0 %}
+            <span class="badge bg-warning text-dark ms-2">OCR: {{ unassigned_ocr_limit }}回未割り当て</span>
+          {% endif %}
+          <span class="ms-2">（プラン上限: API {{ plan_api_limit|default:"無制限" }}回 / OCR {{ plan_ocr_limit|default:"無制限" }}回）</span>
+        </div>
+        <div class="d-flex gap-2">
+          {% if unassigned_api_limit and unassigned_api_limit > 0 %}
+          <button type="button" 
+                  class="btn btn-sm btn-primary" 
+                  id="distributeApiLimitsBtn"
+                  onclick="distributeLimitsEvenly('api')">
+            <i class="ti ti-equal me-1"></i>API利用枠を均等に割り当て
+          </button>
+          {% endif %}
+          {% if unassigned_ocr_limit and unassigned_ocr_limit > 0 %}
+          <button type="button" 
+                  class="btn btn-sm btn-success" 
+                  id="distributeOcrLimitsBtn"
+                  onclick="distributeLimitsEvenly('ocr')">
+            <i class="ti ti-equal me-1"></i>OCR利用枠を均等に割り当て
+          </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endif %}
+
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title fw-semibold mb-4">契約中クライアント</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title fw-semibold mb-0">契約中クライアント</h5>
+        {% if is_firm_manager and user_firm and active_company_count > 0 %}
+        <div class="d-flex gap-2">
+          {% if plan_api_limit %}
+          <button type="button" 
+                  class="btn btn-sm btn-outline-primary" 
+                  onclick="distributeLimitsEvenly('api')"
+                  title="プランのAPI利用枠を各クライアントに均等に割り当てます">
+            <i class="ti ti-equal me-1"></i>API利用枠を均等に割り当て
+          </button>
+          {% endif %}
+          {% if plan_ocr_limit %}
+          <button type="button" 
+                  class="btn btn-sm btn-outline-success" 
+                  onclick="distributeLimitsEvenly('ocr')"
+                  title="プランのOCR利用枠を各クライアントに均等に割り当てます">
+            <i class="ti ti-equal me-1"></i>OCR利用枠を均等に割り当て
+          </button>
+          {% endif %}
+        </div>
+        {% endif %}
       </div>
       <div class="card-body p-4">
         <div class="table table-hover">
@@ -287,6 +348,69 @@
   </div>
 </div>
 
+{% if is_firm_manager and user_firm %}
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function distributeLimitsEvenly(limitType) {
+  const limitName = limitType === 'api' ? 'API利用枠' : 'OCR利用枠';
+  if (!confirm(`プランの${limitName}を各クライアントに均等に割り当てますか？\n既存の割り当ては上書きされます。`)) {
+    return;
+  }
+  
+  const btn = event.target.closest('button') || 
+              document.getElementById('distributeApiLimitsBtn') || 
+              document.getElementById('distributeOcrLimitsBtn');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span>処理中...';
+  
+  const csrftoken = getCookie('csrftoken');
+  
+  // URLを構築（firm_idとlimit_typeを動的に設定）
+  const firmId = '{{ user_firm.firm.id }}';
+  const url = `/firm/${firmId}/distribute-limits-evenly/${limitType}/`;
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': csrftoken,
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.message);
+      location.reload();
+    } else {
+      alert('エラー: ' + (data.error || '不明なエラーが発生しました'));
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('エラーが発生しました: ' + error.message);
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  });
+}
+</script>
+{% endif %}
 
 {% endblock %}
 

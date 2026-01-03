@@ -3,7 +3,7 @@
 """
 from typing import Any, Dict
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 from django.http import HttpResponse, JsonResponse
 from django.db.models import Sum, Q, Count
 from django.utils import timezone
@@ -107,15 +107,28 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
                 continue
             seen_months.add(month_key)
             
-            # 利用状況を取得
-            usage = FirmUsageTracking.objects.filter(
-                firm=self.firm,
-                year=target_year,
-                month=target_month
-            ).first()
+            # AIConsultationHistoryから直接集計（FirmUsageTrackingと一致させるため）
+            # その月の開始日と終了日を計算
+            _, last_day = monthrange(target_year, target_month)
+            month_start = timezone.make_aware(datetime(target_year, target_month, 1))
+            month_end = timezone.make_aware(datetime(target_year, target_month, last_day, 23, 59, 59))
             
-            ai_count = usage.ai_consultation_count if usage else 0
-            ocr_count = usage.ocr_count if usage else 0
+            # Firmに紐づく全てのCompanyを取得
+            firm_companies = FirmCompany.objects.filter(
+                firm=self.firm,
+                active=True
+            ).values_list('company', flat=True)
+            
+            # その月のAI相談回数を集計（Company Userのみ）
+            ai_count = AIConsultationHistory.objects.filter(
+                company__in=firm_companies,
+                created_at__gte=month_start,
+                created_at__lte=month_end,
+                user__is_company_user=True
+            ).count()
+            
+            # OCR回数は現時点ではCompany別に追跡していないため、0を返す
+            ocr_count = 0
             
             month_data_list.append({
                 'year': target_year,
@@ -137,8 +150,12 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
         # テーブル表示用のデータを準備（古い月から新しい月へ昇順）
         table_data = []
         for i in range(len(labels)):
+            # month_data_listから対応する年月情報を取得
+            month_data = month_data_list[i]
             table_data.append({
                 'label': labels[i],
+                'year': month_data['year'],
+                'month': month_data['month'],
                 'ai_consultation': ai_consultation[i],
                 'ocr': ocr[i],
             })
@@ -237,6 +254,95 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
         company_usage_list.sort(key=lambda x: x['total'], reverse=True)
         
         return company_usage_list
+    
+    def _get_monthly_company_usage(self, year: int, month: int) -> list:
+        """特定の年月のクライアント別AI相談回数を取得"""
+        # その月の開始日と終了日を計算
+        _, last_day = monthrange(year, month)
+        month_start = timezone.make_aware(datetime(year, month, 1))
+        month_end = timezone.make_aware(datetime(year, month, last_day, 23, 59, 59))
+        
+        # Firmに紐づく全てのCompanyを取得
+        firm_companies = FirmCompany.objects.filter(
+            firm=self.firm,
+            active=True
+        ).select_related('company')
+        
+        company_usage_list = []
+        
+        for firm_company in firm_companies:
+            company = firm_company.company
+            
+            # その月のCompanyのAI相談回数を取得（Company Userのみ）
+            ai_count = AIConsultationHistory.objects.filter(
+                company=company,
+                created_at__gte=month_start,
+                created_at__lte=month_end,
+                user__is_company_user=True
+            ).count()
+            
+            if ai_count > 0:  # 利用があるCompanyのみ表示
+                company_usage_list.append({
+                    'company_id': str(company.id),
+                    'company_name': company.name,
+                    'ai_consultation': ai_count,
+                })
+        
+        # AI相談回数でソート（降順）
+        company_usage_list.sort(key=lambda x: x['ai_consultation'], reverse=True)
+        
+        return company_usage_list
+
+
+class MonthlyCompanyUsageAPIView(FirmOwnerMixin, View):
+    """月別のクライアント別AI相談回数を返すAPI（AJAX用）"""
+    
+    def get(self, request, firm_id):
+        year = int(request.GET.get('year', 0))
+        month = int(request.GET.get('month', 0))
+        
+        if not year or not month:
+            return JsonResponse({'error': '年月が指定されていません。'}, status=400)
+        
+        # その月の開始日と終了日を計算
+        _, last_day = monthrange(year, month)
+        month_start = timezone.make_aware(datetime(year, month, 1))
+        month_end = timezone.make_aware(datetime(year, month, last_day, 23, 59, 59))
+        
+        # Firmに紐づく全てのCompanyを取得
+        firm_companies = FirmCompany.objects.filter(
+            firm=self.firm,
+            active=True
+        ).select_related('company')
+        
+        company_usage_list = []
+        
+        for firm_company in firm_companies:
+            company = firm_company.company
+            
+            # その月のCompanyのAI相談回数を取得（Company Userのみ）
+            ai_count = AIConsultationHistory.objects.filter(
+                company=company,
+                created_at__gte=month_start,
+                created_at__lte=month_end,
+                user__is_company_user=True
+            ).count()
+            
+            if ai_count > 0:  # 利用があるCompanyのみ表示
+                company_usage_list.append({
+                    'company_id': str(company.id),
+                    'company_name': company.name,
+                    'ai_consultation': ai_count,
+                })
+        
+        # AI相談回数でソート（降順）
+        company_usage_list.sort(key=lambda x: x['ai_consultation'], reverse=True)
+        
+        return JsonResponse({
+            'year': year,
+            'month': month,
+            'company_usage': company_usage_list,
+        })
 
 
 class UsageReportExportView(FirmOwnerMixin, TemplateView):

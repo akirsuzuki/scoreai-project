@@ -103,8 +103,34 @@ class AIConsultationView(SelectedCompanyMixin, TemplateView):
             consultation_type=consultation_type
         ).order_by('-created_at')[:10]
         
-        # 利用可能なデータを確認
-        available_data = get_consultation_data(consultation_type, self.this_company)
+        # 利用可能なデータを確認（全てのデータタイプを個別に取得）
+        from ..utils.ai_consultation_data import (
+            get_fiscal_summary_data,
+            get_debt_data,
+            get_monthly_data,
+            get_meeting_minutes_data,
+            get_stakeholder_data,
+            get_available_fiscal_summaries,
+            get_available_monthly_summaries,
+        )
+        
+        # 利用可能な決算書データと月次データの一覧を取得
+        available_fiscal_summaries = get_available_fiscal_summaries(self.this_company)
+        available_monthly_summaries = get_available_monthly_summaries(self.this_company)
+        
+        # 各データタイプの存在を確認
+        has_fiscal_summary = bool(available_fiscal_summaries['actual'] or available_fiscal_summaries['budget'])
+        has_debt_info = bool(get_debt_data(self.this_company))
+        has_monthly_data = bool(available_monthly_summaries['actual'] or available_monthly_summaries['budget'])
+        has_meeting_minutes = bool(get_meeting_minutes_data(self.this_company))
+        has_stakeholder_name = bool(get_stakeholder_data(self.this_company))
+        
+        # データの詳細情報を取得（表示用）
+        available_data = {
+            'debt_info': get_debt_data(self.this_company) if has_debt_info else None,
+            'meeting_minutes': get_meeting_minutes_data(self.this_company) if has_meeting_minutes else None,
+            'stakeholder_name': get_stakeholder_data(self.this_company) if has_stakeholder_name else None,
+        }
         
         # よくある質問を取得
         from ..models import AIConsultationFAQ
@@ -124,6 +150,13 @@ class AIConsultationView(SelectedCompanyMixin, TemplateView):
         context['consultation_type'] = consultation_type
         context['histories'] = histories
         context['available_data'] = available_data
+        context['available_fiscal_summaries'] = available_fiscal_summaries
+        context['available_monthly_summaries'] = available_monthly_summaries
+        context['has_fiscal_summary'] = has_fiscal_summary
+        context['has_debt_info'] = has_debt_info
+        context['has_monthly_data'] = has_monthly_data
+        context['has_meeting_minutes'] = has_meeting_minutes
+        context['has_stakeholder_name'] = has_stakeholder_name
         context['faqs'] = faqs
         context['user_scripts'] = user_scripts
         context['title'] = f'{consultation_type.name}'
@@ -151,8 +184,39 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
             }, status=400)
         
         try:
-            # データを収集
-            company_data = get_consultation_data(consultation_type, self.this_company)
+            # 選択されたデータタイプを取得
+            selected_data_types = request.POST.getlist('selected_data_types')
+            
+            # 選択された決算書データを取得
+            selected_fiscal_years = []
+            for key in request.POST.keys():
+                if key.startswith('fiscal_year_'):
+                    # フォーマット: fiscal_year_2025_budget または fiscal_year_2025_actual
+                    parts = key.replace('fiscal_year_', '').split('_')
+                    if len(parts) == 2:
+                        year = int(parts[0])
+                        is_budget = parts[1] == 'budget'
+                        selected_fiscal_years.append({'year': year, 'is_budget': is_budget})
+            
+            # 選択された月次データを取得
+            selected_monthly_years = []
+            for key in request.POST.keys():
+                if key.startswith('monthly_year_'):
+                    # フォーマット: monthly_year_2025_budget または monthly_year_2025_actual
+                    parts = key.replace('monthly_year_', '').split('_')
+                    if len(parts) == 2:
+                        year = int(parts[0])
+                        is_budget = parts[1] == 'budget'
+                        selected_monthly_years.append({'year': year, 'is_budget': is_budget})
+            
+            # データを収集（選択されたデータタイプのみ）
+            company_data = get_consultation_data(
+                consultation_type, 
+                self.this_company,
+                selected_data_types=selected_data_types if selected_data_types else None,
+                selected_fiscal_years=selected_fiscal_years if selected_fiscal_years else None,
+                selected_monthly_years=selected_monthly_years if selected_monthly_years else None
+            )
             
             # FAQのスクリプトを取得（指定されている場合）
             faq_script = None
@@ -234,14 +298,25 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                     increment_company_api_count(self.this_company, self.this_firm, user=request.user)
             # FirmのAPIキーを使用した場合はFirmレベルでカウントしない（既に上限を超えているため）
             
-            # AI応答を生成
+            # AI応答を生成（トークン数も取得）
             # 現在はGeminiのみ対応（OpenAI対応は後で追加可能）
+            ai_response_text = None
+            input_tokens = 0
+            output_tokens = 0
+            total_tokens = 0
+            
             if api_provider == 'gemini':
-                ai_response = get_gemini_response(
+                from ..utils.gemini import get_gemini_response_with_tokens
+                response_data = get_gemini_response_with_tokens(
                     prompt,
                     system_instruction=system_instruction,
                     api_key=api_key
                 )
+                if response_data:
+                    ai_response_text = response_data['text']
+                    input_tokens = response_data.get('input_tokens', 0)
+                    output_tokens = response_data.get('output_tokens', 0)
+                    total_tokens = response_data.get('total_tokens', 0) or (input_tokens + output_tokens)
             else:
                 # OpenAI対応は後で実装
                 logger.error(f"Unsupported API provider: {api_provider}")
@@ -250,19 +325,25 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                     'error': '現在サポートされていないAPIプロバイダーです。'
                 }, status=500)
             
-            if not ai_response:
+            if not ai_response_text:
                 return JsonResponse({
                     'success': False,
                     'error': 'AI応答の生成に失敗しました。'
                 }, status=500)
             
             # 利用状況をカウント（Company Userの場合のみ）
+            # 現状は相談回数ベースで制限（トークン数は記録のみ）
             usage_incremented = increment_ai_consultation_count(self.this_firm, user=request.user)
             if not usage_incremented:
                 return JsonResponse({
                     'success': False,
                     'error': 'AI相談の利用制限に達しています。プランをアップグレードするか、管理者にお問い合わせください。'
                 }, status=403)
+            
+            # トークン数を累積（将来の制限用）
+            if total_tokens > 0:
+                from ..utils.usage_tracking import increment_ai_consultation_tokens
+                increment_ai_consultation_tokens(self.this_firm, total_tokens, user=request.user)
             
             # 履歴を保存（ULIDを文字列に変換）
             # json.dumps()とjson.loads()を使って、ULIDを確実に文字列に変換
@@ -287,17 +368,25 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
                 company=self.this_company,
                 consultation_type=consultation_type,
                 user_message=user_message,
-                ai_response=ai_response,
+                ai_response=ai_response_text,
                 script_used=system_script if system_script else None,
                 user_script_used=user_script if user_script else None,
-                data_snapshot=serializable_data
+                data_snapshot=serializable_data,
+                input_tokens=input_tokens if input_tokens > 0 else None,
+                output_tokens=output_tokens if output_tokens > 0 else None,
+                total_tokens=total_tokens if total_tokens > 0 else None,
             )
             
             # JsonResponseに渡す前に、すべてのULIDを文字列に変換
             response_data = {
                 'success': True,
-                'response': ai_response,
-                'history_id': str(history.id)  # ULIDを文字列に変換
+                'response': ai_response_text,
+                'history_id': str(history.id),  # ULIDを文字列に変換
+                'tokens': {
+                    'input': input_tokens,
+                    'output': output_tokens,
+                    'total': total_tokens,
+                } if total_tokens > 0 else None
             }
             # 念のため、json.dumpsでシリアライズ可能か確認
             try:

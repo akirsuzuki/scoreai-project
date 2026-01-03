@@ -92,6 +92,9 @@
                 <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">OCR読み込み回数</h6>
                 </th>
+                <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">操作</h6>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -105,6 +108,21 @@
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ row.ocr|intcomma }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  {% if row.ai_consultation > 0 %}
+                  <button type="button" 
+                          class="btn btn-sm btn-outline-primary company-usage-btn" 
+                          data-bs-toggle="modal" 
+                          data-bs-target="#companyUsageModal"
+                          data-year="{{ row.year }}"
+                          data-month="{{ row.month }}"
+                          data-label="{{ row.label }}">
+                    クライアント別
+                  </button>
+                  {% else %}
+                  <span class="text-muted">-</span>
+                  {% endif %}
                 </td>
               </tr>
               {% endfor %}
@@ -176,6 +194,46 @@
 </div>
 {% endif %}
 
+<!-- クライアント別利用状況モーダル -->
+<div class="modal fade" id="companyUsageModal" tabindex="-1" aria-labelledby="companyUsageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="companyUsageModalLabel">クライアント別AI相談回数</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="companyUsageLoading" class="text-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">読み込み中...</span>
+          </div>
+        </div>
+        <div id="companyUsageContent" style="display: none;">
+          <h6 class="mb-3" id="companyUsageMonthLabel"></h6>
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Company名</th>
+                  <th class="text-end">AI相談回数</th>
+                </tr>
+              </thead>
+              <tbody id="companyUsageTableBody">
+              </tbody>
+            </table>
+          </div>
+          <div id="companyUsageEmpty" class="alert alert-info" style="display: none;">
+            <i class="ti ti-info-circle me-2"></i>この月のクライアント別データはありません。
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const chartData = {{ chart_data|safe }};
 
@@ -230,6 +288,78 @@ function updateMonths(months) {
   url.searchParams.set('months', months);
   window.location.href = url.toString();
 }
+
+// クライアント別利用状況を読み込む
+function loadCompanyUsage(year, month, label) {
+  const loading = document.getElementById('companyUsageLoading');
+  const content = document.getElementById('companyUsageContent');
+  const empty = document.getElementById('companyUsageEmpty');
+  const tableBody = document.getElementById('companyUsageTableBody');
+  const monthLabel = document.getElementById('companyUsageMonthLabel');
+  
+  // 表示をリセット
+  loading.style.display = 'block';
+  content.style.display = 'none';
+  empty.style.display = 'none';
+  monthLabel.textContent = label;
+  tableBody.innerHTML = '';
+  
+  // AJAXでデータを取得
+  fetch(`{% url 'monthly_company_usage_api' firm.id %}?year=${year}&month=${month}`)
+    .then(response => response.json())
+    .then(data => {
+      loading.style.display = 'none';
+      
+      if (data.company_usage && data.company_usage.length > 0) {
+        content.style.display = 'block';
+        
+        data.company_usage.forEach(function(company) {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${company.company_name}</td>
+            <td class="text-end">${parseInt(company.ai_consultation).toLocaleString()}</td>
+          `;
+          tableBody.appendChild(row);
+        });
+      } else {
+        empty.style.display = 'block';
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      loading.style.display = 'none';
+      empty.style.display = 'block';
+      empty.innerHTML = '<i class="ti ti-alert-circle me-2"></i>データの取得に失敗しました。';
+    });
+}
+
+// クライアント別ボタンがクリックされたときにデータを読み込む
+document.addEventListener('DOMContentLoaded', function() {
+  const modal = document.getElementById('companyUsageModal');
+  const companyUsageButtons = document.querySelectorAll('.company-usage-btn');
+  
+  companyUsageButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      const year = parseInt(this.getAttribute('data-year'));
+      const month = parseInt(this.getAttribute('data-month'));
+      const label = this.getAttribute('data-label');
+      
+      // モーダルが開かれたときにデータを読み込む
+      modal.addEventListener('shown.bs.modal', function onModalShown() {
+        loadCompanyUsage(year, month, label);
+        modal.removeEventListener('shown.bs.modal', onModalShown);
+      }, { once: true });
+    });
+  });
+  
+  // モーダルが閉じられたときにテーブルをクリア
+  modal.addEventListener('hidden.bs.modal', function() {
+    document.getElementById('companyUsageTableBody').innerHTML = '';
+    document.getElementById('companyUsageContent').style.display = 'none';
+    document.getElementById('companyUsageLoading').style.display = 'block';
+    document.getElementById('companyUsageEmpty').style.display = 'none';
+  });
+});
 </script>
 {% endblock %}
 

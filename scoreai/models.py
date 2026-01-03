@@ -560,6 +560,7 @@ class FirmUsageTracking(models.Model):
     
     # 利用状況
     ai_consultation_count = models.IntegerField('AI相談回数', default=0)
+    ai_consultation_tokens = models.IntegerField('AI相談トークン数', default=0, help_text='AI相談で使用した合計トークン数（将来の制限用、現状は記録のみ）')
     ocr_count = models.IntegerField('OCR読み込み回数', default=0)
     api_count = models.IntegerField('API利用回数', default=0, help_text='FirmによるAPI利用回数（上限まではSCOREのAPIを使用）')
     
@@ -1794,6 +1795,10 @@ class AIConsultationHistory(models.Model):
         verbose_name="使用したスクリプト（ユーザー）"
     )  # 使用したスクリプト（ユーザー用）
     data_snapshot = models.JSONField(default=dict, verbose_name="データスナップショット")  # 相談時に使用したデータのスナップショット
+    # トークン数（将来の制限用、現状は記録のみ）
+    input_tokens = models.IntegerField("入力トークン数", default=0, null=True, blank=True, help_text="プロンプトのトークン数")
+    output_tokens = models.IntegerField("出力トークン数", default=0, null=True, blank=True, help_text="AI応答のトークン数")
+    total_tokens = models.IntegerField("合計トークン数", default=0, null=True, blank=True, help_text="入力+出力の合計トークン数")
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:
@@ -1803,3 +1808,10 @@ class AIConsultationHistory(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.consultation_type.name} - {self.created_at}"
+    
+    @property
+    def tokens_display(self):
+        """トークン数の表示用"""
+        if self.total_tokens:
+            return f"{self.total_tokens:,}トークン (入力: {self.input_tokens or 0:,}, 出力: {self.output_tokens or 0:,})"
+        return "未記録"

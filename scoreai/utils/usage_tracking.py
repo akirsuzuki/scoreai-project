@@ -38,6 +38,7 @@ def get_or_create_usage_tracking(firm: Firm, subscription: FirmSubscription = No
         month=month,
         defaults={
             'ai_consultation_count': 0,
+            'ai_consultation_tokens': 0,
             'ocr_count': 0,
             'api_count': 0,
             'is_reset': False,
@@ -92,6 +93,53 @@ def increment_ai_consultation_count(firm: Firm, user=None) -> bool:
     usage_tracking.save()
     
     logger.info(f"Incremented AI consultation count for firm {firm.id}: {usage_tracking.ai_consultation_count}")
+    return True
+
+
+@transaction.atomic
+def increment_ai_consultation_tokens(firm: Firm, tokens: int, user=None) -> bool:
+    """
+    AI相談のトークン数を累積（将来の制限用、現状は記録のみ）
+    
+    Args:
+        firm: Firmオブジェクト
+        tokens: 追加するトークン数
+        user: Userオブジェクト（Company Userの場合のみカウント）
+    
+    Returns:
+        成功した場合True、失敗した場合False
+    """
+    # Company Userの場合のみカウント
+    if user and not user.is_company_user:
+        return True  # カウントしないが、エラーではない
+    
+    if tokens <= 0:
+        return True  # トークン数が0以下の場合はカウントしない
+    
+    try:
+        subscription = firm.subscription
+    except FirmSubscription.DoesNotExist:
+        logger.warning(f"Subscription not found for firm {firm.id}")
+        return False
+    
+    # 利用制限をチェック
+    if not subscription.is_active_subscription:
+        logger.warning(f"Subscription is not active for firm {firm.id}")
+        return False
+    
+    usage_tracking = get_or_create_usage_tracking(firm, subscription)
+    if not usage_tracking:
+        return False
+    
+    # 無制限の場合はカウントしない
+    if subscription.plan.is_unlimited_ai_consultations:
+        return True
+    
+    # トークン数を累積（現状は制限チェックなし、記録のみ）
+    usage_tracking.ai_consultation_tokens += tokens
+    usage_tracking.save()
+    
+    logger.info(f"Incremented AI consultation tokens for firm {firm.id}: +{tokens} tokens (total: {usage_tracking.ai_consultation_tokens})")
     return True
 
 

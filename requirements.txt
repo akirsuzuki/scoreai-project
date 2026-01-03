@@ -31,3 +31,4 @@ markdown
 boxsdk
 openpyxl
 reportlab
+python-pptx

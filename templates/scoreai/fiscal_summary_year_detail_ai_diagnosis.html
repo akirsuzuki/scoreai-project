@@ -1,0 +1,194 @@
+{% load humanize %}
+{% load custom_filters %}
+
+<div class="tab-pane fade" id="ai-info" role="tabpanel" aria-labelledby="ai-tab">
+  <div class="row">
+    <div class="col-12">
+      <h4 class="mb-4">AI診断レポート</h4>
+      
+      {% if not fiscal_summary_year.is_draft %}
+      <div class="card mb-4">
+        <div class="card-body">
+          <div id="diagnosis-loading" style="display: none;">
+            <div class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">読み込み中...</span>
+              </div>
+              <p class="mt-3">AI診断レポートを生成中です。しばらくお待ちください...</p>
+            </div>
+          </div>
+          
+          <div id="diagnosis-content" style="display: none;">
+            <div id="diagnosis-report" class="mb-4"></div>
+            
+            <div class="d-flex gap-2 mb-3">
+              <button type="button" class="btn btn-primary" onclick="downloadDiagnosisReport('pdf')">
+                <i class="ti ti-download me-1"></i>PDFでダウンロード
+              </button>
+              {% if can_download_advanced %}
+              <button type="button" class="btn btn-success" onclick="downloadDiagnosisReport('pptx')">
+                <i class="ti ti-download me-1"></i>PPTXでダウンロード
+              </button>
+              <button type="button" class="btn btn-info" onclick="downloadDiagnosisReport('excel')">
+                <i class="ti ti-download me-1"></i>Excelでダウンロード
+              </button>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div id="diagnosis-chat" style="display: none;">
+            <div class="card mb-3">
+              <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                <div id="chat-messages"></div>
+              </div>
+            </div>
+            <div class="input-group">
+              <input type="text" class="form-control" id="chat-input" placeholder="情報を入力してください...">
+              <button class="btn btn-primary" type="button" onclick="sendChatMessage()">送信</button>
+            </div>
+          </div>
+          
+          <div id="diagnosis-initial">
+            <p class="text-muted mb-3">
+              AI診断レポートを生成すると、対象年度の決算データと前期・前々期のデータ、およびローカルベンチマークデータを基に、詳細な財務分析レポートを作成します。
+            </p>
+            <button type="button" class="btn btn-primary" onclick="generateDiagnosisReport()">
+              <i class="fas fa-robot me-2"></i>AI診断レポートを生成
+            </button>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="alert alert-info">
+        <i class="ti ti-info-circle me-2"></i>下書きモードの決算データではAI診断レポートを生成できません。決算データを確定してから再度お試しください。
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+function generateDiagnosisReport() {
+  const loadingDiv = document.getElementById('diagnosis-loading');
+  const contentDiv = document.getElementById('diagnosis-content');
+  const initialDiv = document.getElementById('diagnosis-initial');
+  const chatDiv = document.getElementById('diagnosis-chat');
+  
+  loadingDiv.style.display = 'block';
+  initialDiv.style.display = 'none';
+  contentDiv.style.display = 'none';
+  chatDiv.style.display = 'none';
+  
+  fetch('{% url "fiscal_ai_diagnosis_generate" fiscal_summary_year.id %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/json',
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    loadingDiv.style.display = 'none';
+    
+    if (data.success) {
+      if (data.needs_info) {
+        // 情報が不足している場合、会話形式で入力
+        chatDiv.style.display = 'block';
+        displayChatMessage('assistant', data.message);
+        displayChatMessage('assistant', data.missing_info_questions.join('\n'));
+      } else {
+        // レポートを表示
+        contentDiv.style.display = 'block';
+        document.getElementById('diagnosis-report').innerHTML = formatReport(data.report);
+      }
+    } else {
+      alert('エラー: ' + (data.error || '不明なエラーが発生しました'));
+      initialDiv.style.display = 'block';
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('エラーが発生しました: ' + error.message);
+    loadingDiv.style.display = 'none';
+    initialDiv.style.display = 'block';
+  });
+}
+
+function formatReport(report) {
+  // レポートをMarkdown形式からHTMLに変換（簡易版）
+  return report.replace(/\n/g, '<br>').replace(/#{3} (.*)/g, '<h5>$1</h5>').replace(/#{2} (.*)/g, '<h4>$1</h4>').replace(/#{1} (.*)/g, '<h3>$1</h3>');
+}
+
+function downloadDiagnosisReport(format) {
+  window.location.href = '{% url "fiscal_ai_diagnosis_download" fiscal_summary_year.id "pdf" %}'.replace('pdf', format);
+}
+
+function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const message = input.value.trim();
+  
+  if (!message) return;
+  
+  displayChatMessage('user', message);
+  input.value = '';
+  
+  // サーバーに送信
+  fetch('{% url "fiscal_ai_diagnosis_chat" fiscal_summary_year.id %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ message: message }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      displayChatMessage('assistant', data.response);
+      if (data.report_ready) {
+        // レポートが準備できた場合
+        document.getElementById('diagnosis-chat').style.display = 'none';
+        document.getElementById('diagnosis-content').style.display = 'block';
+        document.getElementById('diagnosis-report').innerHTML = formatReport(data.report);
+      }
+    } else {
+      displayChatMessage('assistant', 'エラー: ' + (data.error || '不明なエラーが発生しました'));
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    displayChatMessage('assistant', 'エラーが発生しました: ' + error.message);
+  });
+}
+
+function displayChatMessage(role, message) {
+  const messagesDiv = document.getElementById('chat-messages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `mb-3 ${role === 'user' ? 'text-end' : 'text-start'}`;
+  
+  const bubble = document.createElement('div');
+  bubble.className = `d-inline-block p-3 rounded ${role === 'user' ? 'bg-primary text-white' : 'bg-light'}`;
+  bubble.style.maxWidth = '70%';
+  bubble.textContent = message;
+  
+  messageDiv.appendChild(bubble);
+  messagesDiv.appendChild(messageDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+</script>
+

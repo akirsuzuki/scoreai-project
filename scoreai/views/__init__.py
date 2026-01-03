@@ -55,6 +55,13 @@ from .helper_views import select_company, chat_view
 # OCR views
 from .ocr_views import ImportFiscalSummaryFromOcrView
 
+# Fiscal AI Diagnosis views
+from .fiscal_ai_diagnosis_views import (
+    FiscalAIDiagnosisGenerateView,
+    FiscalAIDiagnosisChatView,
+    FiscalAIDiagnosisDownloadView,
+)
+
 # Meeting Minutes AI views
 from .meeting_minutes_ai_views import (
     MeetingMinutesAIGenerateView,
@@ -99,6 +106,7 @@ _views_py = _import_views_py()
 # views.pyから必要な関数とビューを再エクスポート
 add_client = _views_py.add_client
 remove_client = _views_py.remove_client
+distribute_limits_evenly = _views_py.distribute_limits_evenly
 download_fiscal_summary_year_csv = _views_py.download_fiscal_summary_year_csv
 download_fiscal_summary_month_csv = _views_py.download_fiscal_summary_month_csv
 download_financial_institutions_csv = _views_py.download_financial_institutions_csv
@@ -268,6 +276,7 @@ __all__ = [
     'ClientsList',
     'add_client',
     'remove_client',
+    'distribute_limits_evenly',
     # Static
     'AboutView',
     'AboutLinksView',

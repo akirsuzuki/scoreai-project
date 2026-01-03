@@ -91,11 +91,19 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
                     )
                     return None
 
-            # OCRでテキストを抽出
+            # OCRでテキストを抽出（Document Text Detection APIと前処理を使用）
             if file_type == 'pdf':
-                extracted_text = extract_text_from_pdf(uploaded_file)
+                extracted_text = extract_text_from_pdf(
+                    uploaded_file,
+                    use_document_detection=True,  # 表形式に最適化されたAPIを使用
+                    preprocess=True  # 画像前処理を有効化
+                )
             else:
-                extracted_text = extract_text_from_image(uploaded_file)
+                extracted_text = extract_text_from_image(
+                    uploaded_file,
+                    use_document_detection=True,  # 表形式に最適化されたAPIを使用
+                    preprocess=True  # 画像前処理を有効化
+                )
 
             if not extracted_text:
                 messages.error(
@@ -105,13 +113,16 @@ class ImportFiscalSummaryFromOcrView(SelectedCompanyMixin, TransactionMixin, For
                 return None
 
             # 書類タイプに応じてパース
+            # AIパースを使用するかどうか（設定で切り替え可能、デフォルトはFalse）
+            use_ai_parsing = form.cleaned_data.get('use_ai_parsing', False)
+            
             if document_type == 'loan_contract':
                 # 金銭消費貸借契約書をパース
                 parsed_data = parse_loan_contract_from_text(extracted_text)
                 parsed_data['document_type'] = 'loan_contract'
             else:
-                # 決算書をパース
-                parsed_data = parse_financial_statement_from_text(extracted_text)
+                # 決算書をパース（AIパースオプション付き）
+                parsed_data = parse_financial_statement_from_text(extracted_text, use_ai=use_ai_parsing)
                 parsed_data['document_type'] = 'financial_statement'
                 
                 # 年度の確定

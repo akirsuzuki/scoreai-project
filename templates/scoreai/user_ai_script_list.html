@@ -7,12 +7,42 @@
 
 {% block content %}
 <div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-end align-items-center">
-                    <a href="{% url 'user_ai_script_create' %}" class="btn btn-primary">新規作成</a>
+        <!-- ガイダンス -->
+        <div class="alert alert-info mb-4">
+            <h6 class="alert-heading mb-3">
+                <i class="ti ti-info-circle me-2"></i>システムプロンプトとプロンプトテンプレートについて
+            </h6>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <strong class="text-primary">システムプロンプト</strong>
+                    <p class="small mb-0">AIの役割や振る舞いを定義します。「あなたは何者か」「どのように回答すべきか」を指示する設定です。</p>
                 </div>
-                <div class="card-body">
+                <div class="col-md-6 mb-2">
+                    <strong class="text-success">プロンプトテンプレート</strong>
+                    <p class="small mb-0">実際の質問とデータを組み合わせたメッセージの構造を定義します。変数（{user_message}など）を使用してデータを埋め込みます。</p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="{% url 'user_ai_script_create' %}" class="btn btn-sm btn-outline-primary">
+                    <i class="ti ti-plus me-1"></i>新規作成で詳細を確認
+                </a>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header d-flex justify-content-end align-items-center">
+                <a href="{% url 'user_ai_script_create' %}" class="btn btn-primary">新規作成</a>
+            </div>
+            <div class="card-body">
                     {% if scripts %}
                     <div class="table-responsive">
                         <table class="table table-hover">

@@ -14,6 +14,7 @@ from django.contrib.auth.views import (
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
+from django.views.decorators.http import require_http_methods
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
@@ -469,6 +470,25 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
         # ベンチマーク指数を取得
         benchmark_index = get_benchmark_index(self.this_company.industry_classification, self.this_company.industry_subclassification, self.this_company.company_size, self.object.year)
         context['benchmark_index'] = benchmark_index
+        
+        # AI診断用: プラン情報を取得（ダウンロード形式の制限用）
+        try:
+            # Firmユーザーの場合、Firmのプランを確認
+            if hasattr(self.request.user, 'userfirm') and self.request.user.userfirm.exists():
+                user_firm = self.request.user.userfirm.filter(is_selected=True, active=True).first()
+                if user_firm:
+                    subscription = user_firm.firm.subscription
+                    plan_type = subscription.plan.plan_type
+                    # ProfessionalまたはEnterpriseプランの場合、高度なレポート形式をダウンロード可能
+                    context['can_download_advanced'] = plan_type in ['professional', 'enterprise']
+                else:
+                    context['can_download_advanced'] = False
+            else:
+                # Companyユーザーの場合、デフォルトはPDFのみ
+                context['can_download_advanced'] = False
+        except Exception:
+            context['can_download_advanced'] = False
+        
         context['title'] = '年次財務諸表'
         context['show_title_card'] = False  # 第二レベルなのでタイトルカードを非表示
 
@@ -2830,15 +2850,141 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
             context['max_companies'] = max_allowed
             context['is_unlimited'] = max_allowed == 0
             context['can_add_company'] = is_allowed
+            
+            # Firmのマネージャーかどうかを確認
+            context['is_firm_manager'] = self.request.user.is_manager
+            
+            # プランの利用枠情報を取得
+            try:
+                subscription = user_firm.firm.subscription
+                plan = subscription.plan
+                
+                # プランの上限
+                plan_api_limit = plan.api_limit if plan.api_limit > 0 else None
+                plan_ocr_limit = plan.max_ocr_per_month if plan.max_ocr_per_month > 0 else None
+                
+                # 現在割り当て済みの利用枠
+                active_firm_companies = FirmCompany.objects.filter(
+                    firm=user_firm.firm,
+                    active=True
+                )
+                assigned_api_limit = sum(fc.api_limit for fc in active_firm_companies)
+                assigned_ocr_limit = sum(fc.ocr_limit for fc in active_firm_companies)
+                
+                # 未割り当ての利用枠
+                unassigned_api_limit = None
+                unassigned_ocr_limit = None
+                if plan_api_limit is not None:
+                    unassigned_api_limit = max(0, plan_api_limit - assigned_api_limit)
+                if plan_ocr_limit is not None:
+                    unassigned_ocr_limit = max(0, plan_ocr_limit - assigned_ocr_limit)
+                
+                context['plan_api_limit'] = plan_api_limit
+                context['plan_ocr_limit'] = plan_ocr_limit
+                context['assigned_api_limit'] = assigned_api_limit
+                context['assigned_ocr_limit'] = assigned_ocr_limit
+                context['unassigned_api_limit'] = unassigned_api_limit
+                context['unassigned_ocr_limit'] = unassigned_ocr_limit
+                context['active_company_count'] = active_firm_companies.count()
+            except Exception as e:
+                context['is_firm_manager'] = False
+                context['plan_api_limit'] = None
+                context['plan_ocr_limit'] = None
+                context['unassigned_api_limit'] = None
+                context['unassigned_ocr_limit'] = None
+                context['active_company_count'] = 0
         else:
             context['clients_assigned'] = UserCompany.objects.none()
             context['current_company_count'] = 0
             context['max_companies'] = 0
             context['is_unlimited'] = True
             context['can_add_company'] = True
+            context['is_firm_manager'] = False
+            context['unassigned_api_limit'] = None
+            context['unassigned_ocr_limit'] = None
+            context['active_company_count'] = 0
         
         return context
 
+
+@login_required
+@require_http_methods(["POST"])
+def distribute_limits_evenly(request, firm_id, limit_type):
+    """プランの利用枠を各クライアントに均等に割り振る（APIまたはOCR）"""
+    from django.http import JsonResponse
+    from django.db import transaction
+    from django.contrib import messages
+    
+    # Firmを取得
+    user_firm = UserFirm.objects.filter(
+        user=request.user,
+        firm_id=firm_id,
+        active=True
+    ).first()
+    
+    if not user_firm:
+        return JsonResponse({'error': 'Firmが見つかりません。'}, status=404)
+    
+    # マネージャー権限を確認
+    if not request.user.is_manager:
+        return JsonResponse({'error': 'マネージャー権限がありません。'}, status=403)
+    
+    # limit_typeの検証
+    if limit_type not in ['api', 'ocr']:
+        return JsonResponse({'error': '無効なlimit_typeです。apiまたはocrを指定してください。'}, status=400)
+    
+    try:
+        subscription = user_firm.firm.subscription
+        plan = subscription.plan
+        
+        # プランの上限を取得
+        if limit_type == 'api':
+            plan_limit = plan.api_limit if plan.api_limit > 0 else None
+            limit_name = 'API利用枠'
+        else:  # ocr
+            plan_limit = plan.max_ocr_per_month if plan.max_ocr_per_month > 0 else None
+            limit_name = 'OCR利用枠'
+        
+        if plan_limit is None:
+            return JsonResponse({'error': f'{limit_name}の上限が設定されていません（無制限の可能性があります）。'}, status=400)
+        
+        # アクティブなクライアントを取得
+        active_firm_companies = FirmCompany.objects.filter(
+            firm=user_firm.firm,
+            active=True
+        )
+        active_count = active_firm_companies.count()
+        
+        if active_count == 0:
+            return JsonResponse({'error': 'アクティブなクライアントがありません。'}, status=400)
+        
+        with transaction.atomic():
+            # 均等に割り振る
+            limit_per_company = plan_limit // active_count
+            remainder = plan_limit % active_count
+            
+            # 各クライアントに割り当て
+            for idx, firm_company in enumerate(active_firm_companies):
+                if limit_type == 'api':
+                    # 余りは最初のクライアントに追加
+                    firm_company.api_limit = limit_per_company + (remainder if idx < remainder else 0)
+                else:  # ocr
+                    # 余りは最初のクライアントに追加
+                    firm_company.ocr_limit = limit_per_company + (remainder if idx < remainder else 0)
+                
+                firm_company.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'{active_count}社のクライアントに{limit_name}を均等に割り当てました。',
+            'limit_per_company': limit_per_company,
+            'limit_type': limit_type,
+        })
+    except Exception as e:
+        import logging
+        logger = logging.getLogger(__name__)
+        logger.error(f"Error distributing {limit_type} limits evenly: {e}")
+        return JsonResponse({'error': f'エラーが発生しました: {str(e)}'}, status=500)
 
 
 @login_required
@@ -2976,28 +3122,49 @@ class ManualListView(SelectedCompanyMixin, generic.ListView):
     model = Manual
     template_name = 'scoreai/manual_list.html'
     context_object_name = 'manuals'
+    paginate_by = 12
     
     def get_queryset(self):
-        # ユーザータイプを判定
+        # デフォルトのユーザータイプを判定
         user = self.request.user
+        default_user_type = None
         if user.is_company_user:
             if user.is_manager:
-                user_type = 'company_admin'
+                default_user_type = 'company_admin'
             else:
-                user_type = 'company_user'
+                default_user_type = 'company_user'
         elif hasattr(user, 'userfirm') and user.userfirm.exists():
             if user.is_manager:
-                user_type = 'firm_admin'
+                default_user_type = 'firm_admin'
             else:
-                user_type = 'firm_user'
+                default_user_type = 'firm_user'
         else:
-            # デフォルトは会社ユーザー（一般）
-            user_type = 'company_user'
+            default_user_type = 'company_user'
         
-        queryset = Manual.objects.filter(
-            user_type=user_type,
-            is_active=True
-        ).order_by('category', 'order', 'id')
+        # クエリパラメータからフィルタを取得
+        user_type_filter = self.request.GET.get('user_type', default_user_type)
+        category_filter = self.request.GET.get('category', '')
+        search_query = self.request.GET.get('search', '')
+        
+        # ベースクエリセット
+        queryset = Manual.objects.filter(is_active=True)
+        
+        # ユーザータイプでフィルタ
+        if user_type_filter:
+            queryset = queryset.filter(user_type=user_type_filter)
+        
+        # カテゴリでフィルタ
+        if category_filter:
+            queryset = queryset.filter(category=category_filter)
+        
+        # 検索クエリでフィルタ（タイトルと内容を検索）
+        if search_query:
+            queryset = queryset.filter(
+                Q(title__icontains=search_query) | 
+                Q(content__icontains=search_query)
+            )
+        
+        queryset = queryset.order_by('category', 'order', 'id')
         
         return queryset
     
@@ -3006,15 +3173,39 @@ class ManualListView(SelectedCompanyMixin, generic.ListView):
         context['title'] = 'マニュアル'
         context['show_title_card'] = False
         
-        # カテゴリごとにグループ化
-        manuals_by_category = {}
-        for manual in context['manuals']:
-            category = manual.get_category_display()
-            if category not in manuals_by_category:
-                manuals_by_category[category] = []
-            manuals_by_category[category].append(manual)
+        # デフォルトのユーザータイプを判定
+        user = self.request.user
+        default_user_type = None
+        if user.is_company_user:
+            if user.is_manager:
+                default_user_type = 'company_admin'
+            else:
+                default_user_type = 'company_user'
+        elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            if user.is_manager:
+                default_user_type = 'firm_admin'
+            else:
+                default_user_type = 'firm_user'
+        else:
+            default_user_type = 'company_user'
         
-        context['manuals_by_category'] = manuals_by_category
+        # 現在のフィルタ値を取得（初回アクセス時はデフォルト値を使用）
+        current_user_type = self.request.GET.get('user_type', '')
+        if not current_user_type:
+            current_user_type = default_user_type
+        current_category = self.request.GET.get('category', '')
+        current_search = self.request.GET.get('search', '')
+        
+        # ユーザータイプの選択肢
+        context['user_type_choices'] = Manual.USER_TYPE_CHOICES
+        context['current_user_type'] = current_user_type
+        
+        # カテゴリの選択肢
+        context['category_choices'] = Manual.CATEGORY_CHOICES
+        context['current_category'] = current_category
+        
+        # 検索クエリ
+        context['current_search'] = current_search
         
         # ユーザータイプを表示用に取得
         user = self.request.user

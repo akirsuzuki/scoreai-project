@@ -430,12 +430,30 @@ class AIConsultationFAQAdmin(admin.ModelAdmin):
 
 @admin.register(AIConsultationHistory)
 class AIConsultationHistoryAdmin(admin.ModelAdmin):
-    list_display = ('user', 'company', 'consultation_type', 'created_at')
+    list_display = ('user', 'company', 'consultation_type', 'created_at', 'total_tokens', 'tokens_display')
     list_display_links = ('created_at',)
     list_filter = ('consultation_type', 'created_at')
-    search_fields = ('user__username', 'company__name', 'consultation_type__name')
+    search_fields = ('user__username', 'company__name', 'consultation_type__name', 'user_message', 'ai_response')
     ordering = ('-created_at',)
-    readonly_fields = ('created_at',)
+    readonly_fields = ('created_at', 'tokens_display')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('user', 'company', 'consultation_type', 'created_at')
+        }),
+        ('相談内容', {
+            'fields': ('user_message', 'ai_response')
+        }),
+        ('使用スクリプト', {
+            'fields': ('script_used', 'user_script_used')
+        }),
+        ('トークン数', {
+            'fields': ('input_tokens', 'output_tokens', 'total_tokens', 'tokens_display')
+        }),
+        ('データスナップショット', {
+            'fields': ('data_snapshot',),
+            'classes': ('collapse',)
+        }),
+    )
 
 
 @admin.register(CloudStorageSetting)
@@ -568,7 +586,7 @@ class FirmUsageTrackingAdmin(admin.ModelAdmin):
             'fields': ('firm', 'subscription', 'year', 'month', 'is_reset')
         }),
         ('利用状況', {
-            'fields': ('ai_consultation_count', 'ocr_count')
+            'fields': ('ai_consultation_count', 'ai_consultation_tokens', 'ocr_count', 'api_count')
         }),
         ('システム情報', {
             'fields': ('created_at', 'updated_at'),

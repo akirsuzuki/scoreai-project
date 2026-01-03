@@ -426,6 +426,25 @@
               </a>
             </li>
             <li class="sidebar-item">
+              <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">請求管理</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% endif %}
+        
+        <!-- Firm管理（Firm Ownerのみ） -->
+        {% if user_firm_owner %}
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="#collapseFirmManagement" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu">Firm管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          </a>
+          <ul id="collapseFirmManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
               <a href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
@@ -434,27 +453,19 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="{% url 'usage_report' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">利用状況レポート</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">請求管理</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
               <a href="{% url 'subscription_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
                 <span class="hide-menu">サブスクリプション履歴</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'usage_report' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">利用状況レポート</span>
               </a>
             </li>
             <li class="sidebar-item">

@@ -1,8 +1,135 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}
 {{ title }}
+{% endblock %}
+
+{% block head %}
+<style>
+/* Markdownコンテンツのスタイル */
+.markdown-content {
+    line-height: 1.6;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #2A3547;
+}
+
+.markdown-content h1 { font-size: 1.75rem; }
+.markdown-content h2 { font-size: 1.5rem; }
+.markdown-content h3 { font-size: 1.25rem; }
+.markdown-content h4 { font-size: 1.1rem; }
+
+.markdown-content p {
+    margin-bottom: 1rem;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+
+.markdown-content li {
+    margin-bottom: 0.5rem;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #667eea;
+    padding-left: 1rem;
+    margin-left: 0;
+    margin-bottom: 1rem;
+    color: #6c757d;
+    font-style: italic;
+    background-color: rgba(102, 126, 234, 0.05);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+}
+
+.markdown-content code {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: 'Courier New', monospace;
+    color: #e83e8c;
+}
+
+.markdown-content pre {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.markdown-content pre code {
+    background-color: transparent;
+    padding: 0;
+    color: #333;
+}
+
+.markdown-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.markdown-content table th,
+.markdown-content table td {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 0.75rem;
+    text-align: left;
+}
+
+.markdown-content table th {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-weight: 600;
+}
+
+.markdown-content a {
+    color: #667eea;
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+.markdown-content strong {
+    font-weight: 600;
+    color: #2A3547;
+}
+
+.markdown-content em {
+    font-style: italic;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 1rem 0;
+}
+
+.markdown-content hr {
+    border: none;
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    margin: 2rem 0;
+}
+</style>
+{{ block.super }}
 {% endblock %}
 
 {% block content %}
@@ -29,8 +156,8 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="manual-content">
-          {{ manual.content|linebreaks }}
+        <div class="manual-content markdown-content">
+          {{ manual.content|markdown }}
         </div>
       </div>
       <div class="card-footer">

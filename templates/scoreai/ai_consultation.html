@@ -236,19 +236,157 @@
         <div class="card">
             <div class="card-body">
                     <div class="mb-3">
-                        <h6>【利用可能なデータ】</h6>
-                        <ul class="list-unstyled">
-                            {% if available_data.fiscal_summary %}
-                            <li>✓ 決算書データ（{{ available_data.fiscal_summary.year }}年度）</li>
+                        <div class="accordion" id="availableDataAccordion">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="availableDataHeading">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#availableDataCollapse" aria-expanded="true" aria-controls="availableDataCollapse">
+                                        <h6 class="mb-0">【利用可能なデータ】</h6>
+                                    </button>
+                                </h2>
+                                <div id="availableDataCollapse" class="accordion-collapse collapse show" aria-labelledby="availableDataHeading" data-bs-parent="#availableDataAccordion">
+                                    <div class="accordion-body">
+                                        <div class="form-check-group">
+                            {% if has_fiscal_summary %}
+                            <div class="mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input data-type-checkbox fiscal-summary-type-checkbox" 
+                                           type="checkbox" 
+                                           id="data_fiscal_summary" 
+                                           name="selected_data_types" 
+                                           value="fiscal_summary">
+                                    <label class="form-check-label fw-semibold" for="data_fiscal_summary">
+                                        決算書データ
+                                    </label>
+                                </div>
+                                <div class="ms-4">
+                                    <div class="small text-muted mb-1">実績データ（直近3年）</div>
+                                    {% for item in available_fiscal_summaries.actual %}
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input fiscal-year-checkbox" 
+                                               type="checkbox" 
+                                               id="fiscal_year_{{ item.year }}_actual" 
+                                               name="fiscal_year_{{ item.year }}_actual" 
+                                               value="1"
+                                               data-year="{{ item.year }}"
+                                               data-is-budget="false">
+                                        <label class="form-check-label" for="fiscal_year_{{ item.year }}_actual">
+                                            {{ item.year }}年度（実績）
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="small text-muted mb-1 mt-2">予算データ（直近1年）</div>
+                                    {% for item in available_fiscal_summaries.budget %}
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input fiscal-year-checkbox" 
+                                               type="checkbox" 
+                                               id="fiscal_year_{{ item.year }}_budget" 
+                                               name="fiscal_year_{{ item.year }}_budget" 
+                                               value="1"
+                                               data-year="{{ item.year }}"
+                                               data-is-budget="true">
+                                        <label class="form-check-label" for="fiscal_year_{{ item.year }}_budget">
+                                            {{ item.year }}年度（予算）
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             {% endif %}
-                            {% if available_data.debt_info %}
-                            <li>✓ 借入情報（{{ available_data.debt_info|length }}件）</li>
+                            
+                            {% if has_debt_info %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input data-type-checkbox" 
+                                       type="checkbox" 
+                                       id="data_debt_info" 
+                                       name="selected_data_types" 
+                                       value="debt_info" 
+                                       checked>
+                                <label class="form-check-label" for="data_debt_info">
+                                    ✓ 借入情報（{{ available_data.debt_info|length }}件）
+                                </label>
+                            </div>
                             {% endif %}
-                            {% if available_data.monthly_data %}
-                            <li>✓ 月次推移データ（{{ available_data.monthly_data|length }}ヶ月）</li>
+                            
+                            {% if has_monthly_data %}
+                            <div class="mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input data-type-checkbox monthly-data-type-checkbox" 
+                                           type="checkbox" 
+                                           id="data_monthly_data" 
+                                           name="selected_data_types" 
+                                           value="monthly_data">
+                                    <label class="form-check-label fw-semibold" for="data_monthly_data">
+                                        月次推移データ
+                                    </label>
+                                </div>
+                                <div class="ms-4">
+                                    <div class="small text-muted mb-1">実績データ（直近3年）</div>
+                                    {% for item in available_monthly_summaries.actual %}
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input monthly-year-checkbox" 
+                                               type="checkbox" 
+                                               id="monthly_year_{{ item.year }}_actual" 
+                                               name="monthly_year_{{ item.year }}_actual" 
+                                               value="1"
+                                               data-year="{{ item.year }}"
+                                               data-is-budget="false">
+                                        <label class="form-check-label" for="monthly_year_{{ item.year }}_actual">
+                                            {{ item.year }}年度（実績、{{ item.max_period }}ヶ月分）
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                    <div class="small text-muted mb-1 mt-2">予算データ（直近1年）</div>
+                                    {% for item in available_monthly_summaries.budget %}
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input monthly-year-checkbox" 
+                                               type="checkbox" 
+                                               id="monthly_year_{{ item.year }}_budget" 
+                                               name="monthly_year_{{ item.year }}_budget" 
+                                               value="1"
+                                               data-year="{{ item.year }}"
+                                               data-is-budget="true">
+                                        <label class="form-check-label" for="monthly_year_{{ item.year }}_budget">
+                                            {{ item.year }}年度（予算、{{ item.max_period }}ヶ月分）
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             {% endif %}
-                        </ul>
-                    </div>
+                            
+                            {% if has_meeting_minutes %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input data-type-checkbox" 
+                                       type="checkbox" 
+                                       id="data_meeting_minutes" 
+                                       name="selected_data_types" 
+                                       value="meeting_minutes" 
+                                       checked>
+                                <label class="form-check-label" for="data_meeting_minutes">
+                                    ✓ 議事録（{{ available_data.meeting_minutes|length }}件）
+                                </label>
+                            </div>
+                            {% endif %}
+                            
+                            {% if has_stakeholder_name %}
+                            <div class="form-check mb-2">
+                                <input class="form-check-input data-type-checkbox" 
+                                       type="checkbox" 
+                                       id="data_stakeholder_name" 
+                                       name="selected_data_types" 
+                                       value="stakeholder_name" 
+                                       checked>
+                                <label class="form-check-label" for="data_stakeholder_name">
+                                    ✓ 株主情報（{{ available_data.stakeholder_name|length }}件）
+                                </label>
+                            </div>
+                            {% endif %}
+                                        </div>
+                                        <small class="text-muted d-block mt-2">使用するデータを選択してください（複数選択可）</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     
                     {% if user_scripts %}
                     <div class="mb-3">
@@ -380,6 +518,32 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentFaqId = null; // 現在選択されているFAQのID
     let currentFaqQuestion = null; // 現在選択されているFAQの質問文
     
+    // 決算書データの親チェックボックスの連動
+    const fiscalSummaryTypeCheckbox = document.getElementById('data_fiscal_summary');
+    if (fiscalSummaryTypeCheckbox) {
+        fiscalSummaryTypeCheckbox.addEventListener('change', function() {
+            const fiscalYearCheckboxes = document.querySelectorAll('.fiscal-year-checkbox');
+            fiscalYearCheckboxes.forEach(function(checkbox) {
+                checkbox.disabled = !this.checked;
+            }.bind(this));
+        });
+        // 初期状態を設定
+        fiscalSummaryTypeCheckbox.dispatchEvent(new Event('change'));
+    }
+    
+    // 月次データの親チェックボックスの連動
+    const monthlyDataTypeCheckbox = document.getElementById('data_monthly_data');
+    if (monthlyDataTypeCheckbox) {
+        monthlyDataTypeCheckbox.addEventListener('change', function() {
+            const monthlyYearCheckboxes = document.querySelectorAll('.monthly-year-checkbox');
+            monthlyYearCheckboxes.forEach(function(checkbox) {
+                checkbox.disabled = !this.checked;
+            }.bind(this));
+        });
+        // 初期状態を設定
+        monthlyDataTypeCheckbox.dispatchEvent(new Event('change'));
+    }
+    
     function sendMessage() {
         const additionalInfo = chatInput.value.trim();
         
@@ -410,15 +574,51 @@ document.addEventListener('DOMContentLoaded', function() {
         const scriptSelect = document.getElementById('scriptSelect');
         const selectedScriptId = scriptSelect ? scriptSelect.value : '';
         
-        // APIリクエスト（FAQ IDとスクリプトIDも送信）
-        const body = `message=${encodeURIComponent(message)}`;
-        let requestBody = body;
+        // 選択されたデータタイプを取得
+        const selectedDataTypes = [];
+        document.querySelectorAll('.data-type-checkbox:checked').forEach(function(checkbox) {
+            selectedDataTypes.push(checkbox.value);
+        });
+        
+        // 選択された決算書データの年度と予算/実績を取得
+        const selectedFiscalYears = [];
+        document.querySelectorAll('.fiscal-year-checkbox:checked').forEach(function(checkbox) {
+            const year = parseInt(checkbox.getAttribute('data-year'));
+            const isBudget = checkbox.getAttribute('data-is-budget') === 'true';
+            selectedFiscalYears.push({year: year, is_budget: isBudget});
+        });
+        
+        // 選択された月次データの年度と予算/実績を取得
+        const selectedMonthlyYears = [];
+        document.querySelectorAll('.monthly-year-checkbox:checked').forEach(function(checkbox) {
+            const year = parseInt(checkbox.getAttribute('data-year'));
+            const isBudget = checkbox.getAttribute('data-is-budget') === 'true';
+            selectedMonthlyYears.push({year: year, is_budget: isBudget});
+        });
+        
+        // APIリクエスト（FAQ ID、スクリプトID、選択されたデータタイプも送信）
+        const formData = new URLSearchParams();
+        formData.append('message', message);
         if (currentFaqId) {
-            requestBody += `&faq_id=${encodeURIComponent(currentFaqId)}`;
+            formData.append('faq_id', currentFaqId);
         }
         if (selectedScriptId) {
-            requestBody += `&script_id=${encodeURIComponent(selectedScriptId)}`;
+            formData.append('script_id', selectedScriptId);
         }
+        // 選択されたデータタイプを複数送信
+        selectedDataTypes.forEach(function(dataType) {
+            formData.append('selected_data_types', dataType);
+        });
+        // 選択された決算書データの年度と予算/実績を送信
+        selectedFiscalYears.forEach(function(item) {
+            const key = `fiscal_year_${item.year}_${item.is_budget ? 'budget' : 'actual'}`;
+            formData.append(key, '1');
+        });
+        // 選択された月次データの年度と予算/実績を送信
+        selectedMonthlyYears.forEach(function(item) {
+            const key = `monthly_year_${item.year}_${item.is_budget ? 'budget' : 'actual'}`;
+            formData.append(key, '1');
+        });
         
         fetch('{% url "ai_consultation_api" consultation_type.id %}', {
             method: 'POST',
@@ -426,7 +626,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-CSRFToken': '{{ csrf_token }}'
             },
-            body: requestBody
+            body: formData.toString()
         })
         .then(response => response.json())
         .then(data => {

@@ -23,6 +23,11 @@ from .views.ai_consultation_views import (
     AIConsultationAPIView,
     AIConsultationHistoryView,
 )
+from .views.fiscal_ai_diagnosis_views import (
+    FiscalAIDiagnosisGenerateView,
+    FiscalAIDiagnosisChatView,
+    FiscalAIDiagnosisDownloadView,
+)
 from .views.about_links_views import AboutLinksView
 from .views.ai_script_views import (
     AdminAIScriptListView,
@@ -63,6 +68,7 @@ from .views.usage_report_views import (
     UsageReportView,
     UsageReportExportView,
     CompanyUsageReportView,
+    MonthlyCompanyUsageAPIView,
 )
 from .views.billing_views import (
     BillingHistoryView,
@@ -116,6 +122,7 @@ from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
     remove_client,
+    distribute_limits_evenly,
     download_fiscal_summary_year_csv,
     download_fiscal_summary_month_csv,
     download_financial_institutions_csv,
@@ -216,6 +223,10 @@ urlpatterns = [
     path('fiscal_summary_year/<str:pk>/update/', FiscalSummary_YearUpdateView.as_view(), name='fiscal_summary_year_update'),
     path('fiscal_summary_year/<str:pk>/detail/', FiscalSummary_YearDetailView.as_view(), name='fiscal_summary_year_detail'),
     path('fiscal-summary-year/latest/', LatestFiscalSummaryYearDetailView.as_view(), name='latest_fiscal_summary_year_detail'),
+    # AI診断レポート
+    path('fiscal_summary_year/<str:fiscal_summary_year_id>/ai-diagnosis/generate/', FiscalAIDiagnosisGenerateView.as_view(), name='fiscal_ai_diagnosis_generate'),
+    path('fiscal_summary_year/<str:fiscal_summary_year_id>/ai-diagnosis/chat/', FiscalAIDiagnosisChatView.as_view(), name='fiscal_ai_diagnosis_chat'),
+    path('fiscal_summary_year/<str:fiscal_summary_year_id>/ai-diagnosis/download/<str:format_type>/', FiscalAIDiagnosisDownloadView.as_view(), name='fiscal_ai_diagnosis_download'),
     path('fiscal_summary_year/<str:pk>/delete/', FiscalSummary_YearDeleteView.as_view(), name='fiscal_summary_year_delete'),
     # 予算管理
     path('fiscal_summary_year/budget/create/', FiscalSummary_YearBudgetCreateView.as_view(), name='fiscal_summary_year_budget_create'),
@@ -292,6 +303,7 @@ urlpatterns = [
     path('firm_clientslist/', ClientsList.as_view(), name='firm_clientslist'),
     path('assigned-clients/', AssignedClientsListView.as_view(), name='assigned_clients_list'),
     path('firm/<str:firm_id>/company/<str:company_id>/limit/', FirmCompanyLimitUpdateView.as_view(), name='firm_company_limit_update'),
+    path('firm/<str:firm_id>/distribute-limits-evenly/<str:limit_type>/', distribute_limits_evenly, name='distribute_limits_evenly'),
     path('import-financial-institution/', ImportFinancialInstitutionView.as_view(), name='import_financial_institution'),
     path('download/financial_institutions/', download_financial_institutions_csv, name='download_financial_institutions_csv'),
     path('sample/', SampleView.as_view(), name='sample'),
@@ -347,6 +359,7 @@ urlpatterns = [
     # 利用状況レポート
     path('firm/<str:firm_id>/usage/report/', UsageReportView.as_view(), name='usage_report'),
     path('firm/<str:firm_id>/usage/report/export/', UsageReportExportView.as_view(), name='usage_report_export'),
+    path('firm/<str:firm_id>/usage/report/monthly-company/', MonthlyCompanyUsageAPIView.as_view(), name='monthly_company_usage_api'),
     path('firm/<str:firm_id>/companies/<str:company_id>/usage/', CompanyUsageReportView.as_view(), name='company_usage_report'),
     
     # 請求履歴

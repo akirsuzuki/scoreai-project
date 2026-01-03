@@ -195,6 +195,20 @@ class OcrUploadForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control'}),
         help_text='決算書の場合は年度を選択してください（任意）。'
     )
+    override_flag = forms.BooleanField(
+        label='既存データを上書きする',
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='既に同じ年度のデータが存在する場合、上書きします。'
+    )
+    use_ai_parsing = forms.BooleanField(
+        label='AIパースを使用する（高精度）',
+        required=False,
+        initial=False,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='Gemini APIを使用してより高精度にデータを抽出します。通常のパースで精度が低い場合に有効です。'
+    )
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
