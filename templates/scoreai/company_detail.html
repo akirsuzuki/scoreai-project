@@ -90,6 +90,122 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">利用システム</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">会計システム</td>
+                <td>
+                  {% if company.accounting_system %}
+                    {% if company.accounting_system == 'other' %}
+                      {{ company.accounting_system_other|default:"その他" }}
+                    {% else %}
+                      {{ company.get_accounting_system_display }}
+                    {% endif %}
+                  {% else %}
+                    <span class="text-muted">未設定</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">販売管理</td>
+                <td>
+                  {% if company.sales_management_system %}
+                    {{ company.sales_management_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">購買管理</td>
+                <td>
+                  {% if company.purchase_management_system %}
+                    {{ company.purchase_management_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">生産管理</td>
+                <td>
+                  {% if company.production_management_system %}
+                    {{ company.production_management_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">在庫管理</td>
+                <td>
+                  {% if company.inventory_management_system %}
+                    {{ company.inventory_management_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">給与計算</td>
+                <td>
+                  {% if company.payroll_system %}
+                    {{ company.payroll_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">人事管理</td>
+                <td>
+                  {% if company.hr_management_system %}
+                    {{ company.hr_management_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">基幹システム</td>
+                <td>
+                  {% if company.core_system %}
+                    {{ company.core_system }}
+                  {% else %}
+                    <span class="text-muted">未使用</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">その他</td>
+                <td>
+                  {% if company.other_systems %}
+                    {{ company.other_systems|linebreaks }}
+                  {% else %}
+                    <span class="text-muted">なし</span>
+                  {% endif %}
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% if is_company_manager and usage_info %}
 <div class="row" id="usage-info">
   <div class="col-lg-12 d-flex align-items-stretch">
