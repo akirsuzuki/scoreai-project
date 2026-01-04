@@ -6,6 +6,7 @@ from django import forms
 from django.contrib import messages
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
 from django.views.generic import CreateView, UpdateView, FormView, TemplateView
 from django.db.models import Q, Max
 from django.utils import timezone
@@ -47,6 +48,7 @@ class FiscalSummary_YearBudgetCreateView(SelectedCompanyMixin, TransactionMixin,
         form.instance.company = self.this_company
         form.instance.is_budget = True  # 予算として設定
         form.instance.is_draft = False  # 予算は下書きではない
+        form.instance.version = 1  # versionは常に1に設定
         messages.success(self.request, f'{form.instance.year}年の予算データが正常に登録されました。')
         return super().form_valid(form)
 
@@ -72,9 +74,13 @@ class FiscalSummary_YearBudgetUpdateView(SelectedCompanyMixin, TransactionMixin,
         )
 
     def form_valid(self, form):
-        form.instance.is_budget = True  # 予算として設定
-        messages.success(self.request, f'{form.instance.year}年の予算データが正常に更新されました。')
-        return super().form_valid(form)
+        # フォームからインスタンスを取得（まだ保存はしない）
+        fiscal_summary_year = form.save(commit=False)
+        fiscal_summary_year.is_budget = True  # 予算として設定
+        fiscal_summary_year.version = 1  # versionは常に1に設定
+        fiscal_summary_year.save()
+        messages.success(self.request, f'{fiscal_summary_year.year}年の予算データが正常に更新されました。')
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

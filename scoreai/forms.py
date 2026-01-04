@@ -195,7 +195,7 @@ class FiscalSummary_YearForm(forms.ModelForm):
     class Meta:
         model = FiscalSummary_Year
         fields = '__all__'
-        exclude = ['company']
+        exclude = ['company', 'version']  # versionは常に1に設定されるため、フォームから除外
 
 
 class FiscalSummary_MonthForm(forms.ModelForm):

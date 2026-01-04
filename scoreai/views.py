@@ -160,11 +160,66 @@ class FiscalSummary_YearCreateView(SelectedCompanyMixin, TransactionMixin, Creat
         return form
 
     def form_valid(self, form):
-        form.instance.company = self.this_company
+        # フォームからインスタンスを取得（まだ保存はしない）
+        fiscal_summary_year = form.save(commit=False)
+        fiscal_summary_year.company = self.this_company
+        fiscal_summary_year.version = 1  # versionは常に1に設定
         # is_budgetはフォームから取得（デフォルトはFalse）
         if form.cleaned_data.get('is_budget') is None:
-            form.instance.is_budget = False
-        messages.success(self.request, f'{form.instance.year}年の決算データが正常に登録されました。' )
+            fiscal_summary_year.is_budget = False
+
+        # 業界分類・小分類が設定されている場合のみスコアを計算
+        company = fiscal_summary_year.company
+        if company.industry_classification and company.industry_subclassification:
+            # 必要な情報を取得
+            year = fiscal_summary_year.year
+            industry_classification = company.industry_classification
+            industry_subclassification = company.industry_subclassification
+            company_size = company.company_size
+
+            logger.debug(f"Instance: {fiscal_summary_year}, Year: {year}, Industry Classification: {industry_classification}, "
+                         f"Subclassification: {industry_subclassification}, Company Size: {company_size}")
+
+            # 各指標の値を取得
+            indicator_values = {
+                'sales_growth_rate': fiscal_summary_year.sales_growth_rate,
+                'operating_profit_margin': fiscal_summary_year.operating_profit_margin,
+                'labor_productivity': fiscal_summary_year.labor_productivity,
+                'EBITDA_interest_bearing_debt_ratio': fiscal_summary_year.EBITDA_interest_bearing_debt_ratio,
+                'operating_working_capital_turnover_period': fiscal_summary_year.operating_working_capital_turnover_period,
+                'equity_ratio': fiscal_summary_year.equity_ratio,
+            }
+
+            # 各指標のスコアを計算して更新
+            for indicator_name, value in indicator_values.items():
+                if value is not None:
+                    score = get_finance_score(
+                        year,
+                        industry_classification,
+                        industry_subclassification,
+                        company_size,
+                        indicator_name,
+                        value
+                    )
+                    if score is not None:
+                        if indicator_name == 'sales_growth_rate':
+                            fiscal_summary_year.score_sales_growth_rate = score
+                        elif indicator_name == 'operating_profit_margin':
+                            fiscal_summary_year.score_operating_profit_margin = score
+                        elif indicator_name == 'labor_productivity':
+                            fiscal_summary_year.score_labor_productivity = score
+                        elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                            fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio = score
+                        elif indicator_name == 'operating_working_capital_turnover_period':
+                            fiscal_summary_year.score_operating_working_capital_turnover_period = score
+                        elif indicator_name == 'equity_ratio':
+                            fiscal_summary_year.score_equity_ratio = score
+
+        # インスタンスを保存
+        fiscal_summary_year.save()
+        # self.objectを設定してget_success_urlが正しく動作するようにする
+        self.object = fiscal_summary_year
+        messages.success(self.request, f'{fiscal_summary_year.year}年の決算データが正常に登録されました。')
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -179,59 +234,89 @@ class FiscalSummary_YearUpdateView(SelectedCompanyMixin, TransactionMixin, Updat
     template_name = 'scoreai/fiscal_summary_year_form.html'
     success_url = reverse_lazy('fiscal_summary_year_list')
 
+    def get_queryset(self):
+        """選択されたCompanyのFiscalSummary_Yearのみを取得"""
+        return FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        )
+
+    def post(self, request, *args, **kwargs):
+        """POSTリクエストを処理"""
+        logger.info(f"FiscalSummary_YearUpdateView.post called: pk={kwargs.get('pk')}, company={self.this_company.name}")
+        return super().post(request, *args, **kwargs)
+
+    def form_invalid(self, form):
+        """フォームが無効な場合の処理"""
+        logger.warning(f"FiscalSummary_YearUpdateView.form_invalid: errors={form.errors}")
+        return super().form_invalid(form)
+
     def form_valid(self, form):
-        response = super().form_valid(form)
+        logger.info(f"FiscalSummary_YearUpdateView.form_valid called for company: {self.this_company.name}")
         # フォームからインスタンスを取得（まだ保存はしない）
         fiscal_summary_year = form.save(commit=False)
+        fiscal_summary_year.company = self.this_company
+        fiscal_summary_year.version = 1  # versionは常に1に設定
+        logger.info(f"FiscalSummary_Year instance: ID={fiscal_summary_year.id}, Year={fiscal_summary_year.year}")
 
-        # 必要な情報を取得
-        year = fiscal_summary_year.year
-        industry_classification = fiscal_summary_year.company.industry_classification.id
-        industry_subclassification = fiscal_summary_year.company.industry_subclassification.id
-        company_size = fiscal_summary_year.company.company_size
+        # 業界分類・小分類が設定されている場合のみスコアを計算
+        company = fiscal_summary_year.company
+        if company.industry_classification and company.industry_subclassification:
+            # 必要な情報を取得
+            year = fiscal_summary_year.year
+            industry_classification = company.industry_classification
+            industry_subclassification = company.industry_subclassification
+            company_size = company.company_size
 
-        logger.debug(f"Instance: {fiscal_summary_year}, Year: {year}, Industry Classification: {industry_classification}, "
-                     f"Subclassification: {industry_subclassification}, Company Size: {company_size}")
+            logger.debug(f"Instance: {fiscal_summary_year}, Year: {year}, Industry Classification: {industry_classification}, "
+                         f"Subclassification: {industry_subclassification}, Company Size: {company_size}")
 
-        # 各指標の値を取得
-        indicator_values = {
-            'sales_growth_rate': fiscal_summary_year.sales_growth_rate,
-            'operating_profit_margin': fiscal_summary_year.operating_profit_margin,
-            'labor_productivity': fiscal_summary_year.labor_productivity,
-            'EBITDA_interest_bearing_debt_ratio': fiscal_summary_year.EBITDA_interest_bearing_debt_ratio,
-            'operating_working_capital_turnover_period': fiscal_summary_year.operating_working_capital_turnover_period,
-            'equity_ratio': fiscal_summary_year.equity_ratio,
-        }
+            # 各指標の値を取得
+            indicator_values = {
+                'sales_growth_rate': fiscal_summary_year.sales_growth_rate,
+                'operating_profit_margin': fiscal_summary_year.operating_profit_margin,
+                'labor_productivity': fiscal_summary_year.labor_productivity,
+                'EBITDA_interest_bearing_debt_ratio': fiscal_summary_year.EBITDA_interest_bearing_debt_ratio,
+                'operating_working_capital_turnover_period': fiscal_summary_year.operating_working_capital_turnover_period,
+                'equity_ratio': fiscal_summary_year.equity_ratio,
+            }
 
-        # 各指標のスコアを計算して更新
-        for indicator_name, value in indicator_values.items():
-            if value is not None:
-                score = get_finance_score(
-                    year,
-                    industry_classification,
-                    industry_subclassification,
-                    company_size,
-                    indicator_name,
-                    value
-                )
-                if score is not None:
-                    if indicator_name == 'sales_growth_rate':
-                        fiscal_summary_year.score_sales_growth_rate = score
-                    elif indicator_name == 'operating_profit_margin':
-                        fiscal_summary_year.score_operating_profit_margin = score
-                    elif indicator_name == 'labor_productivity':
-                        fiscal_summary_year.score_labor_productivity = score
-                    elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
-                        fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio = score
-                    elif indicator_name == 'operating_working_capital_turnover_period':
-                        fiscal_summary_year.score_operating_working_capital_turnover_period = score
-                    elif indicator_name == 'equity_ratio':
-                        fiscal_summary_year.score_equity_ratio = score
+            # 各指標のスコアを計算して更新
+            for indicator_name, value in indicator_values.items():
+                if value is not None:
+                    score = get_finance_score(
+                        year,
+                        industry_classification,
+                        industry_subclassification,
+                        company_size,
+                        indicator_name,
+                        value
+                    )
+                    if score is not None:
+                        if indicator_name == 'sales_growth_rate':
+                            fiscal_summary_year.score_sales_growth_rate = score
+                        elif indicator_name == 'operating_profit_margin':
+                            fiscal_summary_year.score_operating_profit_margin = score
+                        elif indicator_name == 'labor_productivity':
+                            fiscal_summary_year.score_labor_productivity = score
+                        elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                            fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio = score
+                        elif indicator_name == 'operating_working_capital_turnover_period':
+                            fiscal_summary_year.score_operating_working_capital_turnover_period = score
+                        elif indicator_name == 'equity_ratio':
+                            fiscal_summary_year.score_equity_ratio = score
 
-        # インスタンスを再保存
-        fiscal_summary_year.save()
-        messages.success(self.request, '財務情報が正常に更新されました。')
-        return HttpResponseRedirect(self.get_success_url())
+        # インスタンスを保存
+        try:
+            fiscal_summary_year.save()
+            # self.objectを設定してget_success_urlが正しく動作するようにする
+            self.object = fiscal_summary_year
+            logger.info(f"FiscalSummary_Year updated successfully: ID={fiscal_summary_year.id}, Year={fiscal_summary_year.year}, Company={fiscal_summary_year.company.name}")
+            messages.success(self.request, '財務情報が正常に更新されました。')
+            return super().form_valid(form)
+        except Exception as e:
+            logger.error(f"Error saving FiscalSummary_Year: {e}", exc_info=True)
+            messages.error(self.request, f'財務情報の更新中にエラーが発生しました: {str(e)}')
+            return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -685,7 +770,7 @@ class ImportFiscalSummary_Year(SelectedCompanyMixin, TransactionMixin, FormView)
                         return self.form_invalid(form)
                     else:
                         defaults['is_budget'] = False  # 実績として設定
-                        # versionは常に1で固定（defaultsに含めない）
+                        defaults['version'] = 1  # versionは常に1に設定
                         FiscalSummary_Year.objects.update_or_create(
                             company=self.this_company,
                             year=year,

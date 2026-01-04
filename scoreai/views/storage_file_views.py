@@ -183,13 +183,17 @@ class StorageFileProcessView(SelectedCompanyMixin, TransactionMixin, LoginRequir
         from ..models import FiscalSummary_Year
         
         # FiscalSummary_Yearの作成または取得
-        # versionは常に1で固定（defaultsに含めない、モデルのdefault=1が適用される）
+        # versionは常に1で固定
         fiscal_summary_year, created = FiscalSummary_Year.objects.get_or_create(
             year=fiscal_year,
             company=self.this_company,
             is_budget=False,  # 実績データとして明示的に指定
-            defaults={'is_draft': True}
+            defaults={'is_draft': True, 'version': 1}
         )
+        
+        # 既存レコードの場合もversionを1に設定
+        if not created:
+            fiscal_summary_year.version = 1
         
         # データの更新
         update_fields = {}
