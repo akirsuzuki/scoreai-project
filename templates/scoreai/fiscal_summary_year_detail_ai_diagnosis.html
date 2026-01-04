@@ -94,8 +94,16 @@ function generateDiagnosisReport() {
       if (data.needs_info) {
         // 情報が不足している場合、会話形式で入力
         chatDiv.style.display = 'block';
-        displayChatMessage('assistant', data.message);
-        displayChatMessage('assistant', data.missing_info_questions.join('\n'));
+        if (data.company_edit_url) {
+          // 会社情報が不足している場合、リンク付きメッセージを表示
+          displayChatMessageHTML('assistant', data.message);
+        } else {
+          // その他の情報が不足している場合
+          displayChatMessage('assistant', data.message);
+          if (data.missing_info_questions && data.missing_info_questions.length > 0) {
+            displayChatMessage('assistant', data.missing_info_questions.join('\n'));
+          }
+        }
       } else {
         // レポートを表示
         contentDiv.style.display = 'block';
@@ -144,7 +152,12 @@ function sendChatMessage() {
   .then(response => response.json())
   .then(data => {
     if (data.success) {
-      displayChatMessage('assistant', data.response);
+      if (data.company_edit_url) {
+        // 会社情報が不足している場合、リンク付きメッセージを表示
+        displayChatMessageHTML('assistant', data.response);
+      } else {
+        displayChatMessage('assistant', data.response);
+      }
       if (data.report_ready) {
         // レポートが準備できた場合
         document.getElementById('diagnosis-chat').style.display = 'none';
@@ -170,6 +183,21 @@ function displayChatMessage(role, message) {
   bubble.className = `d-inline-block p-3 rounded ${role === 'user' ? 'bg-primary text-white' : 'bg-light'}`;
   bubble.style.maxWidth = '70%';
   bubble.textContent = message;
+  
+  messageDiv.appendChild(bubble);
+  messagesDiv.appendChild(messageDiv);
+  messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function displayChatMessageHTML(role, message) {
+  const messagesDiv = document.getElementById('chat-messages');
+  const messageDiv = document.createElement('div');
+  messageDiv.className = `mb-3 ${role === 'user' ? 'text-end' : 'text-start'}`;
+  
+  const bubble = document.createElement('div');
+  bubble.className = `d-inline-block p-3 rounded ${role === 'user' ? 'bg-primary text-white' : 'bg-light'}`;
+  bubble.style.maxWidth = '70%';
+  bubble.innerHTML = message.replace(/\n/g, '<br>');
   
   messageDiv.appendChild(bubble);
   messagesDiv.appendChild(messageDiv);

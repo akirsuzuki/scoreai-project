@@ -56,9 +56,28 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(Company)
 class CompanyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'id')
+    list_display = ('name', 'id', 'accounting_system', 'industry_classification')
     list_display_links = ('name',)
     ordering = ('name',)
+    search_fields = ('name', 'code')
+    list_filter = ('accounting_system', 'industry_classification', 'company_size')
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('name', 'code', 'fiscal_month', 'industry_classification', 'industry_subclassification', 'company_size')
+        }),
+        ('API設定', {
+            'fields': ('api_key', 'api_provider'),
+            'classes': ('collapse',)
+        }),
+        ('システム情報', {
+            'fields': (
+                'accounting_system', 'accounting_system_other',
+                'sales_management_system', 'purchase_management_system', 'production_management_system',
+                'inventory_management_system', 'payroll_system', 'hr_management_system',
+                'core_system', 'other_systems'
+            )
+        }),
+    )
 
 
 @admin.register(UserCompany)

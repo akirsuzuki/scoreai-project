@@ -16051,3 +16051,258 @@ INFO 2026-01-03 21:41:11,646 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
 INFO 2026-01-03 21:41:15,287 basehttp "GET /ai-consultation/ HTTP/1.1" 200 37430
 INFO 2026-01-03 21:41:16,492 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59177
 INFO 2026-01-03 21:41:19,931 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 200 59223
+INFO 2026-01-03 21:43:32,966 autoreload Watching for file changes with StatReloader
+INFO 2026-01-03 21:44:01,741 basehttp "GET /ai-consultation/01KDCG3BCEQSDHGBGCKXKDEPHF/ HTTP/1.1" 200 58314
+INFO 2026-01-03 21:44:01,768 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-03 21:50:19,650 basehttp "GET /ai-consultation/ HTTP/1.1" 200 37430
+INFO 2026-01-03 21:50:22,103 basehttp "GET /ai-consultation/ HTTP/1.1" 200 37430
+INFO 2026-01-03 21:50:50,480 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59177
+INFO 2026-01-03 21:50:52,613 basehttp "GET /ai-consultation/ HTTP/1.1" 200 37430
+INFO 2026-01-03 21:50:55,060 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77906
+INFO 2026-01-03 21:50:55,926 basehttp "GET /ai-consultation/ HTTP/1.1" 200 37430
+INFO 2026-01-03 21:54:26,206 autoreload Watching for file changes with StatReloader
+INFO 2026-01-03 21:54:28,160 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39782
+INFO 2026-01-03 21:54:30,473 basehttp "GET /ai-consultation/01KE1YJNT84DX5GC40T1YH3FZM/ HTTP/1.1" 200 58431
+INFO 2026-01-03 21:54:34,659 basehttp "GET /ai-consultation/01KE1YJNT3ER5FHFJ247HNVMV6/ HTTP/1.1" 200 58356
+INFO 2026-01-03 21:56:40,912 basehttp "GET /ai-consultation/01KE1YJNT84DX5GC40T1YH3FZM/ HTTP/1.1" 200 58431
+INFO 2026-01-03 21:56:43,184 basehttp "GET /ai-consultation/01KE1YJNT3ER5FHFJ247HNVMV6/ HTTP/1.1" 200 58356
+INFO 2026-01-04 07:41:40,186 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39782
+INFO 2026-01-04 07:41:40,204 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-04 07:41:40,257 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-04 07:41:42,348 basehttp "GET /ai-consultation/01KDTADK6RB9KBW1V2JWSD4RH8/ HTTP/1.1" 200 58352
+INFO 2026-01-04 07:43:21,402 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37191
+INFO 2026-01-04 07:43:48,290 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:44:05,363 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-04 07:44:05,406 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 76374
+INFO 2026-01-04 07:44:15,216 basehttp "POST /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/ai-diagnosis/generate/ HTTP/1.1" 200 390
+INFO 2026-01-04 07:47:28,853 autoreload /app/scoreai/views/fiscal_ai_diagnosis_views.py changed, reloading.
+INFO 2026-01-04 07:47:29,140 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:47:40,896 autoreload /app/scoreai/views/fiscal_ai_diagnosis_views.py changed, reloading.
+INFO 2026-01-04 07:47:41,213 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:47:47,927 autoreload /app/scoreai/views/fiscal_ai_diagnosis_views.py changed, reloading.
+INFO 2026-01-04 07:47:48,173 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:48:20,369 autoreload /app/scoreai/views/fiscal_ai_diagnosis_views.py changed, reloading.
+INFO 2026-01-04 07:48:20,645 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:50:59,685 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77593
+INFO 2026-01-04 07:51:03,381 basehttp "POST /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/ai-diagnosis/generate/ HTTP/1.1" 200 390
+INFO 2026-01-04 07:51:11,200 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 35660
+INFO 2026-01-04 07:51:24,353 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 07:51:30,938 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77593
+INFO 2026-01-04 07:51:35,115 basehttp "POST /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/ai-diagnosis/generate/ HTTP/1.1" 200 390
+INFO 2026-01-04 07:52:39,325 gemini Trying model: gemini-2.0-flash-exp
+INFO 2026-01-04 07:52:39,332 gemini Successfully initialized model: gemini-2.0-flash-exp
+ERROR 2026-01-04 07:52:39,576 gemini Gemini API quota/rate limit exceeded: ResourceExhausted - 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp
+Please retry in 20.452108756s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 20
+}
+]
+ERROR 2026-01-04 07:52:39,576 fiscal_ai_diagnosis_views Error in AI diagnosis chat: Gemini APIの利用制限に達しました。
+
+【無料プランの制限】
+無料プランの1日のリクエスト数やトークン数の制限に達している可能性があります。
+【対処方法】
+- しばらく時間をおいてから再度お試しください（通常1分程度）
+- APIキーの設定を確認してください
+- Google AI Studioで使用状況を確認してください: https://ai.dev/usage
+- 詳細: https://ai.google.dev/gemini-api/docs/rate-limits
+
+【エラー詳細】
+429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 167, in get_gemini_response_with_tokens
+    response = model_instance.generate_content(full_prompt)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/generativeai/generative_models.py", line 331, in generate_content
+    response = self._client.generate_content(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/ai/generativelanguage_v1beta/services/generative_service/client.py", line 835, in generate_content
+    response = rpc(
+               ^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/gapic_v1/method.py", line 131, in __call__
+    return wrapped_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 294, in retry_wrapped_func
+    return retry_target(
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 156, in retry_target
+    next_sleep = _retry_error_helper(
+                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_base.py", line 214, in _retry_error_helper
+    raise final_exc from source_exc
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/retry/retry_unary.py", line 147, in retry_target
+    result = target()
+             ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/timeout.py", line 130, in func_with_timeout
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/google/api_core/grpc_helpers.py", line 77, in error_remapped_callable
+    raise exceptions.from_grpc_error(exc) from exc
+google.api_core.exceptions.ResourceExhausted: 429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 0, model: gemini-2.0-flash-exp
+Please retry in 20.452108756s. [links {
+  description: "Learn more about Gemini API quotas"
+  url: "https://ai.google.dev/gemini-api/docs/rate-limits"
+}
+, violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_input_token_count"
+  quota_id: "GenerateContentInputTokensPerModelPerMinute-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerMinutePerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+violations {
+  quota_metric: "generativelanguage.googleapis.com/generate_content_free_tier_requests"
+  quota_id: "GenerateRequestsPerDayPerProjectPerModel-FreeTier"
+  quota_dimensions {
+    key: "model"
+    value: "gemini-2.0-flash-exp"
+  }
+  quota_dimensions {
+    key: "location"
+    value: "global"
+  }
+}
+, retry_delay {
+  seconds: 20
+}
+]
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/views/fiscal_ai_diagnosis_views.py", line 232, in post
+    ai_response = get_gemini_response(
+                  ^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 77, in get_gemini_response
+    result = get_gemini_response_with_tokens(prompt, system_instruction, model, api_key)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 253, in get_gemini_response_with_tokens
+    raise ValueError(error_message)
+ValueError: Gemini APIの利用制限に達しました。
+
+【無料プランの制限】
+無料プランの1日のリクエスト数やトークン数の制限に達している可能性があります。
+【対処方法】
+- しばらく時間をおいてから再度お試しください（通常1分程度）
+- APIキーの設定を確認してください
+- Google AI Studioで使用状況を確認してください: https://ai.dev/usage
+- 詳細: https://ai.google.dev/gemini-api/docs/rate-limits
+
+【エラー詳細】
+429 You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/usage?tab=rate-limit. 
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_input_token_count, limit: 0, model: gemini-2.0-flash-exp
+* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests
+ERROR 2026-01-04 07:52:39,581 log Internal Server Error: /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/ai-diagnosis/chat/
+ERROR 2026-01-04 07:52:39,581 basehttp "POST /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/ai-diagnosis/chat/ HTTP/1.1" 500 1515
+INFO 2026-01-04 07:59:09,854 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77906
+INFO 2026-01-04 09:58:34,154 basehttp "GET /admin/scoreai/blog/ HTTP/1.1" 200 33067
+INFO 2026-01-04 09:58:34,198 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,199 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,203 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,203 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,205 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,210 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,212 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,214 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,214 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,223 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,223 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,228 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,228 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,237 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,239 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 09:58:34,242 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,243 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,250 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,251 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,260 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,261 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,262 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:34,263 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:38,066 basehttp "GET /admin/scoreai/blog/1/change/ HTTP/1.1" 200 33735
+INFO 2026-01-04 09:58:38,096 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:38,100 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2026-01-04 09:58:38,101 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2026-01-04 09:58:38,104 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-01-04 09:58:38,102 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15502
+INFO 2026-01-04 09:58:38,107 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-01-04 09:58:38,108 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-04 09:58:38,110 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 09:58:38,113 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2026-01-04 09:58:38,114 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2026-01-04 09:58:38,175 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-01-04 09:58:38,175 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2026-01-04 09:58:38,176 basehttp "GET /static/admin/img/icon-unknown-alt.svg HTTP/1.1" 200 655
+INFO 2026-01-04 09:58:38,177 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2026-01-04 11:08:22,107 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-04 11:08:24,677 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 11:08:47,046 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-04 11:08:47,276 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 11:08:58,082 autoreload /app/scoreai/admin.py changed, reloading.
+INFO 2026-01-04 11:08:58,346 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 11:09:11,156 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-04 11:09:11,388 autoreload Watching for file changes with StatReloader

@@ -31,6 +31,34 @@ class FiscalAIDiagnosisGenerateView(SelectedCompanyMixin, LoginRequiredMixin, Er
                 company=self.this_company
             )
             
+            # 会社情報の不足をチェック
+            company = self.this_company
+            missing_company_info = []
+            company_edit_url = None
+            
+            if not company.industry_classification:
+                missing_company_info.append('業界分類')
+            if not company.industry_subclassification:
+                missing_company_info.append('業界小分類')
+            # company_sizeはCharFieldでデフォルト値's'があるため、Noneになることはない
+            # ただし、ユーザーが明示的に設定していない可能性を考慮して、デフォルト値の場合はチェックしない
+            # （デフォルト値's'は有効な値として扱う）
+            
+            # 会社情報が不足している場合
+            if missing_company_info:
+                from django.urls import reverse
+                company_edit_url = reverse('company_update', kwargs={'id': company.id})
+                missing_info_text = '、'.join(missing_company_info)
+                message = f'診断に必要な情報が不足しています。\n\n以下の項目を設定してください：{missing_info_text}\n\n設定は<a href="{company_edit_url}" target="_blank">会社情報編集画面</a>から行えます。'
+                
+                return JsonResponse({
+                    'success': True,
+                    'needs_info': True,
+                    'message': message,
+                    'missing_info_questions': [f"{missing_info_text}を設定してください。"],
+                    'company_edit_url': company_edit_url,
+                })
+            
             # データを収集
             fiscal_data = collect_fiscal_data_for_diagnosis(
                 self.this_company,
@@ -46,9 +74,13 @@ class FiscalAIDiagnosisGenerateView(SelectedCompanyMixin, LoginRequiredMixin, Er
             if not fiscal_data['fiscal_data'].get(f'year_{fiscal_summary_year.year - 2}'):
                 missing_info.append('前々期の決算データ')
             
-            # ベンチマークデータが不足している場合
+            # ベンチマークデータが不足している場合（業界分類・企業規模が設定されていても、ベンチマークデータ自体が存在しない場合）
             if not fiscal_data['benchmark_data']:
-                missing_info.append('ローカルベンチマークデータ（業界分類・企業規模の設定が必要）')
+                if company.industry_classification and company.industry_subclassification and company.company_size:
+                    missing_info.append('ローカルベンチマークデータ（該当する業界・規模のベンチマークデータが存在しません）')
+                else:
+                    # 業界分類・企業規模が未設定の場合は、上記のチェックで既に処理されている
+                    pass
             
             # 情報が不足している場合、会話形式で入力
             if missing_info:
@@ -162,6 +194,28 @@ class FiscalAIDiagnosisChatView(SelectedCompanyMixin, LoginRequiredMixin, ErrorH
                 id=fiscal_summary_year_id,
                 company=self.this_company
             )
+            
+            # 会社情報の不足をチェック（初回リクエスト時のみ）
+            company = self.this_company
+            if not user_message:  # 初回リクエストの場合
+                missing_company_info = []
+                if not company.industry_classification:
+                    missing_company_info.append('業界分類')
+                if not company.industry_subclassification:
+                    missing_company_info.append('業界小分類')
+                
+                if missing_company_info:
+                    from django.urls import reverse
+                    company_edit_url = reverse('company_update', kwargs={'id': company.id})
+                    missing_info_text = '、'.join(missing_company_info)
+                    message = f'診断に必要な情報が不足しています。\n\n以下の項目を設定してください：{missing_info_text}\n\n設定は<a href="{company_edit_url}" target="_blank">会社情報編集画面</a>から行えます。'
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'needs_info': True,
+                        'response': message,
+                        'company_edit_url': company_edit_url,
+                    })
             
             # 会話履歴を取得（セッションから）
             chat_history = request.session.get(f'diagnosis_chat_{fiscal_summary_year_id}', [])

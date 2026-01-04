@@ -88,6 +88,77 @@ class Company(models.Model):
     )
     api_key = models.CharField('APIキー', max_length=255, blank=True, null=True, help_text='CompanyのAPIキー（上限超過時に使用、Company Userのみ）')
     api_provider = models.CharField('APIプロバイダー', max_length=20, choices=[('gemini', 'Google Gemini'), ('openai', 'OpenAI')], blank=True, null=True, help_text='APIキーのプロバイダー')
+    
+    # システム情報
+    ACCOUNTING_SYSTEM_CHOICES = [
+        ('yayoi', '弥生会計'),
+        ('freee', 'freee'),
+        ('money_forward', 'Money Forward'),
+        ('kansanbogyo_v', '勘定奉行Vシリーズ'),
+        ('other', 'その他'),
+        ('none', '未使用'),
+    ]
+    accounting_system = models.CharField(
+        '会計システム',
+        max_length=50,
+        choices=ACCOUNTING_SYSTEM_CHOICES,
+        blank=True,
+        null=True,
+        help_text='使用している会計システム'
+    )
+    accounting_system_other = models.CharField(
+        '会計システム（その他）',
+        max_length=100,
+        blank=True,
+        help_text='会計システムが「その他」の場合のシステム名'
+    )
+    sales_management_system = models.CharField(
+        '販売管理システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している販売管理システム名（未使用の場合は空白）'
+    )
+    purchase_management_system = models.CharField(
+        '購買管理システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している購買管理システム名（未使用の場合は空白）'
+    )
+    production_management_system = models.CharField(
+        '生産管理システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している生産管理システム名（未使用の場合は空白）'
+    )
+    inventory_management_system = models.CharField(
+        '在庫管理システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している在庫管理システム名（未使用の場合は空白）'
+    )
+    payroll_system = models.CharField(
+        '給与計算システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している給与計算システム名（未使用の場合は空白）'
+    )
+    hr_management_system = models.CharField(
+        '人事管理システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している人事管理システム名（未使用の場合は空白）'
+    )
+    core_system = models.CharField(
+        '基幹システム',
+        max_length=100,
+        blank=True,
+        help_text='使用している基幹システム名（未使用の場合は空白）'
+    )
+    other_systems = models.TextField(
+        'その他システム',
+        blank=True,
+        help_text='その他の使用しているシステム情報（複数ある場合は改行で区切る）'
+    )
 
     @property
     def user_count(self):

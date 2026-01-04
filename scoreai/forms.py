@@ -74,7 +74,14 @@ class UserProfileUpdateForm(forms.ModelForm):
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'fiscal_month', 'industry_classification', 'industry_subclassification', 'company_size', 'api_key', 'api_provider']
+        fields = [
+            'name', 'fiscal_month', 'industry_classification', 'industry_subclassification', 'company_size',
+            'api_key', 'api_provider',
+            'accounting_system', 'accounting_system_other',
+            'sales_management_system', 'purchase_management_system', 'production_management_system',
+            'inventory_management_system', 'payroll_system', 'hr_management_system',
+            'core_system', 'other_systems'
+        ]
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'fiscal_month': forms.NumberInput(attrs={
@@ -91,6 +98,44 @@ class CompanyForm(forms.ModelForm):
                 'placeholder': 'APIキーを入力（上限超過時に使用）'
             }),
             'api_provider': forms.Select(attrs={'class': 'form-control'}),
+            'accounting_system': forms.Select(attrs={'class': 'form-control'}),
+            'accounting_system_other': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '会計システム名を入力（その他の場合）'
+            }),
+            'sales_management_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '販売管理システム名（未使用の場合は空白）'
+            }),
+            'purchase_management_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '購買管理システム名（未使用の場合は空白）'
+            }),
+            'production_management_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '生産管理システム名（未使用の場合は空白）'
+            }),
+            'inventory_management_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '在庫管理システム名（未使用の場合は空白）'
+            }),
+            'payroll_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '給与計算システム名（未使用の場合は空白）'
+            }),
+            'hr_management_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '人事管理システム名（未使用の場合は空白）'
+            }),
+            'core_system': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': '基幹システム名（未使用の場合は空白）'
+            }),
+            'other_systems': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'その他の使用しているシステム情報（複数ある場合は改行で区切る）'
+            }),
         }
         labels = {
             'name': '会社名',
@@ -100,10 +145,30 @@ class CompanyForm(forms.ModelForm):
             'company_size': '企業規模',
             'api_key': 'APIキー',
             'api_provider': 'APIプロバイダー',
+            'accounting_system': '会計システム',
+            'accounting_system_other': '会計システム（その他）',
+            'sales_management_system': '販売管理システム',
+            'purchase_management_system': '購買管理システム',
+            'production_management_system': '生産管理システム',
+            'inventory_management_system': '在庫管理システム',
+            'payroll_system': '給与計算システム',
+            'hr_management_system': '人事管理システム',
+            'core_system': '基幹システム',
+            'other_systems': 'その他システム',
         }
         help_texts = {
             'api_key': '上限超過時に使用するAPIキー（Company Userのみ使用可能）',
             'api_provider': 'APIキーのプロバイダーを選択',
+            'accounting_system': '使用している会計システムを選択',
+            'accounting_system_other': '会計システムが「その他」の場合のシステム名',
+            'sales_management_system': '使用している販売管理システム名（未使用の場合は空白）',
+            'purchase_management_system': '使用している購買管理システム名（未使用の場合は空白）',
+            'production_management_system': '使用している生産管理システム名（未使用の場合は空白）',
+            'inventory_management_system': '使用している在庫管理システム名（未使用の場合は空白）',
+            'payroll_system': '使用している給与計算システム名（未使用の場合は空白）',
+            'hr_management_system': '使用している人事管理システム名（未使用の場合は空白）',
+            'core_system': '使用している基幹システム名（未使用の場合は空白）',
+            'other_systems': 'その他の使用しているシステム情報（複数ある場合は改行で区切る）',
         }
 
 
