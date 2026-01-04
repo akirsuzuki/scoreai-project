@@ -900,8 +900,12 @@ class Debt(models.Model):
 
     @property
     def interest_amount_monthly(self):
+        """
+        今後12ヶ月間の各月の月次利息額を計算して返す
+        年利を12で割って月次利息率に変換し、各月の残高に掛けて計算
+        """
         start_month = self.elapsed_months
-        return [int(self.balance_after_months(month)[0]*self.interest_rate) for month in range(start_month, start_month + 12)]
+        return [int(self.balance_after_months(month)[1]) for month in range(start_month, start_month + 12)]
 
     @property
     def fiscal_year_months(self):

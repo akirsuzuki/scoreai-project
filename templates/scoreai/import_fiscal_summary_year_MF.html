@@ -36,27 +36,6 @@
         <h5 class="card-title mb-0">マネーフォワード 残高試算表CSVアップロード</h5>
       </div>
       <div class="card-body">
-          <!-- メッセージ表示（フォームの上に表示） -->
-          {% if messages %}
-          <div class="messages mb-4">
-              {% for message in messages %}
-              <div class="alert alert-dismissible fade show
-                         {% if message.tags == 'error' %}alert-danger
-                         {% elif message.tags == 'success' %}alert-success
-                         {% else %}alert-warning
-                         {% endif %}" 
-                   role="alert">
-                  {% if 'safe' in message.tags %}
-                      {{ message|safe }}
-                  {% else %}
-                      {{ message|linebreaks }}
-                  {% endif %}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-              {% endfor %}
-          </div>
-          {% endif %}
-          
           <form method="post" enctype="multipart/form-data" id="csv-upload-form">
               {% csrf_token %}
               

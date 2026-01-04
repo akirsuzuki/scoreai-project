@@ -56,7 +56,14 @@
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="4" style="text-align:right">合計：</th>
+              <th colspan="2" style="text-align:right">合計：</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -110,16 +117,37 @@
                 ? i
                 : 0;
           };
-          total = api
-            .column(2)
-            .data()
-            .reduce((a, b) => intVal(a) + intVal(b), 0);
-          pageTotal = api
-            .column(2, { page: 'current' })
-            .data()
-            .reduce((a, b) => intVal(a) + intVal(b), 0);
-          api.column(2).footer().innerHTML =
-            '表示合計 :' + pageTotal + '千円 ( 総合計 :' + total + ' 千円)';
+          
+          // 合計を計算する列のインデックス
+          const columnsToSum = [
+            { index: 2, label: '元本' },      // principal
+            { index: 7, label: '月返済額' },   // monthly_repayment
+            { index: 11, label: '今月末残高' }, // balances_monthly.0
+            { index: 12, label: '今月概算利息' }, // interest_amount_monthly.0
+            { index: 13, label: '決算時残高' }  // balance_fy1
+          ];
+          
+          columnsToSum.forEach(function(col) {
+            // 全データの合計
+            let total = api
+              .column(col.index)
+              .data()
+              .reduce(function(a, b) {
+                return intVal(a) + intVal(b);
+              }, 0);
+            
+            // 現在のページの合計
+            let pageTotal = api
+              .column(col.index, { page: 'current' })
+              .data()
+              .reduce(function(a, b) {
+                return intVal(a) + intVal(b);
+              }, 0);
+            
+            // フォーマットして表示
+            api.column(col.index).footer().innerHTML =
+              pageTotal.toLocaleString('ja-JP') + '千円';
+          });
         }
       });
 

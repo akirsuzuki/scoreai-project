@@ -359,6 +359,10 @@ def get_monthly_summaries(
             fiscal_summary_year__year=year,
             fiscal_summary_year__is_budget=False,  # 年度が実績であること
             is_budget=False  # 月次データが実績であること
+        ).exclude(
+            is_budget=True  # 念のため、予算データを明示的に除外
+        ).exclude(
+            fiscal_summary_year__is_budget=True  # 念のため、予算年度を明示的に除外
         ).select_related('fiscal_summary_year', 'fiscal_summary_year__company').order_by('-fiscal_summary_year__is_draft', 'period')
 
         # 月データを辞書に変換（同じ期間に複数のレコードがある場合、最初の1つ（非下書き優先）のみを使用）

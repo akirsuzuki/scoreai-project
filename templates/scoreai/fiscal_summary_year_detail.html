@@ -26,7 +26,7 @@
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">直近決算詳細</h5>
+        <h5 class="card-title mb-0 fw-semibold">直近決算詳細（{{ fiscal_summary_year.year }}年{% if fiscal_summary_year.is_budget %}・予算{% else %}・実績{% endif %}）</h5>
       </div>
       <div class="card-body">
         <!-- タブナビゲーション -->

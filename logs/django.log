@@ -16306,3 +16306,262 @@ INFO 2026-01-04 11:08:58,082 autoreload /app/scoreai/admin.py changed, reloading
 INFO 2026-01-04 11:08:58,346 autoreload Watching for file changes with StatReloader
 INFO 2026-01-04 11:09:11,156 autoreload /app/scoreai/models.py changed, reloading.
 INFO 2026-01-04 11:09:11,388 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 11:29:33,234 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 11:29:38,207 basehttp "GET /admin/scoreai/company/ HTTP/1.1" 200 33573
+INFO 2026-01-04 11:29:38,240 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 11:29:39,759 basehttp "GET /admin/scoreai/company/01JEFCNJP7DHQ9TPNFJBBHK0HR/change/ HTTP/1.1" 200 48862
+INFO 2026-01-04 11:29:39,779 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 11:29:39,788 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2026-01-04 11:29:47,321 basehttp "POST /admin/scoreai/company/01JEFCNJP7DHQ9TPNFJBBHK0HR/change/ HTTP/1.1" 302 0
+INFO 2026-01-04 11:29:47,340 basehttp "GET /admin/scoreai/company/ HTTP/1.1" 200 33814
+INFO 2026-01-04 11:29:47,360 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 11:29:47,375 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-04 12:23:29,213 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-04 12:23:29,944 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:24:46,963 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:24:47,397 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:24:56,368 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:24:56,792 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:25:42,621 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:25:42,876 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:25:52,733 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:25:52,972 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:26:05,946 basehttp "GET /user_profile/ HTTP/1.1" 200 44325
+INFO 2026-01-04 12:26:09,011 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:26:09,043 basehttp "GET / HTTP/1.1" 200 52381
+INFO 2026-01-04 12:26:12,992 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:26:13,041 basehttp "GET /fiscal_summary_year/01JE577H9KCNN4TQFC7WVPNHBH/detail/ HTTP/1.1" 200 77361
+INFO 2026-01-04 12:26:15,726 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51431
+INFO 2026-01-04 12:26:17,774 basehttp "GET /fiscal_summary_year/?is_draft=true HTTP/1.1" 200 50998
+INFO 2026-01-04 12:26:22,226 basehttp "GET /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/detail/ HTTP/1.1" 200 75297
+INFO 2026-01-04 12:26:26,104 basehttp "GET /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 91020
+INFO 2026-01-04 12:26:37,603 basehttp "POST /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 91014
+INFO 2026-01-04 12:26:47,535 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51431
+INFO 2026-01-04 12:26:49,823 basehttp "GET /fiscal_summary_year/?is_draft=true HTTP/1.1" 200 50998
+INFO 2026-01-04 12:27:31,457 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:27:31,763 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:27:44,752 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:27:44,990 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:27:58,836 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:27:59,196 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:28:05,975 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:28:15,314 basehttp "GET /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/detail/ HTTP/1.1" 200 75297
+INFO 2026-01-04 12:28:19,542 basehttp "GET /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 91020
+INFO 2026-01-04 12:28:30,837 basehttp "POST /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 91014
+WARNING 2026-01-04 12:28:40,548 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48310
+INFO 2026-01-04 12:28:40,807 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js.map HTTP/1.1" 200 333974
+INFO 2026-01-04 12:29:15,431 basehttp "POST /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 91015
+WARNING 2026-01-04 12:29:15,472 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48310
+INFO 2026-01-04 12:29:33,129 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 32761
+WARNING 2026-01-04 12:29:33,167 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48310
+WARNING 2026-01-04 12:29:34,605 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48310
+INFO 2026-01-04 12:30:30,773 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:30:31,105 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:30:44,089 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:30:44,521 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:30:56,355 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:30:56,597 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:39:17,014 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:39:24,329 views FiscalSummary_YearUpdateView.post called: pk=01JEQP3GNAN0CZ22K0R3S6DQ8T, company=株式会社Sample
+WARNING 2026-01-04 12:39:24,341 views FiscalSummary_YearUpdateView.form_invalid: errors=<ul class="errorlist"><li>version<ul class="errorlist"><li>この項目は必須です。</li></ul></li></ul>
+INFO 2026-01-04 12:39:24,387 basehttp "POST /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 200 94343
+INFO 2026-01-04 12:40:55,918 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-04 12:40:56,380 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:02,298 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:41:02,673 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:08,493 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:41:08,861 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:18,696 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 12:41:19,132 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:35,390 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 12:41:35,838 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:40,735 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 12:41:41,021 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:41:54,959 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:41:55,358 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:42:05,463 autoreload /app/scoreai/views/ocr_views.py changed, reloading.
+INFO 2026-01-04 12:42:05,854 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:42:12,710 autoreload /app/scoreai/views/storage_file_views.py changed, reloading.
+INFO 2026-01-04 12:42:13,011 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:42:24,965 autoreload /app/scoreai/views/ocr_views.py changed, reloading.
+INFO 2026-01-04 12:42:25,251 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:46:16,808 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:46:33,830 views FiscalSummary_YearUpdateView.post called: pk=01JEQP3GNAN0CZ22K0R3S6DQ8T, company=株式会社Sample
+INFO 2026-01-04 12:46:33,836 views FiscalSummary_YearUpdateView.form_valid called for company: 株式会社Sample
+INFO 2026-01-04 12:46:33,837 views FiscalSummary_Year instance: ID=01JEQP3GNAN0CZ22K0R3S6DQ8T, Year=2024
+INFO 2026-01-04 12:46:33,858 views FiscalSummary_Year updated successfully: ID=01JEQP3GNAN0CZ22K0R3S6DQ8T, Year=2024, Company=株式会社Sample
+INFO 2026-01-04 12:46:33,880 basehttp "POST /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/update/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:46:33,913 basehttp "GET /fiscal_summary_year/ HTTP/1.1" 200 51892
+INFO 2026-01-04 12:46:38,106 basehttp "GET /fiscal_summary_year/01JEQP3GNAN0CZ22K0R3S6DQ8T/detail/ HTTP/1.1" 200 77126
+INFO 2026-01-04 12:46:50,431 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51412
+INFO 2026-01-04 12:46:52,784 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91981
+INFO 2026-01-04 12:46:56,633 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 32761
+INFO 2026-01-04 12:46:58,573 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 37228
+INFO 2026-01-04 12:46:58,591 basehttp "GET /static/scoreai/img/MFimport_year2.png HTTP/1.1" 200 40771
+INFO 2026-01-04 12:46:58,592 basehttp "GET /static/scoreai/img/MFimport_year.png HTTP/1.1" 200 91423
+INFO 2026-01-04 12:47:08,398 views ImportFiscalSummary_Year_FromMoneyforward: form_valid called
+INFO 2026-01-04 12:47:08,421 csv_utils Encoding detected (fallback): shift-jis
+INFO 2026-01-04 12:47:08,421 csv_utils CSV read successfully with encoding: shift-jis
+ERROR 2026-01-04 12:47:08,425 views ImportFiscalSummary_Year_FromMoneyforward: form_invalid called. Errors: 
+INFO 2026-01-04 12:47:08,433 basehttp "POST /import_fiscal_summary_year_MF/ HTTP/1.1" 200 38424
+INFO 2026-01-04 12:47:14,618 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 37228
+INFO 2026-01-04 12:47:24,353 views FiscalSummary_YearUpdateView.post called: pk=01KE3HTWMVTFTXFZ3Y0NDGNWWJ, company=株式会社Sample
+ERROR 2026-01-04 12:47:24,356 mixins Unexpected error in FiscalSummary_YearUpdateView.dispatch: クエリーに一致する 年次決算情報 は見つかりませんでした
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 53, in get_object
+    obj = queryset.get()
+          ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 649, in get
+    raise self.model.DoesNotExist(
+scoreai.models.FiscalSummary_Year.DoesNotExist: FiscalSummary_Year matching query does not exist.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 244, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 205, in post
+    self.object = self.get_object()
+                  ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 55, in get_object
+    raise Http404(
+django.http.response.Http404: クエリーに一致する 年次決算情報 は見つかりませんでした
+WARNING 2026-01-04 12:47:24,367 basehttp "POST /fiscal_summary_year/01KE3HTWMVTFTXFZ3Y0NDGNWWJ/update/ HTTP/1.1" 404 9379
+INFO 2026-01-04 12:54:01,401 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:54:09,813 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51936
+INFO 2026-01-04 12:54:14,361 basehttp "GET /fiscal_summary_year/?is_draft=true HTTP/1.1" 200 51420
+INFO 2026-01-04 12:54:16,077 basehttp "GET /fiscal_summary_year/ HTTP/1.1" 200 51412
+INFO 2026-01-04 12:54:19,722 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91916
+ERROR 2026-01-04 12:54:24,523 mixins Unexpected error in FiscalSummary_YearCreateView.dispatch: 'NoneType' object has no attribute '__dict__'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 151, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 221, in form_valid
+    return HttpResponseRedirect(self.get_success_url())
+                                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 120, in get_success_url
+    url = self.success_url.format(**self.object.__dict__)
+                                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+ERROR 2026-01-04 12:54:24,540 log Internal Server Error: /fiscal_summary_year/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 151, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 221, in form_valid
+    return HttpResponseRedirect(self.get_success_url())
+                                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 120, in get_success_url
+    url = self.success_url.format(**self.object.__dict__)
+                                    ^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute '__dict__'. Did you mean: '__dir__'?
+ERROR 2026-01-04 12:54:24,541 basehttp "POST /fiscal_summary_year/create/ HTTP/1.1" 500 111513
+INFO 2026-01-04 12:54:54,709 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 92865
+INFO 2026-01-04 12:55:13,260 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:55:13,557 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:55:22,253 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:55:22,532 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:55:28,114 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:55:28,355 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:55:34,986 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-04 12:55:35,236 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:56:08,965 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 12:56:22,184 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:56:22,228 basehttp "GET /fiscal_summary_year/01KE3J8NVDG286C09XH1HZHG4N/detail/ HTTP/1.1" 200 76975
+INFO 2026-01-04 12:56:25,228 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51296
+INFO 2026-01-04 12:56:28,032 basehttp "GET /fiscal_summary_year/01KE3J8NVDG286C09XH1HZHG4N/detail/ HTTP/1.1" 200 76975
+INFO 2026-01-04 12:56:32,661 basehttp "GET /fiscal_summary_year/01KE3J8NVDG286C09XH1HZHG4N/delete/ HTTP/1.1" 200 30311
+INFO 2026-01-04 12:56:35,422 basehttp "POST /fiscal_summary_year/01KE3J8NVDG286C09XH1HZHG4N/delete/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:56:35,440 basehttp "GET /fiscal_summary_year/ HTTP/1.1" 200 51905
+INFO 2026-01-04 12:56:39,129 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91916
+INFO 2026-01-04 12:56:44,008 basehttp "POST /fiscal_summary_year/create/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:56:44,027 basehttp "GET /fiscal_summary_year/ HTTP/1.1" 200 51789
+INFO 2026-01-04 12:56:56,599 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 51296
+INFO 2026-01-04 12:57:00,199 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39302
+INFO 2026-01-04 12:57:01,099 basehttp "GET / HTTP/1.1" 200 51860
+INFO 2026-01-04 12:57:09,527 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74740
+INFO 2026-01-04 12:57:17,724 basehttp "GET /user_profile/ HTTP/1.1" 200 43841
+INFO 2026-01-04 12:57:19,600 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-04 12:57:19,635 basehttp "GET / HTTP/1.1" 200 60613
+INFO 2026-01-04 13:58:10,079 basehttp "GET /admin/scoreai/fiscalsummary_year/ HTTP/1.1" 200 52686
+INFO 2026-01-04 13:58:10,100 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,102 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,103 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,104 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,106 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,111 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,114 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,114 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,115 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,117 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,117 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,121 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,122 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,126 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,129 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,128 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,129 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-04 13:58:10,143 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,146 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,147 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,163 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,164 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-04 13:58:10,164 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-04 14:57:59,046 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-04 14:57:59,604 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 14:58:11,746 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-04 14:58:11,981 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 15:35:59,974 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-04 15:36:00,126 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77615
+INFO 2026-01-04 15:36:00,143 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-04 15:36:21,031 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/update/ HTTP/1.1" 200 92495
+INFO 2026-01-04 15:36:35,337 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39782
+INFO 2026-01-04 16:57:07,673 basehttp "GET /debts_all/ HTTP/1.1" 200 64253
+WARNING 2026-01-04 16:57:07,699 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-04 17:03:00,653 basehttp "GET /debts_all/ HTTP/1.1" 200 65238
+WARNING 2026-01-04 17:03:00,678 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-04 17:15:17,023 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-04 17:15:17,664 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 17:15:27,836 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-04 17:15:28,202 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 17:15:33,240 basehttp "GET /debts_all/ HTTP/1.1" 200 65201
+WARNING 2026-01-04 17:15:33,266 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-04 17:15:33,278 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
