@@ -20,7 +20,7 @@
       <div class="d-flex gap-2 flex-wrap">
         <a href="{% url 'budget_suggest' %}" class="btn btn-outline-primary btn-sm">AI予算策定（年次）</a>
         <a href="{% url 'budget_suggest_month' %}" class="btn btn-outline-primary btn-sm">AI予算策定（月次）</a>
-        <a href="{% url 'budget_analysis' %}" class="btn btn-outline-primary btn-sm">予算分析</a>
+        <a href="{% url 'budget_analysis' %}?year={{ year }}" class="btn btn-outline-primary btn-sm">予算分析</a>
         <form method="get" class="d-flex gap-2">
           <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
             {% for y in available_years %}
@@ -430,30 +430,20 @@
               </tr>
             </thead>
             <tbody>
-              {% for period in "123456789101112"|make_list %}
-                {% with period_num=period|add:0 %}
-                  {% for budget_month in budget_monthly %}
-                    {% if budget_month.period == period_num %}
-                      {% for actual_month in actual_monthly %}
-                        {% if actual_month.period == period_num %}
-                          <tr>
-                            <td>{{ period_num }}月</td>
-                            <td class="text-end">{{ budget_month.sales|intcomma }}</td>
-                            <td class="text-end">{{ actual_month.sales|intcomma }}</td>
-                            <td class="text-end {% if actual_month.sales > budget_month.sales %}text-success{% else %}text-danger{% endif %}">
-                              {{ actual_month.sales|subtract:budget_month.sales|intcomma }}
-                            </td>
-                            <td class="text-end">{{ budget_month.operating_profit|intcomma }}</td>
-                            <td class="text-end">{{ actual_month.operating_profit|intcomma }}</td>
-                            <td class="text-end {% if actual_month.operating_profit > budget_month.operating_profit %}text-success{% else %}text-danger{% endif %}">
-                              {{ actual_month.operating_profit|subtract:budget_month.operating_profit|intcomma }}
-                            </td>
-                          </tr>
-                        {% endif %}
-                      {% endfor %}
-                    {% endif %}
-                  {% endfor %}
-                {% endwith %}
+              {% for comp in monthly_comparison %}
+                <tr>
+                  <td>{{ comp.display_month }}月</td>
+                  <td class="text-end">{{ comp.budget_month.sales|floatformat:0|intcomma }}</td>
+                  <td class="text-end">{{ comp.actual_month.sales|floatformat:0|intcomma }}</td>
+                  <td class="text-end {% if comp.actual_month.sales > comp.budget_month.sales %}text-success{% else %}text-danger{% endif %}">
+                    {{ comp.actual_month.sales|subtract:comp.budget_month.sales|floatformat:0|intcomma }}
+                  </td>
+                  <td class="text-end">{{ comp.budget_month.operating_profit|floatformat:0|intcomma }}</td>
+                  <td class="text-end">{{ comp.actual_month.operating_profit|floatformat:0|intcomma }}</td>
+                  <td class="text-end {% if comp.actual_month.operating_profit > comp.budget_month.operating_profit %}text-success{% else %}text-danger{% endif %}">
+                    {{ comp.actual_month.operating_profit|subtract:comp.budget_month.operating_profit|floatformat:0|intcomma }}
+                  </td>
+                </tr>
               {% endfor %}
             </tbody>
           </table>
@@ -465,7 +455,7 @@
 
 <script>
 const monthlyData = {
-  labels: [{% for period in "123456789101112"|make_list %}'{{ period }}月'{% if not forloop.last %},{% endif %}{% endfor %}],
+  labels: [{% for label in monthly_labels %}'{{ label }}'{% if not forloop.last %},{% endif %}{% endfor %}],
   budget: [
     {% for period in "123456789101112"|make_list %}
       {% with period_num=period|add:0 %}

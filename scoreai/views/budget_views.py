@@ -233,18 +233,64 @@ class BudgetVsActualComparisonView(SelectedCompanyMixin, TemplateView):
         # 月次データを取得
         budget_monthly = []
         actual_monthly = []
+        monthly_comparison = []  # period順にソートされた比較データ
+        
+        # 決算月を取得
+        fiscal_month = company.fiscal_month if hasattr(company, 'fiscal_month') else 1
         
         if budget_year:
-            budget_monthly = FiscalSummary_Month.objects.filter(
+            budget_monthly_queryset = FiscalSummary_Month.objects.filter(
                 fiscal_summary_year=budget_year,
                 is_budget=True
             ).order_by('period')
+            # 決算月を考慮して表示月を計算してリストに変換
+            budget_monthly = []
+            for month in budget_monthly_queryset:
+                # period（1-12）を決算月を考慮した表示月に変換
+                # period=1が決算月の次の月、period=12が決算月
+                display_month = (fiscal_month + month.period) % 12
+                if display_month == 0:
+                    display_month = 12
+                month.display_month = display_month
+                budget_monthly.append(month)
         
         if actual_year:
-            actual_monthly = FiscalSummary_Month.objects.filter(
+            actual_monthly_queryset = FiscalSummary_Month.objects.filter(
                 fiscal_summary_year=actual_year,
                 is_budget=False
             ).order_by('period')
+            # 決算月を考慮して表示月を計算してリストに変換
+            actual_monthly = []
+            for month in actual_monthly_queryset:
+                # period（1-12）を決算月を考慮した表示月に変換
+                display_month = (fiscal_month + month.period) % 12
+                if display_month == 0:
+                    display_month = 12
+                month.display_month = display_month
+                actual_monthly.append(month)
+        
+        # periodをキーにした辞書を作成（重複を防ぐため）
+        budget_monthly_dict = {m.period: m for m in budget_monthly}
+        actual_monthly_dict = {m.period: m for m in actual_monthly}
+        
+        # period順（1-12）に比較データを作成
+        monthly_labels = []  # グラフ用のラベル（決算月を考慮）
+        for period in range(1, 13):
+            # 決算月を考慮して表示月を計算
+            display_month = (fiscal_month + period) % 12
+            if display_month == 0:
+                display_month = 12
+            monthly_labels.append(f"{display_month}月")
+            
+            budget_month = budget_monthly_dict.get(period)
+            actual_month = actual_monthly_dict.get(period)
+            if budget_month and actual_month:
+                monthly_comparison.append({
+                    'period': period,
+                    'display_month': budget_month.display_month,
+                    'budget_month': budget_month,
+                    'actual_month': actual_month,
+                })
         
         # BS（貸借対照表）データを計算
         bs_indicators = {}
@@ -405,10 +451,13 @@ class BudgetVsActualComparisonView(SelectedCompanyMixin, TemplateView):
             'actual_year': actual_year,
             'budget_monthly': budget_monthly,
             'actual_monthly': actual_monthly,
+            'monthly_comparison': monthly_comparison,  # period順にソートされた比較データ
+            'monthly_labels': monthly_labels,  # グラフ用のラベル（決算月を考慮）
             'bs_indicators': bs_indicators,
             'bs_chart_data': bs_chart_data,
             'bs_chart_data_json': bs_chart_data_json,
             'available_years': available_years_list,
+            'fiscal_month': fiscal_month,  # 決算月を追加
         })
         
         return context
@@ -1086,6 +1135,12 @@ class BudgetSuggestView(SelectedCompanyMixin, TransactionMixin, FormView):
             is_draft=False
         ).order_by('-year').first()
         
+        # 予算分析ボタン用に年度を設定（最新年度または現在年度）
+        if latest_actual:
+            context['year'] = latest_actual.year
+        else:
+            context['year'] = timezone.now().year
+        
         context['latest_actual'] = latest_actual
         return context
 
@@ -1268,6 +1323,9 @@ class BudgetSuggest_MonthView(SelectedCompanyMixin, TransactionMixin, FormView):
             context['previous_actual'] = previous_actual
             context['previous_year'] = previous_year
             
+            # 予算分析ボタン用に年度を設定
+            context['year'] = latest_budget.year
+            
             # 前年の月次実績データを取得
             if previous_actual:
                 previous_monthly = FiscalSummary_Month.objects.filter(
@@ -1275,6 +1333,9 @@ class BudgetSuggest_MonthView(SelectedCompanyMixin, TransactionMixin, FormView):
                     is_budget=False
                 ).order_by('period')
                 context['previous_monthly'] = previous_monthly
+        else:
+            # 予算データがない場合は現在年度を使用
+            context['year'] = timezone.now().year
         
         return context
 
