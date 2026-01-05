@@ -96,6 +96,28 @@ class Command(BaseCommand):
             },
         ]
 
+        # 生産性の指標
+        productivity_terms = [
+            {
+                'name': '労働生産性',
+                'term_category': '生産性',
+                'description1': '従業員1人あたりの付加価値額を示す指標です。付加価値 = 営業利益 + 人件費 + 減価償却費 + 支払利息',
+                'description2': '高いほど良い',
+                'description3': '付加価値 ÷ 従業員数',
+            },
+        ]
+
+        # 成長性の指標
+        growth_terms = [
+            {
+                'name': '対前年度売上高成長率',
+                'term_category': '成長性',
+                'description1': '前期と比較した売上高の増減率を示す指標です。企業の成長性を評価する重要な指標です。',
+                'description2': '高いほど良い',
+                'description3': '（当期売上高 - 前期売上高）÷ 前期売上高 × 100 (%)',
+            },
+        ]
+
         # 効率性の指標
         efficiency_terms = [
             {
@@ -129,7 +151,7 @@ class Command(BaseCommand):
         ]
 
         # すべての用語を統合
-        all_terms = safety_terms + profitability_terms + efficiency_terms
+        all_terms = safety_terms + profitability_terms + productivity_terms + growth_terms + efficiency_terms
 
         created_count = 0
         updated_count = 0

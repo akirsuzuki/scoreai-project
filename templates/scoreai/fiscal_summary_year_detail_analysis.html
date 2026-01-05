@@ -301,6 +301,24 @@
         <div class="card-body">
           <h5 class="card-title">生産性</h5>
           <div class="mb-3 row">
+            <!-- 労働生産性 -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-info">
+                <div class="card-body">
+                  <h6 class="card-title">労働生産性</h6>
+                  <p class="card-text">
+                    {% if fiscal_summary_year.labor_productivity %}
+                      {{ fiscal_summary_year.labor_productivity|floatformat:2|intcomma }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </p>
+                  <p class="text-muted small">従業員1人あたりの付加価値額を示す指標です。付加価値 = 営業利益 + 人件費 + 減価償却費 + 支払利息</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 付加価値 ÷ 従業員数</p>
+                </div>
+              </div>
+            </div>
+            
             {% for term in technical_terms %}
             {% if term.term_category == '生産性' %}
               <div class="col-md-6 mb-3">
@@ -314,8 +332,6 @@
                 </div>
               </div>
             {% endif %}
-            {% empty %}
-            <p>生産性に関する用語がありません。</p>
             {% endfor %}
           </div>
         </div>
@@ -326,6 +342,24 @@
         <div class="card-body">
           <h5 class="card-title">成長性</h5>
           <div class="mb-3 row">
+            <!-- 対前年度売上高成長率 -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-warning">
+                <div class="card-body">
+                  <h6 class="card-title">対前年度売上高成長率</h6>
+                  <p class="card-text">
+                    {% if fiscal_summary_year.sales_growth_rate is not None %}
+                      {{ fiscal_summary_year.sales_growth_rate|floatformat:2 }}%
+                    {% else %}
+                      -
+                    {% endif %}
+                  </p>
+                  <p class="text-muted small">前期と比較した売上高の増減率を示す指標です。企業の成長性を評価する重要な指標です。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> （当期売上高 - 前期売上高）÷ 前期売上高 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            
             {% for term in technical_terms %}
             {% if term.term_category == '成長性' %}
               <div class="col-md-6 mb-3">
@@ -339,8 +373,6 @@
                 </div>
               </div>
             {% endif %}
-            {% empty %}
-            <p>成長性に関する用語がありません。</p>
             {% endfor %}
           </div>
         </div>
