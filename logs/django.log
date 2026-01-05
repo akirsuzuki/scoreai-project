@@ -18067,3 +18067,11 @@ WARNING 2026-01-05 23:49:49,945 gemini google.generativeai is deprecated. Please
 INFO 2026-01-05 23:51:47,821 autoreload /app/scoreai/models.py changed, reloading.
 INFO 2026-01-05 23:51:48,152 autoreload Watching for file changes with StatReloader
 WARNING 2026-01-05 23:51:48,558 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:57:15,441 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:57:15,810 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:57:18,927 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88294
+INFO 2026-01-05 23:57:36,908 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-05 23:57:37,239 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:57:37,461 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:57:40,879 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88294
+INFO 2026-01-06 06:25:58,562 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88294

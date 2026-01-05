@@ -1275,6 +1275,63 @@ class FiscalSummary_Year(models.Model):
             return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
         return None
 
+    @property
+    def quick_ratio(self):
+        """当座比率 = （流動資産 - 棚卸資産）÷ 流動負債 × 100 (%)"""
+        if self.total_current_liabilities != 0:
+            quick_assets = self.total_current_assets - self.inventory
+            ratio = (quick_assets / self.total_current_liabilities) * 100
+            return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return Decimal('0.00')
+
+    @property
+    def ROE(self):
+        """自己資本利益率（ROE）= 経常利益 ÷ 純資産 × 100 (%)"""
+        if self.total_net_assets != 0:
+            ratio = (self.ordinary_profit / self.total_net_assets) * 100
+            return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return None
+
+    @property
+    def total_asset_turnover(self):
+        """総資産回転率 = 売上高 ÷ 総資産"""
+        if self.total_assets != 0:
+            turnover = self.sales / self.total_assets
+            return Decimal(turnover).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return Decimal('0.00')
+
+    @property
+    def ordinary_profit_rate(self):
+        """経常利益率 = 経常利益 ÷ 売上高 × 100 (%)"""
+        if self.sales != 0:
+            ratio = (self.ordinary_profit / self.sales) * 100
+            return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return Decimal('0.00')
+
+    @property
+    def debt_to_equity_ratio(self):
+        """負債資本比率 = 総負債 ÷ 純資産"""
+        if self.total_net_assets != 0:
+            ratio = self.total_liabilities / self.total_net_assets
+            return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return None
+
+    @property
+    def inventory_turnover_period(self):
+        """在庫回転期間（月）= 棚卸資産 ÷ 売上高 × 12 (ヶ月)"""
+        if self.sales > 0:
+            period = (self.inventory / self.sales) * 12
+            return Decimal(period).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return None
+
+    @property
+    def accounts_receivable_turnover_period(self):
+        """売上債権回転期間（月）= 売上債権 ÷ 売上高 × 12 (ヶ月)"""
+        if self.sales > 0:
+            period = (self.accounts_receivable / self.sales) * 12
+            return Decimal(period).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+        return None
+
     # 前年売上高を取得するメソッド
     def get_previous_year_sales(self):
         previous_year_summary = FiscalSummary_Year.objects.filter(

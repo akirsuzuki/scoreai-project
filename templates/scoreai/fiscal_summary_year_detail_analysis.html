@@ -145,39 +145,151 @@
         <div class="card-body">
           <h5 class="card-title">収益性</h5>
           <div class="mb-3 row">
+            <!-- 売上総利益率（粗利益率） -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <h6 class="card-title">売上総利益率（粗利益率）</h6>
+                  <p class="card-text">{{ fiscal_summary_year.gross_profit_margin|floatformat:2 }}%</p>
+                  <p class="text-muted small">売上高に対する粗利益の割合を示す指標です。業種によって異なりますが、一般的に高いほど良いとされています。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 売上総利益 ÷ 売上高 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 経常利益率 -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <h6 class="card-title">経常利益率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.ordinary_profit_rate|floatformat:2 }}%</p>
+                  <p class="text-muted small">売上高に対する経常利益の割合を示す指標です。企業の本業と財務活動を含めた収益性を示します。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 経常利益 ÷ 売上高 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ROA（総資本経常利益率） -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <h6 class="card-title">ROA（総資本経常利益率）</h6>
+                  <p class="card-text">{{ fiscal_summary_year.ROA|floatformat:2 }}%</p>
+                  <p class="text-muted small">総資産に対する経常利益の割合を示す指標です。資産をどれだけ効率的に活用して利益を生み出しているかを示します。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 経常利益 ÷ 総資産 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- ROE（自己資本利益率） -->
+            {% if fiscal_summary_year.ROE %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <h6 class="card-title">ROE（自己資本利益率）</h6>
+                  <p class="card-text">{{ fiscal_summary_year.ROE|floatformat:2 }}%</p>
+                  <p class="text-muted small">自己資本に対する経常利益の割合を示す指標です。株主資本の運用効率を示します。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 経常利益 ÷ 純資産 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
             {% for term in technical_terms %}
             {% if term.term_category == '収益性' %}
-              <div class="term">
-                <h6>{{ term.name }}</h6>
-                <p>{{ term.description1 }}</p>
-                <p><strong>目安:</strong> {{ term.description2 }}</p>
-                <p><strong>計算式:</strong> {{ term.description3 }}</p>
+              <div class="col-md-6 mb-3">
+                <div class="card border-success">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ term.name }}</h6>
+                    <p class="card-text">{{ term.description1 }}</p>
+                    <p class="text-muted small"><strong>目安:</strong> {{ term.description2 }}</p>
+                    <p class="text-muted small"><strong>計算式:</strong> {{ term.description3 }}</p>
+                  </div>
+                </div>
               </div>
             {% endif %}
-          {% empty %}
-            <p>収益性に関する用語がありません。</p>
-          {% endfor %}
+            {% endfor %}
           </div>
         </div>
       </div>
 
-      <!-- 安定性 -->
+      <!-- 安全性 -->
       <div class="card mb-4">
         <div class="card-body">
           <h5 class="card-title">安全性</h5>
           <div class="mb-3 row">
+            <!-- 流動比率 -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-primary">
+                <div class="card-body">
+                  <h6 class="card-title">流動比率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.current_ratio|floatformat:2 }}%</p>
+                  <p class="text-muted small">企業の短期的な支払能力を示す指標で、一般的に100%以上が望ましいとされています。</p>
+                  <p class="text-muted small"><strong>目安:</strong> 100%以上</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 流動資産 ÷ 流動負債 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 当座比率 -->
+            {% if fiscal_summary_year.quick_ratio %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-primary">
+                <div class="card-body">
+                  <h6 class="card-title">当座比率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.quick_ratio|floatformat:2 }}%</p>
+                  <p class="text-muted small">流動比率から在庫を除いた指標で、より厳密な短期的な支払能力を示します。一般的に100%以上が望ましいとされています。</p>
+                  <p class="text-muted small"><strong>目安:</strong> 100%以上</p>
+                  <p class="text-muted small"><strong>計算式:</strong> （流動資産 - 棚卸資産）÷ 流動負債 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- 固定比率 -->
+            {% if fiscal_summary_year.fixed_ratio %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-primary">
+                <div class="card-body">
+                  <h6 class="card-title">固定比率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.fixed_ratio|floatformat:2 }}%</p>
+                  <p class="text-muted small">固定資産が自己資本でどの程度賄われているかを示す指標です。100%以下が望ましいとされています。</p>
+                  <p class="text-muted small"><strong>目安:</strong> 100%以下</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 固定資産 ÷ 自己資本 × 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- 固定長期適合率 -->
+            {% if fiscal_summary_year.fixed_long_term_adequacy_ratio %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-primary">
+                <div class="card-body">
+                  <h6 class="card-title">固定長期適合率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.fixed_long_term_adequacy_ratio|floatformat:2 }}%</p>
+                  <p class="text-muted small">固定資産が自己資本と固定負債でどの程度賄われているかを示す指標です。100%以下が望ましいとされています。</p>
+                  <p class="text-muted small"><strong>目安:</strong> 100%以下</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 固定資産 ÷ （自己資本 + 固定負債）× 100 (%)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
             {% for term in technical_terms %}
             {% if term.term_category == '安全性' %}
-              <div class="term">
-                <h6>{{ term.name }}</h6>
-                <p>{{ term.description1 }}</p>
-                <p><strong>目安:</strong> {{ term.description2 }}</p>
-                <p><strong>計算式:</strong> {{ term.description3 }}</p>
+              <div class="col-md-6 mb-3">
+                <div class="card border-primary">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ term.name }}</h6>
+                    <p class="card-text">{{ term.description1 }}</p>
+                    <p class="text-muted small"><strong>目安:</strong> {{ term.description2 }}</p>
+                    <p class="text-muted small"><strong>計算式:</strong> {{ term.description3 }}</p>
+                  </div>
+                </div>
               </div>
             {% endif %}
-          {% empty %}
-            <p>安全性に関する用語がありません。</p>
-          {% endfor %}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -191,16 +303,20 @@
           <div class="mb-3 row">
             {% for term in technical_terms %}
             {% if term.term_category == '生産性' %}
-              <div class="term">
-                <h6>{{ term.name }}</h6>
-                <p>{{ term.description1 }}</p>
-                <p><strong>目安:</strong> {{ term.description2 }}</p>
-                <p><strong>計算式:</strong> {{ term.description3 }}</p>
+              <div class="col-md-6 mb-3">
+                <div class="card border-info">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ term.name }}</h6>
+                    <p class="card-text">{{ term.description1 }}</p>
+                    <p class="text-muted small"><strong>目安:</strong> {{ term.description2 }}</p>
+                    <p class="text-muted small"><strong>計算式:</strong> {{ term.description3 }}</p>
+                  </div>
+                </div>
               </div>
             {% endif %}
-          {% empty %}
+            {% empty %}
             <p>生産性に関する用語がありません。</p>
-          {% endfor %}
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -212,16 +328,83 @@
           <div class="mb-3 row">
             {% for term in technical_terms %}
             {% if term.term_category == '成長性' %}
-              <div class="term">
-                <h6>{{ term.name }}</h6>
-                <p>{{ term.description1 }}</p>
-                <p><strong>目安:</strong> {{ term.description2 }}</p>
-                <p><strong>計算式:</strong> {{ term.description3 }}</p>
+              <div class="col-md-6 mb-3">
+                <div class="card border-warning">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ term.name }}</h6>
+                    <p class="card-text">{{ term.description1 }}</p>
+                    <p class="text-muted small"><strong>目安:</strong> {{ term.description2 }}</p>
+                    <p class="text-muted small"><strong>計算式:</strong> {{ term.description3 }}</p>
+                  </div>
+                </div>
               </div>
             {% endif %}
-          {% empty %}
+            {% empty %}
             <p>成長性に関する用語がありません。</p>
-          {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      
+      <!-- 効率性 -->
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">効率性</h5>
+          <div class="mb-3 row">
+            <!-- 総資産回転率 -->
+            <div class="col-md-6 mb-3">
+              <div class="card border-secondary">
+                <div class="card-body">
+                  <h6 class="card-title">総資産回転率</h6>
+                  <p class="card-text">{{ fiscal_summary_year.total_asset_turnover|floatformat:2 }}回</p>
+                  <p class="text-muted small">総資産をどれだけ効率的に活用して売上を生み出しているかを示す指標です。高いほど資産の活用効率が良いとされています。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 売上高 ÷ 総資産</p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 在庫回転期間 -->
+            {% if fiscal_summary_year.inventory_turnover_period %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-secondary">
+                <div class="card-body">
+                  <h6 class="card-title">在庫回転期間</h6>
+                  <p class="card-text">{{ fiscal_summary_year.inventory_turnover_period|floatformat:2 }}ヶ月</p>
+                  <p class="text-muted small">在庫が何ヶ月分の売上に相当するかを示す指標です。短いほど在庫の回転が速く、効率的とされています。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 棚卸資産 ÷ 売上高 × 12 (ヶ月)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- 売上債権回転期間 -->
+            {% if fiscal_summary_year.accounts_receivable_turnover_period %}
+            <div class="col-md-6 mb-3">
+              <div class="card border-secondary">
+                <div class="card-body">
+                  <h6 class="card-title">売上債権回転期間</h6>
+                  <p class="card-text">{{ fiscal_summary_year.accounts_receivable_turnover_period|floatformat:2 }}ヶ月</p>
+                  <p class="text-muted small">売上債権が何ヶ月分の売上に相当するかを示す指標です。短いほど回収が速く、効率的とされています。</p>
+                  <p class="text-muted small"><strong>計算式:</strong> 売上債権 ÷ 売上高 × 12 (ヶ月)</p>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            {% for term in technical_terms %}
+            {% if term.term_category == '効率性' %}
+              <div class="col-md-6 mb-3">
+                <div class="card border-secondary">
+                  <div class="card-body">
+                    <h6 class="card-title">{{ term.name }}</h6>
+                    <p class="card-text">{{ term.description1 }}</p>
+                    <p class="text-muted small"><strong>目安:</strong> {{ term.description2 }}</p>
+                    <p class="text-muted small"><strong>計算式:</strong> {{ term.description3 }}</p>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% endfor %}
           </div>
         </div>
       </div>
