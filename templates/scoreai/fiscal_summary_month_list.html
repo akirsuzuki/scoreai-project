@@ -24,9 +24,29 @@
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">{% if request.GET.years == '1' %}月次PL一覧（直近年度）{% else %}月次PL一覧（3期比較）{% endif %}</h5>
+        <div class="d-flex align-items-center gap-2">
+          <h5 class="card-title mb-0 fw-semibold">{% if request.GET.years == '1' %}月次PL一覧（直近年度）{% else %}月次PL一覧（3期比較）{% endif %}</h5>
+          {% if available_years %}
+          <form method="get" id="year-range-form" class="d-flex gap-2 align-items-center">
+            <input type="hidden" name="years" value="{{ request.GET.years|default:3 }}">
+            <label class="form-label mb-0">開始年度:</label>
+            <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 110px;" onchange="updateYearRange()">
+              {% for year in available_years %}
+              <option value="{{ year }}" {% if start_year == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+            <label class="form-label mb-0">終了年度:</label>
+            <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 110px;" onchange="updateYearRange()">
+              {% for year in available_years %}
+              <option value="{{ year }}" {% if end_year == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+          </form>
+          {% endif %}
+        </div>
       </div>
       <div class="card-body">
+        {% if monthly_summaries_with_summary.monthly_data %}
         {% for summary in monthly_summaries_with_summary.monthly_data %}
         <div class="table-responsive">
           <h5 class="mb-3 fw-semibold">{{ summary.year }}年度</h5>
@@ -112,26 +132,15 @@
           </table>
         </div>
         {% endfor %}
+        {% else %}
+        <div class="alert alert-warning" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i>選択された年度のデータが見つかりませんでした。
+        </div>
+        {% endif %}
       </div>
       <div class="card-footer text-end">
         <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
         <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-{% include 'scoreai/budget_vs_actual_dashboard.html' %}
-
-
-<div class="row">
-  <div class="col-lg-12 d-flex align-items-strech">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0">月次推移PLチャート</h5>
-      </div>
-      <div class="card-body">
-        <canvas id="fiscalSummaryChart"></canvas>
       </div>
     </div>
   </div>
@@ -143,190 +152,165 @@
 }
 </style>
 
+{% if chart_data_json %}
+<div class="row mt-4">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次推移PLチャート（複数年度比較）</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="combinedChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const cells = document.querySelectorAll('#fiscal-summary-table td');
-    const labels = [];
-    const salesData = [];
-    const grossProfitData = [];
-    const operatingProfitData = [];
-    const ordinaryProfitData = [];
-    const grossProfitRateData = [];
-    const operatingProfitRateData = [];
-    const ordinaryProfitRateData = [];
-
-    // Extracting data from the table
-    const headerCells = document.querySelectorAll('#fiscal-summary-table th');
-    for (let i = 1; i < headerCells.length - 1; i++) { // Skip Data Type and Total
-      labels.push(headerCells[i].textContent.trim());
-    }
-
-    const salesRow = document.querySelectorAll('#fiscal-summary-table tr')[1]; // Assuming sales data is in the second row
-    salesRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < salesRow.cells.length - 1) { // Skip Data Type and Total
-        salesData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
-      }
+    const chartData = {{ chart_data_json|safe }};
+    
+    if (!chartData || !chartData.years || chartData.years.length === 0) return;
+    
+    // 色の配列を定義
+    const colors = [
+      { border: 'rgba(75, 192, 192, 1)', background: 'rgba(75, 192, 192, 0.3)' },
+      { border: 'rgba(255, 99, 132, 1)', background: 'rgba(255, 99, 132, 0.3)' },
+      { border: 'rgba(54, 162, 235, 1)', background: 'rgba(54, 162, 235, 0.3)' },
+      { border: 'rgba(255, 206, 86, 1)', background: 'rgba(255, 206, 86, 0.3)' },
+      { border: 'rgba(153, 102, 255, 1)', background: 'rgba(153, 102, 255, 0.3)' },
+    ];
+    
+    const ctx = document.getElementById('combinedChart');
+    if (!ctx) return;
+    
+    // データセットを準備
+    const datasets = [];
+    
+    // 売上高を棒グラフで追加（各年度）
+    chartData.years.forEach((year, index) => {
+      datasets.push({
+        label: `${year}年 売上高`,
+        data: chartData.sales[year.toString()],
+        type: 'bar',
+        backgroundColor: colors[index % colors.length].background,
+        borderColor: colors[index % colors.length].border,
+        borderWidth: 1,
+        yAxisID: 'y',
+      });
     });
-
-    // Extracting other data
-    const grossProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[2]; // Assuming gross profit data is in the third row
-    grossProfitRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < grossProfitRow.cells.length - 1) {
-        grossProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
-      }
+    
+    // 営業利益を折れ線グラフで追加（各年度）
+    chartData.years.forEach((year, index) => {
+      datasets.push({
+        label: `${year}年 営業利益`,
+        data: chartData.operating_profit[year.toString()],
+        type: 'line',
+        borderColor: colors[index % colors.length].border,
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        tension: 0.4,
+        fill: false,
+        yAxisID: 'y1',
+      });
     });
-
-    const operatingProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[4]; // Assuming operating profit data is in the fifth row
-    operatingProfitRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < operatingProfitRow.cells.length - 1) {
-        operatingProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
-      }
-    });
-
-    const ordinaryProfitRow = document.querySelectorAll('#fiscal-summary-table tr')[6]; // Assuming ordinary profit data is in the seventh row
-    ordinaryProfitRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < ordinaryProfitRow.cells.length - 1) {
-        ordinaryProfitData.push(parseFloat(cell.textContent.replace(/,/g, '')) || 0);
-      }
-    });
-
-    // Extracting rates
-    const grossProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[3]; // Assuming gross profit rate data is in the fourth row
-    grossProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < grossProfitRateRow.cells.length - 1) {
-        grossProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
-      }
-    });
-
-    const operatingProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[5]; // Assuming operating profit rate data is in the sixth row
-    operatingProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < operatingProfitRateRow.cells.length - 1) {
-        operatingProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
-      }
-    });
-
-    const ordinaryProfitRateRow = document.querySelectorAll('#fiscal-summary-table tr')[7]; // Assuming ordinary profit rate data is in the eighth row
-    ordinaryProfitRateRow.querySelectorAll('td').forEach((cell, index) => {
-      if (index > 0 && index < ordinaryProfitRateRow.cells.length - 1) {
-        ordinaryProfitRateData.push(parseFloat(cell.textContent.replace(/%/g, '').trim()) || 0);
-      }
-    });
-
-    // Create the chart
-    const ctx = document.getElementById('fiscalSummaryChart').getContext('2d');
-    const fiscalSummaryChart = new Chart(ctx, {
-      type: 'bar', // Change to bar chart for profits
+    
+    new Chart(ctx.getContext('2d'), {
+      type: 'bar',
       data: {
-        labels: labels,
-        datasets: [
-          {
-            label: '売上高',
-            data: salesData,
-            borderColor: 'rgba(75, 192, 192, 1)',
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            fill: true,
-          },
-          {
-            label: '粗利益',
-            data: grossProfitData,
-            borderColor: 'rgba(255, 99, 132, 1)',
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            fill: true,
-          },
-          {
-            label: '営業利益',
-            data: operatingProfitData,
-            borderColor: 'rgba(54, 162, 235, 1)',
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            fill: true,
-          },
-          {
-            label: '経常利益',
-            data: ordinaryProfitData,
-            borderColor: 'rgba(255, 206, 86, 1)',
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            fill: true,
-          },
-          {
-            label: '粗利益率',
-            data: grossProfitRateData,
-            type: 'line', // Change to line chart for rates
-            borderColor: 'rgba(255, 159, 64, 1)',
-            backgroundColor: 'rgba(255, 159, 64, 0.2)',
-            fill: false,
-            yAxisID: 'y1', // Use the right Y-axis for rates
-          },
-          {
-            label: '営業利益率',
-            data: operatingProfitRateData,
-            type: 'line', // Change to line chart for rates
-            borderColor: 'rgba(153, 102, 255, 1)',
-            backgroundColor: 'rgba(153, 102, 255, 0.2)',
-            fill: false,
-            yAxisID: 'y1', // Use the right Y-axis for rates
-          },
-          {
-            label: '経常利益率',
-            data: ordinaryProfitRateData,
-            type: 'line', // Change to line chart for rates
-            borderColor: 'rgba(255, 206, 86, 1)',
-            backgroundColor: 'rgba(255, 206, 86, 0.2)',
-            fill: false,
-            yAxisID: 'y1', // Use the right Y-axis for rates
-          },
-        ]
+        labels: chartData.labels,
+        datasets: datasets,
       },
       options: {
         responsive: true,
+        maintainAspectRatio: true,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.dataset.label || '';
+                const value = context.parsed.y;
+                if (label.includes('売上高')) {
+                  return label + ': ' + value.toLocaleString() + '千円';
+                } else if (label.includes('営業利益')) {
+                  return label + ': ' + value.toLocaleString() + '千円';
+                }
+                return label + ': ' + value;
+              }
+            }
+          }
+        },
         scales: {
           y: {
-            beginAtZero: true,
+            type: 'linear',
             position: 'left',
-            grid: {
-              drawOnChartArea: true, // グリッド線を有効にする
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: '売上高（千円）'
             },
-            afterDraw: function (chart) {
-              const ctx = chart.ctx;
-              const yAxis = chart.scales.y;
-              const yValue = yAxis.getPixelForValue(0);
-              ctx.save();
-              ctx.strokeStyle = 'red'; // Color for left Y-axis
-              ctx.lineWidth = 2; // Thicker line
-              ctx.beginPath();
-              ctx.moveTo(yAxis.left, yValue);
-              ctx.lineTo(yAxis.right, yValue);
-              ctx.stroke();
-              ctx.restore();
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString() + '千円';
+              }
             }
           },
           y1: {
             type: 'linear',
             position: 'right',
-            beginAtZero: true,
-            grid: {
-              drawOnChartArea: true, // グリッド線を有効にする
+            beginAtZero: false,
+            title: {
+              display: true,
+              text: '営業利益（千円）'
             },
-            afterDraw: function (chart) {
-              const ctx = chart.ctx;
-              const yAxis = chart.scales.y1;
-              const yValue = yAxis.getPixelForValue(0);
-              ctx.save();
-              ctx.strokeStyle = 'blue'; // Color for right Y-axis
-              ctx.lineWidth = 2; // Thicker line
-              ctx.setLineDash([5, 5]);
-              ctx.beginPath();
-              ctx.moveTo(yAxis.left, yValue);
-              ctx.lineTo(yAxis.right, yValue);
-              ctx.stroke();
-              ctx.restore();
-            }
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString() + '千円';
+              }
+            },
+            grid: {
+              drawOnChartArea: false,
+            },
           }
-        },
+        }
       }
     });
   });
+  
+  function updateYearRange() {
+    const startYear = parseInt(document.getElementById('start-year-select').value);
+    const endYear = parseInt(document.getElementById('end-year-select').value);
+    
+    // 範囲の検証（最大5年間）
+    if (Math.abs(endYear - startYear) > 4) {
+      alert('選択できる範囲は最大5年間です。');
+      // 範囲を5年に制限
+      if (startYear > endYear) {
+        document.getElementById('start-year-select').value = endYear;
+        document.getElementById('end-year-select').value = startYear;
+      } else if (endYear - startYear > 4) {
+        document.getElementById('end-year-select').value = startYear + 4;
+      } else {
+        document.getElementById('start-year-select').value = endYear - 4;
+      }
+      return;
+    }
+    
+    // フォームを送信
+    const form = document.getElementById('year-range-form');
+    if (form) {
+      form.submit();
+    }
+  }
 </script>
-
+{% endif %}
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

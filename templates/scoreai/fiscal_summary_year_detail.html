@@ -19,16 +19,44 @@
       <h4 class="fw-semibold mb-0">年次財務諸表</h4>
       <div class="d-flex gap-2 flex-wrap">
         <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
-        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">直近決算詳細</a>
+        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">単年度決算詳細</a>
       </div>
     </div>
   </div>
   <div class="col-lg-12 d-flex align-items-strech">
     <div class="card w-100">
       <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">直近決算詳細（{{ fiscal_summary_year.year }}年{% if fiscal_summary_year.is_budget %}・予算{% else %}・実績{% endif %}）</h5>
+        <div class="d-flex align-items-center gap-2">
+          <h5 class="card-title mb-0 fw-semibold">単年度決算詳細</h5>
+          {% if available_years %}
+          <select id="year-select" class="form-select form-select-sm" style="width: 110px;">
+            {% for year in available_years %}
+            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
+            {% endfor %}
+          </select>
+          <select id="is-budget-select" class="form-select form-select-sm" style="width: 80px;">
+            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
+            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
+          </select>
+          {% endif %}
+        </div>
       </div>
       <div class="card-body">
+        {% if data_not_found %}
+        <div class="alert alert-warning mb-3" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          {% if data_not_found_year %}
+            {{ data_not_found_year }}年{% if data_not_found_is_budget %}・予算{% else %}・実績{% endif %}のデータが見つかりませんでした。
+          {% else %}
+            選択された年度・予算/実績のデータが見つかりませんでした。
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if not fiscal_summary_year %}
+        <div class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>表示するデータがありません。
+        </div>
+        {% else %}
         <!-- タブナビゲーション -->
         <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
@@ -616,9 +644,10 @@
           {% include 'scoreai/fiscal_summary_year_detail_analysis.html' %}
 
         </div>
-
+        {% endif %}
       </div>
       <div class="card-footer text-end">
+        {% if fiscal_summary_year %}
         {% if previous_year_data %}
         <a href="{% url 'fiscal_summary_year_detail' previous_year_data.id %}" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-angles-left"></i> 前の年度</a>
         {% endif %}
@@ -627,9 +656,34 @@
         {% endif %}
         <a href="{% url 'fiscal_summary_year_update' fiscal_summary_year.id %}" class="btn btn-primary">編集</a>
         <a href="{% url 'fiscal_summary_year_delete' fiscal_summary_year.id %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const yearSelect = document.getElementById('year-select');
+  const isBudgetSelect = document.getElementById('is-budget-select');
+  
+  if (yearSelect && isBudgetSelect) {
+    function updatePage() {
+      const year = yearSelect.value;
+      const isBudget = isBudgetSelect.value;
+      
+      // latest_fiscal_summary_year_detailのURLを使用（年度と予算/実績を選択可能）
+      const baseUrl = "{% url 'latest_fiscal_summary_year_detail' %}";
+      const url = new URL(baseUrl, window.location.origin);
+      url.searchParams.set('year', year);
+      url.searchParams.set('is_budget', isBudget);
+      window.location.href = url.toString();
+    }
+    
+    yearSelect.addEventListener('change', updatePage);
+    isBudgetSelect.addEventListener('change', updatePage);
+  }
+});
+</script>
 
 {% endblock %}

@@ -16565,3 +16565,1505 @@ INFO 2026-01-04 17:15:28,202 autoreload Watching for file changes with StatReloa
 INFO 2026-01-04 17:15:33,240 basehttp "GET /debts_all/ HTTP/1.1" 200 65201
 WARNING 2026-01-04 17:15:33,266 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
 INFO 2026-01-04 17:15:33,278 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-04 17:19:03,927 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:03:13,209 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:03:13,704 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:03:20,645 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:03:20,913 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:03:40,841 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:03:41,161 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:06:48,375 basehttp "GET /budget/vs-actual/?year=2025 HTTP/1.1" 200 72034
+INFO 2026-01-04 18:08:20,812 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:08:21,206 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:08:44,457 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:08:44,776 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:08:50,414 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:08:50,661 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:09:57,869 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:09:58,262 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:10:03,920 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:10:04,161 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:10:29,300 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:10:29,558 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:10:35,189 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:10:35,474 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:11:05,698 autoreload /app/scoreai/views/budget_views.py changed, reloading.
+INFO 2026-01-04 18:11:05,945 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:12:13,810 basehttp "GET /budget/vs-actual/?year=2025 HTTP/1.1" 200 55172
+INFO 2026-01-04 18:12:26,714 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35460
+INFO 2026-01-04 18:12:29,216 basehttp "GET / HTTP/1.1" 200 60092
+INFO 2026-01-04 18:40:45,927 autoreload Watching for file changes with StatReloader
+INFO 2026-01-04 18:41:09,231 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 38383
+INFO 2026-01-04 18:41:09,246 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:50:29,162 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:50:39,131 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 37787
+INFO 2026-01-05 21:50:39,158 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:50:39,159 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:50:39,260 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:50:50,303 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 42921
+INFO 2026-01-05 21:51:06,037 basehttp "GET /admin/scoreai/fiscalsummary_year/ HTTP/1.1" 200 52686
+INFO 2026-01-05 21:51:06,051 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,052 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,054 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,054 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,057 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,058 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,059 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,060 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,063 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,063 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,065 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,066 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,067 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,072 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:06,072 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,073 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,073 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,105 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,105 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,108 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,115 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,116 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:06,116 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+WARNING 2026-01-05 21:51:06,359 basehttp "GET /favicon.ico HTTP/1.1" 404 48199
+INFO 2026-01-05 21:51:11,605 basehttp "GET /admin/scoreai/aiconsultationhistory/ HTTP/1.1" 200 29474
+INFO 2026-01-05 21:51:11,623 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:29,184 basehttp "GET /admin/scoreai/aiconsultationhistory/add/ HTTP/1.1" 200 45342
+INFO 2026-01-05 21:51:29,200 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:29,200 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:29,204 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:29,209 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:29,210 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:29,211 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:29,211 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:35,267 basehttp "GET /admin/scoreai/aiconsultationhistory/ HTTP/1.1" 200 29474
+INFO 2026-01-05 21:51:39,482 basehttp "GET /admin/scoreai/companyusagetracking/ HTTP/1.1" 200 34285
+INFO 2026-01-05 21:51:39,507 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:39,529 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-05 21:51:43,616 basehttp "GET /admin/scoreai/companyusagetracking/01KDZ3K2GYSR6FJT6FD7Z4FXH5/change/ HTTP/1.1" 200 36463
+INFO 2026-01-05 21:51:43,642 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:57,632 basehttp "GET /admin/scoreai/aiconsultationhistory/ HTTP/1.1" 200 29474
+INFO 2026-01-05 21:51:57,654 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:51:59,536 basehttp "GET /admin/scoreai/aiconsultationhistory/add/ HTTP/1.1" 200 45342
+INFO 2026-01-05 21:51:59,553 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 21:54:49,815 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:54:50,243 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:54:56,032 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:54:56,271 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:00,875 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:01,099 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:05,707 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:06,000 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:11,580 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:11,895 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:17,449 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:17,722 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:22,325 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:22,565 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:55:38,464 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:55:38,691 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:56:41,814 autoreload /app/scoreai/views/usage_report_views.py changed, reloading.
+INFO 2026-01-05 21:56:42,069 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 21:58:07,822 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 44510
+INFO 2026-01-05 22:01:32,427 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-05 22:01:32,458 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77615
+INFO 2026-01-05 22:02:59,486 basehttp "GET /admin/scoreai/technicalterm/ HTTP/1.1" 200 29818
+INFO 2026-01-05 22:02:59,528 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 22:03:29,758 basehttp "GET /admin/scoreai/industrybenchmark/ HTTP/1.1" 200 114486
+INFO 2026-01-05 22:03:29,779 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-05 22:03:40,139 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77970
+INFO 2026-01-05 22:03:59,911 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53892
+INFO 2026-01-05 22:04:05,495 basehttp "GET /fiscal_summary_year/01KDXXC5S4Q0HAZZPTR3K6PNWJ/detail/ HTTP/1.1" 200 77953
+INFO 2026-01-05 22:05:18,709 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53892
+INFO 2026-01-05 22:05:26,000 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-05 22:05:26,065 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77970
+INFO 2026-01-05 22:05:33,648 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50561
+INFO 2026-01-05 22:05:39,114 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53469
+INFO 2026-01-05 22:05:42,168 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77906
+INFO 2026-01-05 22:05:54,204 basehttp "GET /budget/vs-actual/?year=2025 HTTP/1.1" 200 55172
+INFO 2026-01-05 22:06:16,104 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53892
+INFO 2026-01-05 22:06:19,033 basehttp "GET /fiscal_summary_year/01J8GZVCDN0TXNTHH1NRVQYWZJ/detail/ HTTP/1.1" 200 78493
+INFO 2026-01-05 22:06:29,489 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77906
+INFO 2026-01-05 22:06:38,451 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53469
+INFO 2026-01-05 22:06:48,898 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+INFO 2026-01-05 22:06:48,933 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 77969
+INFO 2026-01-05 22:09:20,109 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:09:20,440 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 22:10:24,062 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:10:24,274 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 22:10:45,353 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:10:45,598 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 22:11:14,294 basehttp "GET /fiscal_summary_year/01KDW7JGYM52HX6WSD8JVHC12D/detail/ HTTP/1.1" 200 78590
+INFO 2026-01-05 22:11:34,742 autoreload Watching for file changes with StatReloader
+INFO 2026-01-05 22:12:19,792 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53892
+ERROR 2026-01-05 22:12:21,769 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:12:21,788 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:12:21,789 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93158
+WARNING 2026-01-05 22:12:31,167 basehttp "GET /fiscal-summary-year HTTP/1.1" 404 48223
+ERROR 2026-01-05 22:12:50,293 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:12:50,304 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:12:50,305 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93328
+WARNING 2026-01-05 22:12:58,225 basehttp "GET /fiscal-summary-year/2024/ HTTP/1.1" 404 48241
+ERROR 2026-01-05 22:25:15,920 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:25:15,931 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:25:15,932 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93336
+ERROR 2026-01-05 22:25:17,396 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:25:17,407 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 734, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:25:17,408 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93395
+INFO 2026-01-05 22:25:18,083 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 55784
+INFO 2026-01-05 22:25:20,409 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53892
+INFO 2026-01-05 22:25:27,862 basehttp "GET /fiscal_summary_year/01J8HFV4QHTY3WDMD8KT6PS6ZN/detail/ HTTP/1.1" 200 78818
+INFO 2026-01-05 22:25:30,381 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 78809
+INFO 2026-01-05 22:26:00,552 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-05 22:26:00,952 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:26:01,301 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:26:12,926 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-05 22:26:13,173 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:26:13,419 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:26:35,247 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-05 22:26:35,556 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:26:35,802 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:26:49,353 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 78809
+INFO 2026-01-05 22:26:51,599 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-05 22:26:51,894 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:26:52,116 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:27:05,871 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 302 0
+INFO 2026-01-05 22:27:05,886 basehttp "GET /login/?next=/fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 3037
+INFO 2026-01-05 22:27:05,935 basehttp "GET /static/scoreai/img/LogoSCore_Ai.png HTTP/1.1" 200 7589
+INFO 2026-01-05 22:27:05,935 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js HTTP/1.1" 200 88151
+INFO 2026-01-05 22:27:05,942 basehttp "GET /static/Modernize-1.0.0/src/assets/css/styles.min.css HTTP/1.1" 200 335915
+INFO 2026-01-05 22:27:05,946 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js HTTP/1.1" 200 80599
+INFO 2026-01-05 22:27:05,948 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.css HTTP/1.1" 200 3890
+INFO 2026-01-05 22:27:05,949 basehttp "GET /static/Modernize-1.0.0/src/assets/css/icons/tabler-icons/tabler-icons.css HTTP/1.1" 200 146896
+INFO 2026-01-05 22:27:18,777 basehttp "POST /login/?next=/fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 302 0
+INFO 2026-01-05 22:27:18,828 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 78809
+INFO 2026-01-05 22:27:18,841 basehttp "GET /static/scoreai/js/sidebars.js HTTP/1.1" 200 256
+INFO 2026-01-05 22:27:18,842 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 200 2749
+INFO 2026-01-05 22:27:18,842 basehttp "GET /static/Modernize-1.0.0/src/assets/js/sidebarmenu.js HTTP/1.1" 200 1846
+INFO 2026-01-05 22:27:18,843 basehttp "GET /static/scoreai/css/sidebars.css HTTP/1.1" 200 1644
+INFO 2026-01-05 22:27:18,844 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 200 17857
+INFO 2026-01-05 22:27:18,846 basehttp "GET /static/Modernize-1.0.0/src/assets/js/app.min.js HTTP/1.1" 200 1263
+INFO 2026-01-05 22:27:18,849 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js HTTP/1.1" 200 171895
+INFO 2026-01-05 22:27:18,851 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 200 5904
+INFO 2026-01-05 22:27:19,356 basehttp "GET /static/Modernize-1.0.0/src/assets/css/icons/tabler-icons/fonts/tabler-icons.woff2 HTTP/1.1" 200 552144
+INFO 2026-01-05 22:28:10,974 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/ HTTP/1.1" 200 32567
+WARNING 2026-01-05 22:28:14,351 basehttp "POST /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/mark-all-read/ HTTP/1.1" 405 0
+INFO 2026-01-05 22:28:39,861 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:28:40,174 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:28:40,394 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+ERROR 2026-01-05 22:28:50,019 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:28:50,037 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:28:50,039 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93177
+ERROR 2026-01-05 22:28:55,570 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:28:55,586 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:28:55,588 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93533
+WARNING 2026-01-05 22:29:04,137 basehttp "GET /fiscal-summary-year/ HTTP/1.1" 404 48226
+ERROR 2026-01-05 22:29:06,566 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:29:06,581 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:29:06,582 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 500 93410
+INFO 2026-01-05 22:29:13,896 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:29:14,142 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:29:14,503 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:29:15,371 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 81620
+ERROR 2026-01-05 22:29:20,443 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:29:20,456 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 743, in get_context_data
+    from ..models import TechnicalTerm
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:29:20,458 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=true HTTP/1.1" 500 94054
+ERROR 2026-01-05 22:30:30,365 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 703, in get_context_data
+    from ..utils.finance_score import get_finance_score
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:30:30,378 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 703, in get_context_data
+    from ..utils.finance_score import get_finance_score
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:30:30,380 basehttp "GET /fiscal-summary-year/latest/?year=2017&is_budget=true HTTP/1.1" 500 93993
+INFO 2026-01-05 22:30:41,785 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 54875
+ERROR 2026-01-05 22:30:51,754 mixins Unexpected error in LatestFiscalSummaryYearDetailView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 703, in get_context_data
+    from ..utils.finance_score import get_finance_score
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:30:51,766 log Internal Server Error: /fiscal-summary-year/latest/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 703, in get_context_data
+    from ..utils.finance_score import get_finance_score
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-05 22:30:51,766 basehttp "GET /fiscal-summary-year/latest/?year=2016&is_budget=true HTTP/1.1" 500 93630
+INFO 2026-01-05 22:31:16,241 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 80711
+INFO 2026-01-05 22:31:41,231 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:31:41,610 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:31:41,937 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:31:47,378 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:31:47,613 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:31:47,820 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:31:54,327 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:31:54,556 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:31:54,783 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:32:04,317 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:32:04,591 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:32:04,798 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:32:26,332 basehttp "GET /fiscal_summary_year/01J8HFV4T8GBRK4MZTND6TP4HR/detail/ HTTP/1.1" 200 80187
+INFO 2026-01-05 22:32:32,150 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 80008
+INFO 2026-01-05 22:32:35,201 basehttp "GET /fiscal-summary-year/latest/?year=2024&is_budget=false HTTP/1.1" 200 80286
+INFO 2026-01-05 22:32:38,620 basehttp "GET /fiscal-summary-year/latest/?year=2024&is_budget=true HTTP/1.1" 200 80286
+INFO 2026-01-05 22:32:44,980 basehttp "GET /fiscal-summary-year/latest/?year=2023&is_budget=true HTTP/1.1" 200 80492
+INFO 2026-01-05 22:32:49,583 basehttp "GET /fiscal-summary-year/latest/?year=2023&is_budget=false HTTP/1.1" 200 80492
+INFO 2026-01-05 22:32:56,878 basehttp "GET /fiscal-summary-year/latest/?year=2023&is_budget=true HTTP/1.1" 200 80267
+INFO 2026-01-05 22:33:36,313 basehttp "GET /fiscal-summary-year/latest/?year=2023&is_budget=true HTTP/1.1" 200 80267
+INFO 2026-01-05 22:33:49,063 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39785
+INFO 2026-01-05 22:33:50,624 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59180
+INFO 2026-01-05 22:34:25,630 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79763
+INFO 2026-01-05 22:34:28,199 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79763
+INFO 2026-01-05 22:34:34,324 basehttp "GET /fiscal-summary-year/latest/?year=2025&is_budget=true HTTP/1.1" 200 79775
+INFO 2026-01-05 22:34:37,293 basehttp "GET /fiscal-summary-year/latest/?year=2024&is_budget=true HTTP/1.1" 200 80041
+INFO 2026-01-05 22:34:40,015 basehttp "GET /fiscal-summary-year/latest/?year=2024&is_budget=false HTTP/1.1" 200 80041
+INFO 2026-01-05 22:34:44,235 basehttp "GET /fiscal-summary-year/latest/?year=2022&is_budget=false HTTP/1.1" 200 79951
+INFO 2026-01-05 22:34:46,992 basehttp "GET /fiscal-summary-year/latest/?year=2024&is_budget=false HTTP/1.1" 200 80041
+INFO 2026-01-05 22:36:11,037 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53895
+INFO 2026-01-05 22:36:14,995 basehttp "GET /fiscal_summary_year/01J9BB8TFK56XQA44NHA6K1P95/detail/ HTTP/1.1" 200 80041
+INFO 2026-01-05 22:36:18,363 basehttp "GET /fiscal-summary-year/latest/?year=2022&is_budget=false HTTP/1.1" 200 79951
+INFO 2026-01-05 22:36:20,748 basehttp "GET /fiscal-summary-year/latest/?year=2022&is_budget=true HTTP/1.1" 200 79952
+INFO 2026-01-05 22:36:23,048 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=true HTTP/1.1" 200 79943
+INFO 2026-01-05 22:36:25,404 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=false HTTP/1.1" 200 79943
+INFO 2026-01-05 22:36:27,332 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=true HTTP/1.1" 200 79943
+INFO 2026-01-05 22:36:30,006 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=true HTTP/1.1" 200 79943
+INFO 2026-01-05 22:36:45,724 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:36:46,020 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:36:46,356 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:37:23,729 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:37:24,076 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:37:24,463 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:37:41,329 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:37:41,557 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:37:41,763 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:37:53,959 basehttp "GET /fiscal-summary-year/latest/?year=2021&is_budget=true HTTP/1.1" 200 80015
+INFO 2026-01-05 22:37:58,596 basehttp "GET /fiscal-summary-year/latest/?year=2020&is_budget=true HTTP/1.1" 200 80015
+INFO 2026-01-05 22:38:00,769 basehttp "GET /fiscal-summary-year/latest/?year=2020&is_budget=false HTTP/1.1" 200 79963
+INFO 2026-01-05 22:38:03,483 basehttp "GET /fiscal-summary-year/latest/?year=2020&is_budget=true HTTP/1.1" 200 80015
+INFO 2026-01-05 22:38:09,415 basehttp "GET /fiscal-summary-year/latest/?year=2020&is_budget=false HTTP/1.1" 200 79963
+INFO 2026-01-05 22:38:17,699 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79773
+INFO 2026-01-05 22:38:19,429 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79773
+INFO 2026-01-05 22:38:20,877 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53895
+INFO 2026-01-05 22:38:22,187 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79773
+INFO 2026-01-05 22:38:30,523 basehttp "GET /fiscal_summary_year/01J9BB8TFK56XQA44NHA6K1P95/detail/ HTTP/1.1" 200 80051
+INFO 2026-01-05 22:38:34,913 basehttp "GET /fiscal_summary_year/01J8GZVCDN0TXNTHH1NRVQYWZJ/detail/ HTTP/1.1" 200 80257
+INFO 2026-01-05 22:38:38,064 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 53895
+INFO 2026-01-05 22:38:41,818 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&page_param=1 HTTP/1.1" 200 60507
+INFO 2026-01-05 22:38:53,660 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&page_param=2 HTTP/1.1" 200 48627
+INFO 2026-01-05 22:38:59,254 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=7&page_param=1 HTTP/1.1" 200 56282
+INFO 2026-01-05 22:39:01,497 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&page_param=1 HTTP/1.1" 200 60507
+INFO 2026-01-05 22:40:44,618 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:40:45,099 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:40:45,457 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:40:52,997 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:40:53,375 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:40:53,714 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:42:10,257 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:42:10,886 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:42:11,285 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:42:23,905 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&page_param=1 HTTP/1.1" 200 62416
+INFO 2026-01-05 22:42:28,925 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66128
+INFO 2026-01-05 22:44:11,054 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66815
+INFO 2026-01-05 22:44:34,690 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&page_param=1&start_year=2019&end_year=2023 HTTP/1.1" 200 53906
+INFO 2026-01-05 22:44:47,799 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77909
+INFO 2026-01-05 22:44:49,183 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53472
+INFO 2026-01-05 22:45:03,744 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77909
+INFO 2026-01-05 22:45:21,262 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53472
+INFO 2026-01-05 22:46:29,981 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77909
+INFO 2026-01-05 22:46:52,725 basehttp "GET / HTTP/1.1" 200 60095
+INFO 2026-01-05 22:47:00,032 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56491
+INFO 2026-01-05 22:47:03,299 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66815
+INFO 2026-01-05 22:48:04,626 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:48:05,036 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:48:05,410 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:48:23,957 basehttp "GET /fiscal_summary_year/01J9811H1NWH4SHBG8J7EHZ0J9/detail/ HTTP/1.1" 200 79686
+INFO 2026-01-05 22:48:31,772 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77909
+INFO 2026-01-05 22:48:35,663 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53472
+INFO 2026-01-05 22:48:46,023 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50564
+INFO 2026-01-05 22:48:58,810 basehttp "GET /budget/vs-actual-yearly/?year=2023 HTTP/1.1" 200 49923
+INFO 2026-01-05 22:49:05,551 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56491
+INFO 2026-01-05 22:49:06,865 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79773
+INFO 2026-01-05 22:49:09,269 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56491
+INFO 2026-01-05 22:49:12,538 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-05 22:49:12,888 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:49:13,259 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:49:18,767 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-05 22:49:19,091 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:49:19,449 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:49:26,017 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-05 22:49:26,312 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:49:26,654 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:49:33,310 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-05 22:49:33,609 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:49:33,946 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:49:51,240 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53451
+INFO 2026-01-05 22:49:58,306 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53451
+INFO 2026-01-05 22:50:16,404 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:50:16,689 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:50:16,974 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:50:24,820 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 22:50:25,123 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:50:25,437 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:50:54,320 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-05 22:50:54,625 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 22:50:55,112 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 22:50:56,049 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53451
+INFO 2026-01-05 22:51:06,327 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 44320
+INFO 2026-01-05 22:51:09,754 basehttp "GET /monthly-pl/single-year/?year=2024&is_budget=false HTTP/1.1" 200 45003
+INFO 2026-01-05 22:51:11,449 basehttp "GET /monthly-pl/single-year/?year=2024&is_budget=true HTTP/1.1" 200 45245
+INFO 2026-01-05 22:51:14,323 basehttp "GET /monthly-pl/single-year/?year=2025&is_budget=false HTTP/1.1" 200 44320
+INFO 2026-01-05 22:51:16,550 basehttp "GET /monthly-pl/single-year/?year=2025&is_budget=true HTTP/1.1" 200 46676
+INFO 2026-01-05 22:51:52,660 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77888
+INFO 2026-01-05 22:52:13,345 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:52:13,347 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:52:13,347 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:52:13,350 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:52:13,351 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:52:13,359 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49835
+INFO 2026-01-05 22:52:38,784 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 200 53451
+INFO 2026-01-05 22:52:47,546 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77888
+INFO 2026-01-05 22:52:49,418 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:52:49,422 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:52:49,424 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:52:49,431 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:52:49,431 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:52:49,442 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49835
+INFO 2026-01-05 22:54:24,660 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 22:54:25,720 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 22:54:57,262 basehttp "GET /monthly-pl/single-year/?year=2024&is_budget=false HTTP/1.1" 200 53066
+INFO 2026-01-05 22:55:16,536 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 22:55:19,773 basehttp "GET /monthly-pl/single-year/?year=2024&is_budget=false HTTP/1.1" 200 53066
+INFO 2026-01-05 22:55:22,848 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:55:22,849 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:55:22,850 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:55:22,855 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:55:22,856 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:55:22,868 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49835
+INFO 2026-01-05 22:56:05,601 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:56:05,602 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:56:05,603 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:56:05,606 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:56:05,606 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:56:05,618 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50003
+INFO 2026-01-05 22:56:11,870 budget_views BudgetVsActualMonthlyComparisonView: year=2023
+INFO 2026-01-05 22:56:11,872 budget_views budget_monthly_all count: 0
+INFO 2026-01-05 22:56:11,873 budget_views actual_monthly_all count: 13
+INFO 2026-01-05 22:56:11,879 budget_views Period 1: budget_month=None, actual_month=株式会社VanCreworth - 2023 - 月1
+INFO 2026-01-05 22:56:11,879 budget_views BudgetVsActualMonthlyComparisonView: year=2023, monthly_comparison_count=12
+INFO 2026-01-05 22:56:11,888 basehttp "GET /budget/vs-actual-monthly/?year=2023 HTTP/1.1" 200 49526
+INFO 2026-01-05 22:57:05,287 budget_views BudgetVsActualMonthlyComparisonView: year=2020
+INFO 2026-01-05 22:57:05,288 budget_views budget_monthly_all count: 0
+INFO 2026-01-05 22:57:05,289 budget_views actual_monthly_all count: 13
+INFO 2026-01-05 22:57:05,292 budget_views Period 1: budget_month=None, actual_month=株式会社VanCreworth - 2020 - 月1
+INFO 2026-01-05 22:57:05,292 budget_views BudgetVsActualMonthlyComparisonView: year=2020, monthly_comparison_count=12
+INFO 2026-01-05 22:57:05,303 basehttp "GET /budget/vs-actual-monthly/?year=2020 HTTP/1.1" 200 49493
+INFO 2026-01-05 22:57:10,871 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77888
+INFO 2026-01-05 22:57:16,256 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:57:16,258 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:57:16,258 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:57:16,263 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:57:16,264 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:57:16,273 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50003
+INFO 2026-01-05 22:57:38,790 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 22:57:38,793 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 22:57:38,794 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 22:57:38,801 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 22:57:38,801 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 22:57:38,819 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49969
+INFO 2026-01-05 22:59:05,337 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77888
+INFO 2026-01-05 23:00:00,801 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 23:00:07,276 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:00:07,277 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:00:07,278 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:00:07,283 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:00:07,283 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:00:07,296 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-05 23:00:09,436 budget_views BudgetVsActualMonthlyComparisonView: year=2023
+INFO 2026-01-05 23:00:09,437 budget_views budget_monthly_all count: 0
+INFO 2026-01-05 23:00:09,438 budget_views actual_monthly_all count: 13
+INFO 2026-01-05 23:00:09,443 budget_views Period 1: budget_month=None, actual_month=株式会社VanCreworth - 2023 - 月1
+INFO 2026-01-05 23:00:09,443 budget_views BudgetVsActualMonthlyComparisonView: year=2023, monthly_comparison_count=12
+INFO 2026-01-05 23:00:09,452 basehttp "GET /budget/vs-actual-monthly/?year=2023 HTTP/1.1" 200 49479
+INFO 2026-01-05 23:00:36,770 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50543
+INFO 2026-01-05 23:00:55,548 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:00:55,550 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:00:55,551 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:00:55,559 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:00:55,559 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:00:55,572 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-05 23:01:05,341 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 23:01:06,155 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 77888
+INFO 2026-01-05 23:03:47,658 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:03:47,975 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:03:48,290 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:03:55,831 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:03:56,059 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:03:56,273 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:04:56,055 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:04:56,292 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:04:56,504 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:05:12,140 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:05:12,433 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:05:12,643 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+ERROR 2026-01-05 23:29:12,576 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 290: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2026-01-05 23:29:12,611 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 201785
+INFO 2026-01-05 23:29:18,792 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 23:29:19,921 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:29:19,923 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:29:19,924 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:29:19,931 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:29:19,932 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:29:19,946 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+ERROR 2026-01-05 23:29:25,858 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 290: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2026-01-05 23:29:25,859 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 201650
+INFO 2026-01-05 23:30:38,095 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:30:38,097 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:30:38,098 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:30:38,104 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:30:38,104 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:30:38,122 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+ERROR 2026-01-05 23:30:40,259 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 289: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2026-01-05 23:30:40,261 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 202590
+INFO 2026-01-05 23:30:47,935 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:30:48,236 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:30:52,284 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:30:52,288 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:30:52,288 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:30:52,291 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:30:52,292 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:30:52,325 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-05 23:30:59,028 budget_views BudgetVsActualMonthlyComparisonView: year=2023
+INFO 2026-01-05 23:30:59,033 budget_views budget_monthly_all count: 0
+INFO 2026-01-05 23:30:59,033 budget_views actual_monthly_all count: 13
+INFO 2026-01-05 23:30:59,036 budget_views Period 1: budget_month=None, actual_month=株式会社VanCreworth - 2023 - 月1
+INFO 2026-01-05 23:30:59,037 budget_views BudgetVsActualMonthlyComparisonView: year=2023, monthly_comparison_count=12
+INFO 2026-01-05 23:30:59,045 basehttp "GET /budget/vs-actual-monthly/?year=2023 HTTP/1.1" 200 49479
+ERROR 2026-01-05 23:31:02,627 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endblock'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 289: 'endblock', expected 'elif', 'else' or 'endif'. Did you forget to register or load this tag?
+ERROR 2026-01-05 23:31:02,631 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 202600
+INFO 2026-01-05 23:31:15,234 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 23:31:16,057 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-05 23:31:16,060 budget_views budget_monthly_all count: 12
+INFO 2026-01-05 23:31:16,062 budget_views actual_monthly_all count: 6
+INFO 2026-01-05 23:31:16,069 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-05 23:31:16,070 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-05 23:31:16,082 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-05 23:31:18,532 budget_views BudgetVsActualMonthlyComparisonView: year=2024
+INFO 2026-01-05 23:31:18,533 budget_views budget_monthly_all count: 0
+INFO 2026-01-05 23:31:18,534 budget_views actual_monthly_all count: 13
+INFO 2026-01-05 23:31:18,538 budget_views Period 1: budget_month=None, actual_month=株式会社VanCreworth - 2024 - 月1
+INFO 2026-01-05 23:31:18,538 budget_views BudgetVsActualMonthlyComparisonView: year=2024, monthly_comparison_count=12
+INFO 2026-01-05 23:31:18,548 basehttp "GET /budget/vs-actual-monthly/?year=2024 HTTP/1.1" 200 49468
+INFO 2026-01-05 23:31:49,529 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74162
+INFO 2026-01-05 23:31:52,295 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74162
+INFO 2026-01-05 23:31:55,318 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2024 HTTP/1.1" 200 74116
+INFO 2026-01-05 23:32:02,684 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2021 HTTP/1.1" 200 69028
+INFO 2026-01-05 23:32:08,319 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2016 HTTP/1.1" 200 69028
+INFO 2026-01-05 23:32:15,117 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2016 HTTP/1.1" 200 69028
+INFO 2026-01-05 23:32:18,837 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2017 HTTP/1.1" 200 69028
+INFO 2026-01-05 23:33:11,333 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-05 23:33:25,994 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+INFO 2026-01-05 23:33:29,547 basehttp "GET /budget/analysis/?year=2024 HTTP/1.1" 200 32245
+INFO 2026-01-05 23:33:37,853 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-05 23:33:49,766 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-05 23:34:00,327 basehttp "GET /about-links/ HTTP/1.1" 200 34955
+INFO 2026-01-05 23:34:06,704 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79752
+INFO 2026-01-05 23:34:09,590 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:34:09,876 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:34:10,100 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:34:36,014 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:34:36,267 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:34:36,538 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:35:34,520 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 48377
+INFO 2026-01-05 23:35:38,042 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2022 HTTP/1.1" 200 48652
+INFO 2026-01-05 23:35:50,083 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2024 HTTP/1.1" 200 48598
+INFO 2026-01-05 23:35:52,807 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2025 HTTP/1.1" 200 48377
+INFO 2026-01-05 23:35:55,070 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2025 HTTP/1.1" 200 48377
+INFO 2026-01-05 23:37:30,770 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 37783
+INFO 2026-01-05 23:37:43,370 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40775
+INFO 2026-01-05 23:38:02,407 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+WARNING 2026-01-05 23:38:02,430 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-05 23:38:04,331 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40775
+INFO 2026-01-05 23:38:13,190 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 37783
+INFO 2026-01-05 23:38:20,636 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-05 23:38:20,654 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 200 2606
+INFO 2026-01-05 23:38:20,655 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 200 14966
+INFO 2026-01-05 23:38:20,656 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 200 54
+INFO 2026-01-05 23:38:20,658 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 200 862
+INFO 2026-01-05 23:38:20,660 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 200 79212
+INFO 2026-01-05 23:38:23,936 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40775
+INFO 2026-01-05 23:38:27,839 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:38:28,225 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:38:28,506 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:38:29,416 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+WARNING 2026-01-05 23:38:29,436 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-05 23:38:30,702 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40775
+INFO 2026-01-05 23:39:24,558 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:39:24,874 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:39:25,217 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:39:54,068 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 94281
+INFO 2026-01-05 23:39:56,683 basehttp "GET /fiscal_summary_month/?years=3&selected_year=2024 HTTP/1.1" 200 94392
+INFO 2026-01-05 23:41:55,197 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:41:55,640 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:41:56,074 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:42:25,267 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-05 23:43:12,892 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:43:13,258 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:43:13,605 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:44:44,440 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:44:44,770 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:44:45,084 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:45:03,026 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:45:03,335 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:45:03,674 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:46:22,217 basehttp "GET / HTTP/1.1" 200 60074
+ERROR 2026-01-05 23:46:26,283 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:26,326 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:26,328 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 138014
+ERROR 2026-01-05 23:46:38,869 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:38,908 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:38,910 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 138370
+ERROR 2026-01-05 23:46:42,903 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:42,945 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:42,947 basehttp "GET /fiscal_summary_month/?years=5 HTTP/1.1" 500 138227
+ERROR 2026-01-05 23:46:45,975 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:46,014 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:46:46,017 basehttp "GET /fiscal_summary_month/?years=1 HTTP/1.1" 500 138231
+ERROR 2026-01-05 23:47:04,913 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:47:04,945 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:47:04,947 basehttp "GET /fiscal_summary_month/?years=5 HTTP/1.1" 500 138234
+ERROR 2026-01-05 23:47:05,767 mixins Unexpected error in FiscalSummary_MonthListView.dispatch: name 'num_years' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:47:05,798 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 174, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1540, in get_context_data
+    'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
+                 ^^^^^^^^^
+NameError: name 'num_years' is not defined
+ERROR 2026-01-05 23:47:05,800 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 138257
+INFO 2026-01-05 23:47:07,963 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:47:08,301 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:47:08,609 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:47:12,166 basehttp "GET /budget/analysis/ HTTP/1.1" 200 35041
+INFO 2026-01-05 23:47:15,205 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:47:15,560 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:47:15,970 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:47:16,404 basehttp "GET /budget/analysis/?year=2024 HTTP/1.1" 200 32245
+INFO 2026-01-05 23:47:19,658 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73168
+INFO 2026-01-05 23:47:47,953 basehttp "GET /fiscal_summary_month/?years=3&start_year=2021&end_year=2025 HTTP/1.1" 200 96264
+INFO 2026-01-05 23:48:15,343 basehttp "GET /fiscal_summary_month/?years=3&start_year=2021&end_year=2024 HTTP/1.1" 200 84903
+INFO 2026-01-05 23:48:16,935 basehttp "GET /fiscal_summary_month/?years=3&start_year=2021&end_year=2025 HTTP/1.1" 200 96264
+INFO 2026-01-05 23:48:32,818 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 79752
+INFO 2026-01-05 23:49:49,122 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-05 23:49:49,463 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:49:49,945 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-05 23:51:47,821 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-05 23:51:48,152 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-05 23:51:48,558 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai

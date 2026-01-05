@@ -1144,6 +1144,7 @@ class FiscalSummary_Year(models.Model):
 
     @property
     def current_ratio(self):
+        """流動比率"""
         if self.total_current_liabilities != 0:
             ratio = (self.total_current_assets / self.total_current_liabilities) * 100
             return Decimal(ratio).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)

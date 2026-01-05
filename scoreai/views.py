@@ -31,6 +31,7 @@ from django.views import generic
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic import TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from itertools import groupby
 from operator import itemgetter
@@ -470,6 +471,15 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
         
         # スコアが未計算の場合、自動的に計算する
         fiscal_summary_year = self.object
+        
+        # 年度と予算/実績のプルダウン用データを追加
+        available_years = FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        ).values_list('year', flat=True).distinct().order_by('-year')
+        context['available_years'] = list(available_years)
+        context['selected_year'] = fiscal_summary_year.year
+        context['is_budget'] = fiscal_summary_year.is_budget
+        
         needs_save = False
         
         # 必要な情報を取得
@@ -579,20 +589,185 @@ class FiscalSummary_YearDetailView(SelectedCompanyMixin, DetailView):
 
         return context
 
-class LatestFiscalSummaryYearDetailView(SelectedCompanyMixin, DetailView):
-    def get(self, request, *args, **kwargs):
-        # Get the most recent FiscalSummary_Year for the selected company
-        latest_fiscal_summary_year = FiscalSummary_Year.objects.filter(
-            company=self.this_company, 
-            is_draft=False
-        ).select_related('company').order_by('-year').first()
+class LatestFiscalSummaryYearDetailView(SelectedCompanyMixin, TemplateView):
+    """単年度決算詳細ビュー（年度と予算/実績を選択可能）"""
+    template_name = 'scoreai/fiscal_summary_year_detail.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         
-        if not latest_fiscal_summary_year:
-            messages.error(request, "No fiscal summary year data available.")
-            return redirect('fiscal_summary_year_list')  # Redirect to list view if no data is found
-
-        # Redirect to the existing detail view with the latest fiscal summary year's ID
-        return redirect('fiscal_summary_year_detail', pk=latest_fiscal_summary_year.pk)
+        # 年度と予算/実績を取得（デフォルトは直近年度の実績）
+        year_param = self.request.GET.get('year')
+        is_budget_param = self.request.GET.get('is_budget', 'false')
+        
+        # 利用可能な年度を取得
+        available_years = FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        ).values_list('year', flat=True).distinct().order_by('-year')
+        
+        context['available_years'] = list(available_years)
+        
+        # 年度を決定（デフォルトは最新年度）
+        if year_param:
+            try:
+                selected_year = int(year_param)
+            except ValueError:
+                selected_year = available_years[0] if available_years else None
+        else:
+            selected_year = available_years[0] if available_years else None
+        
+        context['selected_year'] = selected_year
+        
+        # 予算/実績を決定（デフォルトは実績）
+        is_budget = is_budget_param.lower() == 'true'
+        context['is_budget'] = is_budget
+        
+        # 該当するFiscalSummary_Yearを取得
+        data_not_found = False
+        previous_fiscal_summary_year = None
+        
+        # まず、選択された年度・予算/実績のデータを探す
+        if selected_year:
+            fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=selected_year,
+                is_budget=is_budget,
+                is_draft=False
+            ).order_by('-version').first()
+            
+            # データが見つからない場合
+            if not fiscal_summary_year:
+                data_not_found = True
+                context['data_not_found'] = True
+                context['data_not_found_year'] = selected_year
+                context['data_not_found_is_budget'] = is_budget
+                
+                # 前回表示していたデータを取得（直近年度の実績をデフォルトとして使用）
+                if available_years:
+                    latest_year = available_years[0]
+                    previous_fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                        company=self.this_company,
+                        year=latest_year,
+                        is_budget=False,
+                        is_draft=False
+                    ).order_by('-version').first()
+        else:
+            fiscal_summary_year = None
+            data_not_found = True
+            context['data_not_found'] = True
+        
+        # データが見つからない場合は、前回のデータを表示
+        if data_not_found and previous_fiscal_summary_year:
+            fiscal_summary_year = previous_fiscal_summary_year
+        elif not fiscal_summary_year:
+            # データが全くない場合
+            context['data_not_found'] = True
+        
+        if fiscal_summary_year:
+            # FiscalSummary_YearDetailViewと同じロジックでスコアを計算
+            needs_save = False
+            year = fiscal_summary_year.year
+            industry_classification = fiscal_summary_year.company.industry_classification
+            industry_subclassification = fiscal_summary_year.company.industry_subclassification
+            company_size = fiscal_summary_year.company.company_size
+            
+            indicator_values = {
+                'sales_growth_rate': fiscal_summary_year.sales_growth_rate,
+                'operating_profit_margin': fiscal_summary_year.operating_profit_margin,
+                'labor_productivity': fiscal_summary_year.labor_productivity,
+                'EBITDA_interest_bearing_debt_ratio': fiscal_summary_year.EBITDA_interest_bearing_debt_ratio,
+                'operating_working_capital_turnover_period': fiscal_summary_year.operating_working_capital_turnover_period,
+                'equity_ratio': fiscal_summary_year.equity_ratio,
+            }
+            
+            for indicator_name, value in indicator_values.items():
+                if value is not None:
+                    current_score = None
+                    if indicator_name == 'sales_growth_rate':
+                        current_score = fiscal_summary_year.score_sales_growth_rate
+                    elif indicator_name == 'operating_profit_margin':
+                        current_score = fiscal_summary_year.score_operating_profit_margin
+                    elif indicator_name == 'labor_productivity':
+                        current_score = fiscal_summary_year.score_labor_productivity
+                    elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                        current_score = fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio
+                    elif indicator_name == 'operating_working_capital_turnover_period':
+                        current_score = fiscal_summary_year.score_operating_working_capital_turnover_period
+                    elif indicator_name == 'equity_ratio':
+                        current_score = fiscal_summary_year.score_equity_ratio
+                    
+                    if current_score is None or current_score == 0:
+                        score = get_finance_score(
+                            year,
+                            industry_classification,
+                            industry_subclassification,
+                            company_size,
+                            indicator_name,
+                            value
+                        )
+                        if score is not None:
+                            if indicator_name == 'sales_growth_rate':
+                                fiscal_summary_year.score_sales_growth_rate = score
+                            elif indicator_name == 'operating_profit_margin':
+                                fiscal_summary_year.score_operating_profit_margin = score
+                            elif indicator_name == 'labor_productivity':
+                                fiscal_summary_year.score_labor_productivity = score
+                            elif indicator_name == 'EBITDA_interest_bearing_debt_ratio':
+                                fiscal_summary_year.score_EBITDA_interest_bearing_debt_ratio = score
+                            elif indicator_name == 'operating_working_capital_turnover_period':
+                                fiscal_summary_year.score_operating_working_capital_turnover_period = score
+                            elif indicator_name == 'equity_ratio':
+                                fiscal_summary_year.score_equity_ratio = score
+                            needs_save = True
+            
+            if needs_save:
+                fiscal_summary_year.save()
+            
+            # 前年・翌年のデータを取得
+            previous_data = FiscalSummary_Year.objects.filter(
+                year__lt=fiscal_summary_year.year,
+                company=fiscal_summary_year.company
+            ).select_related('company').order_by('-year').first()
+            next_data = FiscalSummary_Year.objects.filter(
+                year__gt=fiscal_summary_year.year,
+                company=fiscal_summary_year.company
+            ).select_related('company').order_by('year').first()
+            context['previous_year_data'] = previous_data
+            context['next_year_data'] = next_data
+            
+            # TechnicalTermの全データを取得
+            technical_terms = TechnicalTerm.objects.all()
+            context['technical_terms'] = technical_terms
+            
+            # ベンチマーク指数を取得
+            benchmark_index = get_benchmark_index(
+                self.this_company.industry_classification,
+                self.this_company.industry_subclassification,
+                self.this_company.company_size,
+                fiscal_summary_year.year
+            )
+            context['benchmark_index'] = benchmark_index
+            
+            # AI診断用: プラン情報を取得
+            try:
+                if hasattr(self.request.user, 'userfirm') and self.request.user.userfirm.exists():
+                    user_firm = self.request.user.userfirm.filter(is_selected=True, active=True).first()
+                    if user_firm:
+                        subscription = user_firm.firm.subscription
+                        plan_type = subscription.plan.plan_type
+                        context['can_download_advanced'] = plan_type in ['professional', 'enterprise']
+                    else:
+                        context['can_download_advanced'] = False
+                else:
+                    context['can_download_advanced'] = False
+            except Exception:
+                context['can_download_advanced'] = False
+        
+        context['fiscal_summary_year'] = fiscal_summary_year
+        context['title'] = '年次財務諸表'
+        context['show_title_card'] = False
+        
+        return context
 
 
 # 決算年次推移
@@ -605,6 +780,9 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
         page_param = int(self.request.GET.get('page_param', 1))
         years_in_page = int(self.request.GET.get('years_in_page', 5))  # Default to 5 if not specified
+        show_all = self.request.GET.get('show_all', 'false').lower() == 'true'
+        start_year = self.request.GET.get('start_year')
+        end_year = self.request.GET.get('end_year')
 
         # 実績データのみを取得（is_budget=False）
         queryset = FiscalSummary_Year.objects.filter(
@@ -615,6 +793,22 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
         if not is_draft:
             queryset = queryset.filter(is_draft=False)
 
+        # 年度範囲でフィルタリング
+        if start_year:
+            try:
+                queryset = queryset.filter(year__gte=int(start_year))
+            except ValueError:
+                pass
+        if end_year:
+            try:
+                queryset = queryset.filter(year__lte=int(end_year))
+            except ValueError:
+                pass
+
+        # 全期間表示の場合はページネーションなし
+        if show_all:
+            return queryset
+
         # Calculate the start and end indices for slicing the queryset
         start_index = (page_param - 1) * years_in_page
         end_index = start_index + years_in_page
@@ -624,16 +818,54 @@ class FiscalSummary_YearListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Calculate total pages（実績データのみをカウント）
-        total_records = FiscalSummary_Year.objects.filter(
-            company=self.this_company,
-            is_budget=False  # 実績データのみ
-        ).count()
+        # パラメータを取得
+        is_draft = self.request.GET.get('is_draft', 'false').lower() == 'true'
+        show_all = self.request.GET.get('show_all', 'false').lower() == 'true'
+        start_year = self.request.GET.get('start_year')
+        end_year = self.request.GET.get('end_year')
         years_in_page = int(self.request.GET.get('years_in_page', 5))
-        context['total_pages'] = (total_records + years_in_page - 1) // years_in_page  # Calculate total pages, rounding up
-        # Add page_param and years_in_page to the context
+        
+        # フィルタリング用のクエリセットを作成
+        base_queryset = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            is_budget=False
+        )
+        if not is_draft:
+            base_queryset = base_queryset.filter(is_draft=False)
+        if start_year:
+            try:
+                base_queryset = base_queryset.filter(year__gte=int(start_year))
+            except ValueError:
+                pass
+        if end_year:
+            try:
+                base_queryset = base_queryset.filter(year__lte=int(end_year))
+            except ValueError:
+                pass
+        
+        # Calculate total pages（フィルタリング後のデータをカウント）
+        total_records = base_queryset.count()
+        
+        # 利用可能な年度範囲を取得
+        all_years = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            is_budget=False
+        ).values_list('year', flat=True).distinct().order_by('year')
+        context['min_year'] = all_years.first() if all_years else None
+        context['max_year'] = all_years.last() if all_years else None
+        
+        if show_all:
+            context['total_pages'] = 1
+        else:
+            context['total_pages'] = (total_records + years_in_page - 1) // years_in_page if total_records > 0 else 1
+        
+        # Add parameters to the context
         context['page_param'] = self.request.GET.get('page_param', 1)
         context['years_in_page'] = years_in_page
+        context['show_all'] = show_all
+        context['start_year'] = start_year
+        context['end_year'] = end_year
+        context['is_draft'] = is_draft
 
         # 予算実績比較データを取得（最新年度）
         queryset = self.get_queryset()
@@ -932,6 +1164,184 @@ class FiscalSummary_MonthDetailView(SelectedCompanyMixin, DetailView):
         context['show_title_card'] = False
         return context
 
+class LatestMonthlyPLView(SelectedCompanyMixin, TemplateView):
+    """単年度月次PLビュー（年度と予算/実績を選択可能）"""
+    template_name = 'scoreai/monthly_pl_single_year.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # 年度と予算/実績を取得（デフォルトは直近年度の実績）
+        year_param = self.request.GET.get('year')
+        is_budget_param = self.request.GET.get('is_budget', 'false')
+        
+        # 利用可能な年度を取得
+        available_years = FiscalSummary_Year.objects.filter(
+            company=self.this_company
+        ).values_list('year', flat=True).distinct().order_by('-year')
+        
+        context['available_years'] = list(available_years)
+        
+        # 年度を決定（デフォルトは最新年度）
+        if year_param:
+            try:
+                selected_year = int(year_param)
+            except ValueError:
+                selected_year = available_years[0] if available_years else None
+        else:
+            selected_year = available_years[0] if available_years else None
+        
+        context['selected_year'] = selected_year
+        
+        # 予算/実績を決定（デフォルトは実績）
+        is_budget = is_budget_param.lower() == 'true'
+        context['is_budget'] = is_budget
+        
+        # 該当するFiscalSummary_Yearを取得
+        data_not_found = False
+        fallback_fiscal_summary_year = None
+        
+        if selected_year:
+            fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                company=self.this_company,
+                year=selected_year,
+                is_budget=is_budget,
+                is_draft=False
+            ).order_by('-version').first()
+            
+            # データが見つからない場合、フォールバックを試す
+            if not fiscal_summary_year:
+                # まず、同じ年度で予算/実績を逆に試す
+                fallback_fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                    company=self.this_company,
+                    year=selected_year,
+                    is_budget=not is_budget,
+                    is_draft=False
+                ).order_by('-version').first()
+                
+                # それでも見つからない場合、直近年度の実績を取得
+                if not fallback_fiscal_summary_year and available_years:
+                    latest_year = available_years[0]
+                    fallback_fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                        company=self.this_company,
+                        year=latest_year,
+                        is_budget=False,
+                        is_draft=False
+                    ).order_by('-version').first()
+                
+                if fallback_fiscal_summary_year:
+                    fiscal_summary_year = fallback_fiscal_summary_year
+                    # フォールバックを使用した場合、警告を表示
+                    data_not_found = True
+                    context['data_not_found'] = True
+                    context['data_not_found_year'] = selected_year
+                    context['data_not_found_is_budget'] = is_budget
+                    # 実際に表示する年度と予算/実績を更新
+                    selected_year = fiscal_summary_year.year
+                    is_budget = fiscal_summary_year.is_budget
+                    context['selected_year'] = selected_year
+                    context['is_budget'] = is_budget
+                else:
+                    data_not_found = True
+                    context['data_not_found'] = True
+                    context['data_not_found_year'] = selected_year
+                    context['data_not_found_is_budget'] = is_budget
+        else:
+            # 年度が指定されていない場合、直近年度の実績を取得
+            if available_years:
+                latest_year = available_years[0]
+                fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                    company=self.this_company,
+                    year=latest_year,
+                    is_budget=False,
+                    is_draft=False
+                ).order_by('-version').first()
+                if fiscal_summary_year:
+                    selected_year = latest_year
+                    is_budget = False
+                    context['selected_year'] = selected_year
+                    context['is_budget'] = is_budget
+            else:
+                fiscal_summary_year = None
+                data_not_found = True
+                context['data_not_found'] = True
+        
+        # 月次データを取得
+        monthly_data_list = []
+        if fiscal_summary_year:
+            monthly_data = FiscalSummary_Month.objects.filter(
+                fiscal_summary_year=fiscal_summary_year,
+                is_budget=fiscal_summary_year.is_budget
+            ).order_by('period')
+            
+            # 決算月を取得
+            fiscal_month = self.this_company.fiscal_month if hasattr(self.this_company, 'fiscal_month') else 1
+            
+            # 12ヶ月分のデータを作成
+            monthly_dict = {m.period: m for m in monthly_data}
+            for period in range(1, 13):
+                display_month = (fiscal_month + period - 1) % 12
+                if display_month == 0:
+                    display_month = 12
+                
+                if period in monthly_dict:
+                    month_obj = monthly_dict[period]
+                    monthly_data_list.append({
+                        'id': month_obj.id,
+                        'period': period,
+                        'display_month': display_month,
+                        'sales': float(month_obj.sales) if month_obj.sales is not None else 0.0,
+                        'gross_profit': float(month_obj.gross_profit) if month_obj.gross_profit is not None else 0.0,
+                        'operating_profit': float(month_obj.operating_profit) if month_obj.operating_profit is not None else 0.0,
+                        'ordinary_profit': float(month_obj.ordinary_profit) if month_obj.ordinary_profit is not None else 0.0,
+                        'gross_profit_rate': float(month_obj.gross_profit_rate) if month_obj.gross_profit_rate is not None else 0.0,
+                        'operating_profit_rate': float(month_obj.operating_profit_rate) if month_obj.operating_profit_rate is not None else 0.0,
+                        'ordinary_profit_rate': float(month_obj.ordinary_profit_rate) if month_obj.ordinary_profit_rate is not None else 0.0,
+                        'is_budget': month_obj.is_budget,
+                    })
+                else:
+                    # データがない月は空データを追加
+                    monthly_data_list.append({
+                        'id': None,
+                        'period': period,
+                        'display_month': display_month,
+                        'sales': 0.0,
+                        'gross_profit': 0.0,
+                        'operating_profit': 0.0,
+                        'ordinary_profit': 0.0,
+                        'gross_profit_rate': 0.0,
+                        'operating_profit_rate': 0.0,
+                        'ordinary_profit_rate': 0.0,
+                        'is_budget': is_budget,
+                    })
+            
+            # 合計値を計算
+            total_sales = sum(m['sales'] for m in monthly_data_list)
+            total_gross_profit = sum(m['gross_profit'] for m in monthly_data_list)
+            total_operating_profit = sum(m['operating_profit'] for m in monthly_data_list)
+            total_ordinary_profit = sum(m['ordinary_profit'] for m in monthly_data_list)
+            
+            total_gross_profit_rate = (total_gross_profit / total_sales * 100) if total_sales > 0 else 0
+            total_operating_profit_rate = (total_operating_profit / total_sales * 100) if total_sales > 0 else 0
+            total_ordinary_profit_rate = (total_ordinary_profit / total_sales * 100) if total_sales > 0 else 0
+            
+            context['monthly_data'] = monthly_data_list
+            context['total_sales'] = total_sales
+            context['total_gross_profit'] = total_gross_profit
+            context['total_operating_profit'] = total_operating_profit
+            context['total_ordinary_profit'] = total_ordinary_profit
+            context['total_gross_profit_rate'] = total_gross_profit_rate
+            context['total_operating_profit_rate'] = total_operating_profit_rate
+            context['total_ordinary_profit_rate'] = total_ordinary_profit_rate
+            context['fiscal_summary_year'] = fiscal_summary_year
+            context['fiscal_month'] = fiscal_month
+        
+        context['title'] = '月次PL'
+        context['show_title_card'] = False
+        
+        return context
+
+
 class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
     model = FiscalSummary_Month
     template_name = 'scoreai/fiscal_summary_month_list.html'
@@ -951,95 +1361,186 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # URLパラメータから年数を取得。デフォルトは5年
-        num_years = self.request.GET.get('years', 5)
-        try:
-            num_years = int(num_years)
-            num_years = max(1, num_years)  # 最小値を1に設定
-        except ValueError:
-            num_years = 5  # 数値に変換できない場合はデフォルト値を使用
+        # 利用可能な年度を取得
+        available_years = FiscalSummary_Year.objects.filter(
+            company=self.this_company,
+            is_budget=False
+        ).values_list('year', flat=True).distinct().order_by('-year')
         
-        # 月次サマリーデータを取得
-        monthly_data = get_monthly_summaries(self.this_company, num_years)
+        context['available_years'] = list(available_years)
         
-        # 各年度の合計値を計算
-        summary_data = [
-            calculate_total_monthly_summaries(monthly_data, year_index=i)
-            for i in range(num_years)
-        ]
+        # 開始年度と終了年度を取得
+        start_year_param = self.request.GET.get('start_year')
+        end_year_param = self.request.GET.get('end_year')
         
-        # Calculate totals and rates for each metric
-        for summary in monthly_data:
-            total_sales = sum(item['sales'] for item in summary['data'])
-            total_gross_profit = sum(item['gross_profit'] for item in summary['data'])
-            total_operating_profit = sum(item['operating_profit'] for item in summary['data'])
-            total_ordinary_profit = sum(item['ordinary_profit'] for item in summary['data'])
-
-            summary['total_sales'] = total_sales
-            summary['total_gross_profit'] = total_gross_profit
-            summary['total_operating_profit'] = total_operating_profit
-            summary['total_ordinary_profit'] = total_ordinary_profit
-
-            # Calculate rates
-            summary['total_gross_profit_rate'] = (total_gross_profit / total_sales * 100) if total_sales > 0 else 0
-            summary['total_operating_profit_rate'] = (total_operating_profit / total_sales * 100) if total_sales > 0 else 0
-            summary['total_ordinary_profit_rate'] = (total_ordinary_profit / total_sales * 100) if total_sales > 0 else 0
-
-        # monthly_summaries_with_summaryにデータを格納
+        # デフォルトは最新年度から過去3年分
+        default_end_year = available_years[0] if available_years else None
+        default_start_year = default_end_year - 2 if default_end_year else None
+        
+        if end_year_param:
+            try:
+                end_year = int(end_year_param)
+            except ValueError:
+                end_year = default_end_year
+        else:
+            end_year = default_end_year
+        
+        if start_year_param:
+            try:
+                start_year = int(start_year_param)
+            except ValueError:
+                start_year = default_start_year
+        else:
+            start_year = default_start_year
+        
+        # 範囲の検証（最大5年間、開始年度 <= 終了年度）
+        if start_year and end_year:
+            if start_year > end_year:
+                start_year, end_year = end_year, start_year
+            if end_year - start_year > 4:
+                start_year = end_year - 4
+        
+        context['start_year'] = start_year
+        context['end_year'] = end_year
+        
+        # 選択された年度範囲のデータを取得
+        comparison_years_data = []
+        chart_data = None
+        
+        if start_year and end_year:
+            # 開始年度から終了年度までの年度リストを作成（最大5年）
+            # 新しい年度から古い年度へと降順で並べる
+            years_to_compare = [year for year in range(start_year, end_year + 1) if year in available_years]
+            years_to_compare.sort(reverse=True)  # 降順にソート
+            # 最大5年までに制限
+            if len(years_to_compare) > 5:
+                years_to_compare = years_to_compare[:5]
+            
+            fiscal_month = self.this_company.fiscal_month if hasattr(self.this_company, 'fiscal_month') else 1
+            
+            # 各年度のデータを取得
+            for year in years_to_compare:
+                fiscal_summary_year = FiscalSummary_Year.objects.filter(
+                    company=self.this_company,
+                    year=year,
+                    is_budget=False,
+                    is_draft=False
+                ).order_by('-version').first()
+                
+                if fiscal_summary_year:
+                    monthly_data_list = FiscalSummary_Month.objects.filter(
+                        fiscal_summary_year=fiscal_summary_year,
+                        is_budget=False
+                    ).order_by('period')
+                    
+                    # 12ヶ月分のデータを作成
+                    monthly_dict = {m.period: m for m in monthly_data_list}
+                    year_data_list = []
+                    
+                    for period in range(1, 13):
+                        display_month = (fiscal_month + period - 1) % 12
+                        if display_month == 0:
+                            display_month = 12
+                        
+                        if period in monthly_dict:
+                            month_obj = monthly_dict[period]
+                            month_data = {
+                                'id': month_obj.id,
+                                'period': period,
+                                'display_month': display_month,
+                                'sales': float(month_obj.sales) if month_obj.sales is not None else 0.0,
+                                'gross_profit': float(month_obj.gross_profit) if month_obj.gross_profit is not None else 0.0,
+                                'operating_profit': float(month_obj.operating_profit) if month_obj.operating_profit is not None else 0.0,
+                                'ordinary_profit': float(month_obj.ordinary_profit) if month_obj.ordinary_profit is not None else 0.0,
+                                'gross_profit_rate': float(month_obj.gross_profit_rate) if month_obj.gross_profit_rate is not None else 0.0,
+                                'operating_profit_rate': float(month_obj.operating_profit_rate) if month_obj.operating_profit_rate is not None else 0.0,
+                                'ordinary_profit_rate': float(month_obj.ordinary_profit_rate) if month_obj.ordinary_profit_rate is not None else 0.0,
+                                'is_budget': month_obj.is_budget,
+                            }
+                        else:
+                            month_data = {
+                                'id': None,
+                                'period': period,
+                                'display_month': display_month,
+                                'sales': 0.0,
+                                'gross_profit': 0.0,
+                                'operating_profit': 0.0,
+                                'ordinary_profit': 0.0,
+                                'gross_profit_rate': 0.0,
+                                'operating_profit_rate': 0.0,
+                                'ordinary_profit_rate': 0.0,
+                                'is_budget': False,
+                            }
+                        
+                        year_data_list.append(month_data)
+                    
+                    # 合計値を計算
+                    total_sales = sum(m['sales'] for m in year_data_list)
+                    total_gross_profit = sum(m['gross_profit'] for m in year_data_list)
+                    total_operating_profit = sum(m['operating_profit'] for m in year_data_list)
+                    total_ordinary_profit = sum(m['ordinary_profit'] for m in year_data_list)
+                    
+                    total_gross_profit_rate = (total_gross_profit / total_sales * 100) if total_sales > 0 else 0
+                    total_operating_profit_rate = (total_operating_profit / total_sales * 100) if total_sales > 0 else 0
+                    total_ordinary_profit_rate = (total_ordinary_profit / total_sales * 100) if total_sales > 0 else 0
+                    
+                    year_summary = {
+                        'year': year,
+                        'data': year_data_list,
+                        'total_sales': total_sales,
+                        'total_gross_profit': total_gross_profit,
+                        'total_operating_profit': total_operating_profit,
+                        'total_ordinary_profit': total_ordinary_profit,
+                        'total_gross_profit_rate': total_gross_profit_rate,
+                        'total_operating_profit_rate': total_operating_profit_rate,
+                        'total_ordinary_profit_rate': total_ordinary_profit_rate,
+                    }
+                    
+                    comparison_years_data.append(year_summary)
+            
+            # チャート用データを準備（各年度の月次データ）
+            if comparison_years_data:
+                # 月のラベル（最初の年度のデータから取得）
+                first_year_data = comparison_years_data[0]
+                chart_data = {
+                    'labels': [f"{m['display_month']}月" for m in first_year_data['data']],
+                    'years': [],
+                    'sales': {},
+                    'gross_profit': {},
+                    'operating_profit': {},
+                    'ordinary_profit': {},
+                }
+                
+                for year_data in comparison_years_data:
+                    year = year_data['year']
+                    chart_data['years'].append(year)
+                    chart_data['sales'][str(year)] = [m['sales'] for m in year_data['data']]
+                    chart_data['gross_profit'][str(year)] = [m['gross_profit'] for m in year_data['data']]
+                    chart_data['operating_profit'][str(year)] = [m['operating_profit'] for m in year_data['data']]
+                    chart_data['ordinary_profit'][str(year)] = [m['ordinary_profit'] for m in year_data['data']]
+        
+        import json
+        context['chart_data_json'] = json.dumps(chart_data) if chart_data else None
+        
+        # 比較年度のデータをテーブル用に準備
         monthly_summaries_with_summary = {
-            'monthly_data': monthly_data,
-            'summary_data': summary_data
+            'monthly_data': comparison_years_data,
+            'summary_data': []
         }
         
         # ラベル情報
         fiscal_month = self.this_company.fiscal_month
         months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
 
-        # 予算実績比較データを取得（最新年度）
-        if monthly_data:
-            latest_year = monthly_data[0]['year']
-            budget_year = FiscalSummary_Year.objects.filter(
-                company=self.this_company,
-                year=latest_year,
-                is_budget=True
-            ).first()
-            
-            actual_year = FiscalSummary_Year.objects.filter(
-                company=self.this_company,
-                year=latest_year,
-                is_budget=False
-            ).order_by('-is_draft').first()  # 下書きも含め、非下書きを優先
-            
-            # 月次予算実績比較データ
-            budget_monthly = []
-            actual_monthly = []
-            if budget_year:
-                budget_monthly = FiscalSummary_Month.objects.filter(
-                    fiscal_summary_year=budget_year,
-                    is_budget=True
-                ).order_by('period')
-            if actual_year:
-                actual_monthly = FiscalSummary_Month.objects.filter(
-                    fiscal_summary_year=actual_year,
-                    is_budget=False
-                ).order_by('period')
-        else:
-            budget_year = None
-            actual_year = None
-            budget_monthly = []
-            actual_monthly = []
-
+        # ラベル情報
+        fiscal_month = self.this_company.fiscal_month if hasattr(self.this_company, 'fiscal_month') else 1
+        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
+        
         context.update({
             'title': '月次PL',
             'show_title_card': False,  # タイトルカードを非表示（他のページと統一）
             'monthly_summaries_with_summary': monthly_summaries_with_summary,
             'months_label': months_label,
-            'num_years': num_years,  # テンプレートで現在の年数を表示するために追加
-            # 予算実績比較データ
-            'budget_year': budget_year,
-            'actual_year': actual_year,
-            'budget_monthly': budget_monthly,
-            'actual_monthly': actual_monthly,
         })
         return context
 

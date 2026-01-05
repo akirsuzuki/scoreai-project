@@ -125,6 +125,7 @@ FiscalSummary_MonthUpdateView = _views_py.FiscalSummary_MonthUpdateView
 FiscalSummary_MonthDeleteView = _views_py.FiscalSummary_MonthDeleteView
 FiscalSummary_MonthDetailView = _views_py.FiscalSummary_MonthDetailView
 FiscalSummary_MonthListView = _views_py.FiscalSummary_MonthListView
+LatestMonthlyPLView = _views_py.LatestMonthlyPLView
 ImportFiscalSummary_Month = _views_py.ImportFiscalSummary_Month
 ImportFiscalSummary_Month_FromMoneyforward = _views_py.ImportFiscalSummary_Month_FromMoneyforward
 DebtCreateView = _views_py.DebtCreateView
@@ -225,6 +226,7 @@ __all__ = [
     'FiscalSummary_MonthDeleteView',
     'FiscalSummary_MonthDetailView',
     'FiscalSummary_MonthListView',
+    'LatestMonthlyPLView',
     'ImportFiscalSummary_Month',
     'ImportFiscalSummary_Month_FromMoneyforward',
     'download_fiscal_summary_month_csv',

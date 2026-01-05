@@ -68,6 +68,7 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
             'labels': usage_data['labels'],
             'ai_consultation': usage_data['ai_consultation'],
             'ocr': usage_data['ocr'],
+            'tokens': usage_data['tokens'],
         })
         
         # 各Companyごとの利用数を取得
@@ -82,6 +83,7 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
         labels = []
         ai_consultation = []
         ocr = []
+        tokens = []
         
         # 過去Nヶ月のデータを取得（重複を避けるため、年月のセットを使用）
         seen_months = set()
@@ -130,12 +132,21 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
             # OCR回数は現時点ではCompany別に追跡していないため、0を返す
             ocr_count = 0
             
+            # FirmUsageTrackingからトークン数を取得
+            usage_tracking = FirmUsageTracking.objects.filter(
+                firm=self.firm,
+                year=target_year,
+                month=target_month
+            ).first()
+            token_count = usage_tracking.ai_consultation_tokens if usage_tracking else 0
+            
             month_data_list.append({
                 'year': target_year,
                 'month': target_month,
                 'label': f"{target_year}年{target_month}月",
                 'ai_consultation': ai_count,
                 'ocr': ocr_count,
+                'tokens': token_count,
             })
         
         # 古い月から新しい月へソート（昇順）
@@ -146,6 +157,7 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
             labels.append(month_data['label'])
             ai_consultation.append(month_data['ai_consultation'])
             ocr.append(month_data['ocr'])
+            tokens.append(month_data['tokens'])
         
         # テーブル表示用のデータを準備（古い月から新しい月へ昇順）
         table_data = []
@@ -158,12 +170,14 @@ class UsageReportView(FirmOwnerMixin, TemplateView):
                 'month': month_data['month'],
                 'ai_consultation': ai_consultation[i],
                 'ocr': ocr[i],
+                'tokens': tokens[i],
             })
         
         return {
             'labels': labels,
             'ai_consultation': ai_consultation,
             'ocr': ocr,
+            'tokens': tokens,
             'table_data': table_data,
         }
     
@@ -401,6 +415,7 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
             
             ai_count = usage.ai_consultation_count if usage else 0
             ocr_count = usage.ocr_count if usage else 0
+            token_count = usage.ai_consultation_tokens if usage else 0
             
             month_data_list.append({
                 'year': target_year,
@@ -408,19 +423,23 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
                 'label': f"{target_year}年{target_month}月",
                 'ai_consultation': ai_count,
                 'ocr': ocr_count,
+                'tokens': token_count,
             })
         
         month_data_list.sort(key=lambda x: (x['year'], x['month']))
         
+        tokens = []
         for month_data in month_data_list:
             labels.append(month_data['label'])
             ai_consultation.append(month_data['ai_consultation'])
             ocr.append(month_data['ocr'])
+            tokens.append(month_data['tokens'])
         
         return {
             'labels': labels,
             'ai_consultation': ai_consultation,
             'ocr': ocr,
+            'tokens': tokens,
             'table_data': month_data_list,
         }
     
@@ -503,7 +522,7 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
         writer = csv.writer(response)
         
         # ヘッダー
-        writer.writerow(['年月', 'AI相談回数', 'OCR読み込み回数'])
+        writer.writerow(['年月', 'AI相談回数', 'OCR読み込み回数', 'AI相談トークン数'])
         
         # データを取得
         usage_data = self._get_usage_data(months)
@@ -514,6 +533,7 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
                 month_data['label'],
                 month_data['ai_consultation'],
                 month_data['ocr'],
+                month_data['tokens'],
             ])
         
         # Company別利用状況
@@ -551,14 +571,14 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
         center_alignment = Alignment(horizontal='center', vertical='center')
         
         # タイトル
-        ws.merge_cells('A1:C1')
+        ws.merge_cells('A1:D1')
         title_cell = ws['A1']
         title_cell.value = f"{self.firm.name} - 利用状況レポート（過去{months}ヶ月）"
         title_cell.font = title_font
         title_cell.alignment = center_alignment
         
         # ヘッダー
-        headers = ['年月', 'AI相談回数', 'OCR読み込み回数']
+        headers = ['年月', 'AI相談回数', 'OCR読み込み回数', 'AI相談トークン数']
         for col, header in enumerate(headers, start=1):
             cell = ws.cell(row=3, column=col)
             cell.value = header
@@ -575,11 +595,13 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
             ws.cell(row=row_idx, column=1, value=month_data['label']).border = border
             ws.cell(row=row_idx, column=2, value=month_data['ai_consultation']).border = border
             ws.cell(row=row_idx, column=3, value=month_data['ocr']).border = border
+            ws.cell(row=row_idx, column=4, value=month_data['tokens']).border = border
         
         # 列幅の調整
         ws.column_dimensions['A'].width = 15
         ws.column_dimensions['B'].width = 15
         ws.column_dimensions['C'].width = 18
+        ws.column_dimensions['D'].width = 18
         
         # Company別利用状況
         company_usage = self._get_company_usage_summary(months)
@@ -657,15 +679,16 @@ class UsageReportExportView(FirmOwnerMixin, TemplateView):
         # 利用状況一覧テーブル
         story.append(Paragraph("利用状況一覧", heading_style))
         
-        table_data = [['年月', 'AI相談回数', 'OCR読み込み回数']]
+        table_data = [['年月', 'AI相談回数', 'OCR読み込み回数', 'AI相談トークン数']]
         for month_data in usage_data['table_data']:
             table_data.append([
                 month_data['label'],
                 str(month_data['ai_consultation']),
                 str(month_data['ocr']),
+                str(month_data['tokens']),
             ])
         
-        table = Table(table_data, colWidths=[2*inch, 2*inch, 2*inch])
+        table = Table(table_data, colWidths=[1.5*inch, 1.5*inch, 1.5*inch, 1.5*inch])
         table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#366092')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),

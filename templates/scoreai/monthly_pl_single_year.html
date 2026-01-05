@@ -1,0 +1,445 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <h4 class="fw-semibold mb-0">月次PL</h4>
+      <div class="d-flex gap-2 flex-wrap">
+        <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn btn-outline-primary btn-sm">月次PL一覧（3期比較）</a>
+        <a href="{% url 'latest_monthly_pl' %}" class="btn btn-primary btn-sm">単年度月次PL</a>
+        <a href="{% url 'budget_vs_actual_monthly' %}" class="btn btn-outline-primary btn-sm">予算vs実績推移表</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <div class="d-flex align-items-center gap-2">
+          <h5 class="card-title mb-0 fw-semibold">単年度月次PL</h5>
+          {% if available_years %}
+          <select id="year-select" class="form-select form-select-sm" style="width: 110px;">
+            {% for year in available_years %}
+            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
+            {% endfor %}
+          </select>
+          <select id="is-budget-select" class="form-select form-select-sm" style="width: 80px;">
+            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
+            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
+          </select>
+          {% endif %}
+        </div>
+      </div>
+      <div class="card-body">
+        {% if data_not_found %}
+        <div class="alert alert-warning mb-3" role="alert">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          {% if data_not_found_year %}
+            {{ data_not_found_year }}年{% if data_not_found_is_budget %}・予算{% else %}・実績{% endif %}のデータが見つかりませんでした。
+          {% else %}
+            選択された年度・予算/実績のデータが見つかりませんでした。
+          {% endif %}
+        </div>
+        {% endif %}
+        {% if not monthly_data %}
+        <div class="alert alert-danger" role="alert">
+          <i class="fas fa-exclamation-circle me-2"></i>表示するデータがありません。
+        </div>
+        {% else %}
+        <div class="fiscal-summary-table-container">
+          <table class="table table-hover" id="monthly-pl-table">
+            <thead class="table-light">
+              <tr>
+                <th></th>
+                {% for month in monthly_data %}
+                <th class="text-center">
+                  {{ month.display_month }}月
+                  {% if fiscal_summary_year and fiscal_summary_year.is_budget %}
+                  <i class="ti ti-alert-circle text-warning ms-1" title="予算データ" style="font-size: 0.9em;"></i>
+                  {% endif %}
+                </th>
+                {% endfor %}
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <tr>
+                <td style="writing-mode: vertical-rl; text-orientation: center;">売上高</td>
+                {% for month in monthly_data %}
+                <td class="text-end equal-width">{% if month.id %}{{ month.sales|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_sales|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.gross_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_gross_profit|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.gross_profit_rate|floatformat:1 }}%{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_gross_profit_rate|floatformat:1 }}%</td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.operating_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_operating_profit|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.operating_profit_rate|floatformat:1 }}%{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_operating_profit_rate|floatformat:1 }}%</td>
+              </tr>
+              <tr>
+                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.ordinary_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_ordinary_profit|floatformat:0|intcomma }}</td>
+              </tr>
+              <tr class="bg-light">
+                {% for month in monthly_data %}
+                <td class="text-end">{% if month.id %}{{ month.ordinary_profit_rate|floatformat:1 }}%{% else %}-{% endif %}</td>
+                {% endfor %}
+                <td class="text-end">{{ total_ordinary_profit_rate|floatformat:1 }}%</td>
+              </tr>
+            </tbody>
+            <tfoot class="table-group-divider">
+              <tr>
+                <td>操作</td>
+                {% for month in monthly_data %}
+                <td class="text-end">
+                  {% if month.id %}
+                  <a href="{% url 'fiscal_summary_month_update' month.id %}"><i class="fa-solid fa-pen-to-square"></i></a>
+                  {% else %}
+                  -
+                  {% endif %}
+                </td>
+                {% endfor %}
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        {% endif %}
+      </div>
+      <div class="card-footer text-end">
+        <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
+        <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .fiscal-summary-table-container {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  .fiscal-summary-table-container::-webkit-scrollbar {
+    height: 12px;
+  }
+  .fiscal-summary-table-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+  }
+  .fiscal-summary-table-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+  }
+  .fiscal-summary-table-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  #monthly-pl-table {
+    min-width: max-content;
+  }
+  #monthly-pl-table th,
+  #monthly-pl-table td {
+    white-space: nowrap;
+  }
+  .equal-width {
+    width: 100px;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const yearSelect = document.getElementById('year-select');
+  const isBudgetSelect = document.getElementById('is-budget-select');
+  
+  if (yearSelect && isBudgetSelect) {
+    function updatePage() {
+      const year = yearSelect.value;
+      const isBudget = isBudgetSelect.value;
+      
+      const baseUrl = "{% url 'latest_monthly_pl' %}";
+      const url = new URL(baseUrl, window.location.origin);
+      url.searchParams.set('year', year);
+      url.searchParams.set('is_budget', isBudget);
+      window.location.href = url.toString();
+    }
+    
+    yearSelect.addEventListener('change', updatePage);
+    isBudgetSelect.addEventListener('change', updatePage);
+  }
+});
+</script>
+
+{% if monthly_data %}
+<div class="row mt-4">
+  <div class="col-lg-12 d-flex align-items-strech">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">月次推移PLチャート</h5>
+      </div>
+      <div class="card-body">
+        <canvas id="monthlyPLChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // テーブルからデータを抽出
+  const table = document.getElementById('monthly-pl-table');
+  if (!table) return;
+  
+  const labels = [];
+  const salesData = [];
+  const grossProfitData = [];
+  const operatingProfitData = [];
+  const ordinaryProfitData = [];
+  const grossProfitRateData = [];
+  const operatingProfitRateData = [];
+  const ordinaryProfitRateData = [];
+  
+  // ヘッダーから月のラベルを取得
+  const headerRow = table.querySelector('thead tr');
+  const headerCells = headerRow.querySelectorAll('th');
+  for (let i = 1; i < headerCells.length - 1; i++) { // 最初と最後（Total）をスキップ
+    const monthText = headerCells[i].textContent.trim();
+    // "5月" のような形式から "5月" を抽出（アイコンを除く）
+    const monthMatch = monthText.match(/(\d+)月/);
+    if (monthMatch) {
+      labels.push(monthMatch[0]);
+    } else {
+      labels.push(monthText);
+    }
+  }
+  
+  // テーブルの行を取得（rowspanを考慮）
+  const rows = table.querySelectorAll('tbody tr');
+  
+  // 売上高の行（最初の行）
+  if (rows.length >= 1) {
+    const salesRow = rows[0];
+    const salesCells = salesRow.querySelectorAll('td');
+    // 最初のセル（項目名）をスキップ、最後のセル（Total）をスキップ
+    for (let i = 1; i < salesCells.length - 1; i++) {
+      const cellText = salesCells[i].textContent.trim().replace(/,/g, '');
+      salesData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 粗利益の行（2行目、rowspan=2の最初の行）
+  if (rows.length >= 2) {
+    const grossProfitRow = rows[1];
+    const grossProfitCells = grossProfitRow.querySelectorAll('td');
+    // rowspanがあるので、最初のセルは項目名、次からデータ
+    for (let i = 1; i < grossProfitCells.length - 1; i++) {
+      const cellText = grossProfitCells[i].textContent.trim().replace(/,/g, '');
+      grossProfitData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 粗利益率の行（3行目、rowspan=2の2行目）
+  if (rows.length >= 3) {
+    const grossProfitRateRow = rows[2];
+    const grossProfitRateCells = grossProfitRateRow.querySelectorAll('td');
+    // rowspanの2行目なので、最初のセルは項目名がない
+    for (let i = 0; i < grossProfitRateCells.length - 1; i++) {
+      const cellText = grossProfitRateCells[i].textContent.trim().replace(/%/g, '').trim();
+      grossProfitRateData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 営業利益の行（4行目、rowspan=2の最初の行）
+  if (rows.length >= 4) {
+    const operatingProfitRow = rows[3];
+    const operatingProfitCells = operatingProfitRow.querySelectorAll('td');
+    for (let i = 1; i < operatingProfitCells.length - 1; i++) {
+      const cellText = operatingProfitCells[i].textContent.trim().replace(/,/g, '');
+      operatingProfitData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 営業利益率の行（5行目、rowspan=2の2行目）
+  if (rows.length >= 5) {
+    const operatingProfitRateRow = rows[4];
+    const operatingProfitRateCells = operatingProfitRateRow.querySelectorAll('td');
+    for (let i = 0; i < operatingProfitRateCells.length - 1; i++) {
+      const cellText = operatingProfitRateCells[i].textContent.trim().replace(/%/g, '').trim();
+      operatingProfitRateData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 経常利益の行（6行目、rowspan=2の最初の行）
+  if (rows.length >= 6) {
+    const ordinaryProfitRow = rows[5];
+    const ordinaryProfitCells = ordinaryProfitRow.querySelectorAll('td');
+    for (let i = 1; i < ordinaryProfitCells.length - 1; i++) {
+      const cellText = ordinaryProfitCells[i].textContent.trim().replace(/,/g, '');
+      ordinaryProfitData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // 経常利益率の行（7行目、rowspan=2の2行目）
+  if (rows.length >= 7) {
+    const ordinaryProfitRateRow = rows[6];
+    const ordinaryProfitRateCells = ordinaryProfitRateRow.querySelectorAll('td');
+    for (let i = 0; i < ordinaryProfitRateCells.length - 1; i++) {
+      const cellText = ordinaryProfitRateCells[i].textContent.trim().replace(/%/g, '').trim();
+      ordinaryProfitRateData.push(cellText === '-' ? 0 : parseFloat(cellText) || 0);
+    }
+  }
+  
+  // グラフを作成
+  const ctx = document.getElementById('monthlyPLChart');
+  if (!ctx) return;
+  
+  const monthlyPLChart = new Chart(ctx.getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: '売上高',
+          data: salesData,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          fill: true,
+        },
+        {
+          label: '粗利益',
+          data: grossProfitData,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          fill: true,
+        },
+        {
+          label: '営業利益',
+          data: operatingProfitData,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          fill: true,
+        },
+        {
+          label: '経常利益',
+          data: ordinaryProfitData,
+          borderColor: 'rgba(255, 206, 86, 1)',
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          fill: true,
+        },
+        {
+          label: '粗利益率',
+          data: grossProfitRateData,
+          type: 'line',
+          borderColor: 'rgba(255, 159, 64, 1)',
+          backgroundColor: 'rgba(255, 159, 64, 0.2)',
+          fill: false,
+          yAxisID: 'y1',
+        },
+        {
+          label: '営業利益率',
+          data: operatingProfitRateData,
+          type: 'line',
+          borderColor: 'rgba(153, 102, 255, 1)',
+          backgroundColor: 'rgba(153, 102, 255, 0.2)',
+          fill: false,
+          yAxisID: 'y1',
+        },
+        {
+          label: '経常利益率',
+          data: ordinaryProfitRateData,
+          type: 'line',
+          borderColor: 'rgba(255, 206, 86, 1)',
+          backgroundColor: 'rgba(255, 206, 86, 0.2)',
+          fill: false,
+          yAxisID: 'y1',
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          position: 'left',
+          grid: {
+            drawOnChartArea: true,
+          },
+          afterDraw: function (chart) {
+            const ctx = chart.ctx;
+            const yAxis = chart.scales.y;
+            const yValue = yAxis.getPixelForValue(0);
+            ctx.save();
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(yAxis.left, yValue);
+            ctx.lineTo(yAxis.right, yValue);
+            ctx.stroke();
+            ctx.restore();
+          }
+        },
+        y1: {
+          type: 'linear',
+          position: 'right',
+          beginAtZero: true,
+          grid: {
+            drawOnChartArea: true,
+          },
+          afterDraw: function (chart) {
+            const ctx = chart.ctx;
+            const yAxis = chart.scales.y1;
+            const yValue = yAxis.getPixelForValue(0);
+            ctx.save();
+            ctx.strokeStyle = 'blue';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(yAxis.left, yValue);
+            ctx.lineTo(yAxis.right, yValue);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      },
+    }
+  });
+});
+</script>
+{% endif %}
+{% endblock %}
+

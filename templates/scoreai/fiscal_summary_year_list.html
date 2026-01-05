@@ -48,11 +48,13 @@
 <!-- カード本体の終了タグの直前に JavaScript を追加 -->
 <script>
   function toggleDrafts(checkbox) {
+      const url = new URL(window.location.href);
       if (checkbox.checked) {
-          window.location.href = "{% url 'fiscal_summary_year_list' %}?is_draft=true";
+          url.searchParams.set('is_draft', 'true');
       } else {
-          window.location.href = "{% url 'fiscal_summary_year_list' %}";
+          url.searchParams.set('is_draft', 'false');
       }
+      window.location.href = url.toString();
   }
   
   // ページ読み込み時に下書きデータの表示状態を設定
@@ -71,7 +73,35 @@
 
   function updateYearsInPage(years) {
     const url = new URL(window.location.href);
-    url.searchParams.set('years_in_page', years);
+    if (years === 'all') {
+      url.searchParams.set('show_all', 'true');
+      url.searchParams.delete('years_in_page');
+      url.searchParams.delete('page_param');
+    } else {
+      url.searchParams.set('years_in_page', years);
+      url.searchParams.set('show_all', 'false');
+      url.searchParams.set('page_param', 1); // Reset to first page
+    }
+    window.location.href = url.toString();
+  }
+
+  function applyYearRange() {
+    const url = new URL(window.location.href);
+    const startYear = document.getElementById('startYear').value;
+    const endYear = document.getElementById('endYear').value;
+    
+    if (startYear) {
+      url.searchParams.set('start_year', startYear);
+    } else {
+      url.searchParams.delete('start_year');
+    }
+    
+    if (endYear) {
+      url.searchParams.set('end_year', endYear);
+    } else {
+      url.searchParams.delete('end_year');
+    }
+    
     url.searchParams.set('page_param', 1); // Reset to first page
     window.location.href = url.toString();
   }

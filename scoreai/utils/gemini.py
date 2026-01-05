@@ -1,23 +1,44 @@
 """
 Google Gemini API ユーティリティ関数
 """
+import warnings
+
+# FutureWarningを抑制（google-genaiへの移行が完了するまで）
+warnings.filterwarnings('ignore', category=FutureWarning, module='google.generativeai')
+
 try:
     import google.genai as genai
+    GENAI_PACKAGE = 'google.genai'
 except ImportError:
     # 後方互換性のため、古いパッケージも試す
-    import google.generativeai as genai
-    import warnings
-    warnings.warn(
-        "google.generativeai is deprecated. Please install google-genai package.",
-        DeprecationWarning,
-        stacklevel=2
-    )
+    try:
+        import google.generativeai as genai
+        GENAI_PACKAGE = 'google.generativeai'
+    except ImportError:
+        raise ImportError(
+            "Neither google.genai nor google.generativeai is installed. "
+            "Please install google-genai: pip install google-genai"
+        )
 
 from django.conf import settings
 import logging
 from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
+
+# 古いパッケージを使用している場合に警告を表示
+if GENAI_PACKAGE == 'google.generativeai':
+    logger.warning(
+        "google.generativeai is deprecated. Please install google-genai package: pip install google-genai"
+    )
+
+# パッケージタイプを確認（グローバル変数が定義されていない場合のフォールバック）
+if 'GENAI_PACKAGE' not in globals():
+    try:
+        import google.genai
+        GENAI_PACKAGE = 'google.genai'
+    except ImportError:
+        GENAI_PACKAGE = 'google.generativeai'  # フォールバック
 
 
 def initialize_gemini() -> None:

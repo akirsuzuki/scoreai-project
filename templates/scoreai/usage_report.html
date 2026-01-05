@@ -93,6 +93,9 @@
                   <h6 class="fw-semibold mb-0">OCR読み込み回数</h6>
                 </th>
                 <th class="border-bottom-0">
+                  <h6 class="fw-semibold mb-0">AI相談トークン数</h6>
+                </th>
+                <th class="border-bottom-0">
                   <h6 class="fw-semibold mb-0">操作</h6>
                 </th>
               </tr>
@@ -108,6 +111,9 @@
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ row.ocr|intcomma }}</p>
+                </td>
+                <td class="border-bottom-0">
+                  <p class="mb-0 fw-normal">{{ row.tokens|intcomma }}</p>
                 </td>
                 <td class="border-bottom-0">
                   {% if row.ai_consultation > 0 %}
@@ -250,6 +256,7 @@ const usageChart = new Chart(ctx, {
         backgroundColor: 'rgba(93, 135, 255, 0.1)',
         tension: 0.4,
         fill: true,
+        yAxisID: 'y',
       },
       {
         label: 'OCR読み込み回数',
@@ -258,6 +265,16 @@ const usageChart = new Chart(ctx, {
         backgroundColor: 'rgba(255, 99, 132, 0.1)',
         tension: 0.4,
         fill: true,
+        yAxisID: 'y',
+      },
+      {
+        label: 'AI相談トークン数',
+        data: chartData.tokens,
+        borderColor: 'rgb(75, 192, 192)',
+        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+        tension: 0.4,
+        fill: true,
+        yAxisID: 'y1',
       }
     ]
   },
@@ -274,9 +291,29 @@ const usageChart = new Chart(ctx, {
     },
     scales: {
       y: {
+        type: 'linear',
+        display: true,
+        position: 'left',
         beginAtZero: true,
         ticks: {
           stepSize: 1
+        },
+        title: {
+          display: true,
+          text: '回数'
+        }
+      },
+      y1: {
+        type: 'linear',
+        display: true,
+        position: 'right',
+        beginAtZero: true,
+        grid: {
+          drawOnChartArea: false,
+        },
+        title: {
+          display: true,
+          text: 'トークン数'
         }
       }
     }

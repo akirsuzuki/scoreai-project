@@ -18,7 +18,8 @@ crispy-bootstrap4
 psycopg2
 django_heroku
 dj-static
-google-generativeai
+google-genai
+# google-generativeai  # 非推奨: google-genaiに移行済み
 google-cloud-vision
 google-api-python-client
 google-auth-httplib2
