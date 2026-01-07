@@ -79,7 +79,12 @@ def chat_view(request: HttpRequest) -> HttpResponse:
     
     logger = logging.getLogger(__name__)
     response_message = None
-    debts = Debt.objects.all()
+    # N+1問題を回避するため、関連オブジェクトを事前取得
+    debts = Debt.objects.select_related(
+        'financial_institution',
+        'secured_type',
+        'company'
+    ).all()
 
     if request.method == 'POST':
         form = ChatForm(request.POST)

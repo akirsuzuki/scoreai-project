@@ -106,6 +106,7 @@
 
     tables.forEach(tableId => {
       const table = new DataTable(`#${tableId}`, {
+        responsive: true,
         scrollX: true,
         pageLength: 25,
         pagingType: 'full_numbers',

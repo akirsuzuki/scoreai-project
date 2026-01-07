@@ -10,10 +10,12 @@
 {% block head %}
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 {% endblock %}
@@ -130,8 +132,9 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // DataTable初期化 - 保証協会別テーブル
+    // DataTable初期化 - 保証協会別テーブル（レスポンシブ対応）
     const table1 = new DataTable('#debt_list_bySecuredType_table', {
+      responsive: true,
       scrollX: true,
       pageLength: 25,
       language: {
@@ -144,8 +147,9 @@
       pagingType: 'full_numbers'
     });
 
-    // DataTable初期化 - 金融機関別・保証別テーブル
+    // DataTable初期化 - 金融機関別・保証別テーブル（レスポンシブ対応）
     const table2 = new DataTable('#debt_list_byBankAndSecuredType_table', {
+      responsive: true,
       scrollX: true,
       pageLength: 25,
       language: {

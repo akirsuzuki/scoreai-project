@@ -18075,3 +18075,274 @@ INFO 2026-01-05 23:57:37,239 autoreload Watching for file changes with StatReloa
 WARNING 2026-01-05 23:57:37,461 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
 INFO 2026-01-05 23:57:40,879 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88294
 INFO 2026-01-06 06:25:58,562 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88294
+INFO 2026-01-06 06:58:49,624 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 06:58:50,263 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 06:58:51,442 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89806
+INFO 2026-01-06 07:09:33,954 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89660
+INFO 2026-01-06 07:11:38,128 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56470
+INFO 2026-01-06 07:11:43,315 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66794
+INFO 2026-01-06 07:14:24,718 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+WARNING 2026-01-06 07:14:24,766 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 07:14:31,489 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40775
+INFO 2026-01-06 07:16:51,787 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 07:16:52,299 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 07:16:52,828 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 07:16:57,305 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-06 07:16:57,664 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 07:16:57,984 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 07:17:08,619 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 07:17:08,959 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 07:17:09,260 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 07:17:36,501 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 07:17:36,856 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 07:17:37,193 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 07:17:48,851 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41067
+INFO 2026-01-06 07:18:23,802 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+WARNING 2026-01-06 07:18:23,873 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 07:18:33,611 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41067
+INFO 2026-01-06 07:20:21,243 basehttp "GET /debts_byBank/3/ HTTP/1.1" 200 34370
+INFO 2026-01-06 07:20:24,050 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 43381
+INFO 2026-01-06 07:20:28,388 basehttp "GET /debts_byBank/2/ HTTP/1.1" 200 36575
+INFO 2026-01-06 07:20:32,027 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41067
+INFO 2026-01-06 08:08:39,544 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41067
+INFO 2026-01-06 08:09:40,614 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 08:09:41,333 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:09:41,847 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:10:33,595 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-06 08:10:33,960 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:10:34,426 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:11:53,510 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41068
+INFO 2026-01-06 08:11:57,024 basehttp "GET /debts_byBank/2/ HTTP/1.1" 200 36575
+INFO 2026-01-06 08:12:36,318 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 08:12:36,728 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:12:37,216 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:12:49,075 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 37783
+INFO 2026-01-06 08:14:28,410 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41068
+INFO 2026-01-06 08:14:29,737 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+WARNING 2026-01-06 08:14:29,755 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 08:15:00,656 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 08:15:01,166 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:15:01,562 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:15:09,143 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 08:15:09,586 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:15:09,971 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:15:49,560 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-06 08:15:49,955 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:15:50,490 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:15:58,250 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 08:15:58,657 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 08:15:59,161 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 08:43:45,087 basehttp "GET /debts_all/ HTTP/1.1" 200 65183
+INFO 2026-01-06 08:43:45,130 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+WARNING 2026-01-06 08:43:45,134 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 08:43:50,753 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40980
+INFO 2026-01-06 08:43:55,470 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 38269
+INFO 2026-01-06 08:43:59,277 basehttp "GET /debts_bySecuredType/4/ HTTP/1.1" 200 35452
+INFO 2026-01-06 08:44:04,659 basehttp "GET /debts_bySecuredType/3/ HTTP/1.1" 200 35474
+INFO 2026-01-06 08:44:06,583 basehttp "GET /debts_bySecuredType/2/ HTTP/1.1" 200 36564
+INFO 2026-01-06 08:45:30,453 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73168
+INFO 2026-01-06 08:45:33,749 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-06 08:45:33,751 budget_views budget_monthly_all count: 12
+INFO 2026-01-06 08:45:33,753 budget_views actual_monthly_all count: 6
+INFO 2026-01-06 08:45:33,760 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-06 08:45:33,761 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-06 08:45:33,776 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-06 08:45:39,923 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37173
+INFO 2026-01-06 08:45:42,511 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32058
+INFO 2026-01-06 08:45:46,894 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45797
+INFO 2026-01-06 08:45:57,418 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36036
+INFO 2026-01-06 08:46:29,049 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73168
+INFO 2026-01-06 08:46:33,206 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52383
+INFO 2026-01-06 08:46:35,471 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-06 08:46:35,473 budget_views budget_monthly_all count: 12
+INFO 2026-01-06 08:46:35,474 budget_views actual_monthly_all count: 6
+INFO 2026-01-06 08:46:35,481 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-06 08:46:35,481 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-06 08:46:35,493 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-06 08:46:41,348 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40980
+INFO 2026-01-06 08:46:46,552 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 38269
+INFO 2026-01-06 08:46:48,237 basehttp "GET /debts_archived/ HTTP/1.1" 200 32824
+WARNING 2026-01-06 08:46:48,254 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 08:46:49,790 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-06 08:46:49,808 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2026-01-06 08:46:49,809 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2026-01-06 08:46:49,809 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2026-01-06 08:46:49,811 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2026-01-06 08:46:49,811 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2026-01-06 08:46:55,894 basehttp "GET /assigned-clients/ HTTP/1.1" 200 32952
+INFO 2026-01-06 08:47:05,230 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 38869
+INFO 2026-01-06 08:47:07,430 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 33568
+INFO 2026-01-06 08:47:09,766 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-06 08:49:19,564 basehttp "GET /debts_byBank/ HTTP/1.1" 200 40980
+INFO 2026-01-06 12:32:13,464 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41014
+INFO 2026-01-06 12:32:13,542 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-06 12:32:19,838 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39183
+INFO 2026-01-06 12:32:24,592 basehttp "GET /debts_archived/ HTTP/1.1" 200 32824
+WARNING 2026-01-06 12:32:24,621 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-06 12:32:26,298 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-06 12:38:09,945 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-06 12:38:16,747 basehttp "GET /budget/analysis/?year=2025 HTTP/1.1" 200 35800
+INFO 2026-01-06 12:38:20,643 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-06 12:38:27,643 basehttp "GET /budget/analysis/?year=2025 HTTP/1.1" 200 35800
+INFO 2026-01-06 12:39:02,802 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-06 12:39:03,577 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 12:39:04,138 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-06 12:41:22,170 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-06 12:41:22,838 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-06 12:41:23,161 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 05:59:20,996 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-07 05:59:21,027 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-07 05:59:21,028 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-07 05:59:21,063 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-07 06:01:26,429 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-07 06:01:27,273 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 06:01:27,794 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 06:01:37,460 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 06:01:37,859 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 06:01:38,233 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 06:01:49,974 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 06:01:50,324 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 06:01:50,660 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 06:26:16,030 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-07 06:26:24,824 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41014
+INFO 2026-01-07 06:26:46,721 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39183
+INFO 2026-01-07 06:26:51,325 basehttp "GET /debts_all/ HTTP/1.1" 200 65283
+WARNING 2026-01-07 06:26:51,349 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 20:19:08,414 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 20:19:09,540 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 20:19:10,121 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 20:23:07,181 basehttp "GET /debts_all/ HTTP/1.1" 200 65283
+INFO 2026-01-07 20:23:07,225 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+WARNING 2026-01-07 20:23:07,229 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 20:23:09,187 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-07 20:23:17,770 basehttp "GET / HTTP/1.1" 200 60074
+INFO 2026-01-07 20:23:22,987 basehttp "GET /debts_all/ HTTP/1.1" 200 65283
+WARNING 2026-01-07 20:23:23,008 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:19:43,430 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 21:19:43,991 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:19:44,627 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:22:22,149 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 21:22:22,973 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:22:23,481 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:22:54,504 basehttp "GET /debts_all/ HTTP/1.1" 200 65283
+WARNING 2026-01-07 21:22:54,532 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:23:03,215 basehttp "GET /debts_all/ HTTP/1.1" 200 65283
+WARNING 2026-01-07 21:23:03,230 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:23:08,369 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-07 21:23:08,658 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:23:08,886 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:45:03,456 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:45:04,031 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:45:07,369 basehttp "GET /debts_all/ HTTP/1.1" 200 65287
+WARNING 2026-01-07 21:45:07,399 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:45:16,835 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 21:45:23,182 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-07 21:45:25,911 basehttp "GET /fiscal_summary_month/?years=3&start_year=2022&end_year=2025 HTTP/1.1" 200 84735
+INFO 2026-01-07 21:45:38,385 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-07 21:45:45,261 basehttp "GET /monthly-pl/single-year/?year=2025&is_budget=true HTTP/1.1" 200 54741
+INFO 2026-01-07 21:46:00,284 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-07 21:46:00,285 budget_views budget_monthly_all count: 12
+INFO 2026-01-07 21:46:00,285 budget_views actual_monthly_all count: 6
+INFO 2026-01-07 21:46:00,289 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-07 21:46:00,289 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-07 21:46:00,298 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-07 21:46:09,941 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56473
+INFO 2026-01-07 21:46:22,011 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66797
+INFO 2026-01-07 21:51:25,760 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 66797
+INFO 2026-01-07 21:52:34,555 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 21:53:07,637 basehttp "GET /debts_all/ HTTP/1.1" 200 65248
+WARNING 2026-01-07 21:53:07,664 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:53:27,649 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41235
+INFO 2026-01-07 21:54:59,199 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 21:55:39,206 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-07 21:55:39,728 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:55:40,558 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:55:45,928 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 21:55:48,484 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 21:55:52,356 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-07 21:55:52,926 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-07 21:55:53,192 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-07 21:55:55,933 basehttp "GET /debts_all/ HTTP/1.1" 200 65248
+WARNING 2026-01-07 21:55:55,965 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 21:56:00,048 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41235
+INFO 2026-01-07 21:58:16,536 basehttp "GET /debts_byBank/369/ HTTP/1.1" 200 34412
+INFO 2026-01-07 22:01:06,508 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41235
+INFO 2026-01-07 22:01:10,206 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 22:02:28,969 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 22:02:39,909 basehttp "GET / HTTP/1.1" 200 60076
+INFO 2026-01-07 22:02:44,106 basehttp "GET /debt/01HZNYJZ5X4CVJQP31DD8NRMBD/ HTTP/1.1" 200 44385
+INFO 2026-01-07 22:02:46,206 basehttp "GET /debt/01HZNYJZ5X4CVJQP31DD8NRMBD/update/ HTTP/1.1" 200 96807
+INFO 2026-01-07 22:02:46,228 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2026-01-07 22:02:46,230 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2026-01-07 22:02:46,241 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2026-01-07 22:02:46,240 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2026-01-07 22:02:46,241 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2026-01-07 22:02:50,619 basehttp "GET /debt/01HZNYJZ5X4CVJQP31DD8NRMBD/delete/ HTTP/1.1" 200 32491
+INFO 2026-01-07 22:02:53,393 basehttp "POST /debt/01HZNYJZ5X4CVJQP31DD8NRMBD/delete/ HTTP/1.1" 302 0
+INFO 2026-01-07 22:02:53,423 basehttp "GET /debts_all/ HTTP/1.1" 200 64619
+WARNING 2026-01-07 22:02:53,447 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-07 22:02:59,017 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-08 05:52:33,938 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-08 05:52:34,062 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+WARNING 2026-01-08 05:52:57,437 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+INFO 2026-01-08 05:52:57,594 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js.map HTTP/1.1" 200 333974
+INFO 2026-01-08 05:53:13,963 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+WARNING 2026-01-08 05:53:14,009 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+INFO 2026-01-08 05:53:15,756 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+WARNING 2026-01-08 05:53:15,786 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+INFO 2026-01-08 05:53:20,949 basehttp "GET /debts_all/ HTTP/1.1" 200 64492
+WARNING 2026-01-08 05:53:20,989 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+WARNING 2026-01-08 05:53:20,994 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-08 05:53:28,865 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490
+WARNING 2026-01-08 05:53:28,920 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+INFO 2026-01-08 05:53:44,173 basehttp "GET / HTTP/1.1" 200 60041
+WARNING 2026-01-08 05:53:44,217 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 48592
+INFO 2026-01-08 05:53:59,235 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-08 05:54:03,002 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-08 05:59:52,203 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35659
+INFO 2026-01-08 05:59:52,264 basehttp "GET /static/scoreai/js/form-validation.js HTTP/1.1" 200 9127
+INFO 2026-01-08 05:59:57,860 basehttp "GET / HTTP/1.1" 200 60258
+INFO 2026-01-08 05:59:57,880 basehttp "GET /static/scoreai/js/form-validation.js HTTP/1.1" 304 0
+INFO 2026-01-08 06:00:00,835 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-08 06:00:00,838 budget_views budget_monthly_all count: 12
+INFO 2026-01-08 06:00:00,839 budget_views actual_monthly_all count: 6
+INFO 2026-01-08 06:00:00,845 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-08 06:00:00,845 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-08 06:00:00,860 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50173
+INFO 2026-01-08 06:00:07,772 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73387
+INFO 2026-01-08 06:00:07,786 basehttp "GET /static/scoreai/js/form-validation.js HTTP/1.1" 304 0
+INFO 2026-01-08 06:00:10,359 basehttp "GET /debts_archived/ HTTP/1.1" 200 33053
+WARNING 2026-01-08 06:00:10,377 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-08 06:11:27,651 basehttp "GET /debts_archived/ HTTP/1.1" 200 32900
+WARNING 2026-01-08 06:11:27,678 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-08 06:11:27,731 basehttp "GET /static/scoreai/js/form-validation.js HTTP/1.1" 304 0
+INFO 2026-01-08 06:11:31,742 basehttp "GET / HTTP/1.1" 200 60105
+INFO 2026-01-08 06:27:02,140 autoreload /app/scoreai/views/helper_views.py changed, reloading.
+INFO 2026-01-08 06:27:03,372 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:27:04,013 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:27:14,795 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-08 06:27:15,307 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:27:15,541 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:27:24,088 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-08 06:27:24,416 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:27:24,647 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:27:34,187 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-08 06:27:34,536 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:27:34,806 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:27:43,339 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-08 06:27:43,681 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:27:44,007 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:28:02,818 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-08 06:28:03,237 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:28:03,579 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:28:13,169 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-08 06:28:13,495 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:28:13,914 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:28:36,935 autoreload /app/scoreai/views/utils.py changed, reloading.
+INFO 2026-01-08 06:28:37,328 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-08 06:28:37,567 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-08 06:30:49,200 basehttp "GET / HTTP/1.1" 200 60041
+INFO 2026-01-08 06:30:52,388 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-08 06:30:55,251 basehttp "GET /debts_all/ HTTP/1.1" 200 64492
+WARNING 2026-01-08 06:30:55,276 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-08 06:30:59,464 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490

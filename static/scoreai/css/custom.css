@@ -893,6 +893,153 @@ body {
    コピーライト表示（フッター削除後の最小限の表示）
    ============================================ */
 
+/* ============================================
+   レスポンシブデザイン - モバイルファースト
+   ============================================ */
+
+/* モバイルファースト: 基本スタイル（モバイル向け） */
+@media (max-width: 575.98px) {
+    /* カードのパディングを小さく */
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .card-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    /* テーブルを横スクロール可能に */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* ボタンサイズ調整 */
+    .btn-sm {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    /* タイトルサイズ調整 */
+    h4 {
+        font-size: 1.25rem;
+    }
+    
+    h5 {
+        font-size: 1.1rem;
+    }
+    
+    /* カードのマージン調整 */
+    .card {
+        margin-bottom: 1rem;
+    }
+    
+    /* グラフコンテナの高さ調整 */
+    canvas {
+        max-height: 300px;
+    }
+}
+
+/* タブレット対応 */
+@media (min-width: 576px) and (max-width: 991.98px) {
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    canvas {
+        max-height: 400px;
+    }
+}
+
+/* DataTablesレスポンシブ対応 */
+@media (max-width: 767.98px) {
+    /* DataTablesのレスポンシブ表示を改善 */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1rem;
+    }
+    
+    .dataTables_wrapper .dataTables_length select,
+    .dataTables_wrapper .dataTables_filter input {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+    /* テーブルを横スクロール可能に */
+    .dataTables_wrapper {
+        overflow-x: auto;
+    }
+    
+    /* ページネーションを中央揃え */
+    .dataTables_wrapper .dataTables_paginate {
+        text-align: center;
+    }
+    
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+        padding: 0.25rem 0.5rem;
+        margin: 0 0.125rem;
+    }
+}
+
+/* カード型レイアウトの改善（ダッシュボード用） */
+@media (max-width: 991.98px) {
+    /* カードを縦並びに */
+    .row > [class*="col-"] {
+        margin-bottom: 1rem;
+    }
+    
+    /* ダッシュボードのカードを全幅に */
+    .dashboard-card {
+        width: 100%;
+    }
+}
+
+/* 大画面での最適化 */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+}
+
+/* テーブルのレスポンシブ対応 */
+.table-responsive {
+    position: relative;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* DataTablesのレスポンシブテーブルスタイル */
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.child,
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty {
+    cursor: default !important;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* モバイルでのナビゲーションボタン調整 */
+@media (max-width: 575.98px) {
+    .d-flex.gap-2 {
+        gap: 0.5rem !important;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-group .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
 /* Blog/お知らせページのカテゴリー表示 */
 .announcement .list-group-item a,
 .blog .list-group-item a {

@@ -2262,6 +2262,14 @@ class DebtDetailView(SelectedCompanyMixin, DetailView):
     template_name = 'scoreai/debt_detail.html'
     context_object_name = 'debt'
 
+    def get_queryset(self):
+        """N+1問題を回避するため、関連オブジェクトを事前取得"""
+        return Debt.objects.select_related(
+            'financial_institution',
+            'secured_type',
+            'company'
+        ).filter(company=self.this_company)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)

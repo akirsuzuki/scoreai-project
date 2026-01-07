@@ -3,14 +3,15 @@
 {% load custom_filters %}
 
 <div class="row">
-  <div class="col-lg-8 d-flex align-items-stretch">
+  <div class="col-12 col-lg-8 d-flex align-items-stretch mb-3 mb-lg-0">
     <div class="card w-100">
       <div class="card-header">
         <h5 class="card-title fw-semibold">借入分析</h5>
       </div>
       <div class="card-body">
         <p>借入合計額</p>
-        <table id="debt_table" class="display table" >
+        <div class="table-responsive">
+        <table id="debt_table" class="display table w-100" >
           <thead>
             <tr>
               <th>金融機関 / 元本(千円)<br>ステータス</th>
@@ -36,31 +37,30 @@
             {% endfor %}
           </tbody>
         </table>
-        <div class="d-flex justify-content-end">
-          <h5>合計：{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }} 千円</h5>
-          <br>
+        </div>
+        <div class="d-flex justify-content-end mt-3">
+          <h5 class="mb-0">合計：{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }} 千円</h5>
         </div>
       </div>
       <div class="card-footer">
-        <div class="d-flex justify-content-end">
-          <a href="{% url 'debts_all' %}" class="btn btn-primary m-1">全ての借入を見る</a>
-          <span class="mx-2"></span>
-          <a href="{% url 'debt_create' %}" class="btn btn-primary m-1">新規借入登録</a>
+        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
+          <a href="{% url 'debts_all' %}" class="btn btn-primary">全ての借入を見る</a>
+          <a href="{% url 'debt_create' %}" class="btn btn-primary">新規借入登録</a>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-lg-4">
-    <div class="row">
-      <div class="col-lg-12">
+  <div class="col-12 col-lg-4 mt-3 mt-lg-0">
+    <div class="row g-3">
+      <div class="col-12 col-md-6 col-lg-12">
         {% include "scoreai/part_debt_byBank.html" %}
       </div>
 
-      <div class="col-lg-12">
+      <div class="col-12 col-md-6 col-lg-12">
         {% include "scoreai/part_debt_bySecuredType.html" %}
       </div>
 
-      <div class="col-lg-12">
+      <div class="col-12 col-md-6 col-lg-12">
         {% include "scoreai/part_debt_weighted.html" %}
       </div>
     </div>
@@ -70,6 +70,7 @@
 
 <script>
   new DataTable('#debt_table', {
+    responsive: true,
     paging: false,
     scrollY: 600
   });
