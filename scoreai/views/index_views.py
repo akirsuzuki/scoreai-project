@@ -149,16 +149,15 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
 
-        # Calculate weighted_average_interest for each month
-        # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+        # Calculate weighted_average_interest for current month
+        # Formula: 当月利息合計 / 当月残高 * 12 * 100 = 加重平均金利（年利）
         # Multiply by 100 to convert to percentage
-        weighted_average_interest = [
-            (interest / balance * 100) if balance != 0 else 0
-            for interest, balance in zip(
-                12 * debt_list_totals['total_interest_amount_monthly'],
-                debt_list_totals['total_balances_monthly']
-            )
-        ]
+        if debt_list_totals['total_balances_monthly'][0] != 0:
+            weighted_average_interest = [
+                (12 * debt_list_totals['total_interest_amount_monthly'][0]) / debt_list_totals['total_balances_monthly'][0] * 100
+            ] + [0] * 11  # Keep list format for template compatibility
+        else:
+            weighted_average_interest = [0] * 12
 
         # 予算実績比較データを取得（最新年度、下書きも含む）
         latest_year = latest_years_with_draft[0] if latest_years_with_draft else timezone.now().year

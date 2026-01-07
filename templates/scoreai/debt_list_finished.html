@@ -4,13 +4,13 @@
 <div class="page-break"></div>
 
 <div class="row mt-4">
-  <div class="col-lg-12 d-flex align-items-strech">
+  <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-header">
         <h5 class="card-title fw-semibold">返済完了</h5>
       </div>
       <div class="card-body">
-        <table id="finished_debt_list" class="display nowrap" style="width:100%">
+        <table id="finished_debt_list" class="display nowrap w-100">
           <thead>
             <tr>
               <th>金融機関</th>
@@ -63,6 +63,7 @@
   // Add a new DataTable for the completed debt list
   new DataTable('#finished_debt_list', {
     scrollX: true,
+    pagingType: 'full_numbers',
     footerCallback: function (row, data, start, end, display) {
       let api = this.api();
       // Remove the formatting to get integer data for summation

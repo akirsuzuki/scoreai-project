@@ -2412,13 +2412,15 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
         debt_list_bySecuredByManagement = get_debt_list_byAny('is_securedby_management', debt_list)
         debt_list_byCollateraled = get_debt_list_byAny('is_collateraled', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
-        # Calculate weighted_average_interest for each month
-        # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+        # Calculate weighted_average_interest for current month
+        # Formula: 当月利息合計 / 当月残高 * 12 * 100 = 加重平均金利（年利）
         # Multiply by 100 to convert to percentage
-        weighted_average_interest = [
-            (interest / balance * 100) if balance != 0 else 0
-            for interest, balance in zip(12*debt_list_totals['total_interest_amount_monthly'], debt_list_totals['total_balances_monthly'])
-        ]
+        if debt_list_totals['total_balances_monthly'][0] != 0:
+            weighted_average_interest = [
+                (12 * debt_list_totals['total_interest_amount_monthly'][0]) / debt_list_totals['total_balances_monthly'][0] * 100
+            ] + [0] * 11  # Keep list format for template compatibility
+        else:
+            weighted_average_interest = [0] * 12
 
         context.update({
             'title': '借入管理',
