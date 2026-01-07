@@ -2413,8 +2413,10 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
         debt_list_byCollateraled = get_debt_list_byAny('is_collateraled', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
         # Calculate weighted_average_interest for each month
+        # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+        # Multiply by 100 to convert to percentage
         weighted_average_interest = [
-            interest / balance if balance != 0 else 0
+            (interest / balance * 100) if balance != 0 else 0
             for interest, balance in zip(12*debt_list_totals['total_interest_amount_monthly'], debt_list_totals['total_balances_monthly'])
         ]
 
@@ -2448,6 +2450,16 @@ class DebtsByBankListView(SelectedCompanyMixin, ListView):
         debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
+
+        # Calculate weighted average interest rate for each bank
+        for bank_debt in debt_list_byBank:
+            # Calculate weighted average interest rate using the same formula as weighted_average_interest
+            # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+            # Multiply by 100 to convert to percentage
+            if bank_debt['balances_monthly'][0] != 0:
+                bank_debt['weighted_average_interest'] = (12 * bank_debt['interest_amount_monthly'][0]) / bank_debt['balances_monthly'][0] * 100
+            else:
+                bank_debt['weighted_average_interest'] = 0
 
         context.update({
             'title': '借入管理',
@@ -2522,6 +2534,26 @@ class DebtsBySecuredTypeListView(SelectedCompanyMixin, ListView):
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
+
+        # Calculate weighted average interest rate for each secured type
+        for secured_debt in debt_list_bySecuredType:
+            # Calculate weighted average interest rate using the same formula as weighted_average_interest
+            # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+            # Multiply by 100 to convert to percentage
+            if secured_debt['balances_monthly'][0] != 0:
+                secured_debt['weighted_average_interest'] = (12 * secured_debt['interest_amount_monthly'][0]) / secured_debt['balances_monthly'][0] * 100
+            else:
+                secured_debt['weighted_average_interest'] = 0
+
+        # Calculate weighted average interest rate for each bank and secured type combination
+        for bank_secured_debt in debt_list_byBankAndSecuredType:
+            # Calculate weighted average interest rate using the same formula as weighted_average_interest
+            # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+            # Multiply by 100 to convert to percentage
+            if bank_secured_debt['balances_monthly'][0] != 0:
+                bank_secured_debt['weighted_average_interest'] = (12 * bank_secured_debt['interest_amount_monthly'][0]) / bank_secured_debt['balances_monthly'][0] * 100
+            else:
+                bank_secured_debt['weighted_average_interest'] = 0
 
         context.update({
             'title': '借入管理',
@@ -4284,6 +4316,7 @@ def get_debt_list_byAny(summary_field_label, debt_list):
                 'principal': 0,
                 'monthly_repayment': 0,
                 'balances_monthly': [0] * 12,  # Initialize with 12 zeros
+                'interest_amount_monthly': [0] * 12,  # Initialize with 12 zeros
                 'balance_fy1': 0,
             }
 
@@ -4291,9 +4324,10 @@ def get_debt_list_byAny(summary_field_label, debt_list):
         debt_list_byAny[debt[summary_field_label]]['monthly_repayment'] += debt['monthly_repayment']
         debt_list_byAny[debt[summary_field_label]]['balance_fy1'] += debt['balance_fy1']
 
-        # Sum up the monthly balances
+        # Sum up the monthly balances and interest amounts
         for i in range(12):
             debt_list_byAny[debt[summary_field_label]]['balances_monthly'][i] += debt['balances_monthly'][i]
+            debt_list_byAny[debt[summary_field_label]]['interest_amount_monthly'][i] += debt['interest_amount_monthly'][i]
     # Convert the dictionary to a list of dictionaries
     debt_list_byAny = [{ summary_field_label: summary_field, **values} for summary_field, values in debt_list_byAny.items()]
 
@@ -4309,6 +4343,7 @@ def get_debt_list_byBankAndSecuredType(debt_list):
                 'principal': 0,
                 'monthly_repayment': 0,
                 'balances_monthly': [0] * 12,  # Initialize with 12 zeros
+                'interest_amount_monthly': [0] * 12,  # Initialize with 12 zeros
                 'balance_fy1': 0,
             }
 
@@ -4316,9 +4351,10 @@ def get_debt_list_byBankAndSecuredType(debt_list):
         debt_list_byBankAndSecuredType[key]['monthly_repayment'] += debt['monthly_repayment']
         debt_list_byBankAndSecuredType[key]['balance_fy1'] += debt['balance_fy1']
 
-        # Sum up the monthly balances
+        # Sum up the monthly balances and interest amounts
         for i in range(12):
             debt_list_byBankAndSecuredType[key]['balances_monthly'][i] += debt['balances_monthly'][i]
+            debt_list_byBankAndSecuredType[key]['interest_amount_monthly'][i] += debt['interest_amount_monthly'][i]
 
     # Convert the dictionary to a list of dictionaries
     debt_list_byBankAndSecuredType = [

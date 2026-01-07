@@ -65,6 +65,7 @@
 <script>
   new DataTable('#rescheduled_debt_list', {
     scrollX: true,
+    pagingType: 'full_numbers',
     footerCallback: function (row, data, start, end, display) {
       let api = this.api();
       // Remove the formatting to get integer data for summation

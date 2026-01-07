@@ -150,8 +150,10 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
 
         # Calculate weighted_average_interest for each month
+        # Formula: 12 * interest_amount_monthly[0] / balances_monthly[0] * 100 if balance != 0 else 0
+        # Multiply by 100 to convert to percentage
         weighted_average_interest = [
-            interest / balance if balance != 0 else 0
+            (interest / balance * 100) if balance != 0 else 0
             for interest, balance in zip(
                 12 * debt_list_totals['total_interest_amount_monthly'],
                 debt_list_totals['total_balances_monthly']

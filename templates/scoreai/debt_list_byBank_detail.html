@@ -140,6 +140,7 @@
         url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
       },
       order: [[4, 'desc']], // 実行日で降順ソート
+      pagingType: 'full_numbers',
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
         let intVal = function (i) {

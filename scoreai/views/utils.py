@@ -588,6 +588,7 @@ def get_debt_list_byAny(
                 'principal': 0,
                 'monthly_repayment': 0,
                 'balances_monthly': [0] * 12,  # Initialize with 12 zeros
+                'interest_amount_monthly': [0] * 12,  # Initialize with 12 zeros
                 'balance_fy1': 0,
             }
 
@@ -595,9 +596,10 @@ def get_debt_list_byAny(
         debt_list_byAny[debt[summary_field_label]]['monthly_repayment'] += debt['monthly_repayment']
         debt_list_byAny[debt[summary_field_label]]['balance_fy1'] += debt['balance_fy1']
 
-        # Sum up the monthly balances
+        # Sum up the monthly balances and interest amounts
         for i in range(12):
             debt_list_byAny[debt[summary_field_label]]['balances_monthly'][i] += debt['balances_monthly'][i]
+            debt_list_byAny[debt[summary_field_label]]['interest_amount_monthly'][i] += debt['interest_amount_monthly'][i]
     # Convert the dictionary to a list of dictionaries
     debt_list_byAny = [{summary_field_label: summary_field, **values} for summary_field, values in debt_list_byAny.items()]
 
@@ -640,6 +642,7 @@ def get_debt_list_byBankAndSecuredType(
                 'principal': 0,
                 'monthly_repayment': 0,
                 'balances_monthly': [0] * 12,  # Initialize with 12 zeros
+                'interest_amount_monthly': [0] * 12,  # Initialize with 12 zeros
                 'balance_fy1': 0,
             }
 
@@ -647,9 +650,10 @@ def get_debt_list_byBankAndSecuredType(
         debt_list_byBankAndSecuredType[key]['monthly_repayment'] += debt['monthly_repayment']
         debt_list_byBankAndSecuredType[key]['balance_fy1'] += debt['balance_fy1']
 
-        # Sum up the monthly balances
+        # Sum up the monthly balances and interest amounts
         for i in range(12):
             debt_list_byBankAndSecuredType[key]['balances_monthly'][i] += debt['balances_monthly'][i]
+            debt_list_byBankAndSecuredType[key]['interest_amount_monthly'][i] += debt['interest_amount_monthly'][i]
 
     # Convert the dictionary to a list of dictionaries
     debt_list_byBankAndSecuredType = [

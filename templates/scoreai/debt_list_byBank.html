@@ -61,6 +61,7 @@
                 <th>合計月返済額</th>
                 <th>合計現在残高<br>シェア</th>
                 <th>合計今期末残高<br>シェア</th>
+                <th>加重平均金利</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -74,9 +75,10 @@
                   <br>{{debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
                 <td>{{ debt.balance_fy1|to_thousands|intcomma}}
                   <br>{{debt.balance_fy1|percentage:debt_list_totals.total_balance_fy1 }}</td>
+                <td>{{ debt.weighted_average_interest|floatformat:2 }}%</td>
                 <td>
                   <a href="{% url 'debts_byBank_detail' debt.financial_institution.id %}" class="btn btn-sm btn-primary">
-                    <i class="ti ti-arrow-right me-1"></i>詳細
+                    <i class="ti ti-arrow-right"></i>
                   </a>
                 </td>
               </tr>
@@ -114,7 +116,8 @@
       order: [[0, 'asc']], // 銀行名で昇順ソート
       dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rtip',
       pageLength: 25,
-      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "すべて"]]
+      lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "すべて"]],
+      pagingType: 'full_numbers'
     });
 
     // Chart.js初期化
