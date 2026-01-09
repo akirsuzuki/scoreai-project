@@ -38,27 +38,7 @@
       </div>
       <div class="card-body">
         <div class="mb-3">
-          <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-              <label for="yearsInPage" class="form-label mb-0">表示する年数:</label>
-              <select id="yearsInPage" class="form-select form-select-sm" style="width: 80px; min-width: 80px;" onchange="updateYearsInPage(this.value)">
-                  <option value="5" {% if years_in_page == 5 %}selected{% endif %}>5</option>
-                  <option value="7" {% if years_in_page == 7 %}selected{% endif %}>7</option>
-                  <option value="10" {% if years_in_page == 10 %}selected{% endif %}>10</option>
-                  <option value="all" {% if show_all %}selected{% endif %}>全期間</option>
-              </select>
-            </div>
-            <div class="d-flex align-items-center gap-2 flex-wrap">
-              <label for="startYear" class="form-label mb-0">開始年度:</label>
-              <input type="number" id="startYear" class="form-control form-control-sm" style="width: 100px;" 
-                     value="{{ start_year|default:min_year }}" min="{{ min_year }}" max="{{ max_year }}" 
-                     placeholder="{{ min_year }}">
-              <label for="endYear" class="form-label mb-0">終了年度:</label>
-              <input type="number" id="endYear" class="form-control form-control-sm" style="width: 100px;" 
-                     value="{{ end_year|default:max_year }}" min="{{ min_year }}" max="{{ max_year }}" 
-                     placeholder="{{ max_year }}">
-              <button type="button" class="btn btn-sm btn-outline-primary" onclick="applyYearRange()">適用</button>
-            </div>
+          <div class="d-flex justify-content-end align-items-center flex-wrap gap-3 mb-3">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="showDrafts" onchange="toggleDrafts(this)" {% if is_draft %}checked{% endif %}>
               <label class="form-check-label" for="showDrafts">

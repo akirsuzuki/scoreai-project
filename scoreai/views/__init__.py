@@ -52,6 +52,12 @@ from .utils import (
 # Helper views
 from .helper_views import select_company, chat_view
 
+# Export views
+from .export_views import (
+    export_debts,
+    export_fiscal_summary_year,
+)
+
 # OCR views
 from .ocr_views import ImportFiscalSummaryFromOcrView
 
@@ -297,6 +303,9 @@ __all__ = [
     # Helper functions
     'select_company',
     'chat_view',
+    # Export
+    'export_debts',
+    'export_fiscal_summary_year',
     # OCR
     'ImportFiscalSummaryFromOcrView',
     # Budget

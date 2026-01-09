@@ -1601,7 +1601,7 @@ def download_fiscal_summary_month_csv(request, param=None):
 ##########################################################################
 
 # CSVを編集してからアップロードする
-class ImportFiscalSummary_Month(SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Month(SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month.html"
     form_class = CsvUploadForm
     success_url = reverse_lazy('fiscal_summary_month_list')
@@ -1669,15 +1669,29 @@ class ImportFiscalSummary_Month(SelectedCompanyMixin, FormView):
                     )
 
             messages.success(self.request, 'CSVファイルが正常にインポートされました。')
+        except UnicodeDecodeError as e:
+            logger.error(f"CSV encoding error in ImportFiscalSummary_Month: {e}", exc_info=True)
+            messages.error(self.request, 'CSVファイルの文字コードが正しくありません。Shift-JIS形式のファイルをアップロードしてください。')
+            return self.form_invalid(form)
+        except KeyError as e:
+            logger.error(f"CSV column error in ImportFiscalSummary_Month: {e}", exc_info=True)
+            messages.error(self.request, f'CSVファイルの列名が正しくありません。必要な列が見つかりません: {str(e)}')
+            return self.form_invalid(form)
+        except ValueError as e:
+            logger.error(f"CSV value error in ImportFiscalSummary_Month: {e}", exc_info=True)
+            messages.error(self.request, f'CSVファイルの値が正しくありません: {str(e)}')
+            return self.form_invalid(form)
         except Exception as e:
-            messages.error(self.request, f'CSVファイルの処理中にエラーが発生しました: {str(e)}')
+            logger.error(f"Unexpected error in ImportFiscalSummary_Month: {e}", exc_info=True,
+                        extra={'user': self.request.user.id if self.request.user.is_authenticated else None})
+            messages.error(self.request, 'CSVファイルの処理中にエラーが発生しました。管理者にお問い合わせください。')
             return self.form_invalid(form)
 
         return super().form_valid(form)
 
 
 # Moneyfowardの月次推移表をアップしたらそのまま変換してインポートする
-class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_month_MF.html"
     form_class = MoneyForwardCsvUploadForm_Month
     success_url = reverse_lazy('fiscal_summary_month_list')
@@ -1913,7 +1927,7 @@ class ImportFiscalSummary_Month_FromMoneyforward(SelectedCompanyMixin, FormView)
 
 
 # Moneyfowardの試算表（貸借対照表と損益計算書）をアップしたらそのまま変換してインポートする
-class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, FormView):
+class ImportFiscalSummary_Year_FromMoneyforward(SelectedCompanyMixin, TransactionMixin, FormView):
     template_name = "scoreai/import_fiscal_summary_year_MF.html"
     form_class = MoneyForwardCsvUploadForm_Year
     success_url = None  # リダイレクトしない
@@ -2356,7 +2370,9 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
     paginate_by = 20
 
     def get_queryset(self):
-        """検索・フィルタリング機能付きクエリセット"""
+        """検索・フィルタリング機能付きクエリセット（django-filter使用）"""
+        from .filters import DebtFilter
+        
         queryset = Debt.objects.filter(
             company=self.this_company
         ).select_related(
@@ -2365,35 +2381,13 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
             'company'
         )
         
-        # 検索機能
-        search_query = self.request.GET.get('search', '')
-        if search_query:
-            queryset = queryset.filter(
-                Q(financial_institution__name__icontains=search_query) |
-                Q(financial_institution__short_name__icontains=search_query) |
-                Q(secured_type__name__icontains=search_query)
-            )
-        
-        # フィルタリング機能
-        financial_institution_id = self.request.GET.get('financial_institution')
-        if financial_institution_id:
-            queryset = queryset.filter(financial_institution_id=financial_institution_id)
-        
-        secured_type_id = self.request.GET.get('secured_type')
-        if secured_type_id:
-            queryset = queryset.filter(secured_type_id=secured_type_id)
-        
-        is_rescheduled = self.request.GET.get('is_rescheduled')
-        if is_rescheduled == 'true':
-            queryset = queryset.filter(is_rescheduled=True)
-        elif is_rescheduled == 'false':
-            queryset = queryset.filter(is_rescheduled=False)
-        
-        is_nodisplay = self.request.GET.get('is_nodisplay')
-        if is_nodisplay == 'true':
-            queryset = queryset.filter(is_nodisplay=True)
-        elif is_nodisplay == 'false':
-            queryset = queryset.filter(is_nodisplay=False)
+        # django-filterを使用したフィルタリング
+        debt_filter = DebtFilter(
+            self.request.GET,
+            queryset=queryset,
+            company=self.this_company
+        )
+        queryset = debt_filter.qs
         
         # ソート機能
         order_by = self.request.GET.get('order_by', '-issue_date')
@@ -2403,10 +2397,21 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
         return queryset
 
     def get_context_data(self, **kwargs):
+        from .filters import DebtFilter
+        
         context = super().get_context_data(**kwargs)
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(self.this_company)
         
-        # 検索・フィルタリング用のコンテキスト
+        # django-filterを使用したフィルタリング
+        queryset = Debt.objects.filter(company=self.this_company)
+        debt_filter = DebtFilter(
+            self.request.GET,
+            queryset=queryset,
+            company=self.this_company
+        )
+        context['filter'] = debt_filter
+        
+        # 検索・フィルタリング用のコンテキスト（後方互換性のため保持）
         context['financial_institutions'] = FinancialInstitution.objects.all().order_by('name')
         context['secured_types'] = SecuredType.objects.all().order_by('name')
         context['search_query'] = self.request.GET.get('search', '')
@@ -2420,15 +2425,12 @@ class DebtsAllListView(SelectedCompanyMixin, ListView):
         debt_list_bySecuredByManagement = get_debt_list_byAny('is_securedby_management', debt_list)
         debt_list_byCollateraled = get_debt_list_byAny('is_collateraled', debt_list)
         debt_list_byBankAndSecuredType = get_debt_list_byBankAndSecuredType(debt_list)
-        # Calculate weighted_average_interest for current month
-        # Formula: 当月利息合計 / 当月残高 * 12 * 100 = 加重平均金利（年利）
-        # Multiply by 100 to convert to percentage
-        if debt_list_totals['total_balances_monthly'][0] != 0:
-            weighted_average_interest = [
-                (12 * debt_list_totals['total_interest_amount_monthly'][0]) / debt_list_totals['total_balances_monthly'][0] * 100
-            ] + [0] * 11  # Keep list format for template compatibility
-        else:
-            weighted_average_interest = [0] * 12
+        # Calculate weighted_average_interest using service layer
+        from .services.debt_service import DebtService
+        weighted_average_interest = DebtService.calculate_weighted_average_interest(
+            debt_list_totals['total_interest_amount_monthly'],
+            debt_list_totals['total_balances_monthly']
+        )
 
         context.update({
             'title': '借入管理',
@@ -4220,95 +4222,10 @@ def get_monthly_summaries(this_company, num_years=5):
 
 
 # 選択済みの会社のDebtデータを取得
+# 後方互換性のため残されていますが、内部ではDebtServiceを使用します
 def get_debt_list(this_company):
-    # 対象となる借入の絞り込み
-    # N+1問題を回避するため、関連オブジェクトを事前取得
-    debts = Debt.objects.filter(
-        company=this_company
-    ).select_related(
-        'financial_institution',
-        'secured_type',
-        'company'
-    )
-
-    debt_list = []
-    debt_list_rescheduled = []
-    debt_list_nodisplay = []
-    debt_list_finished = []
-    total_monthly_repayment = 0
-    total_balances_monthly = [0] * 12  # Initialize with 12 zeros
-    total_interest_amount_monthly = [0] * 12  # Initialize with 12 zeros
-    total_balance_fy1 = 0
-    total_balance_fy2 = 0
-    total_balance_fy3 = 0
-    total_balance_fy4 = 0
-    total_balance_fy5 = 0
-    # 返済開始している or していないで処理を分ける
-    for debt in debts:
-        if debt.is_nodisplay == True:
-            debt_list_nodisplay.append(debt)
-        elif debt.is_rescheduled == True:
-            debt_list_rescheduled.append(debt)
-        elif debt.remaining_months < 1:
-            debt_list_finished.append(debt)
-        else:
-
-            total_monthly_repayment += debt.monthly_repayment
-            total_balance_fy1 += debt.balance_fy1
-            total_balance_fy2 += debt.balance_fy2
-            total_balance_fy3 += debt.balance_fy3
-            total_balance_fy4 += debt.balance_fy4
-            total_balance_fy5 += debt.balance_fy5
-            for i in range(12):
-                total_balances_monthly[i] += debt.balances_monthly[i]
-                total_interest_amount_monthly[i] += debt.interest_amount_monthly[i]
-            debt_data = {
-                'id': debt.id,
-                'company': debt.company.name,
-                'financial_institution': debt.financial_institution,
-                'financial_institution_short_name': debt.financial_institution.short_name,
-                'principal': debt.principal,
-                'issue_date': debt.issue_date,
-                'start_date': debt.start_date,
-                'interest_rate': debt.interest_rate,
-                'monthly_repayment': debt.monthly_repayment,
-                'payment_terms': debt.payment_terms,
-                'secured_type': debt.secured_type,
-                'remaining_months': debt.remaining_months,
-                'adjusted_amount_first': debt.adjusted_amount_first,
-                'adjusted_amount_last': debt.adjusted_amount_last,
-                'balances_monthly': debt.balances_monthly,
-                'interest_amount_monthly': debt.interest_amount_monthly,
-                'is_securedby_management': debt.is_securedby_management,
-                'is_collateraled': debt.is_collateraled,
-                'is_rescheduled': debt.is_rescheduled,
-                'reschedule_date': debt.reschedule_date,
-                'reschedule_balance': debt.reschedule_balance,
-                'is_nodisplay': debt.is_nodisplay,
-                'balance_fy1': debt.balance_fy1,
-                'balance_fy2': debt.balance_fy2,
-                'balance_fy3': debt.balance_fy3,
-                'balance_fy4': debt.balance_fy4,
-                'balance_fy5': debt.balance_fy5
-            }
-            debt_list.append(debt_data)
-
-    # Sort debt_list by financial_institution and secured_type
-    debt_list.sort(key=lambda x: (x['financial_institution'].name, x['secured_type'].name))
-    # Add totals to the result
-    debt_list_totals = {
-        'total_monthly_repayment': total_monthly_repayment,
-        'total_balances_monthly': total_balances_monthly,
-        'total_interest_amount_monthly': total_interest_amount_monthly,
-        'total_balance_fy1': total_balance_fy1,
-        'total_balance_fy2': total_balance_fy2,
-        'total_balance_fy3': total_balance_fy3,
-        'total_balance_fy4': total_balance_fy4,
-        'total_balance_fy5': total_balance_fy5,
-
-    }
-
-    return debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished
+    from .services.debt_service import DebtService
+    return DebtService.get_debt_list_with_totals(this_company)
 
 
 ##########################################################################

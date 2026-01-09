@@ -102,67 +102,57 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const tables = ['active_debt_list'];
+    const table = new DataTable('#active_debt_list', {
+      responsive: true,
+      scrollX: true,
+      pageLength: 25,
+      pagingType: 'full_numbers',
+      footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+        // Remove the formatting to get integer data for summation
+        let intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+              ? i
+              : 0;
+        };
+        // Total over all pages
+        let principalTotal = api
+          .column(2)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        // Total over this page
+        let principalPageTotal = api
+          .column(2, { page: 'current' })
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 月返済額の合計
+        let monthlyRepaymentTotal = api
+          .column(7)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        let monthlyRepaymentPageTotal = api
+          .column(7, { page: 'current' })
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // Update footer
+        $(api.column(2).footer()).html('表示合計: ' + principalPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + principalTotal.toLocaleString('ja-JP') + '千円)');
+        $(api.column(7).footer()).html('表示合計: ' + monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + monthlyRepaymentTotal.toLocaleString('ja-JP') + '千円)');
+      }
+    });
 
-    tables.forEach(tableId => {
-      const table = new DataTable(`#${tableId}`, {
-        responsive: true,
-        scrollX: true,
-        pageLength: 25,
-        pagingType: 'full_numbers',
-        footerCallback: function (row, data, start, end, display) {
-          let api = this.api();
-          let intVal = function (i) {
-            return typeof i === 'string'
-              ? i.replace(/[\$,]/g, '') * 1
-              : typeof i === 'number'
-                ? i
-                : 0;
-          };
-          
-          // 合計を計算する列のインデックス
-          const columnsToSum = [
-            { index: 2, label: '元本' },      // principal
-            { index: 7, label: '月返済額' },   // monthly_repayment
-            { index: 11, label: '今月末残高' }, // balances_monthly.0
-            { index: 12, label: '今月概算利息' }, // interest_amount_monthly.0
-            { index: 13, label: '決算時残高' }  // balance_fy1
-          ];
-          
-          columnsToSum.forEach(function(col) {
-            // 全データの合計
-            let total = api
-              .column(col.index)
-              .data()
-              .reduce(function(a, b) {
-                return intVal(a) + intVal(b);
-              }, 0);
-            
-            // 現在のページの合計
-            let pageTotal = api
-              .column(col.index, { page: 'current' })
-              .data()
-              .reduce(function(a, b) {
-                return intVal(a) + intVal(b);
-              }, 0);
-            
-            // フォーマットして表示
-            api.column(col.index).footer().innerHTML =
-              pageTotal.toLocaleString('ja-JP') + '千円';
-          });
-        }
-      });
-
-      // Attach click event listener on table draw
-      table.on('draw', function () {
-        const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-        rows.forEach(row => {
-          row.addEventListener('click', function () {
-            const href = this.getAttribute('data-href');
-            if (href) {
-              window.location.href = href;
-            }
-          });
+    // 行クリックで詳細ページに遷移
+    table.on('draw', function () {
+      const rows = document.querySelectorAll('#active_debt_list tbody tr');
+      rows.forEach(row => {
+        row.addEventListener('click', function () {
+          const href = this.getAttribute('data-href');
+          if (href) {
+            window.location.href = href;
+          }
         });
       });
     });

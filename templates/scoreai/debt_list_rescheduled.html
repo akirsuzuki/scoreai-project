@@ -13,6 +13,7 @@
           <thead>
             <tr>
               <th>金融機関</th>
+              <th>ステータス</th>
               <th>元本(千円)</th>
               <th>保証</th>
               <th>利息</th>
@@ -20,10 +21,15 @@
               <th>返済開始日</th>
               <th>月返済額</th>
               <th>残高シェア</th>
-              <th>リスケ日</th>
-              <th>リスケ金額</th>
+              <th>残り回数</th>
+              <th>支払回数</th>
+              <th>今月末残高</th>
+              <th>今月概算利息</th>
+              <th>決算時残高</th>
               <th>代表者保証</th>
               <th>担保</th>
+              <th>リスケ日</th>
+              <th>リスケ金額</th>
               <th>メモ</th>
             </tr>
           </thead>
@@ -31,6 +37,7 @@
             {% for debt in debt_list_rescheduled %}
             <tr data-href="{% url 'debt_detail' debt.id %}">
               <td>{{ debt.financial_institution.short_name }}</td>
+              <td>{% if debt.start_date < today %}返済中{% else %}<span class="text-danger">【 返済前 】</span>{% endif %}</td>
               <td>{{ debt.principal|to_thousands|intcomma}}</td>
               <td>{{ debt.secured_type }}</td>
               <td>{{ debt.interest_rate }}%</td>
@@ -38,17 +45,34 @@
               <td>{{ debt.start_date|date:"y年n月" }}</td>
               <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
               <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
+              <td>{{ debt.remaining_months }}</td>
+              <td>{{ debt.payment_terms }}</td>
+              <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
+              <td>{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
+              <td>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+              <td>{% if debt.is_securedby_management %}あり{% else %}なし{% endif %}</td>
+              <td>{% if debt.is_collateraled %}あり{% else %}なし{% endif %}</td>
               <td>{{ debt.reschedule_date }}</td>
-              <td>{{ debt.reschedule_balance }}</td>
-              <td>{% if debt.is_securedby_management %}あり{% else %}{% endif %}</td>
-              <td>{{ debt.is_collateraled }}</td>
+              <td>{{ debt.reschedule_balance|to_thousands|intcomma }}</td>
               <td>{{ debt.memo_short }}</td>
             </tr>
             {% endfor %}
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="4" style="text-align:right">合計：</th>
+              <th colspan="2" style="text-align:right">合計：</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
               <th></th>
               <th></th>
               <th></th>
@@ -63,42 +87,52 @@
 </div>
 
 <script>
-  new DataTable('#rescheduled_debt_list', {
-    responsive: true,
-    scrollX: true,
-    pagingType: 'full_numbers',
-    footerCallback: function (row, data, start, end, display) {
-      let api = this.api();
-      // Remove the formatting to get integer data for summation
-      let intVal = function (i) {
-        return typeof i === 'string'
-          ? i.replace(/[\$,]/g, '') * 1
-          : typeof i === 'number'
-            ? i
-            : 0;
-      };
-      // Total over all pages
-      total = api
-        .column(1)
-        .data()
-        .reduce((a, b) => intVal(a) + intVal(b), 0);
-      // Total over this page
-      pageTotal = api
-        .column(1, { page: 'current' })
-        .data()
-        .reduce((a, b) => intVal(a) + intVal(b), 0);
-      // Update footer
-      api.column(1).footer().innerHTML =
-        '表示合計 :' + pageTotal + '千円 ( 総合計 :' + total + ' 千円)';
-    }
-  });
-
   document.addEventListener('DOMContentLoaded', function () {
-    // Update the selector to include all three tables
-    const tables = ['active_debt_list', 'rescheduled_debt_list', 'completed_debt_list'];
-    
-    tables.forEach(tableId => {
-      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
+    const table = new DataTable('#rescheduled_debt_list', {
+      responsive: true,
+      scrollX: true,
+      pageLength: 25,
+      pagingType: 'full_numbers',
+      footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+        // Remove the formatting to get integer data for summation
+        let intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+              ? i
+              : 0;
+        };
+        // Total over all pages
+        let principalTotal = api
+          .column(2)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        // Total over this page
+        let principalPageTotal = api
+          .column(2, { page: 'current' })
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 月返済額の合計
+        let monthlyRepaymentTotal = api
+          .column(7)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        let monthlyRepaymentPageTotal = api
+          .column(7, { page: 'current' })
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // Update footer
+        $(api.column(2).footer()).html('表示合計: ' + principalPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + principalTotal.toLocaleString('ja-JP') + '千円)');
+        $(api.column(7).footer()).html('表示合計: ' + monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + monthlyRepaymentTotal.toLocaleString('ja-JP') + '千円)');
+      }
+    });
+
+    // 行クリックで詳細ページに遷移
+    table.on('draw', function () {
+      const rows = document.querySelectorAll('#rescheduled_debt_list tbody tr');
       rows.forEach(row => {
         row.addEventListener('click', function () {
           const href = this.getAttribute('data-href');

@@ -118,6 +118,10 @@ from .views.budget_views import (
     BudgetAnalysisView,
 )
 from .views.stripe_webhook_views import StripeWebhookView
+from .views.export_views import (
+    export_debts,
+    export_fiscal_summary_year,
+)
 from .views import (
     # views.pyから再エクスポートされた関数
     add_client,
@@ -248,6 +252,8 @@ urlpatterns = [
     path('fiscal_summary_month/<str:pk>/delete/', FiscalSummary_MonthDeleteView.as_view(), name='fiscal_summary_month_delete'),
     # path('fiscal_summary_year/<int:pk>/csv_download/', download_fiscal_summary_year_csv, name='download_fiscal_summary_year_csv'),
     path('download_fiscal_summary_year_csv/<str:param>/', download_fiscal_summary_year_csv, name='download_fiscal_summary_year_csv_param'),
+    path('fiscal_summary_year/export/<str:format_type>/', export_fiscal_summary_year, name='export_fiscal_summary_year'),
+    path('fiscal_summary_year/<str:year_id>/export/<str:format_type>/', export_fiscal_summary_year, name='export_fiscal_summary_year_detail'),
     path('download_fiscal_summary_month_csv/<str:param>/', download_fiscal_summary_month_csv, name='download_fiscal_summary_month_csv_param'),
     path('import_fiscal_summary_month/', ImportFiscalSummary_Month.as_view(), name='import_fiscal_summary_month'),
     path('import_fiscal_summary_month_MF/', ImportFiscalSummary_Month_FromMoneyforward.as_view(), name='import_fiscal_summary_month_MF'),
@@ -258,6 +264,7 @@ urlpatterns = [
     path('get-monthly-totals/', FiscalSummary_YearCreateView.as_view(http_method_names=['get']), name='get_monthly_totals'),
     path('debt/create/', DebtCreateView.as_view(), name='debt_create'),
     path('debts_all/', DebtsAllListView.as_view(), name='debts_all'),
+    path('debts_all/export/<str:format_type>/', export_debts, name='export_debts'),
     path('debts_byBank/', DebtsByBankListView.as_view(), name='debts_byBank'),
     path('debts_byBank/<str:financial_institution_id>/', DebtsByBankDetailListView.as_view(), name='debts_byBank_detail'),
     path('debts_bySecuredType/', DebtsBySecuredTypeListView.as_view(), name='debts_bySecuredType'),

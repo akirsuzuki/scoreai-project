@@ -1,56 +1,47 @@
 """
 Google Gemini API ユーティリティ関数
+
+google.genaiパッケージを使用（google.generativeaiは非推奨）
 """
-import warnings
-
-# FutureWarningを抑制（google-genaiへの移行が完了するまで）
-warnings.filterwarnings('ignore', category=FutureWarning, module='google.generativeai')
-
-try:
-    import google.genai as genai
-    GENAI_PACKAGE = 'google.genai'
-except ImportError:
-    # 後方互換性のため、古いパッケージも試す
-    try:
-        import google.generativeai as genai
-        GENAI_PACKAGE = 'google.generativeai'
-    except ImportError:
-        raise ImportError(
-            "Neither google.genai nor google.generativeai is installed. "
-            "Please install google-genai: pip install google-genai"
-        )
-
-from django.conf import settings
 import logging
 from typing import Optional, Dict, Any
 
+from django.conf import settings
+
 logger = logging.getLogger(__name__)
 
-# 古いパッケージを使用している場合に警告を表示
-if GENAI_PACKAGE == 'google.generativeai':
+# 遅延インポート: google.genaiがインストールされていない場合でも
+# モジュールのインポートは成功するようにする
+genai = None
+try:
+    import google.genai as genai
+except ImportError:
     logger.warning(
-        "google.generativeai is deprecated. Please install google-genai package: pip install google-genai"
+        "google.genai is not installed. "
+        "Please install google-genai: pip install google-genai. "
+        "Gemini API機能は使用できません。"
     )
 
-# パッケージタイプを確認（グローバル変数が定義されていない場合のフォールバック）
-if 'GENAI_PACKAGE' not in globals():
-    try:
-        import google.genai
-        GENAI_PACKAGE = 'google.genai'
-    except ImportError:
-        GENAI_PACKAGE = 'google.generativeai'  # フォールバック
+
+def _check_genai_installed():
+    """google.genaiがインストールされているかチェック"""
+    if genai is None:
+        raise ImportError(
+            "google.genai is not installed. "
+            "Please install google-genai: pip install google-genai"
+        )
 
 
 def initialize_gemini() -> None:
-    """Gemini APIを初期化"""
+    """Gemini APIを初期化（環境変数でAPIキーを設定）"""
+    _check_genai_installed()
     if not hasattr(settings, 'GEMINI_API_KEY') or not settings.GEMINI_API_KEY:
         raise ValueError("GEMINI_API_KEYが設定されていません。環境変数を確認してください。")
-    # google.genaiの場合は異なる初期化方法を使用する可能性がある
-    if hasattr(genai, 'configure'):
-        genai.configure(api_key=settings.GEMINI_API_KEY)
-    elif hasattr(genai, 'Client'):
-        # google.genaiの新しいAPI
-        genai.Client(api_key=settings.GEMINI_API_KEY)
+    # google.genaiパッケージは環境変数GOOGLE_API_KEYまたはClientのapi_key引数で初期化
+    # 環境変数が設定されていない場合は、後でClient作成時にapi_keyを指定
+    import os
+    if 'GOOGLE_API_KEY' not in os.environ:
+        os.environ['GOOGLE_API_KEY'] = settings.GEMINI_API_KEY
 
 
 def get_available_models() -> list:
@@ -60,17 +51,31 @@ def get_available_models() -> list:
     Returns:
         利用可能なモデル名のリスト
     """
+    _check_genai_installed()
     try:
         initialize_gemini()
+        # Clientを作成してモデルリストを取得
+        import os
+        api_key = os.environ.get('GOOGLE_API_KEY') or settings.GEMINI_API_KEY
+        client = genai.Client(api_key=api_key)
+        
         # 利用可能なモデルを取得
-        models = genai.list_models()
-        available = []
-        for m in models:
-            # generateContentをサポートしているモデルのみを取得
-            if 'generateContent' in m.supported_generation_methods:
-                available.append(m.name.replace('models/', ''))
-        logger.info(f"Available models: {available}")
-        return available
+        try:
+            models = client.models.list()
+            available = []
+            for m in models:
+                # モデル名を取得
+                model_name = m.name if hasattr(m, 'name') else str(m)
+                # モデル名から 'models/' プレフィックスを削除
+                if model_name.startswith('models/'):
+                    model_name = model_name.replace('models/', '')
+                available.append(model_name)
+            logger.info(f"Available models: {available}")
+            return available if available else ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+        except Exception as e:
+            logger.warning(f"Failed to list models using client: {e}")
+            # フォールバック: デフォルトのモデルリストを返す
+            return ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
     except Exception as e:
         logger.warning(f"Failed to list models: {e}")
         # フォールバック: 一般的なモデル名のリスト
@@ -120,12 +125,17 @@ def get_gemini_response_with_tokens(
         {'text': str, 'input_tokens': int, 'output_tokens': int, 'total_tokens': int} の辞書
         エラー時はNone
     """
+    _check_genai_installed()
     try:
-        # APIキーが指定されている場合はそれを使用、そうでない場合はデフォルト
+        # APIキーの設定
         if api_key:
-            genai.configure(api_key=api_key)
+            import os
+            os.environ['GOOGLE_API_KEY'] = api_key
         else:
             initialize_gemini()
+        
+        # Clientを作成
+        client = genai.Client(api_key=api_key or settings.GEMINI_API_KEY)
         
         # モデルの設定
         generation_config = {
@@ -135,7 +145,7 @@ def get_gemini_response_with_tokens(
             "max_output_tokens": 8192,  # 回答文字数を増加（2048 → 8192）
         }
         
-        # モデルを初期化（複数のモデル名を試す）
+        # プロンプトを準備
         # system_instructionはモデルによってサポートされていない場合があるため、プロンプトに含める
         if system_instruction:
             full_prompt = f"{system_instruction}\n\n{prompt}"
@@ -154,25 +164,19 @@ def get_gemini_response_with_tokens(
             if fallback not in available_models:
                 available_models.append(fallback)
         
-        model_instance = None
+        response = None
         last_error = None
         
         for model_name in available_models:
             try:
                 logger.info(f"Trying model: {model_name}")
-                # google.genaiとgoogle.generativeaiで異なる可能性がある
-                if hasattr(genai, 'GenerativeModel'):
-                    model_instance = genai.GenerativeModel(
-                        model_name=model_name,
-                        generation_config=generation_config
-                    )
-                elif hasattr(genai, 'Client'):
-                    # google.genaiの新しいAPI（将来の移行用）
-                    client = genai.Client(api_key=api_key or settings.GEMINI_API_KEY)
-                    model_instance = client.models.generate_content
-                    # 注意: この部分は実際のgoogle.genai APIに合わせて調整が必要
-                else:
-                    raise ValueError("サポートされていないgenai APIです")
+                # google.genaiパッケージのClientを使用してコンテンツを生成
+                response = client.models.generate_content(
+                    model=model_name,
+                    contents=full_prompt,
+                    config=generation_config
+                )
+                
                 # モデルの初期化が成功したら、そのモデルを使用
                 logger.info(f"Successfully initialized model: {model_name}")
                 break
@@ -181,11 +185,8 @@ def get_gemini_response_with_tokens(
                 last_error = e
                 continue
         
-        if model_instance is None:
+        if response is None:
             raise ValueError(f"利用可能なGeminiモデルが見つかりませんでした。最後のエラー: {last_error}")
-        
-        # レスポンスを生成
-        response = model_instance.generate_content(full_prompt)
         
         # レスポンスの確認
         if not response:

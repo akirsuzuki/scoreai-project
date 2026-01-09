@@ -443,8 +443,7 @@ def get_debt_list(
     """
     選択済みの会社の借入データを取得し、集計情報を返します。
     
-    借入データを取得し、アクティブな借入、非表示の借入、リスケ済みの借入、
-    完済済みの借入に分類します。また、月次残高や決算期残高の集計も行います。
+    この関数は後方互換性のため残されていますが、内部ではDebtServiceを使用します。
     
     Args:
         this_company: 対象となる会社オブジェクト
@@ -463,92 +462,8 @@ def get_debt_list(
         >>> print(totals['total_monthly_repayment'])
         500000
     """
-    # 対象となる借入の絞り込み
-    # N+1問題を回避するため、関連オブジェクトを事前取得
-    debts = Debt.objects.filter(
-        company=this_company
-    ).select_related(
-        'financial_institution',
-        'secured_type',
-        'company'
-    )
-
-    debt_list = []
-    debt_list_rescheduled = []
-    debt_list_nodisplay = []
-    debt_list_finished = []
-    total_monthly_repayment = 0
-    total_balances_monthly = [0] * 12  # Initialize with 12 zeros
-    total_interest_amount_monthly = [0] * 12  # Initialize with 12 zeros
-    total_balance_fy1 = 0
-    total_balance_fy2 = 0
-    total_balance_fy3 = 0
-    total_balance_fy4 = 0
-    total_balance_fy5 = 0
-    # 返済開始している or していないで処理を分ける
-    for debt in debts:
-        if debt.is_nodisplay:
-            debt_list_nodisplay.append(debt)
-        elif debt.is_rescheduled:
-            debt_list_rescheduled.append(debt)
-        elif debt.remaining_months < 1:
-            debt_list_finished.append(debt)
-        else:
-            total_monthly_repayment += debt.monthly_repayment
-            total_balance_fy1 += debt.balance_fy1
-            total_balance_fy2 += debt.balance_fy2
-            total_balance_fy3 += debt.balance_fy3
-            total_balance_fy4 += debt.balance_fy4
-            total_balance_fy5 += debt.balance_fy5
-            for i in range(12):
-                total_balances_monthly[i] += debt.balances_monthly[i]
-                total_interest_amount_monthly[i] += debt.interest_amount_monthly[i]
-            debt_data = {
-                'id': debt.id,
-                'company': debt.company.name,
-                'financial_institution': debt.financial_institution,
-                'financial_institution_short_name': debt.financial_institution.short_name,
-                'principal': debt.principal,
-                'issue_date': debt.issue_date,
-                'start_date': debt.start_date,
-                'interest_rate': debt.interest_rate,
-                'monthly_repayment': debt.monthly_repayment,
-                'payment_terms': debt.payment_terms,
-                'secured_type': debt.secured_type,
-                'remaining_months': debt.remaining_months,
-                'adjusted_amount_first': debt.adjusted_amount_first,
-                'adjusted_amount_last': debt.adjusted_amount_last,
-                'balances_monthly': debt.balances_monthly,
-                'interest_amount_monthly': debt.interest_amount_monthly,
-                'is_securedby_management': debt.is_securedby_management,
-                'is_collateraled': debt.is_collateraled,
-                'is_rescheduled': debt.is_rescheduled,
-                'reschedule_date': debt.reschedule_date,
-                'reschedule_balance': debt.reschedule_balance,
-                'is_nodisplay': debt.is_nodisplay,
-                'balance_fy1': debt.balance_fy1,
-                'balance_fy2': debt.balance_fy2,
-                'balance_fy3': debt.balance_fy3,
-                'balance_fy4': debt.balance_fy4,
-                'balance_fy5': debt.balance_fy5
-            }
-            debt_list.append(debt_data)
-
-    # Sort debt_list by financial_institution and secured_type
-    debt_list.sort(key=lambda x: (x['financial_institution'].name, x['secured_type'].name))
-    # Add totals to the result
-    debt_list_totals = {
-        'total_monthly_repayment': total_monthly_repayment,
-        'total_balances_monthly': total_balances_monthly,
-        'total_interest_amount_monthly': total_interest_amount_monthly,
-        'total_balance_fy1': total_balance_fy1,
-        'total_balance_fy2': total_balance_fy2,
-        'total_balance_fy3': total_balance_fy3,
-        'total_balance_fy4': total_balance_fy4,
-        'total_balance_fy5': total_balance_fy5,
-    }
-
-    return debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished
+    from ..services.debt_service import DebtService
+    return DebtService.get_debt_list_with_totals(this_company)
 
 
 def get_debt_list_byAny(

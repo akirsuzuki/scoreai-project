@@ -18346,3 +18346,485 @@ INFO 2026-01-08 06:30:52,388 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1
 INFO 2026-01-08 06:30:55,251 basehttp "GET /debts_all/ HTTP/1.1" 200 64492
 WARNING 2026-01-08 06:30:55,276 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
 INFO 2026-01-08 06:30:59,464 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490
+INFO 2026-01-09 06:06:25,615 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:06:26,112 gemini google.generativeai is deprecated. Please install google-genai package: pip install google-genai
+INFO 2026-01-09 06:06:28,383 basehttp "GET / HTTP/1.1" 200 60041
+INFO 2026-01-09 06:06:28,413 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-09 06:06:28,417 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 200 21351
+INFO 2026-01-09 06:06:28,482 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-09 06:09:12,232 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:09:12,717 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:09:24,206 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:09:24,457 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:09:34,959 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:09:35,144 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:10:05,000 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:10:05,235 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:10:16,756 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:10:16,950 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:18:39,476 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 06:19:16,712 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:19:17,069 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:19:17,349 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:19:24,080 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:19:24,490 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:19:24,721 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:19:31,190 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:19:31,477 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:19:31,669 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:19:38,094 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:19:38,468 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:19:38,688 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:19:49,448 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 06:19:49,825 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:19:50,040 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:20:17,297 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:20:17,502 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:23:07,892 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-09 06:23:08,391 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:23:08,736 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:23:17,339 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-09 06:23:17,953 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:23:18,259 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:23:27,040 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-09 06:23:27,462 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:23:27,799 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:24:07,402 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-09 06:24:07,844 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:24:08,422 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:24:15,841 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-09 06:24:16,159 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:24:16,552 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:24:23,890 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-09 06:24:24,320 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:24:24,974 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:24:38,540 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-09 06:24:38,892 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:24:39,506 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:24:49,918 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-09 06:24:50,359 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:24:51,097 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 06:56:28,254 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 06:56:28,797 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 07:00:37,231 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 07:00:37,752 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 07:00:45,008 basehttp "GET / HTTP/1.1" 200 60041
+INFO 2026-01-09 07:00:48,141 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 07:00:59,191 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56473
+INFO 2026-01-09 07:01:07,089 basehttp "GET /fiscal_summary_year/01KDXXC5S4Q0HAZZPTR3K6PNWJ/detail/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:13,945 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:15,632 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50543
+INFO 2026-01-09 07:01:21,908 basehttp "GET /budget/vs-actual-yearly/?year=2023 HTTP/1.1" 200 49902
+INFO 2026-01-09 07:01:29,159 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:49,852 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:50,912 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56473
+INFO 2026-01-09 07:01:52,264 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:55,596 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56473
+INFO 2026-01-09 07:01:56,966 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:01:57,742 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50543
+INFO 2026-01-09 07:02:20,818 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56473
+INFO 2026-01-09 07:02:28,529 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89042
+INFO 2026-01-09 07:02:55,865 basehttp "GET /debts_all/ HTTP/1.1" 200 64492
+WARNING 2026-01-09 07:02:55,897 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 07:03:08,607 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43341
+INFO 2026-01-09 07:03:11,775 basehttp "GET /debt/01JDF29ZCD24SGVPKHN6CFCC32/ HTTP/1.1" 200 43312
+INFO 2026-01-09 07:03:15,671 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43341
+INFO 2026-01-09 07:03:24,658 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43413
+INFO 2026-01-09 07:03:30,371 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43413
+INFO 2026-01-09 07:03:53,447 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43413
+INFO 2026-01-09 07:04:40,225 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33578
+INFO 2026-01-09 07:04:42,630 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33226
+INFO 2026-01-09 07:04:49,020 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 37596
+INFO 2026-01-09 07:04:51,393 basehttp "GET /download_fiscal_summary_year_csv/sample/ HTTP/1.1" 200 1144
+INFO 2026-01-09 07:04:55,397 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 38365
+INFO 2026-01-09 07:05:04,616 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 37769
+INFO 2026-01-09 07:05:20,639 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/ HTTP/1.1" 200 32549
+INFO 2026-01-09 07:05:25,121 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 46633
+INFO 2026-01-09 07:05:42,121 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 07:05:48,526 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56587
+INFO 2026-01-09 07:05:50,035 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89153
+INFO 2026-01-09 07:05:51,417 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50543
+INFO 2026-01-09 07:07:29,114 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50543
+INFO 2026-01-09 07:07:33,344 basehttp "GET /debts_all/ HTTP/1.1" 200 66283
+WARNING 2026-01-09 07:07:33,375 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 07:07:47,415 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 44732
+INFO 2026-01-09 07:07:47,418 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 44732
+INFO 2026-01-09 07:07:50,575 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 44732
+INFO 2026-01-09 07:08:49,692 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490
+INFO 2026-01-09 07:08:52,454 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39289
+INFO 2026-01-09 07:08:55,033 basehttp "GET /debts_archived/ HTTP/1.1" 200 32836
+WARNING 2026-01-09 07:08:55,053 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 07:08:56,670 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-09 07:08:56,696 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2026-01-09 07:08:56,697 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2026-01-09 07:08:56,700 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2026-01-09 07:08:56,702 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2026-01-09 07:08:56,703 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2026-01-09 07:09:00,713 basehttp "GET /debts_all/ HTTP/1.1" 200 66283
+WARNING 2026-01-09 07:09:00,731 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 07:09:06,155 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50620
+INFO 2026-01-09 07:09:20,906 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89153
+INFO 2026-01-09 07:09:23,006 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56587
+INFO 2026-01-09 07:09:27,076 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50620
+INFO 2026-01-09 07:09:28,249 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89153
+INFO 2026-01-09 07:09:39,211 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56587
+INFO 2026-01-09 07:09:46,423 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89153
+INFO 2026-01-09 07:09:49,082 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 56587
+INFO 2026-01-09 07:10:13,022 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89153
+INFO 2026-01-09 07:10:46,406 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50620
+INFO 2026-01-09 07:11:42,040 basehttp "GET /debts_all/ HTTP/1.1" 200 66994
+WARNING 2026-01-09 07:11:42,100 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 07:11:50,029 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 45443
+INFO 2026-01-09 07:12:06,000 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 45443
+INFO 2026-01-09 07:14:37,386 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 07:14:39,748 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 07:14:41,074 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 07:14:41,075 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 07:14:41,077 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 07:14:41,084 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 07:14:41,084 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 07:14:41,094 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 07:14:44,213 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 07:14:45,654 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 07:14:47,183 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 07:14:50,457 basehttp "GET /budget/vs-actual-yearly/?year=2020 HTTP/1.1" 200 50071
+INFO 2026-01-09 07:14:54,022 basehttp "GET /budget/vs-actual-yearly/?year=2015 HTTP/1.1" 200 50053
+INFO 2026-01-09 07:14:57,370 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 07:15:02,635 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 07:15:03,951 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 07:15:06,365 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 07:15:17,496 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 07:15:18,629 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 07:15:22,894 basehttp "GET /fiscal_summary_year/?is_draft=false&start_year=2014&end_year= HTTP/1.1" 200 58142
+INFO 2026-01-09 07:15:25,123 basehttp "GET /fiscal_summary_year/?is_draft=false&start_year=2014&end_year=2022 HTTP/1.1" 200 55994
+INFO 2026-01-09 08:33:34,976 basehttp "GET /fiscal_summary_year/?is_draft=false&start_year=2014&end_year=2022 HTTP/1.1" 200 55994
+INFO 2026-01-09 08:33:35,000 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-09 08:33:38,384 basehttp "GET /debts_all/ HTTP/1.1" 200 68688
+WARNING 2026-01-09 08:33:38,404 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:33:43,630 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 46802
+INFO 2026-01-09 08:33:46,996 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 46802
+INFO 2026-01-09 08:33:49,182 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 46802
+INFO 2026-01-09 08:33:50,500 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 46802
+INFO 2026-01-09 08:33:56,728 basehttp "GET /debts_all/ HTTP/1.1" 200 68688
+WARNING 2026-01-09 08:33:56,745 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:33:59,951 basehttp "GET /debt/01JDEP65ZQ5NHP8W3QW0AX1DWS/ HTTP/1.1" 200 46793
+INFO 2026-01-09 08:34:05,006 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 46723
+INFO 2026-01-09 08:34:10,253 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 46819
+INFO 2026-01-09 08:34:16,376 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 46819
+INFO 2026-01-09 08:34:46,751 basehttp "GET /debt/01JDEP65ZQ5NHP8W3QW0AX1DWS/ HTTP/1.1" 200 46793
+INFO 2026-01-09 08:34:48,375 basehttp "GET /debt/01JDEP65ZQ5NHP8W3QW0AX1DWS/ HTTP/1.1" 200 46793
+INFO 2026-01-09 08:34:50,925 basehttp "GET /debts_all/ HTTP/1.1" 200 68688
+WARNING 2026-01-09 08:34:50,939 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:36:56,238 basehttp "GET /debt/01JDF2F95YA5ZR9NJ7AVHECM3J/ HTTP/1.1" 200 46734
+INFO 2026-01-09 08:37:00,308 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 08:37:02,016 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:37:03,320 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:37:03,322 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:37:03,323 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:37:03,329 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:37:03,329 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:37:03,338 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 08:37:06,068 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 08:37:11,491 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 08:37:14,350 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 08:37:19,421 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 08:37:24,860 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:37:26,404 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:37:26,406 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:37:26,408 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:37:26,414 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:37:26,414 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:37:26,427 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 08:37:28,654 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 08:37:29,609 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:37:30,963 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 08:37:33,332 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:37:35,748 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:37:35,751 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:37:35,752 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:37:35,759 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:37:35,759 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:37:35,770 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 08:37:57,663 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73170
+INFO 2026-01-09 08:38:06,628 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:39:08,937 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:39:08,994 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:39:12,281 basehttp "GET /debt/01JDF2B2X12NXTFCEFPEJRWND8/ HTTP/1.1" 200 45272
+INFO 2026-01-09 08:39:14,705 basehttp "GET /debt/01JDF2B2X12NXTFCEFPEJRWND8/ HTTP/1.1" 200 45272
+INFO 2026-01-09 08:39:17,064 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 43241
+INFO 2026-01-09 08:39:19,791 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-09 08:39:21,866 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:39:21,883 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:39:24,850 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-09 08:39:29,839 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-09 08:39:32,184 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 43241
+INFO 2026-01-09 08:39:54,693 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43150
+INFO 2026-01-09 08:40:02,875 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-09 08:40:03,804 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-09 08:40:05,272 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+INFO 2026-01-09 08:40:11,642 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 08:40:13,075 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 08:40:14,262 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 08:40:18,157 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73261
+INFO 2026-01-09 08:40:19,431 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:40:20,566 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:40:20,567 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:40:20,568 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:40:20,575 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:40:20,575 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:40:20,586 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 08:40:25,726 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:40:25,741 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:40:27,471 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490
+INFO 2026-01-09 08:40:28,785 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39289
+INFO 2026-01-09 08:40:29,718 basehttp "GET /debts_archived/ HTTP/1.1" 200 32836
+WARNING 2026-01-09 08:40:29,733 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:40:31,570 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-09 08:40:33,898 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:40:33,917 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:40:37,865 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41490
+INFO 2026-01-09 08:40:41,050 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-09 08:40:42,190 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-09 08:40:43,440 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+INFO 2026-01-09 08:40:47,286 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 08:40:50,761 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73261
+INFO 2026-01-09 08:40:55,113 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:40:57,212 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 08:40:59,820 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50729
+INFO 2026-01-09 08:42:17,051 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88636
+INFO 2026-01-09 08:42:29,142 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 58142
+INFO 2026-01-09 08:42:38,515 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:42:38,517 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:42:38,517 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:42:38,523 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:42:38,523 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:42:38,535 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49956
+INFO 2026-01-09 08:42:54,701 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52385
+INFO 2026-01-09 08:43:02,911 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73261
+INFO 2026-01-09 08:43:35,620 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39764
+INFO 2026-01-09 08:43:36,837 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59159
+INFO 2026-01-09 08:43:47,460 api_key_manager Incremented API count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 4
+INFO 2026-01-09 08:43:47,476 usage_tracking Incremented Company API count for company 01HYFKMZ3NYHVDET5KNM0VTKGV in firm 01HYFP566T1EEE38RT7FZPV9TQ: 4
+ERROR 2026-01-09 08:43:47,479 ai_consultation_views AI consultation error: google.genai is not installed. Please install google-genai: pip install google-genai
+Traceback (most recent call last):
+  File "/app/scoreai/views/ai_consultation_views.py", line 310, in post
+    response_data = get_gemini_response_with_tokens(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 125, in get_gemini_response_with_tokens
+    _check_genai_installed()
+  File "/app/scoreai/utils/gemini.py", line 29, in _check_genai_installed
+    raise ImportError(
+ImportError: google.genai is not installed. Please install google-genai: pip install google-genai
+ERROR 2026-01-09 08:43:47,481 log Internal Server Error: /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/
+ERROR 2026-01-09 08:43:47,482 basehttp "POST /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/ HTTP/1.1" 500 115
+INFO 2026-01-09 08:46:20,666 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73261
+INFO 2026-01-09 08:46:26,332 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52661
+INFO 2026-01-09 08:46:30,554 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:46:30,556 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:46:30,557 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:46:30,561 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:46:30,561 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:46:30,570 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 08:46:34,785 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57795
+INFO 2026-01-09 08:46:41,625 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=7&show_all=false&page_param=1 HTTP/1.1" 200 60182
+INFO 2026-01-09 08:46:43,984 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 68119
+INFO 2026-01-09 08:46:45,777 basehttp "GET /fiscal_summary_year/?is_draft=false&start_year=2014&end_year= HTTP/1.1" 200 57803
+INFO 2026-01-09 08:46:47,605 basehttp "GET /fiscal_summary_year/?is_draft=false&start_year=2014&end_year=2015 HTTP/1.1" 200 51001
+INFO 2026-01-09 08:46:52,504 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57795
+INFO 2026-01-09 08:46:57,997 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88576
+INFO 2026-01-09 08:47:00,845 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-09 08:47:04,891 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73237
+INFO 2026-01-09 08:47:06,504 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 08:47:08,093 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:47:08,095 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:47:08,095 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:47:08,100 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:47:08,100 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:47:08,109 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 08:47:10,982 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 08:47:13,366 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73167
+INFO 2026-01-09 08:47:15,930 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-09 08:47:17,042 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88576
+INFO 2026-01-09 08:47:18,885 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57795
+INFO 2026-01-09 08:47:35,328 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 68119
+INFO 2026-01-09 08:47:57,128 autoreload /app/scoreai/views/ai_consultation_views.py changed, reloading.
+INFO 2026-01-09 08:47:57,880 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 08:47:58,833 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 08:48:05,203 autoreload /app/scoreai/views/ai_consultation_views.py changed, reloading.
+INFO 2026-01-09 08:48:05,574 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-09 08:48:06,068 gemini google.genai is not installed. Please install google-genai: pip install google-genai. Gemini API機能は使用できません。
+INFO 2026-01-09 08:49:28,491 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39764
+INFO 2026-01-09 08:49:29,480 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59159
+INFO 2026-01-09 08:49:38,192 api_key_manager Incremented API count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 5
+INFO 2026-01-09 08:49:38,205 usage_tracking Incremented Company API count for company 01HYFKMZ3NYHVDET5KNM0VTKGV in firm 01HYFP566T1EEE38RT7FZPV9TQ: 5
+ERROR 2026-01-09 08:49:38,207 ai_consultation_views AI consultation error: google.genai is not installed. Please install google-genai: pip install google-genai
+Traceback (most recent call last):
+  File "/app/scoreai/views/ai_consultation_views.py", line 311, in post
+    response_data = get_gemini_response_with_tokens(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 125, in get_gemini_response_with_tokens
+    _check_genai_installed()
+  File "/app/scoreai/utils/gemini.py", line 29, in _check_genai_installed
+    raise ImportError(
+ImportError: google.genai is not installed. Please install google-genai: pip install google-genai
+ERROR 2026-01-09 08:49:38,208 log Internal Server Error: /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/
+ERROR 2026-01-09 08:49:38,208 basehttp "POST /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/api/ HTTP/1.1" 500 253
+INFO 2026-01-09 08:53:28,226 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 08:53:31,109 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:53:31,151 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:53:35,850 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-09 08:53:39,611 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:53:39,627 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:53:45,704 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-09 08:53:55,588 basehttp "GET /debt/01JDF2D9Q8R6ADABAP89QSA6CQ/ HTTP/1.1" 200 43218
+INFO 2026-01-09 08:54:03,229 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43150
+INFO 2026-01-09 08:54:19,266 basehttp "GET /debt/01JDF2D9Q8R6ADABAP89QSA6CQ/ HTTP/1.1" 200 43218
+INFO 2026-01-09 08:55:26,402 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39764
+INFO 2026-01-09 08:55:27,489 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 59159
+INFO 2026-01-09 08:55:29,738 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 200 59205
+INFO 2026-01-09 08:55:36,644 api_key_manager Incremented API count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 6
+INFO 2026-01-09 08:55:36,663 usage_tracking Incremented Company API count for company 01HYFKMZ3NYHVDET5KNM0VTKGV in firm 01HYFP566T1EEE38RT7FZPV9TQ: 6
+ERROR 2026-01-09 08:55:36,666 gemini Gemini API configuration error: google.genaiパッケージの初期化に失敗しました。
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 131, in get_gemini_response_with_tokens
+    initialize_gemini()
+  File "/app/scoreai/utils/gemini.py", line 45, in initialize_gemini
+    raise ValueError("google.genaiパッケージの初期化に失敗しました。")
+ValueError: google.genaiパッケージの初期化に失敗しました。
+ERROR 2026-01-09 08:55:36,667 ai_consultation_views AI consultation error: Gemini APIの設定エラー: google.genaiパッケージの初期化に失敗しました。
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 131, in get_gemini_response_with_tokens
+    initialize_gemini()
+  File "/app/scoreai/utils/gemini.py", line 45, in initialize_gemini
+    raise ValueError("google.genaiパッケージの初期化に失敗しました。")
+ValueError: google.genaiパッケージの初期化に失敗しました。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/views/ai_consultation_views.py", line 311, in post
+    response_data = get_gemini_response_with_tokens(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 241, in get_gemini_response_with_tokens
+    raise ValueError(f"Gemini APIの設定エラー: {str(e)}")
+ValueError: Gemini APIの設定エラー: google.genaiパッケージの初期化に失敗しました。
+ERROR 2026-01-09 08:55:36,669 log Internal Server Error: /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/api/
+ERROR 2026-01-09 08:55:36,669 basehttp "POST /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/api/ HTTP/1.1" 500 193
+INFO 2026-01-09 08:56:44,222 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 08:56:44,224 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 08:56:44,224 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 08:56:44,228 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 08:56:44,229 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 08:56:44,245 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 08:56:45,403 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 08:56:47,229 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73167
+INFO 2026-01-09 08:56:51,223 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 59512
+INFO 2026-01-09 08:56:54,873 basehttp "GET /fiscal_summary_year/?is_draft=false&years_in_page=10&show_all=false&page_param=1 HTTP/1.1" 200 66124
+INFO 2026-01-09 08:56:56,860 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true&start_year=2013 HTTP/1.1" 200 69836
+INFO 2026-01-09 08:56:57,032 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 08:56:57,836 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 08:57:04,166 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 08:57:04,509 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 08:57:06,016 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true&start_year=2013&end_year=2015 HTTP/1.1" 200 53776
+INFO 2026-01-09 08:57:11,489 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 08:57:11,788 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 08:57:18,366 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-09 08:57:21,150 basehttp "GET /budget/vs-actual-yearly/?year=2023 HTTP/1.1" 200 50027
+INFO 2026-01-09 08:57:25,700 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-09 08:57:26,976 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-09 08:57:28,228 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+INFO 2026-01-09 08:57:29,746 basehttp "GET /budget/vs-actual/?year=2025 HTTP/1.1" 200 55154
+INFO 2026-01-09 08:57:34,396 basehttp "GET / HTTP/1.1" 200 60041
+INFO 2026-01-09 08:57:37,552 basehttp "GET /debt/01JDEWZTJ9EAF3DT74EDF9XK52/ HTTP/1.1" 200 43233
+INFO 2026-01-09 08:57:40,212 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:57:40,233 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 08:59:11,144 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 08:59:14,214 basehttp "GET /debts_all/ HTTP/1.1" 200 64301
+WARNING 2026-01-09 08:59:14,247 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 09:00:31,481 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:00:32,330 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:00:36,127 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73167
+INFO 2026-01-09 09:00:40,637 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 59512
+INFO 2026-01-09 09:00:44,256 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 69828
+INFO 2026-01-09 09:00:56,530 autoreload /app/scoreai/views/ai_consultation_views.py changed, reloading.
+INFO 2026-01-09 09:00:57,528 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:02:43,999 basehttp "GET /debts_all/ HTTP/1.1" 200 65611
+WARNING 2026-01-09 09:02:44,046 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 09:02:46,855 basehttp "GET /debt/01JDF2F95YA5ZR9NJ7AVHECM3J/ HTTP/1.1" 200 43154
+INFO 2026-01-09 09:02:48,918 basehttp "GET /debts_all/ HTTP/1.1" 200 65611
+WARNING 2026-01-09 09:02:48,943 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 09:02:53,125 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43150
+INFO 2026-01-09 09:04:18,016 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88576
+INFO 2026-01-09 09:04:21,043 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 61542
+INFO 2026-01-09 09:04:26,901 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 71858
+INFO 2026-01-09 09:05:41,807 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39764
+INFO 2026-01-09 09:05:43,890 basehttp "GET /ai-consultation/01KE1YJNT84DX5GC40T1YH3FZM/ HTTP/1.1" 200 58413
+ERROR 2026-01-09 09:05:47,332 ai_consultation_data Template variable missing: 'fiscal_summary'
+INFO 2026-01-09 09:05:47,342 api_key_manager Incremented API count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 7
+INFO 2026-01-09 09:05:47,361 usage_tracking Incremented Company API count for company 01HYFKMZ3NYHVDET5KNM0VTKGV in firm 01HYFP566T1EEE38RT7FZPV9TQ: 7
+ERROR 2026-01-09 09:05:47,363 gemini Gemini API configuration error: google.genaiパッケージの初期化に失敗しました。
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 131, in get_gemini_response_with_tokens
+    initialize_gemini()
+  File "/app/scoreai/utils/gemini.py", line 45, in initialize_gemini
+    raise ValueError("google.genaiパッケージの初期化に失敗しました。")
+ValueError: google.genaiパッケージの初期化に失敗しました。
+ERROR 2026-01-09 09:05:47,364 ai_consultation_views AI consultation error: Gemini APIの設定エラー: google.genaiパッケージの初期化に失敗しました。
+Traceback (most recent call last):
+  File "/app/scoreai/utils/gemini.py", line 131, in get_gemini_response_with_tokens
+    initialize_gemini()
+  File "/app/scoreai/utils/gemini.py", line 45, in initialize_gemini
+    raise ValueError("google.genaiパッケージの初期化に失敗しました。")
+ValueError: google.genaiパッケージの初期化に失敗しました。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/views/ai_consultation_views.py", line 311, in post
+    response_data = get_gemini_response_with_tokens(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/utils/gemini.py", line 241, in get_gemini_response_with_tokens
+    raise ValueError(f"Gemini APIの設定エラー: {str(e)}")
+ValueError: Gemini APIの設定エラー: google.genaiパッケージの初期化に失敗しました。
+ERROR 2026-01-09 09:05:47,365 log Internal Server Error: /ai-consultation/01KE1YJNT84DX5GC40T1YH3FZM/api/
+ERROR 2026-01-09 09:05:47,365 basehttp "POST /ai-consultation/01KE1YJNT84DX5GC40T1YH3FZM/api/ HTTP/1.1" 500 193
+INFO 2026-01-09 09:06:15,833 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 61940
+INFO 2026-01-09 09:06:21,490 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 72256
+INFO 2026-01-09 09:08:50,780 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73167
+INFO 2026-01-09 09:10:14,427 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:10:15,023 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:10:23,303 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:10:23,658 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:16:42,325 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:16:42,974 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:16:56,268 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:16:56,749 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:17:05,911 autoreload /app/scoreai/utils/gemini.py changed, reloading.
+INFO 2026-01-09 09:17:06,262 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:24:04,351 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 73167
+INFO 2026-01-09 09:24:07,560 basehttp "GET /ai-consultation/ HTTP/1.1" 200 39764
+INFO 2026-01-09 09:24:09,461 basehttp "GET /ai-consultation/01KE1YJNT3ER5FHFJ247HNVMV6/ HTTP/1.1" 200 58338
+ERROR 2026-01-09 09:24:16,157 ai_consultation_data Template variable missing: 'fiscal_summary'
+INFO 2026-01-09 09:24:16,166 api_key_manager Incremented API count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 8
+INFO 2026-01-09 09:24:16,181 usage_tracking Incremented Company API count for company 01HYFKMZ3NYHVDET5KNM0VTKGV in firm 01HYFP566T1EEE38RT7FZPV9TQ: 8
+INFO 2026-01-09 09:24:16,524 gemini Available models: ['embedding-gecko-001', 'gemini-2.5-flash', 'gemini-2.5-pro', 'gemini-2.0-flash-exp', 'gemini-2.0-flash', 'gemini-2.0-flash-001', 'gemini-2.0-flash-exp-image-generation', 'gemini-2.0-flash-lite-001', 'gemini-2.0-flash-lite', 'gemini-2.0-flash-lite-preview-02-05', 'gemini-2.0-flash-lite-preview', 'gemini-exp-1206', 'gemini-2.5-flash-preview-tts', 'gemini-2.5-pro-preview-tts', 'gemma-3-1b-it', 'gemma-3-4b-it', 'gemma-3-12b-it', 'gemma-3-27b-it', 'gemma-3n-e4b-it', 'gemma-3n-e2b-it', 'gemini-flash-latest', 'gemini-flash-lite-latest', 'gemini-pro-latest', 'gemini-2.5-flash-lite', 'gemini-2.5-flash-image-preview', 'gemini-2.5-flash-image', 'gemini-2.5-flash-preview-09-2025', 'gemini-2.5-flash-lite-preview-09-2025', 'gemini-3-pro-preview', 'gemini-3-flash-preview', 'gemini-3-pro-image-preview', 'nano-banana-pro-preview', 'gemini-robotics-er-1.5-preview', 'gemini-2.5-computer-use-preview-10-2025', 'deep-research-pro-preview-12-2025', 'embedding-001', 'text-embedding-004', 'gemini-embedding-exp-03-07', 'gemini-embedding-exp', 'gemini-embedding-001', 'aqa', 'imagen-4.0-generate-preview-06-06', 'imagen-4.0-ultra-generate-preview-06-06', 'imagen-4.0-generate-001', 'imagen-4.0-ultra-generate-001', 'imagen-4.0-fast-generate-001', 'veo-2.0-generate-001', 'veo-3.0-generate-001', 'veo-3.0-fast-generate-001', 'veo-3.1-generate-preview', 'veo-3.1-fast-generate-preview', 'gemini-2.5-flash-native-audio-latest', 'gemini-2.5-flash-native-audio-preview-09-2025', 'gemini-2.5-flash-native-audio-preview-12-2025']
+INFO 2026-01-09 09:24:16,525 gemini Trying model: embedding-gecko-001
+WARNING 2026-01-09 09:24:16,624 gemini Failed to initialize model embedding-gecko-001: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'models/embedding-gecko-001 is not found for API version v1beta, or is not supported for generateContent. Call ListModels to see the list of available models and their supported methods.', 'status': 'NOT_FOUND'}}
+INFO 2026-01-09 09:24:16,625 gemini Trying model: gemini-2.5-flash
+INFO 2026-01-09 09:24:34,785 gemini Successfully initialized model: gemini-2.5-flash
+INFO 2026-01-09 09:24:34,809 usage_tracking Incremented AI consultation count for firm 01HYFP566T1EEE38RT7FZPV9TQ: 4
+INFO 2026-01-09 09:24:34,831 usage_tracking Incremented AI consultation tokens for firm 01HYFP566T1EEE38RT7FZPV9TQ: +3271 tokens (total: 3271)
+INFO 2026-01-09 09:24:34,839 basehttp "POST /ai-consultation/01KE1YJNT3ER5FHFJ247HNVMV6/api/ HTTP/1.1" 200 19059
+INFO 2026-01-09 09:24:46,379 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-09 09:24:57,402 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62058
+INFO 2026-01-09 09:26:28,168 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 72374
+INFO 2026-01-09 09:26:38,934 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-09 09:26:46,415 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 09:26:50,511 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 09:26:50,513 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 09:26:50,514 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 09:26:50,521 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 09:26:50,521 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 09:26:50,535 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 09:26:55,070 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-09 09:27:12,224 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668

@@ -79,6 +79,41 @@
     const total_net_assets = fiscalSummaries.map(summary => summary.total_net_assets);
     const total_assets = fiscalSummaries.map(summary => summary.total_assets);
 
+    // データ範囲を計算してゼロの位置を揃える
+    const allBSData = [...cash_and_deposits, ...long_term_loans_payables, ...total_net_assets, ...total_assets].filter(v => v !== null && v !== undefined);
+    const allPLData = [...sales, ...grossProfits, ...operatingProfits, ...ordinaryProfits, ...EBITDAs].filter(v => v !== null && v !== undefined);
+    
+    const bsMin = Math.min(...allBSData);
+    const bsMax = Math.max(...allBSData);
+    const plMin = Math.min(...allPLData);
+    const plMax = Math.max(...allPLData);
+    
+    // ゼロを含むように範囲を拡張
+    const bsMinWithZero = Math.min(bsMin, 0);
+    const bsMaxWithZero = Math.max(bsMax, 0);
+    const plMinWithZero = Math.min(plMin, 0);
+    const plMaxWithZero = Math.max(plMax, 0);
+    
+    // ゼロからの距離を計算
+    const bsRangeAboveZero = bsMaxWithZero - 0;
+    const bsRangeBelowZero = 0 - bsMinWithZero;
+    const plRangeAboveZero = plMaxWithZero - 0;
+    const plRangeBelowZero = 0 - plMinWithZero;
+    
+    // ゼロの位置を揃えるために、より大きい範囲に合わせる
+    const maxRangeAboveZero = Math.max(bsRangeAboveZero, plRangeAboveZero);
+    const maxRangeBelowZero = Math.max(bsRangeBelowZero, plRangeBelowZero);
+    
+    // 余白を追加（10%）
+    const paddingAbove = maxRangeAboveZero * 0.1;
+    const paddingBelow = maxRangeBelowZero * 0.1;
+    
+    // 両方の軸で同じゼロ位置になるように範囲を設定
+    const bsMinValue = -(maxRangeBelowZero + paddingBelow);
+    const bsMaxValue = maxRangeAboveZero + paddingAbove;
+    const plMinValue = -(maxRangeBelowZero + paddingBelow);
+    const plMaxValue = maxRangeAboveZero + paddingAbove;
+    
     const chart = new Chart(ctx, {
       type: 'bar',
       data: {
@@ -91,6 +126,8 @@
             backgroundColor: chartColors.backgroundColor[0],
             borderColor: chartColors.borderColor[0],
             borderWidth: 2,
+            pointRadius: 4,
+            tension: 0,
             yAxisID: 'y1'
           },
           {
@@ -99,7 +136,9 @@
             type: 'line',
             backgroundColor: chartColors.backgroundColor[1],
             borderColor: chartColors.borderColor[1],
-            borderWidth: 1,
+            borderWidth: 2,
+            pointRadius: 4,
+            tension: 0,
             yAxisID: 'y1'
           },
           {
@@ -108,7 +147,9 @@
             type: 'line',
             backgroundColor: chartColors.backgroundColor[2],
             borderColor: chartColors.borderColor[2],
-            borderWidth: 1,
+            borderWidth: 2,
+            pointRadius: 4,
+            tension: 0,
             yAxisID: 'y1'
           },
           {
@@ -117,7 +158,9 @@
             type: 'line',
             backgroundColor: chartColors.backgroundColor[3],
             borderColor: chartColors.borderColor[3],
-            borderWidth: 1,
+            borderWidth: 2,
+            pointRadius: 4,
+            tension: 0,
             yAxisID: 'y1'
           },
           {
@@ -126,35 +169,45 @@
             type: 'line',
             backgroundColor: chartColors.backgroundColor[4],
             borderColor: chartColors.borderColor[4],
-            borderWidth: 1,
+            borderWidth: 2,
+            pointRadius: 4,
+            tension: 0,
             yAxisID: 'y1'
           },
           {
             label: '現預金',
             data: cash_and_deposits,
+            type: 'bar',
             backgroundColor: chartColors.backgroundColor[5],
             borderColor: chartColors.borderColor[5],
+            borderWidth: 1,
             yAxisID: 'y'
           },
           {
             label: '長期借入金',
             data: long_term_loans_payables,
+            type: 'bar',
             backgroundColor: chartColors.backgroundColor[6],
             borderColor: chartColors.borderColor[6],
+            borderWidth: 1,
             yAxisID: 'y'
           },
           {
             label: '純資産合計',
             data: total_net_assets,
+            type: 'bar',
             backgroundColor: chartColors.backgroundColor[7],
             borderColor: chartColors.borderColor[7],
+            borderWidth: 1,
             yAxisID: 'y'
           },
           {
             label: '総資産',
             data: total_assets,
+            type: 'bar',
             backgroundColor: chartColors.backgroundColor[8],
             borderColor: chartColors.borderColor[8],
+            borderWidth: 1,
             yAxisID: 'y'
           }
         ]
@@ -169,6 +222,13 @@
             title: {
               display: true,
               text: 'BS項目'
+            },
+            min: bsMinValue,
+            max: bsMaxValue,
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString();
+              }
             }
           },
           y1: {
@@ -176,11 +236,17 @@
             display: true,
             position: 'right',
             title: {
-              display: true,
-              text: 'PL項目'
+              display: false
             },
+            min: plMinValue,
+            max: plMaxValue,
             grid: {
               drawOnChartArea: false
+            },
+            ticks: {
+              callback: function(value) {
+                return value.toLocaleString();
+              }
             }
           }
         }

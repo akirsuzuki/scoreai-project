@@ -27,11 +27,39 @@
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <h4 class="fw-semibold mb-0">決算年次推移</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn {% if request.GET.is_draft != 'true' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">決算年次推移</a>
-        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        {% if min_year and max_year %}
+        <form method="get" class="d-flex gap-2 align-items-center" id="year-range-form">
+          {% if request.GET.is_draft %}<input type="hidden" name="is_draft" value="{{ request.GET.is_draft }}">{% endif %}
+          <label for="yearsInPage" class="form-label mb-0">表示する年数:</label>
+          <select id="yearsInPage" name="years_in_page" class="form-select form-select-sm" style="width: 100px;" onchange="updateYearsInPage(this.value)">
+            <option value="5" {% if years_in_page == 5 and not show_all %}selected{% endif %}>5</option>
+            <option value="7" {% if years_in_page == 7 and not show_all %}selected{% endif %}>7</option>
+            <option value="10" {% if years_in_page == 10 and not show_all %}selected{% endif %}>10</option>
+            <option value="all" {% if show_all %}selected{% endif %}>全期間</option>
+          </select>
+          <span class="text-muted">|</span>
+          <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <option value="">開始年度</option>
+            {% for year in min_year|to:max_year %}
+              <option value="{{ year }}" {% if start_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
+            {% endfor %}
+          </select>
+          <span class="text-muted">～</span>
+          <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <option value="">終了年度</option>
+            {% for year in min_year|to:max_year %}
+              <option value="{{ year }}" {% if end_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
+            {% endfor %}
+          </select>
+        </form>
+        {% endif %}
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn {% if request.GET.is_draft != 'true' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">決算年次推移</a>
+          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
+          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-outline-primary btn-sm">年次予算vs実績比較</a>
+        </div>
       </div>
-    </div>
   </div>
 </div>
 <div class="row">
@@ -77,32 +105,59 @@
       url.searchParams.set('show_all', 'true');
       url.searchParams.delete('years_in_page');
       url.searchParams.delete('page_param');
+      // 年度範囲をクリア（全期間表示のため）
+      url.searchParams.delete('start_year');
+      url.searchParams.delete('end_year');
     } else {
       url.searchParams.set('years_in_page', years);
       url.searchParams.set('show_all', 'false');
       url.searchParams.set('page_param', 1); // Reset to first page
+      // 年度範囲をクリア（表示年数で制御するため）
+      url.searchParams.delete('start_year');
+      url.searchParams.delete('end_year');
     }
     window.location.href = url.toString();
   }
 
-  function applyYearRange() {
+  function updateYearRange() {
+    const startYear = document.getElementById('start-year-select').value;
+    const endYear = document.getElementById('end-year-select').value;
     const url = new URL(window.location.href);
-    const startYear = document.getElementById('startYear').value;
-    const endYear = document.getElementById('endYear').value;
     
-    if (startYear) {
-      url.searchParams.set('start_year', startYear);
+    // 年度範囲が選択されている場合
+    if (startYear || endYear) {
+      if (startYear) {
+        url.searchParams.set('start_year', startYear);
+      } else {
+        url.searchParams.delete('start_year');
+      }
+      if (endYear) {
+        url.searchParams.set('end_year', endYear);
+      } else {
+        url.searchParams.delete('end_year');
+      }
+      // 表示年数を「全期間」に設定（年度範囲でフィルタリングするため）
+      url.searchParams.set('show_all', 'true');
+      url.searchParams.delete('years_in_page');
+      url.searchParams.delete('page_param');
+      // 表示年数のセレクトボックスも更新
+      const yearsInPageSelect = document.getElementById('yearsInPage');
+      if (yearsInPageSelect) {
+        yearsInPageSelect.value = 'all';
+      }
     } else {
+      // 年度範囲がクリアされた場合、デフォルトの表示年数に戻す
       url.searchParams.delete('start_year');
-    }
-    
-    if (endYear) {
-      url.searchParams.set('end_year', endYear);
-    } else {
       url.searchParams.delete('end_year');
+      url.searchParams.set('years_in_page', '5');
+      url.searchParams.set('show_all', 'false');
+      url.searchParams.set('page_param', '1');
+      const yearsInPageSelect = document.getElementById('yearsInPage');
+      if (yearsInPageSelect) {
+        yearsInPageSelect.value = '5';
+      }
     }
     
-    url.searchParams.set('page_param', 1); // Reset to first page
     window.location.href = url.toString();
   }
 </script>

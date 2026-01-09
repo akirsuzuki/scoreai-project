@@ -41,18 +41,24 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         try:
             context = self.get_context_data()
             return render(request, self.template_name, context)
+        except Debt.DoesNotExist:
+            messages.info(request, '借入情報がありません。')
+            return render(request, 'scoreai/help.html')
+        except Company.DoesNotExist:
+            messages.warning(request, '会社情報が設定されていません。')
+            # 会社選択ページにリダイレクト（存在する場合）
+            return render(request, 'scoreai/help.html')
         except Exception as e:
-            # データを取得できない場合は help.html に遷移
             logger.error(
-                f"Error in IndexView.get: {e}",
+                f"Unexpected error in IndexView.get: {e}",
                 exc_info=True,
                 extra={'user': request.user.id if request.user.is_authenticated else None}
             )
             messages.error(
                 request,
-                'データの取得中にエラーが発生しました。管理者にお問い合わせください。'
+                'システムエラーが発生しました。管理者にお問い合わせください。'
             )
-            return render(request, 'scoreai/help.html')
+            return render(request, 'scoreai/500.html', status=500)
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得
@@ -149,15 +155,12 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         debt_list_byBank = get_debt_list_byAny('financial_institution', debt_list)
         debt_list_bySecuredType = get_debt_list_byAny('secured_type', debt_list)
 
-        # Calculate weighted_average_interest for current month
-        # Formula: 当月利息合計 / 当月残高 * 12 * 100 = 加重平均金利（年利）
-        # Multiply by 100 to convert to percentage
-        if debt_list_totals['total_balances_monthly'][0] != 0:
-            weighted_average_interest = [
-                (12 * debt_list_totals['total_interest_amount_monthly'][0]) / debt_list_totals['total_balances_monthly'][0] * 100
-            ] + [0] * 11  # Keep list format for template compatibility
-        else:
-            weighted_average_interest = [0] * 12
+        # Calculate weighted_average_interest using service layer
+        from ..services.debt_service import DebtService
+        weighted_average_interest = DebtService.calculate_weighted_average_interest(
+            debt_list_totals['total_interest_amount_monthly'],
+            debt_list_totals['total_balances_monthly']
+        )
 
         # 予算実績比較データを取得（最新年度、下書きも含む）
         latest_year = latest_years_with_draft[0] if latest_years_with_draft else timezone.now().year

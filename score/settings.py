@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'widget_tweaks',
     'django_select2',
+    'django_filters',  # フィルタリング機能
 ]
 
 

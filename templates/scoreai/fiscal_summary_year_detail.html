@@ -17,29 +17,32 @@
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <h4 class="fw-semibold mb-0">年次財務諸表</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
-        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">単年度決算詳細</a>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        {% if available_years and selected_year %}
+        <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
+          <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
+            {% for year in available_years %}
+            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
+            {% endfor %}
+          </select>
+          <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
+            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
+            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
+          </select>
+        </form>
+        {% endif %}
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
+          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">直近決算詳細</a>
+          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-outline-primary btn-sm">年次予算vs実績比較</a>
+        </div>
       </div>
     </div>
   </div>
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-header">
-        <div class="d-flex align-items-center gap-2">
-          <h5 class="card-title mb-0 fw-semibold">単年度決算詳細</h5>
-          {% if available_years %}
-          <select id="year-select" class="form-select form-select-sm" style="width: 110px;">
-            {% for year in available_years %}
-            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
-            {% endfor %}
-          </select>
-          <select id="is-budget-select" class="form-select form-select-sm" style="width: 80px;">
-            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
-            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
-          </select>
-          {% endif %}
-        </div>
+        <h5 class="card-title mb-0 fw-semibold">単年度決算詳細</h5>
       </div>
       <div class="card-body">
         {% if data_not_found %}
@@ -662,28 +665,5 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const yearSelect = document.getElementById('year-select');
-  const isBudgetSelect = document.getElementById('is-budget-select');
-  
-  if (yearSelect && isBudgetSelect) {
-    function updatePage() {
-      const year = yearSelect.value;
-      const isBudget = isBudgetSelect.value;
-      
-      // latest_fiscal_summary_year_detailのURLを使用（年度と予算/実績を選択可能）
-      const baseUrl = "{% url 'latest_fiscal_summary_year_detail' %}";
-      const url = new URL(baseUrl, window.location.origin);
-      url.searchParams.set('year', year);
-      url.searchParams.set('is_budget', isBudget);
-      window.location.href = url.toString();
-    }
-    
-    yearSelect.addEventListener('change', updatePage);
-    isBudgetSelect.addEventListener('change', updatePage);
-  }
-});
-</script>
 
 {% endblock %}

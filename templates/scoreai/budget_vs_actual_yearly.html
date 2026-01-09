@@ -16,17 +16,21 @@
   <div class="col-12 mb-4">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <h4 class="fw-semibold mb-0">年次財務諸表</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
-        <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
-        <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-primary btn-sm">年次予算vs実績比較</a>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        {% if year %}
         <form method="get" class="d-flex gap-2">
-          <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+          <select name="year" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
             {% for y in available_years %}
               <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
             {% endfor %}
           </select>
         </form>
+        {% endif %}
+        <div class="d-flex gap-2 flex-wrap">
+          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
+          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
+          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-primary btn-sm">年次予算vs実績比較</a>
+        </div>
       </div>
     </div>
   </div>

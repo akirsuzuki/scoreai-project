@@ -307,16 +307,23 @@ class AIConsultationAPIView(SelectedCompanyMixin, View):
             
             if api_provider == 'gemini':
                 from ..utils.gemini import get_gemini_response_with_tokens
-                response_data = get_gemini_response_with_tokens(
-                    prompt,
-                    system_instruction=system_instruction,
-                    api_key=api_key
-                )
-                if response_data:
-                    ai_response_text = response_data['text']
-                    input_tokens = response_data.get('input_tokens', 0)
-                    output_tokens = response_data.get('output_tokens', 0)
-                    total_tokens = response_data.get('total_tokens', 0) or (input_tokens + output_tokens)
+                try:
+                    response_data = get_gemini_response_with_tokens(
+                        prompt,
+                        system_instruction=system_instruction,
+                        api_key=api_key
+                    )
+                    if response_data:
+                        ai_response_text = response_data['text']
+                        input_tokens = response_data.get('input_tokens', 0)
+                        output_tokens = response_data.get('output_tokens', 0)
+                        total_tokens = response_data.get('total_tokens', 0) or (input_tokens + output_tokens)
+                except ImportError as e:
+                    logger.error(f"AI consultation error: {e}", exc_info=True)
+                    return JsonResponse({
+                        'success': False,
+                        'error': 'google.genaiパッケージがインストールされていません。管理者にお問い合わせください。'
+                    }, status=500)
             else:
                 # OpenAI対応は後で実装
                 logger.error(f"Unsupported API provider: {api_provider}")
