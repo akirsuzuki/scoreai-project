@@ -15,7 +15,11 @@ SCore AIでは、ユーザー招待メールの送信にSendGridを使用して�
 2. 左メニューから「Settings」→「API Keys」を選択
 3. 「Create API Key」をクリック
 4. APIキー名を入力（例: "SCore AI Production"）
-5. 権限を選択（「Full Access」または「Mail Send」）
+5. 権限を選択：
+   - **推奨**: 「Restricted Access（カスタム）」を選択し、「Mail Send」権限のみを有効化
+   - ユーザー登録時の認証メール送信が主な用途のため、「Mail Send」権限で十分です
+   - セキュリティの観点から、必要最小限の権限を付与することを推奨します
+   - 「Full Access」はすべての権限を持つため、セキュリティリスクが高いです
 6. 「Create & View」をクリック
 7. 表示されたAPIキーをコピー（**この画面を閉じると二度と表示されません**）
 

@@ -18828,3 +18828,89 @@ INFO 2026-01-09 09:26:50,521 budget_views BudgetVsActualMonthlyComparisonView: y
 INFO 2026-01-09 09:26:50,535 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
 INFO 2026-01-09 09:26:55,070 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
 INFO 2026-01-09 09:27:12,224 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-09 09:29:28,087 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:30:27,107 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-09 09:30:27,579 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:30:39,604 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-09 09:30:39,928 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 09:40:11,920 basehttp "GET /admin/scoreai/industrybenchmark/ HTTP/1.1" 200 114486
+INFO 2026-01-09 09:40:12,036 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-01-09 09:40:12,038 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+WARNING 2026-01-09 09:40:12,275 basehttp "GET /favicon.ico HTTP/1.1" 404 49441
+INFO 2026-01-09 10:11:59,111 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:11:59,740 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:12:31,894 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:12:32,344 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:17:09,140 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:17:09,654 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:19:29,427 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:19:29,897 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:19:38,857 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:19:39,160 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:19:41,845 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:19:42,163 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:20:23,047 autoreload /app/score/local_settings.py changed, reloading.
+INFO 2026-01-09 10:20:23,472 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:28:50,436 autoreload Watching for file changes with StatReloader
+INFO 2026-01-09 10:28:52,106 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 10:28:52,110 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 10:28:52,111 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 10:28:52,116 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 10:28:52,116 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 10:28:52,198 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 10:28:55,498 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 10:29:01,068 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-09 10:30:10,528 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51913
+INFO 2026-01-09 10:30:12,836 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-09 10:30:12,838 budget_views budget_monthly_all count: 12
+INFO 2026-01-09 10:30:12,839 budget_views actual_monthly_all count: 6
+INFO 2026-01-09 10:30:12,845 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-09 10:30:12,845 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-09 10:30:12,857 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49926
+INFO 2026-01-09 10:30:16,531 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62058
+INFO 2026-01-09 10:30:21,511 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 88576
+INFO 2026-01-09 10:30:24,095 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-09 10:30:29,245 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-09 10:30:31,045 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35442
+INFO 2026-01-09 10:30:31,807 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32237
+INFO 2026-01-09 10:30:33,805 basehttp "GET /budget/vs-actual/?year=2025 HTTP/1.1" 200 55154
+INFO 2026-01-09 10:30:47,074 basehttp "GET /debts_all/ HTTP/1.1" 200 65611
+WARNING 2026-01-09 10:30:47,100 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 10:30:55,945 basehttp "GET /user_profile/ HTTP/1.1" 200 44307
+INFO 2026-01-09 10:30:59,053 basehttp "GET /select_company/01JEFCNJP7DHQ9TPNFJBBHK0HR/ HTTP/1.1" 302 0
+INFO 2026-01-09 10:30:59,083 basehttp "GET / HTTP/1.1" 200 54561
+INFO 2026-01-09 10:31:03,854 basehttp "GET / HTTP/1.1" 200 54046
+INFO 2026-01-09 10:31:08,007 basehttp "GET /debts_all/ HTTP/1.1" 200 54446
+WARNING 2026-01-09 10:31:08,028 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 10:36:06,066 basehttp "GET /debts_all/ HTTP/1.1" 200 55004
+WARNING 2026-01-09 10:36:06,085 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 10:36:14,163 basehttp "GET /debt/01KDTD374N5GKJKYVEY8D9N8VW/ HTTP/1.1" 200 43194
+INFO 2026-01-09 10:38:23,044 basehttp "GET /debts_all/ HTTP/1.1" 200 54832
+WARNING 2026-01-09 10:38:23,075 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 10:39:47,441 basehttp "GET /debts_all/ HTTP/1.1" 200 55177
+WARNING 2026-01-09 10:39:47,467 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-09 10:39:54,895 basehttp "GET /user_profile/ HTTP/1.1" 200 44285
+INFO 2026-01-09 10:40:00,724 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-09 10:40:00,762 basehttp "GET / HTTP/1.1" 200 60556
+INFO 2026-01-09 10:40:10,540 basehttp "GET /debts_all/ HTTP/1.1" 200 66342
+WARNING 2026-01-09 10:40:10,556 basehttp "GET /static/scoreai/js/detatable_custom.js HTTP/1.1" 404 1904
+INFO 2026-01-10 00:16:35,064 autoreload Watching for file changes with StatReloader
+INFO 2026-01-10 00:17:03,768 basehttp "GET /debts_all/ HTTP/1.1" 200 66279
+INFO 2026-01-10 00:17:03,797 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-10 00:19:38,159 basehttp "GET /debts_archived/ HTTP/1.1" 200 32773
+INFO 2026-01-10 00:19:40,602 basehttp "GET /debt/01J9GQ2WGQKQGCE3J58VKAN8B5/ HTTP/1.1" 200 41497
+INFO 2026-01-10 00:19:44,226 basehttp "GET /debts_all/ HTTP/1.1" 200 66279
+INFO 2026-01-10 00:19:47,209 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 43241
+INFO 2026-01-10 00:19:50,297 basehttp "GET /debts_all/ HTTP/1.1" 200 66279
+INFO 2026-01-10 00:19:53,378 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-10 00:19:57,729 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+WARNING 2026-01-10 00:20:26,366 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 49552
+INFO 2026-01-10 00:21:11,140 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+WARNING 2026-01-10 00:21:11,218 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 49552
+INFO 2026-01-10 00:21:25,141 basehttp "GET /debts_all/ HTTP/1.1" 200 67821
+INFO 2026-01-10 00:21:38,018 basehttp "GET /debts_all/ HTTP/1.1" 200 67821
+INFO 2026-01-10 00:24:26,985 basehttp "GET /debts_all/ HTTP/1.1" 200 67746
+INFO 2026-01-10 00:24:47,472 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43150
+INFO 2026-01-10 00:24:51,092 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-10 00:24:53,983 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62058
+INFO 2026-01-10 00:24:57,345 basehttp "GET /fiscal_summary_year/?is_draft=false&show_all=true HTTP/1.1" 200 72374

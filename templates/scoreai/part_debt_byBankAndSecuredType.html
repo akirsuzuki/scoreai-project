@@ -2,8 +2,8 @@
   <div class="card-header">
     <h5 class="card-title fw-semibold"> 金融機関別保証別残高 </h5>
   </div>
-  <div class="card-body">
-    <div class="d-flex justify-content-center">
+  <div class="card-body" style="padding-top: 1.5rem; padding-bottom: 1.5rem;">
+    <div class="d-flex justify-content-center" style="min-height: 200px;">
       <canvas id="chart_byBankAndSecuredType" style="width: 100%;"></canvas>
     </div>
   </div>
@@ -20,8 +20,10 @@
       {% endfor %}
     ];
 
-    // 項目数に応じてキャンバスの高さを設定（1項目あたり30px）
-    const chartHeight = labels.length * 30; // 必要に応じて倍率を調整
+    // 項目数に応じてキャンバスの高さを設定（1項目あたり50px、最小200px）
+    const minHeight = 200;
+    const itemHeight = 50;
+    const chartHeight = Math.max(minHeight, labels.length * itemHeight);
     canvas.height = chartHeight;
 
     const data = {
@@ -50,17 +52,44 @@
       options: {
         indexAxis: 'y',
         responsive: true,
-        maintainAspectRatio: false, // キャンバスの高さをチャートに反映
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            top: 20,
+            bottom: 20,
+            left: 10,
+            right: 10
+          }
+        },
         scales: {
+          x: {
+            ticks: {
+              callback: function(value) {
+                return (value / 1000000).toFixed(1) + '百万円';
+              },
+              padding: 10
+            }
+          },
           y: {
             ticks: {
-              autoSkip: false, // すべてのラベルを表示
+              autoSkip: false,
+              font: {
+                size: 12
+              },
+              padding: 15
             },
           },
         },
         plugins: {
           legend: {
             display: false,
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return '残高: ' + (context.parsed.x / 1000000).toFixed(2) + '百万円';
+              }
+            }
           },
         },
       },

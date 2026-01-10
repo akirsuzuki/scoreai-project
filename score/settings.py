@@ -170,6 +170,8 @@ except ImportError:
     EMAIL_HOST_USER = 'apikey'  # SendGridでは固定値
     EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_API_KEY', '')
     DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@score-ai.net')
+    # メール送信のタイムアウト設定（秒）
+    EMAIL_TIMEOUT = 10
     # Stripe設定
     STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
     STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')

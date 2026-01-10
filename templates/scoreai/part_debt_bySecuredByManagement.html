@@ -2,9 +2,9 @@
   <div class="card-header">
     <h5 class="card-title fw-semibold"> 経営者保証残高 </h5>
   </div>
-  <div class="card-body">
-    <div class="d-flex justify-content-center">
-      <canvas id="chart_bySecuredByManagement" style="width: 100%; height: auto;"></canvas>
+  <div class="card-body p-4">
+    <div class="d-flex justify-content-center" style="height: 250px;">
+      <canvas id="chart_bySecuredByManagement" style="width: 100%;"></canvas>
     </div>
   </div>
 </div>
@@ -12,42 +12,57 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('chart_bySecuredByManagement').getContext('2d');
+    
+    // データを集計: 保証ありと保証なしの合計を計算
+    let totalWithGuarantee = 0;
+    let totalWithoutGuarantee = 0;
+    
+    {% for debt in debt_list_bySecuredByManagement %}
+      {% if debt.is_securedby_management %}
+        totalWithGuarantee += {{ debt.balances_monthly.0 }};
+      {% else %}
+        totalWithoutGuarantee += {{ debt.balances_monthly.0 }};
+      {% endif %}
+    {% endfor %}
+    
     const data = {
-      labels: [
-        {% for debt in debt_list_bySecuredByManagement %}
-            {% if debt.is_securedby_management %}'保証あり'{% else %}'保証なし'{% endif %}{% if not forloop.last %}, {% endif %}
-        {% endfor %}
-      ],
-    datasets: [{
-      data: [
-        {% for debt in debt_list_bySecuredByManagement %}
-            {{ debt.balances_monthly.0 }}{% if not forloop.last %}, {% endif %}
-  {% endfor %}
+      labels: ['保証あり', '保証なし'],
+      datasets: [{
+        data: [totalWithGuarantee, totalWithoutGuarantee],
+        backgroundColor: [
+          'rgb(54, 162, 235)',
+          'rgb(255, 99, 132)'
         ],
-  backgroundColor: [
-    'rgb(255, 99, 132)',
-    'rgb(54, 162, 235)',
-    'rgb(255, 205, 86)',
-    'rgb(75, 192, 192)',
-    'rgb(153, 102, 255)',
-    'rgb(201, 203, 207)'
-  ],
-    hoverOffset: 4
+        hoverOffset: 4
       }]
     };
-  const config = {
-    type: 'bar',
-    data: data,
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false,
-        },
+    
+    const config = {
+      type: 'doughnut',
+      data: data,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                const label = context.label || '';
+                const value = context.parsed || 0;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1);
+                return label + ': ' + (value / 1000000).toFixed(2) + '百万円 (' + percentage + '%)';
+              }
+            }
+          }
+        }
       }
-    },
-
-  };
-  new Chart(ctx, config);
+    };
+    
+    new Chart(ctx, config);
   });
 </script>

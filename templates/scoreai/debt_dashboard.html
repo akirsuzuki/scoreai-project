@@ -13,11 +13,15 @@
     </div>
 </div>
 <div class="row align-items-stretch g-3 mt-0">
-    <div class="col-12 col-md-6 col-lg-3">
-        {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
-    </div>
-    <div class="col-12 col-md-6 col-lg-3">
-        {% include 'scoreai/part_debt_byCollateraled.html' %}
+    <div class="col-12 col-md-6 col-lg-6">
+        <div class="row g-3">
+            <div class="col-12">
+                {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
+            </div>
+            <div class="col-12">
+                {% include 'scoreai/part_debt_byCollateraled.html' %}
+            </div>
+        </div>
     </div>
     <div class="col-12 col-lg-6">
         {% include 'scoreai/part_debt_byBankAndSecuredType.html' %}
