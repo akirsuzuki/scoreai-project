@@ -27,8 +27,11 @@
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
             <h4 class="fw-semibold mb-0">{{ title }}</h4>
             <div>
-                <a href="{% url 'izakaya_plan_update' plan_id=plan.id %}" class="btn btn-outline-primary me-2">
+                <a href="{% url 'izakaya_plan_update' pk=plan.id %}" class="btn btn-outline-primary me-2">
                     <i class="ti ti-edit me-1"></i>編集
+                </a>
+                <a href="{% url 'izakaya_plan_delete' pk=plan.id %}" class="btn btn-outline-danger me-2">
+                    <i class="ti ti-trash me-1"></i>削除
                 </a>
                 <a href="{% url 'izakaya_plan_list' %}" class="btn btn-outline-secondary">
                     <i class="ti ti-list me-1"></i>計画一覧
@@ -54,7 +57,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-2 mb-3">
         <div class="card summary-card">
             <div class="card-body">
                 <h6 class="text-muted mb-2">月間売上</h6>
@@ -62,7 +65,25 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-2 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">売上原価</h6>
+                <h3 class="mb-0">{{ plan.monthly_cost_of_goods_sold|default:0|intcomma }}円</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">粗利益</h6>
+                <h3 class="mb-0 {% if plan.monthly_gross_profit < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ plan.monthly_gross_profit|default:0|intcomma }}円
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 mb-3">
         <div class="card summary-card">
             <div class="card-body">
                 <h6 class="text-muted mb-2">月間経費</h6>
@@ -70,7 +91,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 mb-3">
+    <div class="col-md-2 mb-3">
         <div class="card summary-card">
             <div class="card-body">
                 <h6 class="text-muted mb-2">月間利益</h6>

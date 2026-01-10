@@ -2,13 +2,13 @@
 業界別専門相談室のビュー
 """
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db import transaction
 from django.http import JsonResponse, HttpResponse
 from django.views import View
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from decimal import Decimal
 
 from ..models import IndustryCategory, IndustryConsultationType, IzakayaPlan
@@ -76,7 +76,6 @@ class IzakayaPlanCreateView(SelectedCompanyMixin, LoginRequiredMixin, CreateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '居酒屋出店計画作成'
-        context['default_coefficients'] = IzakayaPlanService.get_default_sales_coefficients()
         return context
     
     @transaction.atomic
@@ -85,9 +84,11 @@ class IzakayaPlanCreateView(SelectedCompanyMixin, LoginRequiredMixin, CreateView
         form.instance.company = self.this_company
         form.instance.user = self.request.user
         
-        # 売上係数が空の場合はデフォルト値を設定
-        if not form.instance.sales_coefficients:
-            form.instance.sales_coefficients = IzakayaPlanService.get_default_sales_coefficients()
+        # 月毎指数が空の場合はデフォルト値を設定
+        if not form.instance.lunch_monthly_coefficients:
+            form.instance.lunch_monthly_coefficients = IzakayaPlanService.get_default_monthly_coefficients()
+        if not form.instance.dinner_monthly_coefficients:
+            form.instance.dinner_monthly_coefficients = IzakayaPlanService.get_default_monthly_coefficients()
         
         response = super().form_valid(form)
         
@@ -128,14 +129,15 @@ class IzakayaPlanUpdateView(SelectedCompanyMixin, LoginRequiredMixin, UpdateView
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '居酒屋出店計画編集'
-        context['default_coefficients'] = IzakayaPlanService.get_default_sales_coefficients()
         return context
     
     @transaction.atomic
     def form_valid(self, form):
-        # 売上係数が空の場合はデフォルト値を設定
-        if not form.instance.sales_coefficients:
-            form.instance.sales_coefficients = IzakayaPlanService.get_default_sales_coefficients()
+        # 月毎指数が空の場合はデフォルト値を設定
+        if not form.instance.lunch_monthly_coefficients:
+            form.instance.lunch_monthly_coefficients = IzakayaPlanService.get_default_monthly_coefficients()
+        if not form.instance.dinner_monthly_coefficients:
+            form.instance.dinner_monthly_coefficients = IzakayaPlanService.get_default_monthly_coefficients()
         
         response = super().form_valid(form)
         
@@ -223,5 +225,28 @@ class IzakayaPlanListView(SelectedCompanyMixin, LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '居酒屋出店計画一覧'
+        return context
+
+
+class IzakayaPlanDeleteView(SelectedCompanyMixin, LoginRequiredMixin, DeleteView):
+    """居酒屋出店計画削除ビュー"""
+    model = IzakayaPlan
+    template_name = 'scoreai/izakaya_plan_confirm_delete.html'
+    context_object_name = 'plan'
+    success_url = reverse_lazy('izakaya_plan_list')
+    
+    def get_queryset(self):
+        return IzakayaPlan.objects.filter(
+            company=self.this_company,
+            user=self.request.user
+        )
+    
+    def delete(self, request, *args, **kwargs):
+        messages.success(self.request, '居酒屋出店計画を削除しました。')
+        return super().delete(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '居酒屋出店計画削除'
         return context
 

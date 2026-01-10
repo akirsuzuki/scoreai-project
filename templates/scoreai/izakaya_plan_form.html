@@ -11,6 +11,7 @@
     border-left: 4px solid #667eea;
     padding-left: 15px;
     margin-bottom: 30px;
+    cursor: pointer;
 }
 
 .progress-section.active {
@@ -27,6 +28,10 @@
 
 .section-content.active {
     display: block;
+}
+
+.monthly-coefficient-input {
+    width: 80px;
 }
 </style>
 {% endblock %}
@@ -46,33 +51,47 @@
 <form method="post" id="izakayaPlanForm">
     {% csrf_token %}
     {{ form.is_draft }}
+    {{ form.lunch_monthly_coefficients }}
+    {{ form.dinner_monthly_coefficients }}
     
     <!-- プログレスバー -->
     <div class="card mb-4">
         <div class="card-body">
             <div class="row">
-                <div class="col-3 text-center">
-                    <div class="progress-section active" data-section="1">
+                <div class="col-2 text-center">
+                    <div class="progress-section active" data-section="1" onclick="showSection(1)">
                         <h6 class="mb-0">基本情報</h6>
                         <small class="text-muted">店の概要</small>
                     </div>
                 </div>
-                <div class="col-3 text-center">
-                    <div class="progress-section" data-section="2">
+                <div class="col-2 text-center">
+                    <div class="progress-section" data-section="2" onclick="showSection(2)">
+                        <h6 class="mb-0">昼の営業</h6>
+                        <small class="text-muted">時間帯・曜日</small>
+                    </div>
+                </div>
+                <div class="col-2 text-center">
+                    <div class="progress-section" data-section="3" onclick="showSection(3)">
+                        <h6 class="mb-0">夜の営業</h6>
+                        <small class="text-muted">時間帯・曜日</small>
+                    </div>
+                </div>
+                <div class="col-2 text-center">
+                    <div class="progress-section" data-section="4" onclick="showSection(4)">
                         <h6 class="mb-0">投資情報</h6>
                         <small class="text-muted">初期投資・家賃</small>
                     </div>
                 </div>
-                <div class="col-3 text-center">
-                    <div class="progress-section" data-section="3">
+                <div class="col-2 text-center">
+                    <div class="progress-section" data-section="5" onclick="showSection(5)">
                         <h6 class="mb-0">人件費</h6>
                         <small class="text-muted">社員・アルバイト</small>
                     </div>
                 </div>
-                <div class="col-3 text-center">
-                    <div class="progress-section" data-section="4">
-                        <h6 class="mb-0">売上係数</h6>
-                        <small class="text-muted">曜日別設定</small>
+                <div class="col-2 text-center">
+                    <div class="progress-section" data-section="6" onclick="showSection(6)">
+                        <h6 class="mb-0">追加経費</h6>
+                        <small class="text-muted">光熱費など</small>
                     </div>
                 </div>
             </div>
@@ -100,35 +119,11 @@
                     <div class="text-danger small">{{ form.number_of_seats.errors }}</div>
                     {% endif %}
                 </div>
-                <div class="col-md-3 mb-3">
-                    <label for="{{ form.opening_hours_start.id_for_label }}" class="form-label">営業開始時間</label>
-                    {{ form.opening_hours_start }}
-                    {% if form.opening_hours_start.errors %}
-                    <div class="text-danger small">{{ form.opening_hours_start.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="col-md-3 mb-3">
-                    <label for="{{ form.opening_hours_end.id_for_label }}" class="form-label">営業終了時間</label>
-                    {{ form.opening_hours_end }}
-                    {% if form.opening_hours_end.errors %}
-                    <div class="text-danger small">{{ form.opening_hours_end.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="col-12 mb-3">
+                <div class="col-md-6 mb-3">
                     <label for="{{ form.target_customer.id_for_label }}" class="form-label">{{ form.target_customer.label }}</label>
                     {{ form.target_customer }}
                     {% if form.target_customer.errors %}
                     <div class="text-danger small">{{ form.target_customer.errors }}</div>
-                    {% endif %}
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="{{ form.average_price_per_customer.id_for_label }}" class="form-label">{{ form.average_price_per_customer.label }}</label>
-                    <div class="input-group">
-                        {{ form.average_price_per_customer }}
-                        <span class="input-group-text">円</span>
-                    </div>
-                    {% if form.average_price_per_customer.errors %}
-                    <div class="text-danger small">{{ form.average_price_per_customer.errors }}</div>
                     {% endif %}
                 </div>
             </div>
@@ -138,8 +133,154 @@
         </div>
     </div>
 
-    <!-- セクション2: 投資情報 -->
+    <!-- セクション2: 昼の営業時間帯 -->
     <div class="card mb-4 section-content" id="section2">
+        <div class="card-header">
+            <h5 class="card-title mb-0">昼の営業時間帯</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.lunch_start_time.id_for_label }}" class="form-label">{{ form.lunch_start_time.label }}</label>
+                    {{ form.lunch_start_time }}
+                    {% if form.lunch_start_time.errors %}
+                    <div class="text-danger small">{{ form.lunch_start_time.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.lunch_end_time.id_for_label }}" class="form-label">{{ form.lunch_end_time.label }}</label>
+                    {{ form.lunch_end_time }}
+                    {% if form.lunch_end_time.errors %}
+                    <div class="text-danger small">{{ form.lunch_end_time.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">{{ form.lunch_operating_days_widget.label }}</label>
+                    <div class="row">
+                        {% for choice in form.lunch_operating_days_widget %}
+                        <div class="col-md-3 col-6 mb-2">
+                            <div class="form-check">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.lunch_operating_days_widget.errors %}
+                    <div class="text-danger small">{{ form.lunch_operating_days_widget.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.lunch_price_per_customer.id_for_label }}" class="form-label">{{ form.lunch_price_per_customer.label }}</label>
+                    <div class="input-group">
+                        {{ form.lunch_price_per_customer }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.lunch_price_per_customer.errors %}
+                    <div class="text-danger small">{{ form.lunch_price_per_customer.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.lunch_cost_rate.id_for_label }}" class="form-label">{{ form.lunch_cost_rate.label }}</label>
+                    <div class="input-group">
+                        {{ form.lunch_cost_rate }}
+                        <span class="input-group-text">%</span>
+                    </div>
+                    {% if form.lunch_cost_rate.errors %}
+                    <div class="text-danger small">{{ form.lunch_cost_rate.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">昼の月毎指数（1-12月）</label>
+                    <div class="row" id="lunchMonthlyCoefficientsContainer">
+                        <!-- JavaScriptで動的に生成 -->
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(1)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(3)">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション3: 夜の営業時間帯 -->
+    <div class="card mb-4 section-content" id="section3">
+        <div class="card-header">
+            <h5 class="card-title mb-0">夜の営業時間帯</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.dinner_start_time.id_for_label }}" class="form-label">{{ form.dinner_start_time.label }}</label>
+                    {{ form.dinner_start_time }}
+                    {% if form.dinner_start_time.errors %}
+                    <div class="text-danger small">{{ form.dinner_start_time.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.dinner_end_time.id_for_label }}" class="form-label">{{ form.dinner_end_time.label }}</label>
+                    {{ form.dinner_end_time }}
+                    {% if form.dinner_end_time.errors %}
+                    <div class="text-danger small">{{ form.dinner_end_time.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">{{ form.dinner_operating_days_widget.label }}</label>
+                    <div class="row">
+                        {% for choice in form.dinner_operating_days_widget %}
+                        <div class="col-md-3 col-6 mb-2">
+                            <div class="form-check">
+                                {{ choice.tag }}
+                                <label class="form-check-label" for="{{ choice.id_for_label }}">
+                                    {{ choice.choice_label }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if form.dinner_operating_days_widget.errors %}
+                    <div class="text-danger small">{{ form.dinner_operating_days_widget.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.dinner_price_per_customer.id_for_label }}" class="form-label">{{ form.dinner_price_per_customer.label }}</label>
+                    <div class="input-group">
+                        {{ form.dinner_price_per_customer }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.dinner_price_per_customer.errors %}
+                    <div class="text-danger small">{{ form.dinner_price_per_customer.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.dinner_cost_rate.id_for_label }}" class="form-label">{{ form.dinner_cost_rate.label }}</label>
+                    <div class="input-group">
+                        {{ form.dinner_cost_rate }}
+                        <span class="input-group-text">%</span>
+                    </div>
+                    {% if form.dinner_cost_rate.errors %}
+                    <div class="text-danger small">{{ form.dinner_cost_rate.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">夜の月毎指数（1-12月）</label>
+                    <div class="row" id="dinnerMonthlyCoefficientsContainer">
+                        <!-- JavaScriptで動的に生成 -->
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(2)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(4)">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション4: 投資情報 -->
+    <div class="card mb-4 section-content" id="section4">
         <div class="card-header">
             <h5 class="card-title mb-0">投資情報</h5>
         </div>
@@ -167,14 +308,14 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(1)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(3)">次へ</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(3)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(5)">次へ</button>
             </div>
         </div>
     </div>
 
-    <!-- セクション3: 人件費 -->
-    <div class="card mb-4 section-content" id="section3">
+    <!-- セクション5: 人件費 -->
+    <div class="card mb-4 section-content" id="section5">
         <div class="card-header">
             <h5 class="card-title mb-0">人件費</h5>
         </div>
@@ -216,24 +357,72 @@
                 </div>
             </div>
             <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(2)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(4)">次へ</button>
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(4)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(6)">次へ</button>
             </div>
         </div>
     </div>
 
-    <!-- セクション4: 売上係数 -->
-    <div class="card mb-4 section-content" id="section4">
+    <!-- セクション6: 追加経費 -->
+    <div class="card mb-4 section-content" id="section6">
         <div class="card-header">
-            <h5 class="card-title mb-0">売上係数設定</h5>
+            <h5 class="card-title mb-0">追加経費</h5>
         </div>
         <div class="card-body">
-            <p class="text-muted mb-3">曜日別・祝前日の売上係数を設定してください。1.0を基準として、高い日は1.0より大きく、低い日は1.0より小さく設定します。</p>
-            <div class="row" id="salesCoefficientsContainer">
-                <!-- JavaScriptで動的に生成 -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_utilities.id_for_label }}" class="form-label">{{ form.monthly_utilities.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_utilities }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_utilities.errors %}
+                    <div class="text-danger small">{{ form.monthly_utilities.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_supplies.id_for_label }}" class="form-label">{{ form.monthly_supplies.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_supplies }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_supplies.errors %}
+                    <div class="text-danger small">{{ form.monthly_supplies.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_advertising.id_for_label }}" class="form-label">{{ form.monthly_advertising.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_advertising }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_advertising.errors %}
+                    <div class="text-danger small">{{ form.monthly_advertising.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_fees.id_for_label }}" class="form-label">{{ form.monthly_fees.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_fees }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_fees.errors %}
+                    <div class="text-danger small">{{ form.monthly_fees.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_other_expenses.id_for_label }}" class="form-label">{{ form.monthly_other_expenses.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_other_expenses }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_other_expenses.errors %}
+                    <div class="text-danger small">{{ form.monthly_other_expenses.errors }}</div>
+                    {% endif %}
+                </div>
             </div>
-            <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(3)">戻る</button>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(5)">戻る</button>
                 <div>
                     <button type="submit" name="save_draft" value="1" class="btn btn-outline-primary me-2">
                         <i class="ti ti-device-floppy me-1"></i>保存して下書き
@@ -249,7 +438,6 @@
 
 <script>
 let currentSection = 1;
-const defaultCoefficients = {{ default_coefficients|safe }};
 
 function showSection(sectionNum) {
     // 現在のセクションを非表示
@@ -273,74 +461,141 @@ function showSection(sectionNum) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 売上係数の入力フィールドを生成
-function initializeSalesCoefficients() {
-    const container = document.getElementById('salesCoefficientsContainer');
-    const coefficients = {{ form.sales_coefficients.value|default:"{}"|safe }};
-    const defaultCoeffs = defaultCoefficients;
+// 月毎指数の入力フィールドを生成
+function initializeMonthlyCoefficients(containerId, fieldId, defaultValues) {
+    const container = document.getElementById(containerId);
+    const hiddenField = document.getElementById(fieldId);
     
-    const days = [
-        { key: 'monday', label: '月曜日', default: defaultCoeffs.monday || 0.8 },
-        { key: 'tuesday', label: '火曜日', default: defaultCoeffs.tuesday || 0.9 },
-        { key: 'wednesday', label: '水曜日', default: defaultCoeffs.wednesday || 0.9 },
-        { key: 'thursday', label: '木曜日', default: defaultCoeffs.thursday || 1.0 },
-        { key: 'friday', label: '金曜日', default: defaultCoeffs.friday || 1.2 },
-        { key: 'saturday', label: '土曜日', default: defaultCoeffs.saturday || 1.3 },
-        { key: 'sunday', label: '日曜日', default: defaultCoeffs.sunday || 1.1 },
-        { key: 'holiday_eve', label: '祝前日', default: defaultCoeffs.holiday_eve || 1.5 },
+    let coefficients = {};
+    if (hiddenField && hiddenField.value) {
+        try {
+            coefficients = JSON.parse(hiddenField.value);
+        } catch (e) {
+            coefficients = defaultValues;
+        }
+    } else {
+        coefficients = defaultValues;
+    }
+    
+    const months = [
+        { num: 1, name: '1月' }, { num: 2, name: '2月' }, { num: 3, name: '3月' },
+        { num: 4, name: '4月' }, { num: 5, name: '5月' }, { num: 6, name: '6月' },
+        { num: 7, name: '7月' }, { num: 8, name: '8月' }, { num: 9, name: '9月' },
+        { num: 10, name: '10月' }, { num: 11, name: '11月' }, { num: 12, name: '12月' }
     ];
     
-    days.forEach(day => {
-        const value = coefficients[day.key] || day.default;
+    months.forEach(month => {
+        const value = coefficients[String(month.num)] || 1.0;
         const col = document.createElement('div');
-        col.className = 'col-md-6 col-lg-3 mb-3';
+        col.className = 'col-md-3 col-6 mb-2';
         col.innerHTML = `
-            <label class="form-label">${day.label}</label>
+            <label class="form-label small">${month.name}</label>
             <input type="number" 
-                   class="form-control coefficient-input" 
-                   data-key="${day.key}"
+                   class="form-control monthly-coefficient-input" 
+                   data-container="${containerId}"
+                   data-month="${month.num}"
                    value="${value}" 
                    step="0.1" 
-                   min="0" 
-                   required>
+                   min="0">
         `;
         container.appendChild(col);
     });
-    
-    // フォーム送信時にJSON形式で値を設定
-    document.getElementById('izakayaPlanForm').addEventListener('submit', function(e) {
-        const coefficients = {};
-        document.querySelectorAll('.coefficient-input').forEach(input => {
-            coefficients[input.dataset.key] = parseFloat(input.value) || 0;
-        });
-        
-        // 隠しフィールドを作成または更新
-        let hiddenInput = document.getElementById('id_sales_coefficients');
-        if (!hiddenInput) {
-            hiddenInput = document.createElement('input');
-            hiddenInput.type = 'hidden';
-            hiddenInput.name = 'sales_coefficients';
-            hiddenInput.id = 'id_sales_coefficients';
-            this.appendChild(hiddenInput);
-        }
-        hiddenInput.value = JSON.stringify(coefficients);
+}
+
+// フォーム送信時に月毎指数をJSON形式で設定
+function updateMonthlyCoefficients() {
+    // 昼の月毎指数
+    const lunchCoefficients = {};
+    document.querySelectorAll('#lunchMonthlyCoefficientsContainer .monthly-coefficient-input').forEach(input => {
+        lunchCoefficients[input.dataset.month] = parseFloat(input.value) || 1.0;
     });
+    const lunchField = document.getElementById('id_lunch_monthly_coefficients');
+    if (lunchField) {
+        lunchField.value = JSON.stringify(lunchCoefficients);
+    }
+    
+    // 夜の月毎指数
+    const dinnerCoefficients = {};
+    document.querySelectorAll('#dinnerMonthlyCoefficientsContainer .monthly-coefficient-input').forEach(input => {
+        dinnerCoefficients[input.dataset.month] = parseFloat(input.value) || 1.0;
+    });
+    const dinnerField = document.getElementById('id_dinner_monthly_coefficients');
+    if (dinnerField) {
+        dinnerField.value = JSON.stringify(dinnerCoefficients);
+    }
 }
 
 // ページ読み込み時に初期化
 document.addEventListener('DOMContentLoaded', function() {
-    initializeSalesCoefficients();
+    // デフォルトの月毎指数（すべて1.0、文字列キー）
+    const defaultMonthlyCoeffs = {};
+    for (let i = 1; i <= 12; i++) {
+        defaultMonthlyCoeffs[String(i)] = 1.0;
+    }
+    
+    // 昼の月毎指数の初期化
+    {% if form.lunch_monthly_coefficients.value %}
+    let lunchCoeffs = {};
+    try {
+        lunchCoeffs = JSON.parse('{{ form.lunch_monthly_coefficients.value|safe }}');
+    } catch (e) {
+        lunchCoeffs = defaultMonthlyCoeffs;
+    }
+    {% else %}
+    const lunchCoeffs = defaultMonthlyCoeffs;
+    {% endif %}
+    initializeMonthlyCoefficients('lunchMonthlyCoefficientsContainer', 'id_lunch_monthly_coefficients', lunchCoeffs);
+    
+    // 夜の月毎指数の初期化
+    {% if form.dinner_monthly_coefficients.value %}
+    let dinnerCoeffs = {};
+    try {
+        dinnerCoeffs = JSON.parse('{{ form.dinner_monthly_coefficients.value|safe }}');
+    } catch (e) {
+        dinnerCoeffs = defaultMonthlyCoeffs;
+    }
+    {% else %}
+    const dinnerCoeffs = defaultMonthlyCoeffs;
+    {% endif %}
+    initializeMonthlyCoefficients('dinnerMonthlyCoefficientsContainer', 'id_dinner_monthly_coefficients', dinnerCoeffs);
+    
+    // 編集時は既存のセクションを表示
+    {% if plan %}
+    // 編集時はすべてのセクションを完了としてマーク
+    document.querySelectorAll('.progress-section').forEach(section => {
+        section.classList.add('completed');
+    });
+    // 最後のセクションをアクティブに
+    showSection(6);
+    {% endif %}
+    
+    // フォーム送信時に月毎指数を更新
+    document.getElementById('izakayaPlanForm').addEventListener('submit', function(e) {
+        updateMonthlyCoefficients();
+    });
+    
+    // 月毎指数の入力時にリアルタイムで更新
+    document.querySelectorAll('.monthly-coefficient-input').forEach(input => {
+        input.addEventListener('change', updateMonthlyCoefficients);
+    });
     
     // 下書き保存ボタンの処理
-    document.querySelector('button[name="save_draft"]').addEventListener('click', function(e) {
-        document.getElementById('id_is_draft').value = 'true';
-    });
+    const saveDraftBtn = document.querySelector('button[name="save_draft"]');
+    if (saveDraftBtn) {
+        saveDraftBtn.addEventListener('click', function(e) {
+            updateMonthlyCoefficients();
+            document.getElementById('id_is_draft').value = 'true';
+        });
+    }
     
     // 計算ボタンの処理
-    document.querySelector('button[name="calculate"]').addEventListener('click', function(e) {
-        document.getElementById('id_is_draft').value = 'false';
-    });
+    const calculateBtn = document.querySelector('button[name="calculate"]');
+    if (calculateBtn) {
+        calculateBtn.addEventListener('click', function(e) {
+            updateMonthlyCoefficients();
+            document.getElementById('id_is_draft').value = 'false';
+        });
+    }
 });
 </script>
 {% endblock %}
-

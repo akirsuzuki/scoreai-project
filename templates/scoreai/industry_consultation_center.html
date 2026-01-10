@@ -109,6 +109,9 @@
                                                     <i class="ti ti-eye"></i>プレビュー
                                                 </a>
                                                 {% endif %}
+                                                <a href="{% url 'izakaya_plan_delete' plan.id %}" class="btn btn-outline-danger">
+                                                    <i class="ti ti-trash"></i>削除
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
@@ -136,9 +139,14 @@
                                         <td>{{ plan.initial_investment|intcomma }}円</td>
                                         <td>{{ plan.created_at|date:"Y年m月d日 H:i" }}</td>
                                         <td>
-                                            <a href="{% url 'izakaya_plan_update' plan.id %}" class="btn btn-sm btn-outline-primary">
-                                                <i class="ti ti-edit"></i>編集
-                                            </a>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'izakaya_plan_update' plan.id %}" class="btn btn-outline-primary">
+                                                    <i class="ti ti-edit"></i>編集
+                                                </a>
+                                                <a href="{% url 'izakaya_plan_delete' plan.id %}" class="btn btn-outline-danger">
+                                                    <i class="ti ti-trash"></i>削除
+                                                </a>
+                                            </div>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -182,6 +190,9 @@
                                                 </a>
                                                 <a href="{% url 'izakaya_plan_preview' plan.id %}" class="btn btn-outline-info">
                                                     <i class="ti ti-eye"></i>プレビュー
+                                                </a>
+                                                <a href="{% url 'izakaya_plan_delete' plan.id %}" class="btn btn-outline-danger">
+                                                    <i class="ti ti-trash"></i>削除
                                                 </a>
                                             </div>
                                         </td>

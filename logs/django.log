@@ -19293,3 +19293,316 @@ INFO 2026-01-10 16:49:16,499 basehttp "POST /ai-consultation/industry/food-servi
 INFO 2026-01-10 16:49:16,516 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/preview/ HTTP/1.1" 200 38767
 INFO 2026-01-10 16:49:23,647 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/export/pdf/ HTTP/1.1" 200 5708
 INFO 2026-01-10 16:49:31,838 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/export/excel/ HTTP/1.1" 200 6171
+INFO 2026-01-10 17:07:21,303 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:07:21,563 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 17:07:24,226 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/update/ HTTP/1.1" 405 0
+INFO 2026-01-10 17:07:28,720 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/preview/ HTTP/1.1" 200 38284
+WARNING 2026-01-10 17:07:31,084 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/update/ HTTP/1.1" 405 0
+INFO 2026-01-10 17:07:48,449 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 44048
+INFO 2026-01-10 17:07:58,878 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 302 0
+WARNING 2026-01-10 17:07:58,885 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKF59KPV1BJ1SN0HZP9Z9TC/update/ HTTP/1.1" 405 0
+INFO 2026-01-10 17:08:04,243 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:08:05,106 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:08:05,654 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:08:26,940 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:08:27,143 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:08:30,674 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:08:30,999 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:08:31,175 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:08:32,484 basehttp "GET / HTTP/1.1" 200 60506
+INFO 2026-01-10 17:08:46,778 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/ HTTP/1.1" 200 43119
+INFO 2026-01-10 17:08:52,866 basehttp "GET /debts_all/ HTTP/1.1" 200 68558
+INFO 2026-01-10 17:08:56,807 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+INFO 2026-01-10 17:09:03,322 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 43222
+WARNING 2026-01-10 17:09:24,734 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:09:39,276 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-10 17:09:39,992 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:09:40,258 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 17:09:41,530 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:09:58,447 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:09:59,165 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:09:59,455 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 17:10:00,982 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:10:08,540 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-10 17:10:09,028 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:10:09,671 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:12:51,120 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 17:12:52,675 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30790
+INFO 2026-01-10 17:12:54,003 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 31071
+INFO 2026-01-10 17:12:55,854 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 44283
+INFO 2026-01-10 17:13:04,433 basehttp "GET /admin/scoreai/cloudstoragesetting/ HTTP/1.1" 200 34269
+INFO 2026-01-10 17:13:04,463 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-10 17:13:12,690 basehttp "GET /admin/scoreai/izakayaplan/ HTTP/1.1" 200 37505
+INFO 2026-01-10 17:13:12,716 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-10 17:14:59,238 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 17:15:00,979 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30790
+INFO 2026-01-10 17:15:38,333 basehttp "GET /debts_all/ HTTP/1.1" 200 68587
+INFO 2026-01-10 17:15:48,878 basehttp "GET /debt/01JDF2B2X12NXTFCEFPEJRWND8/ HTTP/1.1" 200 45325
+INFO 2026-01-10 17:15:53,563 basehttp "GET /debt/01HZ4MZQHAC5HYVQYH2VV39PJF/ HTTP/1.1" 200 43203
+INFO 2026-01-10 17:16:16,792 basehttp "GET /debts_all/ HTTP/1.1" 200 68611
+INFO 2026-01-10 17:17:01,640 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 17:17:01,822 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-10 17:17:02,926 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30790
+INFO 2026-01-10 17:18:21,675 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30790
+INFO 2026-01-10 17:18:24,103 basehttp "GET /debts_all/ HTTP/1.1" 200 68700
+INFO 2026-01-10 17:18:46,887 basehttp "GET /debt/01JACTD7KGFMSNZBW61XNCB42W/ HTTP/1.1" 200 42276
+INFO 2026-01-10 17:18:49,310 basehttp "GET /debts_all/ HTTP/1.1" 200 68700
+INFO 2026-01-10 17:19:08,056 basehttp "GET /debts_all/ HTTP/1.1" 200 69654
+INFO 2026-01-10 17:19:17,175 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:19:18,956 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:19:19,442 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:19:50,199 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+ERROR 2026-01-10 17:19:51,890 mixins Unexpected error in IndustryConsultationCenterView.dispatch: Cannot filter a query once a slice has been taken.
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:19:51,923 log Internal Server Error: /ai-consultation/industry/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:19:51,924 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 500 99405
+INFO 2026-01-10 17:20:10,560 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40990
+ERROR 2026-01-10 17:20:12,282 mixins Unexpected error in IndustryConsultationCenterView.dispatch: Cannot filter a query once a slice has been taken.
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:20:12,304 log Internal Server Error: /ai-consultation/industry/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:20:12,305 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 500 99405
+INFO 2026-01-10 17:20:14,660 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:20:15,691 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:20:16,025 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:20:22,254 basehttp "GET /debts_all/ HTTP/1.1" 200 70178
+INFO 2026-01-10 17:20:30,360 basehttp "GET /debts_all/ HTTP/1.1" 200 69654
+INFO 2026-01-10 17:20:38,971 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+ERROR 2026-01-10 17:20:41,411 mixins Unexpected error in IndustryConsultationCenterView.dispatch: Cannot filter a query once a slice has been taken.
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:20:41,444 log Internal Server Error: /ai-consultation/industry/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 226, in get
+    context = self.get_context_data(**kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 38, in get_context_data
+    context['draft_plans'] = izakaya_plans.filter(is_draft=True)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1476, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1488, in _filter_or_exclude
+    raise TypeError("Cannot filter a query once a slice has been taken.")
+TypeError: Cannot filter a query once a slice has been taken.
+ERROR 2026-01-10 17:20:41,446 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 500 99405
+INFO 2026-01-10 17:21:18,948 basehttp "GET /debts_all/ HTTP/1.1" 200 70479
+INFO 2026-01-10 17:21:34,659 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:21:35,932 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:21:36,470 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:21:45,960 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 17:21:46,472 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 17:21:46,782 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 17:21:52,678 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 17:21:53,727 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 45065
+INFO 2026-01-10 21:21:43,968 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/update/ HTTP/1.1" 200 44636
+INFO 2026-01-10 21:21:44,078 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-10 21:22:46,564 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 21:22:47,239 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:22:47,567 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:22:56,565 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 21:22:56,985 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:22:57,155 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:23:09,956 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-10 21:23:10,418 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:23:10,654 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:23:18,360 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/update/ HTTP/1.1" 302 0
+INFO 2026-01-10 21:23:18,395 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/preview/ HTTP/1.1" 200 38764
+INFO 2026-01-10 21:23:20,907 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-10 21:23:21,273 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:23:21,471 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:23:32,469 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/update/ HTTP/1.1" 200 44636
+INFO 2026-01-10 21:24:08,736 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/update/ HTTP/1.1" 200 44636
+INFO 2026-01-10 21:24:35,614 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-10 21:24:36,268 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:24:36,611 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:27:04,709 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/update/ HTTP/1.1" 200 44636
+INFO 2026-01-10 21:27:08,887 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 35080
+INFO 2026-01-10 21:27:11,968 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/delete/ HTTP/1.1" 200 32605
+INFO 2026-01-10 21:27:14,533 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKE31HT66SHGV9QB2Z3TM6D/delete/ HTTP/1.1" 302 0
+INFO 2026-01-10 21:27:14,554 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 33320
+INFO 2026-01-10 21:27:15,988 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/delete/ HTTP/1.1" 200 32596
+INFO 2026-01-10 21:27:18,141 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKDXKA1X7G8DSB2QZZKS6KB/delete/ HTTP/1.1" 302 0
+INFO 2026-01-10 21:27:18,159 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 31560
+INFO 2026-01-10 21:27:19,371 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKF59KPV1BJ1SN0HZP9Z9TC/delete/ HTTP/1.1" 200 32241
+INFO 2026-01-10 21:27:20,948 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKF59KPV1BJ1SN0HZP9Z9TC/delete/ HTTP/1.1" 302 0
+INFO 2026-01-10 21:27:20,963 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 30430
+INFO 2026-01-10 21:28:00,529 basehttp "GET /debts_all/ HTTP/1.1" 200 69955
+INFO 2026-01-10 21:28:08,953 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-10 21:28:09,468 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:28:09,716 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:28:18,662 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-10 21:28:19,111 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:28:19,307 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:29:46,712 basehttp "GET /debt/create/ HTTP/1.1" 200 98181
+INFO 2026-01-10 21:29:46,823 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 200 2484
+INFO 2026-01-10 21:29:46,824 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 200 862
+INFO 2026-01-10 21:29:46,827 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 200 14966
+INFO 2026-01-10 21:29:46,829 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 200 54
+INFO 2026-01-10 21:29:46,831 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 200 79212
+INFO 2026-01-10 21:29:54,843 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-10 21:29:55,402 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:29:55,581 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:30:25,060 basehttp "POST /debt/create/ HTTP/1.1" 302 0
+INFO 2026-01-10 21:30:25,145 basehttp "GET /debts_all/ HTTP/1.1" 200 71694
+INFO 2026-01-10 21:31:34,342 basehttp "GET /debts_all/ HTTP/1.1" 200 71076
+INFO 2026-01-10 21:31:52,168 basehttp "GET /debts_all/ HTTP/1.1" 200 71057
+INFO 2026-01-10 21:32:20,645 basehttp "GET /debts_all/ HTTP/1.1" 200 70965
+INFO 2026-01-10 21:32:36,204 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 21:34:54,867 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 38869
+INFO 2026-01-10 21:35:01,037 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 21:35:01,822 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:35:02,265 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:35:05,365 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 46633
+INFO 2026-01-10 21:35:11,254 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 21:35:11,826 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:35:12,026 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:35:15,747 basehttp "GET /industry_benchmark_list/?year=&industry_classification=&industry_subclassification=7&company_size=&indicator= HTTP/1.1" 200 45705
+INFO 2026-01-10 21:35:19,884 basehttp "GET /industry_benchmark_list/?year=&industry_classification=&industry_subclassification=7&company_size=m&indicator= HTTP/1.1" 200 42183
+WARNING 2026-01-10 21:36:11,136 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 21:36:18,266 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:36:32,220 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-10 21:36:32,712 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:36:33,039 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 21:40:52,921 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-10 21:41:07,921 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:41:13,195 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-10 21:41:13,353 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-10 21:41:17,913 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-10 21:41:19,334 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30829
+INFO 2026-01-10 21:41:20,685 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 31071
+INFO 2026-01-10 21:41:22,011 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 50456
+INFO 2026-01-10 21:42:35,241 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 50518
+INFO 2026-01-10 21:42:40,069 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 50518

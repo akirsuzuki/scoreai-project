@@ -164,8 +164,8 @@
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // Update footer
-        $(api.column(2).footer()).html('表示合計: ' + principalPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + principalTotal.toLocaleString('ja-JP') + '千円)');
-        $(api.column(7).footer()).html('表示合計: ' + monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + monthlyRepaymentTotal.toLocaleString('ja-JP') + '千円)');
+        $(api.column(2).footer()).html(principalPageTotal.toLocaleString('ja-JP') + '千円');
+        $(api.column(7).footer()).html(monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円');
       }
     });
 

@@ -30,6 +30,7 @@ from .views.industry_consultation_views import (
     IzakayaPlanUpdateView,
     IzakayaPlanPreviewView,
     IzakayaPlanListView,
+    IzakayaPlanDeleteView,
 )
 from .views.izakaya_plan_export_views import IzakayaPlanExportView
 from .views.fiscal_ai_diagnosis_views import (
@@ -337,8 +338,9 @@ urlpatterns = [
     path('ai-consultation/industry/<str:category_id>/', IndustryCategoryDetailView.as_view(), name='industry_category_detail'),
     # 居酒屋出店計画
     path('ai-consultation/industry/food-service/izakaya-plan/create/', IzakayaPlanCreateView.as_view(), name='izakaya_plan_create'),
-    path('ai-consultation/industry/food-service/izakaya-plan/<str:plan_id>/update/', IzakayaPlanUpdateView.as_view(), name='izakaya_plan_update'),
+    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/update/', IzakayaPlanUpdateView.as_view(), name='izakaya_plan_update'),
     path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/preview/', IzakayaPlanPreviewView.as_view(), name='izakaya_plan_preview'),
+    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/delete/', IzakayaPlanDeleteView.as_view(), name='izakaya_plan_delete'),
     path('ai-consultation/industry/food-service/izakaya-plan/<str:plan_id>/export/<str:format_type>/', IzakayaPlanExportView.as_view(), name='izakaya_plan_export'),
     path('ai-consultation/industry/food-service/izakaya-plan/list/', IzakayaPlanListView.as_view(), name='izakaya_plan_list'),
     # 汎用AI相談（より一般的なパスを後に配置）

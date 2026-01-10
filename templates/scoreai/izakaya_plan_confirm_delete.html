@@ -1,0 +1,103 @@
+{% extends "scoreai/base.html" %}
+{% load humanize %}
+{% load custom_filters %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">居酒屋出店計画の削除確認</h5>
+      </div>
+      <div class="card-body">
+        <h4 class="mb-4">以下の居酒屋出店計画を削除しますか？</h4>
+        <div class="row">
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">店のコンセプト</td>
+                <td>{{ plan.store_concept|default:"（未設定）" }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">席数</td>
+                <td>{{ plan.number_of_seats }}席</td>
+              </tr>
+              <tr>
+                <td class="table-light">ターゲット顧客</td>
+                <td>{{ plan.target_customer|default:"（未設定）" }}</td>
+              </tr>
+              <tr>
+                <td class="table-light">客単価</td>
+                <td>{{ plan.average_price_per_customer|intcomma }}円</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="col-md-6">
+            <table class="table table-bordered">
+              <tr>
+                <td class="table-light">初期投資額</td>
+                <td>{{ plan.initial_investment|intcomma }}円</td>
+              </tr>
+              <tr>
+                <td class="table-light">月額家賃</td>
+                <td>{{ plan.monthly_rent|intcomma }}円</td>
+              </tr>
+              {% if plan.monthly_profit %}
+              <tr>
+                <td class="table-light">月間利益</td>
+                <td>{{ plan.monthly_profit|intcomma }}円</td>
+              </tr>
+              <tr>
+                <td class="table-light">回収期間</td>
+                <td>
+                  {% if plan.payback_period_years == 999 %}
+                    回収不可能
+                  {% else %}
+                    {{ plan.payback_period_years }}年{{ plan.payback_period_months }}ヶ月
+                  {% endif %}
+                </td>
+              </tr>
+              {% endif %}
+              <tr>
+                <td class="table-light">ステータス</td>
+                <td>
+                  {% if plan.is_draft %}
+                    <span class="badge bg-warning">下書き</span>
+                  {% else %}
+                    <span class="badge bg-success">確定済み</span>
+                  {% endif %}
+                </td>
+              </tr>
+              <tr>
+                <td class="table-light">作成日</td>
+                <td>{{ plan.created_at|date:"Y年m月d日 H:i" }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="alert alert-warning mt-4">
+          <i class="ti ti-alert-triangle me-2"></i>この操作は取り消せません。削除した計画は復元できません。
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <form method="post" class="mt-4">
+          {% csrf_token %}
+          <div class="d-flex justify-content-end">
+            <a href="{% url 'izakaya_plan_list' %}" class="btn btn-outline-secondary me-2">キャンセル</a>
+            <button type="submit" class="btn btn-danger">
+              <i class="ti ti-trash me-1"></i>削除する
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

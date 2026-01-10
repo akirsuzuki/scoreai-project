@@ -2013,10 +2013,29 @@ class IzakayaPlan(models.Model):
     # 基本情報
     store_concept = models.CharField(max_length=200, verbose_name="店のコンセプト", blank=True)  # 店のコンセプト
     number_of_seats = models.IntegerField(verbose_name="席数", default=0)  # 席数
-    opening_hours_start = models.TimeField(verbose_name="営業開始時間", null=True, blank=True)  # 営業開始時間
-    opening_hours_end = models.TimeField(verbose_name="営業終了時間", null=True, blank=True)  # 営業終了時間
     target_customer = models.CharField(max_length=200, verbose_name="ターゲット顧客", blank=True)  # ターゲット
-    average_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="客単価（円）", default=0)  # 客単価（円）
+    
+    # 昼の営業時間帯
+    lunch_start_time = models.TimeField(verbose_name="昼の営業開始時間", null=True, blank=True)
+    lunch_end_time = models.TimeField(verbose_name="昼の営業終了時間", null=True, blank=True)
+    lunch_operating_days = models.JSONField(default=list, verbose_name="昼の営業曜日", blank=True, help_text="['monday', 'tuesday', ...]の形式")
+    lunch_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="昼の客単価（円）", default=0)
+    lunch_cost_rate = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="昼の原価率（%）", default=30.0, help_text="0-100の値")
+    lunch_monthly_coefficients = models.JSONField(default=dict, verbose_name="昼の月毎指数", blank=True, help_text="{'1': 1.0, '2': 1.1, ...}の形式（1-12月）")
+    
+    # 夜の営業時間帯
+    dinner_start_time = models.TimeField(verbose_name="夜の営業開始時間", null=True, blank=True)
+    dinner_end_time = models.TimeField(verbose_name="夜の営業終了時間", null=True, blank=True)
+    dinner_operating_days = models.JSONField(default=list, verbose_name="夜の営業曜日", blank=True, help_text="['monday', 'tuesday', ...]の形式")
+    dinner_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="夜の客単価（円）", default=0)
+    dinner_cost_rate = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="夜の原価率（%）", default=30.0, help_text="0-100の値")
+    dinner_monthly_coefficients = models.JSONField(default=dict, verbose_name="夜の月毎指数", blank=True, help_text="{'1': 1.0, '2': 1.1, ...}の形式（1-12月）")
+    
+    # 後方互換性のためのフィールド（非推奨）
+    opening_hours_start = models.TimeField(verbose_name="営業開始時間（旧）", null=True, blank=True)  # 非推奨
+    opening_hours_end = models.TimeField(verbose_name="営業終了時間（旧）", null=True, blank=True)  # 非推奨
+    average_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="客単価（円）（旧）", default=0)  # 非推奨
+    sales_coefficients = models.JSONField(default=dict, verbose_name="売上係数（旧）", blank=True)  # 非推奨
     
     # 投資情報
     initial_investment = models.DecimalField(max_digits=12, decimal_places=0, verbose_name="初期投資額（円）", default=0)  # 初期投資額（円）
@@ -2028,12 +2047,17 @@ class IzakayaPlan(models.Model):
     part_time_hours_per_month = models.IntegerField(verbose_name="アルバイト時間数/月", default=0)  # アルバイト時間数/月
     part_time_hourly_wage = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="アルバイト時給（円）", default=0)  # アルバイト時給（円）
     
-    # 売上係数（JSON形式で保存）
-    # 例: {"monday": 0.8, "tuesday": 0.9, ..., "holiday_eve": 1.5}
-    sales_coefficients = models.JSONField(default=dict, verbose_name="売上係数", blank=True)
+    # 追加経費項目
+    monthly_utilities = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="光熱費（円/月）", default=0)
+    monthly_supplies = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="消耗品費（円/月）", default=0)
+    monthly_advertising = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="広告宣伝費（円/月）", default=0)
+    monthly_fees = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="手数料（円/月）", default=0)
+    monthly_other_expenses = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="その他販管費（円/月）", default=0)
     
     # 計算結果（自動計算）
     monthly_revenue = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間売上（円）")  # 月間売上
+    monthly_cost_of_goods_sold = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間売上原価（円）")  # 売上原価
+    monthly_gross_profit = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間粗利益（円）")  # 粗利益
     monthly_cost = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間経費（円）")  # 月間経費
     monthly_profit = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間利益（円）")  # 月間利益
     payback_period_months = models.IntegerField(null=True, blank=True, verbose_name="回収期間（月）")  # 回収期間（月）
@@ -2055,7 +2079,7 @@ class IzakayaPlan(models.Model):
     def get_absolute_url(self):
         """編集ページのURL"""
         from django.urls import reverse
-        return reverse('izakaya_plan_update', kwargs={'plan_id': self.id})
+        return reverse('izakaya_plan_update', kwargs={'pk': self.id})
     
     def get_preview_url(self):
         """プレビューページのURL"""
