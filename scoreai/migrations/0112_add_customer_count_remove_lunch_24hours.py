@@ -127,38 +127,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='izakayaplan',
-            name='dinner_24hours',
-            field=models.BooleanField(default=False, help_text='24時間営業（昼夜連続）の場合はチェック', verbose_name='24時間営業'),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
-            name='dinner_end_time',
-            field=models.CharField(blank=True, help_text='参考情報（売上計算には使用しません）。28時（翌日4時）まで入力可能。例: 28:00', max_length=5, null=True, verbose_name='夜の営業終了時間'),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
-            name='dinner_operating_days',
-            field=models.JSONField(blank=True, default=list, help_text="['monday', 'tuesday', ...]の形式。24時間営業の場合は全曜日", verbose_name='夜の営業曜日'),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
-            name='dinner_start_time',
-            field=models.TimeField(blank=True, help_text='参考情報（売上計算には使用しません）', null=True, verbose_name='夜の営業開始時間'),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
             name='id',
             field=models.CharField(default=ulid.api.api.Api.new, editable=False, max_length=26, primary_key=True, serialize=False),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
-            name='lunch_end_time',
-            field=models.TimeField(blank=True, help_text='参考情報（売上計算には使用しません）', null=True, verbose_name='昼の営業終了時間'),
-        ),
-        migrations.AlterField(
-            model_name='izakayaplan',
-            name='lunch_start_time',
-            field=models.TimeField(blank=True, help_text='参考情報（売上計算には使用しません）', null=True, verbose_name='昼の営業開始時間'),
         ),
         migrations.AlterField(
             model_name='manual',
@@ -201,3 +171,4 @@ class Migration(migrations.Migration):
             field=models.CharField(default=ulid.api.api.Api.new, editable=False, max_length=26, primary_key=True, serialize=False),
         ),
     ]
+
