@@ -3,7 +3,7 @@
 """
 from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime, date, time
-from typing import Tuple, Dict
+from typing import Tuple, Dict, Optional, Union
 from ..models import IzakayaPlan
 
 
@@ -23,56 +23,78 @@ class IzakayaPlanService:
     }
     
     @staticmethod
+    def parse_time_with_28hour(time_str) -> Tuple[time, bool]:
+        """
+        28時表記（例: "28:00"）をtimeオブジェクトに変換
+        28:00 = 翌日4:00として扱う
+        
+        Args:
+            time_str: 時間文字列（"HH:MM"形式、28時まで対応）またはtimeオブジェクト
+        
+        Returns:
+            (timeオブジェクト, 翌日フラグ)のタプル
+        """
+        if not time_str:
+            return None, False
+        
+        # 既にtimeオブジェクトの場合はそのまま返す
+        if isinstance(time_str, time):
+            return time_str, False
+        
+        # 文字列の場合
+        if isinstance(time_str, str):
+            parts = time_str.split(':')
+            if len(parts) == 2:
+                hour = int(parts[0])
+                minute = int(parts[1])
+                # 28時以上は翌日として扱う
+                is_next_day = hour >= 24
+                if is_next_day:
+                    hour = hour - 24
+                return time(hour, minute), is_next_day
+        
+        return None, False
+    
+    @staticmethod
     def calculate_time_slot_revenue(
         plan: IzakayaPlan,
-        start_time: time,
-        end_time: time,
         operating_days: list,
         price_per_customer: Decimal,
+        customer_count: int,
         monthly_coefficients: Dict[str, float],
-        average_stay_hours: Decimal = Decimal('2.5')
+        is_24hours: bool = False
     ) -> Decimal:
         """
         特定の時間帯の月間売上を計算
+        計算式: 客単価 × 客数 × 営業日数 × 月毎指数
         
         Args:
             plan: IzakayaPlanインスタンス
-            start_time: 営業開始時間
-            end_time: 営業終了時間
             operating_days: 営業曜日のリスト（['monday', 'tuesday', ...]）
             price_per_customer: 客単価
+            customer_count: 1日あたりの客数
             monthly_coefficients: 月毎指数の辞書（{'1': 1.0, '2': 1.1, ...}）
-            average_stay_hours: 平均滞在時間（デフォルト2.5時間）
+            is_24hours: 24時間営業かどうか
         
         Returns:
             月間売上（円）
         """
-        if not start_time or not end_time or not operating_days:
+        if price_per_customer <= 0 or customer_count <= 0:
             return Decimal('0')
         
-        # 営業時間の計算（時間）
-        start_datetime = datetime.combine(date.today(), start_time)
-        end_datetime = datetime.combine(date.today(), end_time)
-        
-        # 終了時間が開始時間より前の場合は翌日とみなす
-        if end_datetime <= start_datetime:
-            end_datetime = datetime.combine(
-                date.today().replace(day=date.today().day + 1) if date.today().day < 28 else date.today().replace(month=date.today().month + 1, day=1),
-                end_time
-            )
-        
-        opening_duration = Decimal(str((end_datetime - start_datetime).total_seconds() / 3600))
-        
-        # 回転率 = 営業時間 / 平均滞在時間
-        if average_stay_hours > 0:
-            turnover_rate = opening_duration / average_stay_hours
-        else:
-            turnover_rate = Decimal('0')
-        
         # 営業日数の計算（月間）
+        # 24時間営業の場合は全曜日（7日）として扱う
+        if is_24hours:
+            operating_days_count = 7
+        else:
+            operating_days_count = len(operating_days) if operating_days else 0
+        
+        if operating_days_count == 0:
+            return Decimal('0')
+        
         # 1ヶ月あたりの各曜日の出現回数を計算（平均4.33回）
         days_per_weekday = Decimal('4.33')
-        monthly_operating_days = Decimal(str(len(operating_days))) * days_per_weekday
+        monthly_operating_days = Decimal(str(operating_days_count)) * days_per_weekday
         
         # 月毎指数の平均を計算（デフォルトは1.0）
         if monthly_coefficients:
@@ -80,11 +102,10 @@ class IzakayaPlanService:
         else:
             avg_monthly_coefficient = Decimal('1.0')
         
-        # 月間売上計算
+        # 月間売上計算: 客単価 × 客数 × 営業日数 × 月毎指数
         monthly_revenue = (
             price_per_customer *
-            Decimal(str(plan.number_of_seats)) *
-            turnover_rate *
+            Decimal(str(customer_count)) *
             monthly_operating_days *
             avg_monthly_coefficient
         )
@@ -105,26 +126,28 @@ class IzakayaPlanService:
         total_revenue = Decimal('0')
         
         # 昼の営業時間帯の売上
-        if plan.lunch_start_time and plan.lunch_end_time and plan.lunch_operating_days:
+        if plan.lunch_24hours or (plan.lunch_start_time and plan.lunch_end_time and plan.lunch_operating_days):
             lunch_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
                 start_time=plan.lunch_start_time,
                 end_time=plan.lunch_end_time,
                 operating_days=plan.lunch_operating_days or [],
                 price_per_customer=Decimal(str(plan.lunch_price_per_customer)),
-                monthly_coefficients=plan.lunch_monthly_coefficients or {}
+                monthly_coefficients=plan.lunch_monthly_coefficients or {},
+                is_24hours=plan.lunch_24hours
             )
             total_revenue += lunch_revenue
         
         # 夜の営業時間帯の売上
-        if plan.dinner_start_time and plan.dinner_end_time and plan.dinner_operating_days:
+        if plan.dinner_24hours or (plan.dinner_start_time and plan.dinner_end_time and plan.dinner_operating_days):
             dinner_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
                 start_time=plan.dinner_start_time,
                 end_time=plan.dinner_end_time,
                 operating_days=plan.dinner_operating_days or [],
                 price_per_customer=Decimal(str(plan.dinner_price_per_customer)),
-                monthly_coefficients=plan.dinner_monthly_coefficients or {}
+                monthly_coefficients=plan.dinner_monthly_coefficients or {},
+                is_24hours=plan.dinner_24hours
             )
             total_revenue += dinner_revenue
         
@@ -185,27 +208,32 @@ class IzakayaPlanService:
         monthly_revenue = IzakayaPlanService.calculate_monthly_revenue(plan)
         
         # 昼の営業時間帯の原価
-        if plan.lunch_start_time and plan.lunch_end_time and plan.lunch_operating_days:
+        if plan.lunch_price_per_customer > 0 and plan.lunch_customer_count > 0 and plan.lunch_operating_days:
             lunch_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
-                start_time=plan.lunch_start_time,
-                end_time=plan.lunch_end_time,
                 operating_days=plan.lunch_operating_days or [],
                 price_per_customer=Decimal(str(plan.lunch_price_per_customer)),
-                monthly_coefficients=plan.lunch_monthly_coefficients or {}
+                customer_count=plan.lunch_customer_count,
+                monthly_coefficients=plan.lunch_monthly_coefficients or {},
+                is_24hours=False
             )
             lunch_cost_rate = Decimal(str(plan.lunch_cost_rate)) / Decimal('100')
             total_cost += lunch_revenue * lunch_cost_rate
         
         # 夜の営業時間帯の原価
-        if plan.dinner_start_time and plan.dinner_end_time and plan.dinner_operating_days:
+        if plan.dinner_price_per_customer > 0 and plan.dinner_customer_count > 0:
+            # 24時間営業の場合は全曜日として扱う
+            operating_days = plan.dinner_operating_days or []
+            if plan.dinner_24hours:
+                operating_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            
             dinner_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
-                start_time=plan.dinner_start_time,
-                end_time=plan.dinner_end_time,
-                operating_days=plan.dinner_operating_days or [],
+                operating_days=operating_days,
                 price_per_customer=Decimal(str(plan.dinner_price_per_customer)),
-                monthly_coefficients=plan.dinner_monthly_coefficients or {}
+                customer_count=plan.dinner_customer_count,
+                monthly_coefficients=plan.dinner_monthly_coefficients or {},
+                is_24hours=plan.dinner_24hours
             )
             dinner_cost_rate = Decimal(str(plan.dinner_cost_rate)) / Decimal('100')
             total_cost += dinner_revenue * dinner_cost_rate

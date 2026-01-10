@@ -13,7 +13,7 @@ from decimal import Decimal
 
 from ..models import IndustryCategory, IndustryConsultationType, IzakayaPlan
 from ..mixins import SelectedCompanyMixin
-from scoreai.izakaya_plan_forms import IzakayaPlanForm
+from ..izakaya_plan_forms import IzakayaPlanForm
 from ..services.izakaya_plan_service import IzakayaPlanService
 
 

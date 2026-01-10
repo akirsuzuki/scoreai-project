@@ -235,7 +235,34 @@
     {% empty %}
     <div class="col-12">
         <div class="alert alert-info">
-            <i class="ti ti-info-circle me-2"></i>現在、利用可能な業界別相談室はありません。
+            <div class="d-flex align-items-start">
+                <i class="ti ti-info-circle me-3 fs-4"></i>
+                <div class="flex-grow-1">
+                    <h5 class="alert-heading mb-3">業界別相談室を利用するには</h5>
+                    <p class="mb-2">業界別相談室を利用するには、以下の設定が必要です：</p>
+                    <ul class="mb-3">
+                        <li><strong>業界カテゴリー</strong>の登録（例：外食業界、小売業界など）</li>
+                        <li><strong>業界別相談タイプ</strong>の登録（例：居酒屋出店計画作成など）</li>
+                    </ul>
+                    <p class="mb-3 text-muted small">
+                        これらの設定は、システム管理者がDjango管理画面から行うか、管理コマンド <code>python manage.py init_industry_consultation</code> を実行して初期データを設定します。
+                    </p>
+                    {% if user.is_staff %}
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="/admin/scoreai/industrycategory/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="ti ti-settings me-1"></i>業界カテゴリーを設定
+                        </a>
+                        <a href="/admin/scoreai/industryconsultationtype/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="ti ti-settings me-1"></i>業界別相談タイプを設定
+                        </a>
+                    </div>
+                    {% else %}
+                    <p class="mb-0 text-muted small">
+                        <i class="ti ti-lock me-1"></i>設定はシステム管理者のみが行えます。管理者にお問い合わせください。
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </div>
     {% endfor %}
