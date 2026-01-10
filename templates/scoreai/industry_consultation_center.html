@@ -1,5 +1,6 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}
 {{ title }}
@@ -16,6 +17,187 @@
         </div>
     </div>
 </div>
+
+<!-- 相談履歴セクション -->
+{% if recent_plans %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h5 class="card-title mb-0">
+                        <i class="ti ti-history me-2"></i>相談履歴
+                    </h5>
+                    <a href="{% url 'izakaya_plan_list' %}" class="btn btn-sm btn-outline-primary">
+                        すべて見る
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs mb-3" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#all-plans" type="button" role="tab">
+                            すべて ({{ recent_plans|length }})
+                        </button>
+                    </li>
+                    {% if draft_plans %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#draft-plans" type="button" role="tab">
+                            下書き ({{ draft_plans|length }})
+                        </button>
+                    </li>
+                    {% endif %}
+                    {% if completed_plans %}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed-plans" type="button" role="tab">
+                            確定済み ({{ completed_plans|length }})
+                        </button>
+                    </li>
+                    {% endif %}
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="all-plans" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>店のコンセプト</th>
+                                        <th>初期投資額</th>
+                                        <th>月間利益</th>
+                                        <th>回収期間</th>
+                                        <th>ステータス</th>
+                                        <th>作成日</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for plan in recent_plans %}
+                                    <tr>
+                                        <td>{{ plan.store_concept|default:"（未設定）" }}</td>
+                                        <td>{{ plan.initial_investment|intcomma }}円</td>
+                                        <td>
+                                            {% if plan.monthly_profit %}
+                                                {{ plan.monthly_profit|intcomma }}円
+                                            {% else %}
+                                                <span class="text-muted">未計算</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if plan.payback_period_years == 999 %}
+                                                <span class="text-danger">回収不可能</span>
+                                            {% elif plan.payback_period_years %}
+                                                {{ plan.payback_period_years }}年{{ plan.payback_period_months }}ヶ月
+                                            {% else %}
+                                                <span class="text-muted">未計算</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if plan.is_draft %}
+                                                <span class="badge bg-warning">下書き</span>
+                                            {% else %}
+                                                <span class="badge bg-success">確定済み</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ plan.created_at|date:"Y年m月d日 H:i" }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'izakaya_plan_update' plan.id %}" class="btn btn-outline-primary">
+                                                    <i class="ti ti-edit"></i>編集
+                                                </a>
+                                                {% if not plan.is_draft %}
+                                                <a href="{% url 'izakaya_plan_preview' plan.id %}" class="btn btn-outline-info">
+                                                    <i class="ti ti-eye"></i>プレビュー
+                                                </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% if draft_plans %}
+                    <div class="tab-pane fade" id="draft-plans" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>店のコンセプト</th>
+                                        <th>初期投資額</th>
+                                        <th>作成日</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for plan in draft_plans %}
+                                    <tr>
+                                        <td>{{ plan.store_concept|default:"（未設定）" }}</td>
+                                        <td>{{ plan.initial_investment|intcomma }}円</td>
+                                        <td>{{ plan.created_at|date:"Y年m月d日 H:i" }}</td>
+                                        <td>
+                                            <a href="{% url 'izakaya_plan_update' plan.id %}" class="btn btn-sm btn-outline-primary">
+                                                <i class="ti ti-edit"></i>編集
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if completed_plans %}
+                    <div class="tab-pane fade" id="completed-plans" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>店のコンセプト</th>
+                                        <th>初期投資額</th>
+                                        <th>月間利益</th>
+                                        <th>回収期間</th>
+                                        <th>作成日</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for plan in completed_plans %}
+                                    <tr>
+                                        <td>{{ plan.store_concept|default:"（未設定）" }}</td>
+                                        <td>{{ plan.initial_investment|intcomma }}円</td>
+                                        <td>{{ plan.monthly_profit|intcomma }}円</td>
+                                        <td>
+                                            {% if plan.payback_period_years == 999 %}
+                                                <span class="text-danger">回収不可能</span>
+                                            {% else %}
+                                                {{ plan.payback_period_years }}年{{ plan.payback_period_months }}ヶ月
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ plan.created_at|date:"Y年m月d日 H:i" }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a href="{% url 'izakaya_plan_update' plan.id %}" class="btn btn-outline-primary">
+                                                    <i class="ti ti-edit"></i>編集
+                                                </a>
+                                                <a href="{% url 'izakaya_plan_preview' plan.id %}" class="btn btn-outline-info">
+                                                    <i class="ti ti-eye"></i>プレビュー
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <div class="row">
     {% for category in categories %}

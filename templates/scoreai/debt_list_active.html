@@ -11,7 +11,8 @@
         <h5 class="card-title fw-semibold">現在アクティブな借入</h5>
       </div>
       <div class="card-body">
-        <table id="active_debt_list" class="display nowrap w-100">
+        <div style="overflow-x: auto;">
+        <table id="active_debt_list" class="display nowrap" style="width: 100%; min-width: 1200px;">
           <thead>
             <tr>
               <th>金融機関</th>
@@ -74,6 +75,7 @@
             </tr>
           </tfoot>
         </table>
+        </div>
       </div>
       <div class="card-footer text-end">
         <a href="{% url 'debt_create' %}" class="btn btn-primary">新規借入登録</a>
@@ -103,10 +105,33 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const table = new DataTable('#active_debt_list', {
-      responsive: true,
+      responsive: false,
       scrollX: true,
+      scrollCollapse: true,
+      autoWidth: false,
       pageLength: 25,
       pagingType: 'full_numbers',
+      fixedColumns: {
+        left: 1  // 左側に1列（金融機関）を固定
+      },
+      columnDefs: [
+        { targets: 0, width: '120px' },  // 金融機関
+        { targets: 1, width: '100px' },  // ステータス
+        { targets: 2, width: '100px' },  // 元本(千円)
+        { targets: 3, width: '100px' },  // 保証
+        { targets: 4, width: '70px' },   // 利息
+        { targets: 5, width: '80px' },   // 実行日
+        { targets: 6, width: '100px' },   // 返済開始日
+        { targets: 7, width: '100px' },   // 月返済額
+        { targets: 8, width: '80px' },   // 残高シェア
+        { targets: 9, width: '70px' },    // 残り回数
+        { targets: 10, width: '80px' },   // 支払回数
+        { targets: 11, width: '110px' },  // 今月末残高
+        { targets: 12, width: '110px' },  // 今月概算利息
+        { targets: 13, width: '110px' },  // 決算時残高
+        { targets: 14, width: '90px' },   // 代表者保証
+        { targets: 15, width: '70px' },  // 担保
+      ],
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
         // Remove the formatting to get integer data for summation

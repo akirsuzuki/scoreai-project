@@ -2,7 +2,7 @@
 業界別専門相談室のビュー
 """
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import TemplateView, CreateView, DetailView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, DetailView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.db import transaction
@@ -26,6 +26,25 @@ class IndustryConsultationCenterView(SelectedCompanyMixin, LoginRequiredMixin, T
         categories = IndustryCategory.objects.filter(is_active=True).order_by('order', 'name')
         context['categories'] = categories
         context['title'] = '業界別相談室'
+        
+        # 選択中のCompanyの相談履歴を取得
+        # 居酒屋出店計画の履歴（下書き含む）
+        izakaya_plans_queryset = IzakayaPlan.objects.filter(
+            company=self.this_company,
+            user=self.request.user
+        ).order_by('-created_at')
+        
+        # 最新10件を取得
+        recent_plans = list(izakaya_plans_queryset[:10])
+        
+        # 下書きと確定済みを分けて取得（最新10件の中から）
+        draft_plans = [plan for plan in recent_plans if plan.is_draft]
+        completed_plans = [plan for plan in recent_plans if not plan.is_draft]
+        
+        context['recent_plans'] = recent_plans
+        context['draft_plans'] = draft_plans
+        context['completed_plans'] = completed_plans
+        
         return context
 
 
@@ -88,49 +107,57 @@ class IzakayaPlanCreateView(SelectedCompanyMixin, LoginRequiredMixin, CreateView
     def get_success_url(self):
         from django.urls import reverse
         if self.object.is_draft:
-            return reverse('izakaya_plan_update', kwargs={'plan_id': self.object.id})
+            return reverse('izakaya_plan_update', kwargs={'pk': self.object.id})
         else:
             return reverse('izakaya_plan_preview', kwargs={'pk': self.object.id})
 
 
-class IzakayaPlanUpdateView(SelectedCompanyMixin, LoginRequiredMixin, View):
-    """居酒屋出店計画更新ビュー（AJAX用）"""
+class IzakayaPlanUpdateView(SelectedCompanyMixin, LoginRequiredMixin, UpdateView):
+    """居酒屋出店計画更新ビュー"""
+    model = IzakayaPlan
+    form_class = IzakayaPlanForm
+    template_name = 'scoreai/izakaya_plan_form.html'
+    context_object_name = 'plan'
     
-    def post(self, request, plan_id):
-        plan = get_object_or_404(
-            IzakayaPlan,
-            id=plan_id,
+    def get_queryset(self):
+        return IzakayaPlan.objects.filter(
             company=self.this_company,
-            user=request.user
+            user=self.request.user
         )
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '居酒屋出店計画編集'
+        context['default_coefficients'] = IzakayaPlanService.get_default_sales_coefficients()
+        return context
+    
+    @transaction.atomic
+    def form_valid(self, form):
+        # 売上係数が空の場合はデフォルト値を設定
+        if not form.instance.sales_coefficients:
+            form.instance.sales_coefficients = IzakayaPlanService.get_default_sales_coefficients()
         
-        form = IzakayaPlanForm(request.POST, instance=plan)
-        if form.is_valid():
-            form.save()
-            
-            # 下書きでない場合は計算を実行
-            if not form.instance.is_draft:
-                try:
-                    IzakayaPlanService.calculate_all(form.instance)
-                    return JsonResponse({
-                        'success': True,
-                        'message': '計画を更新し、計算を完了しました。'
-                    })
-                except Exception as e:
-                    return JsonResponse({
-                        'success': False,
-                        'message': f'計算中にエラーが発生しました: {str(e)}'
-                    }, status=400)
-            else:
-                return JsonResponse({
-                    'success': True,
-                    'message': '下書きとして保存しました。'
-                })
+        response = super().form_valid(form)
+        
+        # 下書きでない場合は計算を実行
+        if not form.instance.is_draft:
+            try:
+                IzakayaPlanService.calculate_all(form.instance)
+                messages.success(self.request, '計画を更新し、計算を完了しました。')
+                return redirect('izakaya_plan_preview', pk=self.object.id)
+            except Exception as e:
+                messages.error(self.request, f'計算中にエラーが発生しました: {str(e)}')
         else:
-            return JsonResponse({
-                'success': False,
-                'errors': form.errors
-            }, status=400)
+            messages.info(self.request, '下書きとして保存しました。')
+        
+        return response
+    
+    def get_success_url(self):
+        from django.urls import reverse
+        if self.object.is_draft:
+            return reverse('izakaya_plan_update', kwargs={'plan_id': self.object.id})
+        else:
+            return reverse('izakaya_plan_preview', kwargs={'pk': self.object.id})
 
 
 class IzakayaPlanPreviewView(SelectedCompanyMixin, LoginRequiredMixin, DetailView):
