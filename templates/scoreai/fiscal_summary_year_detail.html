@@ -32,6 +32,24 @@
         </form>
         {% endif %}
         <div class="d-flex gap-2 flex-wrap">
+          {% if fiscal_summary_year %}
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="ti ti-download me-1"></i>エクスポート
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{% url 'export_fiscal_summary_year_detail' year_id=fiscal_summary_year.id format_type='csv' %}">
+                <i class="ti ti-file-text me-2"></i>CSV形式
+              </a></li>
+              <li><a class="dropdown-item" href="{% url 'export_fiscal_summary_year_detail' year_id=fiscal_summary_year.id format_type='excel' %}">
+                <i class="ti ti-file-spreadsheet me-2"></i>Excel形式
+              </a></li>
+              <li><a class="dropdown-item" href="{% url 'export_fiscal_summary_year_detail' year_id=fiscal_summary_year.id format_type='pdf' %}">
+                <i class="ti ti-file-type-pdf me-2"></i>PDF形式
+              </a></li>
+            </ul>
+          </div>
+          {% endif %}
           <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
           <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">直近決算詳細</a>
           <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-outline-primary btn-sm">年次予算vs実績比較</a>

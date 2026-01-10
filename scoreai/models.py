@@ -1948,3 +1948,116 @@ class AIConsultationHistory(models.Model):
         if self.total_tokens:
             return f"{self.total_tokens:,}トークン (入力: {self.input_tokens or 0:,}, 出力: {self.output_tokens or 0:,})"
         return "未記録"
+
+
+# ============================================================================
+# 業界別専門相談室 モデル
+# ============================================================================
+
+class IndustryCategory(models.Model):
+    """業界カテゴリー"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    name = models.CharField(max_length=100, verbose_name="業界名")  # 例: "外食業界"
+    description = models.TextField(verbose_name="説明", blank=True)
+    icon = models.CharField(max_length=50, verbose_name="アイコン", blank=True, help_text="Font Awesome等のアイコン名")  # アイコン名（Font Awesome等）
+    order = models.IntegerField(default=0, verbose_name="表示順")
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = '業界カテゴリー'
+        verbose_name_plural = '業界カテゴリー'
+    
+    def __str__(self):
+        return self.name
+
+
+class IndustryConsultationType(models.Model):
+    """業界別相談タイプ"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    industry_category = models.ForeignKey(IndustryCategory, on_delete=models.CASCADE, related_name='consultation_types', verbose_name="業界カテゴリー")
+    name = models.CharField(max_length=100, verbose_name="相談タイプ名")  # 例: "居酒屋出店計画作成"
+    description = models.TextField(verbose_name="説明", blank=True)
+    template_type = models.CharField(
+        max_length=50,
+        choices=[
+            ('izakaya_plan', '居酒屋出店計画'),
+            ('cafe_plan', 'カフェ出店計画'),
+            # 将来拡張用
+        ],
+        verbose_name="テンプレートタイプ"
+    )
+    is_active = models.BooleanField(default=True, verbose_name="有効")
+    order = models.IntegerField(default=0, verbose_name="表示順")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
+    
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = '業界別相談タイプ'
+        verbose_name_plural = '業界別相談タイプ'
+    
+    def __str__(self):
+        return f"{self.industry_category.name} - {self.name}"
+
+
+class IzakayaPlan(models.Model):
+    """居酒屋出店計画データ"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    # 必須: 選択中のCompanyを保持（SelectedCompanyMixinと連携）
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='izakaya_plans', verbose_name="会社")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='izakaya_plans', verbose_name="ユーザー")
+    
+    # 基本情報
+    store_concept = models.CharField(max_length=200, verbose_name="店のコンセプト", blank=True)  # 店のコンセプト
+    number_of_seats = models.IntegerField(verbose_name="席数", default=0)  # 席数
+    opening_hours_start = models.TimeField(verbose_name="営業開始時間", null=True, blank=True)  # 営業開始時間
+    opening_hours_end = models.TimeField(verbose_name="営業終了時間", null=True, blank=True)  # 営業終了時間
+    target_customer = models.CharField(max_length=200, verbose_name="ターゲット顧客", blank=True)  # ターゲット
+    average_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="客単価（円）", default=0)  # 客単価（円）
+    
+    # 投資情報
+    initial_investment = models.DecimalField(max_digits=12, decimal_places=0, verbose_name="初期投資額（円）", default=0)  # 初期投資額（円）
+    monthly_rent = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="月額家賃（円）", default=0)  # 月額家賃（円）
+    
+    # 人件費
+    number_of_staff = models.IntegerField(verbose_name="社員人数", default=0)  # 社員人数
+    staff_monthly_salary = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="社員月給（円）", default=0)  # 社員月給（円）
+    part_time_hours_per_month = models.IntegerField(verbose_name="アルバイト時間数/月", default=0)  # アルバイト時間数/月
+    part_time_hourly_wage = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="アルバイト時給（円）", default=0)  # アルバイト時給（円）
+    
+    # 売上係数（JSON形式で保存）
+    # 例: {"monday": 0.8, "tuesday": 0.9, ..., "holiday_eve": 1.5}
+    sales_coefficients = models.JSONField(default=dict, verbose_name="売上係数", blank=True)
+    
+    # 計算結果（自動計算）
+    monthly_revenue = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間売上（円）")  # 月間売上
+    monthly_cost = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間経費（円）")  # 月間経費
+    monthly_profit = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間利益（円）")  # 月間利益
+    payback_period_months = models.IntegerField(null=True, blank=True, verbose_name="回収期間（月）")  # 回収期間（月）
+    payback_period_years = models.IntegerField(null=True, blank=True, verbose_name="回収期間（年）")  # 回収期間（年）
+    
+    # メタ情報
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
+    is_draft = models.BooleanField(default=True, verbose_name="下書き")  # 下書きかどうか
+    
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = '居酒屋出店計画'
+        verbose_name_plural = '居酒屋出店計画'
+    
+    def __str__(self):
+        return f"{self.company.name} - {self.store_concept or '無題'} ({self.created_at.strftime('%Y-%m-%d')})"
+    
+    def get_absolute_url(self):
+        """編集ページのURL"""
+        from django.urls import reverse
+        return reverse('izakaya_plan_update', kwargs={'plan_id': self.id})
+    
+    def get_preview_url(self):
+        """プレビューページのURL"""
+        from django.urls import reverse
+        return reverse('izakaya_plan_preview', kwargs={'pk': self.id})

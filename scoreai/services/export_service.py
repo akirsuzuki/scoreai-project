@@ -27,9 +27,44 @@ try:
     from reportlab.lib.units import inch
     from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
     from reportlab.lib import colors
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import TTFont
+    import os
     REPORTLAB_AVAILABLE = True
+    
+    # 日本語フォントの登録を試行
+    try:
+        # フォントファイルのパスを確認（複数の可能性のあるパスを試す）
+        font_paths = [
+            '/usr/share/fonts/truetype/ipafont/ipagp.ttf',  # Linux (IPAゴシック)
+            '/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc',  # macOS
+            'C:/Windows/Fonts/msgothic.ttc',  # Windows
+            os.path.join(os.path.dirname(__file__), '../../static/fonts/ipaexg.ttf'),  # プロジェクト内
+        ]
+        
+        font_registered = False
+        for font_path in font_paths:
+            if os.path.exists(font_path):
+                try:
+                    pdfmetrics.registerFont(TTFont('JapaneseFont', font_path))
+                    font_registered = True
+                    logger.info(f"Japanese font registered: {font_path}")
+                    break
+                except Exception as e:
+                    logger.warning(f"Failed to register font {font_path}: {e}")
+                    continue
+        
+        if not font_registered:
+            logger.warning("Japanese font not found. PDF export may have character encoding issues.")
+            JAPANESE_FONT_AVAILABLE = False
+        else:
+            JAPANESE_FONT_AVAILABLE = True
+    except Exception as e:
+        logger.warning(f"Error registering Japanese font: {e}")
+        JAPANESE_FONT_AVAILABLE = False
 except ImportError:
     REPORTLAB_AVAILABLE = False
+    JAPANESE_FONT_AVAILABLE = False
     logger.warning("reportlab is not installed. PDF export will not be available.")
 
 
@@ -199,13 +234,25 @@ class ExportService:
         
         # スタイルの定義
         styles = getSampleStyleSheet()
+        
+        # 日本語フォントが利用可能な場合は使用
+        font_name = 'JapaneseFont' if JAPANESE_FONT_AVAILABLE else 'Helvetica'
+        header_font_name = 'JapaneseFont' if JAPANESE_FONT_AVAILABLE else 'Helvetica-Bold'
+        
         title_style = ParagraphStyle(
             'CustomTitle',
             parent=styles['Heading1'],
             fontSize=16,
             textColor=colors.HexColor('#366092'),
             spaceAfter=30,
-            alignment=1  # 中央揃え
+            alignment=1,  # 中央揃え
+            fontName=font_name
+        )
+        
+        normal_style = ParagraphStyle(
+            'CustomNormal',
+            parent=styles['Normal'],
+            fontName=font_name
         )
         
         # タイトル
@@ -217,18 +264,24 @@ class ExportService:
             info_text = []
             for key, value in additional_info.items():
                 info_text.append(f"<b>{key}:</b> {value}")
-            story.append(Paragraph("<br/>".join(info_text), styles['Normal']))
+            story.append(Paragraph("<br/>".join(info_text), normal_style))
             story.append(Spacer(1, 0.2 * inch))
         
         # テーブルの作成
-        table_data = [headers] + data
+        # 日本語フォントが利用可能な場合は、データをParagraphに変換
+        if JAPANESE_FONT_AVAILABLE:
+            table_data = [[Paragraph(str(h), normal_style) for h in headers]]
+            for row in data:
+                table_data.append([Paragraph(str(cell), normal_style) for cell in row])
+        else:
+            table_data = [headers] + data
         
         # テーブルのスタイル
         table_style = TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#366092')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
             ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTNAME', (0, 0), (-1, 0), header_font_name),
             ('FONTSIZE', (0, 0), (-1, 0), 10),
             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
             ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
@@ -237,6 +290,9 @@ class ExportService:
             ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
         ])
         
+        if JAPANESE_FONT_AVAILABLE:
+            table_style.add('FONTNAME', (0, 1), (-1, -1), font_name)
+        
         table = Table(table_data, repeatRows=1)
         table.setStyle(table_style)
         story.append(table)
@@ -244,7 +300,7 @@ class ExportService:
         # フッター（生成日時）
         story.append(Spacer(1, 0.3 * inch))
         footer_text = f"生成日時: {timezone.now().strftime('%Y年%m月%d日 %H:%M:%S')}"
-        story.append(Paragraph(footer_text, styles['Normal']))
+        story.append(Paragraph(footer_text, normal_style))
         
         # PDFの生成
         doc.build(story)

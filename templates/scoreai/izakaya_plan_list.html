@@ -1,0 +1,66 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+            <a href="{% url 'izakaya_plan_create' %}" class="btn btn-primary">
+                <i class="ti ti-plus me-1"></i>新規作成
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for plan in plans %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title">{{ plan.store_concept|default:"無題" }}</h5>
+                <p class="text-muted small mb-2">
+                    <i class="ti ti-calendar me-1"></i>{{ plan.created_at|date:"Y年m月d日" }}
+                </p>
+                {% if plan.is_draft %}
+                <span class="badge bg-warning mb-2">下書き</span>
+                {% else %}
+                <span class="badge bg-success mb-2">確定</span>
+                {% endif %}
+                <div class="mt-3">
+                    <p class="mb-1"><strong>初期投資:</strong> {{ plan.initial_investment|intcomma }}円</p>
+                    {% if plan.monthly_profit %}
+                    <p class="mb-1"><strong>月間利益:</strong> {{ plan.monthly_profit|intcomma }}円</p>
+                    {% if plan.payback_period_years != 999 %}
+                    <p class="mb-1"><strong>回収期間:</strong> {{ plan.payback_period_years }}年{{ plan.payback_period_months }}ヶ月</p>
+                    {% else %}
+                    <p class="mb-1 text-danger"><strong>回収期間:</strong> 回収不可能</p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'izakaya_plan_preview' pk=plan.id %}" class="btn btn-sm btn-primary">
+                        <i class="ti ti-eye me-1"></i>詳細を見る
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="ti ti-info-circle me-2"></i>居酒屋出店計画がまだ作成されていません。
+            <a href="{% url 'izakaya_plan_create' %}" class="btn btn-sm btn-primary ms-2">
+                <i class="ti ti-plus me-1"></i>新規作成
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

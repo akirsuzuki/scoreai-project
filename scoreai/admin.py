@@ -1,4 +1,6 @@
 from django.contrib import admin
+# 業界別相談室のAdmin設定をインポート
+from .admin_industry_consultation import *
 from .models import (
     CompanyUsageTracking,
     User,
@@ -28,6 +30,9 @@ from .models import (
     IndustryClassification,
     IndustrySubClassification,
     IndustryIndicator,
+    IndustryCategory,
+    IndustryConsultationType,
+    IzakayaPlan,
     IndustryBenchmark,
     TechnicalTerm,
     Help,

@@ -1,0 +1,279 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+.summary-card {
+    border-left: 4px solid #667eea;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin-bottom: 30px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+            <div>
+                <a href="{% url 'izakaya_plan_update' plan_id=plan.id %}" class="btn btn-outline-primary me-2">
+                    <i class="ti ti-edit me-1"></i>編集
+                </a>
+                <a href="{% url 'izakaya_plan_list' %}" class="btn btn-outline-secondary">
+                    <i class="ti ti-list me-1"></i>計画一覧
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 結果サマリー -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">初期投資回収期間</h6>
+                <h3 class="mb-0">
+                    {% if plan.payback_period_years == 999 %}
+                    <span class="text-danger">回収不可能</span>
+                    {% else %}
+                    {{ plan.payback_period_years }}年{{ plan.payback_period_months }}ヶ月
+                    {% endif %}
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">月間売上</h6>
+                <h3 class="mb-0">{{ plan.monthly_revenue|intcomma }}円</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">月間経費</h6>
+                <h3 class="mb-0">{{ plan.monthly_cost|intcomma }}円</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">月間利益</h6>
+                <h3 class="mb-0 {% if plan.monthly_profit < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ plan.monthly_profit|intcomma }}円
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- グラフ表示 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">月次収支予測（12ヶ月分）</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">累積利益グラフ</h5>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="cumulativeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 基本情報 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">基本情報</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <strong>店のコンセプト:</strong><br>
+                        {{ plan.store_concept|default:"未設定" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>席数:</strong><br>
+                        {{ plan.number_of_seats }}席
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>営業時間:</strong><br>
+                        {{ plan.opening_hours_start|time:"H:i" }} ～ {{ plan.opening_hours_end|time:"H:i" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>ターゲット顧客:</strong><br>
+                        {{ plan.target_customer|default:"未設定" }}
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong>客単価:</strong><br>
+                        {{ plan.average_price_per_customer|intcomma }}円
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- エクスポートボタン -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">書類生成・ダウンロード</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">銀行提出用の書類を生成・ダウンロードできます。</p>
+                <div class="btn-group" role="group">
+                    <a href="{% url 'izakaya_plan_export' plan_id=plan.id format_type='pdf' %}" class="btn btn-primary">
+                        <i class="ti ti-file-pdf me-1"></i>PDFダウンロード
+                    </a>
+                    <a href="{% url 'izakaya_plan_export' plan_id=plan.id format_type='excel' %}" class="btn btn-success">
+                        <i class="ti ti-file-excel me-1"></i>Excelダウンロード
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 月次収支予測グラフ
+const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+const monthlyData = {
+    labels: Array.from({length: 12}, (_, i) => `${i + 1}月`),
+    datasets: [
+        {
+            label: '売上',
+            data: {{ monthly_revenue_data|safe }},
+            backgroundColor: 'rgba(102, 126, 234, 0.5)',
+            borderColor: 'rgba(102, 126, 234, 1)',
+            borderWidth: 1,
+            type: 'bar'
+        },
+        {
+            label: '経費',
+            data: {{ monthly_cost_data|safe }},
+            backgroundColor: 'rgba(239, 68, 68, 0.5)',
+            borderColor: 'rgba(239, 68, 68, 1)',
+            borderWidth: 1,
+            type: 'bar'
+        },
+        {
+            label: '利益',
+            data: {{ monthly_profit_data|safe }},
+            backgroundColor: 'rgba(16, 185, 129, 0.5)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 2,
+            type: 'line',
+            tension: 0.1
+        }
+    ]
+};
+
+new Chart(monthlyCtx, {
+    type: 'bar',
+    data: monthlyData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString() + '円';
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + '円';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// 累積利益グラフ
+const cumulativeCtx = document.getElementById('cumulativeChart').getContext('2d');
+const cumulativeData = {
+    labels: Array.from({length: 12}, (_, i) => `${i + 1}月`),
+    datasets: [{
+        label: '累積利益',
+        data: {{ cumulative_profit_data|safe }},
+        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+        borderColor: 'rgba(16, 185, 129, 1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.1
+    }]
+};
+
+new Chart(cumulativeCtx, {
+    type: 'line',
+    data: cumulativeData,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    callback: function(value) {
+                        return value.toLocaleString() + '円';
+                    }
+                }
+            }
+        },
+        plugins: {
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        return '累積利益: ' + context.parsed.y.toLocaleString() + '円';
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}
+

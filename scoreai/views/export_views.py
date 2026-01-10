@@ -72,16 +72,31 @@ def export_debts(request, format_type='csv'):
     elif is_nodisplay == 'false':
         queryset = queryset.filter(is_nodisplay=False)
     
+    # 合計値を計算（残高シェア計算用）
+    # プロパティにアクセスするため、リストに変換してから計算
+    debts_list = list(queryset)
+    total_balance_monthly = sum([debt.balances_monthly[0] for debt in debts_list if hasattr(debt, 'balances_monthly') and len(debt.balances_monthly) > 0])
+    total_balance_fy1 = sum([debt.balance_fy1 for debt in debts_list if hasattr(debt, 'balance_fy1')])
+    
     # ヘッダー
     headers = [
         '金融機関', '実行日', '返済開始日', '元本（円）', '利息（%）',
         '月返済額（円）', '返済回数', '残り回数', '保証協会',
+        '現在残高（円）', '現在残高シェア（%）', '決算時残高（円）', '決算時残高シェア（%）',
         '経営者保証', '担保', 'リスケ', '非表示'
     ]
     
     # データ
     data = []
-    for debt in queryset.order_by('-issue_date'):
+    for debt in debts_list:
+        # 現在残高とシェア
+        current_balance = debt.balances_monthly[0] if hasattr(debt, 'balances_monthly') and len(debt.balances_monthly) > 0 else 0
+        current_balance_share = (current_balance / total_balance_monthly * 100) if total_balance_monthly > 0 else 0
+        
+        # 決算時残高とシェア
+        balance_fy1 = debt.balance_fy1 if hasattr(debt, 'balance_fy1') else 0
+        balance_fy1_share = (balance_fy1 / total_balance_fy1 * 100) if total_balance_fy1 > 0 else 0
+        
         data.append([
             debt.financial_institution.short_name if debt.financial_institution else '',
             debt.issue_date.strftime('%Y-%m-%d') if debt.issue_date else '',
@@ -92,6 +107,10 @@ def export_debts(request, format_type='csv'):
             debt.payment_terms,
             debt.remaining_months,
             debt.secured_type.name if debt.secured_type else '',
+            int(current_balance),
+            round(current_balance_share, 2),
+            int(balance_fy1),
+            round(balance_fy1_share, 2),
             'あり' if debt.is_securedby_management else 'なし',
             'あり' if debt.is_collateraled else 'なし',
             'あり' if debt.is_rescheduled else 'なし',
@@ -100,7 +119,7 @@ def export_debts(request, format_type='csv'):
     
     # ファイル名
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename_base = f"借入データ_{this_company.name}_{timestamp}"
+    filename_base = f"借入一覧_{this_company.name}_{timestamp}"
     
     # エクスポート
     try:
@@ -109,11 +128,11 @@ def export_debts(request, format_type='csv'):
             return ExportService.export_to_csv(headers, data, filename, encoding='utf-8-sig')
         elif format_type == 'excel':
             filename = f"{filename_base}.xlsx"
-            title = f"借入データ - {this_company.name}"
+            title = f"借入一覧 - {this_company.name}"
             return ExportService.export_to_excel(headers, data, filename, title=title)
         elif format_type == 'pdf':
             filename = f"{filename_base}.pdf"
-            title = f"借入データ - {this_company.name}"
+            title = f"借入一覧 - {this_company.name}"
             additional_info = {
                 '会社名': this_company.name,
                 'エクスポート日時': datetime.now().strftime('%Y年%m月%d日 %H:%M:%S'),
@@ -158,11 +177,15 @@ def export_fiscal_summary_year(request, format_type='csv', year_id=None):
             id=year_id,
             is_budget=False
         )
+        # 特定年度の場合は年度を取得
+        selected_year = queryset.first()
+        year_label = f"_{selected_year.year}年" if selected_year else ""
     else:
         queryset = FiscalSummary_Year.objects.filter(
             company=this_company,
             is_budget=False
         )
+        year_label = ""
     
     # ヘッダー
     headers = [
@@ -196,9 +219,14 @@ def export_fiscal_summary_year(request, format_type='csv', year_id=None):
             year_data.net_profit or 0,
         ])
     
-    # ファイル名
+    # ファイル名（特定年度の場合は「決算年次詳細」、全年度の場合は「決算年次推移」）
     timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    filename_base = f"決算年次データ_{this_company.name}_{timestamp}"
+    if year_id:
+        filename_base = f"決算年次詳細_{this_company.name}{year_label}_{timestamp}"
+        title_base = f"決算年次詳細 - {this_company.name}{year_label}"
+    else:
+        filename_base = f"決算年次推移_{this_company.name}_{timestamp}"
+        title_base = f"決算年次推移 - {this_company.name}"
     
     # エクスポート
     try:
@@ -207,11 +235,11 @@ def export_fiscal_summary_year(request, format_type='csv', year_id=None):
             return ExportService.export_to_csv(headers, data, filename, encoding='shift-jis')
         elif format_type == 'excel':
             filename = f"{filename_base}.xlsx"
-            title = f"決算年次データ - {this_company.name}"
+            title = title_base
             return ExportService.export_to_excel(headers, data, filename, title=title)
         elif format_type == 'pdf':
             filename = f"{filename_base}.pdf"
-            title = f"決算年次データ - {this_company.name}"
+            title = title_base
             additional_info = {
                 '会社名': this_company.name,
                 'エクスポート日時': datetime.now().strftime('%Y年%m月%d日 %H:%M:%S'),

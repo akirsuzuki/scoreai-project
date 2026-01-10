@@ -1,0 +1,346 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<style>
+.progress-section {
+    border-left: 4px solid #667eea;
+    padding-left: 15px;
+    margin-bottom: 30px;
+}
+
+.progress-section.active {
+    border-left-color: #667eea;
+}
+
+.progress-section.completed {
+    border-left-color: #10b981;
+}
+
+.section-content {
+    display: none;
+}
+
+.section-content.active {
+    display: block;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+            <a href="{% url 'izakaya_plan_list' %}" class="btn btn-outline-secondary">
+                <i class="ti ti-list me-1"></i>計画一覧
+            </a>
+        </div>
+    </div>
+</div>
+
+<form method="post" id="izakayaPlanForm">
+    {% csrf_token %}
+    {{ form.is_draft }}
+    
+    <!-- プログレスバー -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-3 text-center">
+                    <div class="progress-section active" data-section="1">
+                        <h6 class="mb-0">基本情報</h6>
+                        <small class="text-muted">店の概要</small>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="progress-section" data-section="2">
+                        <h6 class="mb-0">投資情報</h6>
+                        <small class="text-muted">初期投資・家賃</small>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="progress-section" data-section="3">
+                        <h6 class="mb-0">人件費</h6>
+                        <small class="text-muted">社員・アルバイト</small>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="progress-section" data-section="4">
+                        <h6 class="mb-0">売上係数</h6>
+                        <small class="text-muted">曜日別設定</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション1: 基本情報 -->
+    <div class="card mb-4 section-content active" id="section1">
+        <div class="card-header">
+            <h5 class="card-title mb-0">基本情報</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <label for="{{ form.store_concept.id_for_label }}" class="form-label">{{ form.store_concept.label }}</label>
+                    {{ form.store_concept }}
+                    {% if form.store_concept.errors %}
+                    <div class="text-danger small">{{ form.store_concept.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.number_of_seats.id_for_label }}" class="form-label">{{ form.number_of_seats.label }}</label>
+                    {{ form.number_of_seats }}
+                    {% if form.number_of_seats.errors %}
+                    <div class="text-danger small">{{ form.number_of_seats.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="{{ form.opening_hours_start.id_for_label }}" class="form-label">営業開始時間</label>
+                    {{ form.opening_hours_start }}
+                    {% if form.opening_hours_start.errors %}
+                    <div class="text-danger small">{{ form.opening_hours_start.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label for="{{ form.opening_hours_end.id_for_label }}" class="form-label">営業終了時間</label>
+                    {{ form.opening_hours_end }}
+                    {% if form.opening_hours_end.errors %}
+                    <div class="text-danger small">{{ form.opening_hours_end.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12 mb-3">
+                    <label for="{{ form.target_customer.id_for_label }}" class="form-label">{{ form.target_customer.label }}</label>
+                    {{ form.target_customer }}
+                    {% if form.target_customer.errors %}
+                    <div class="text-danger small">{{ form.target_customer.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.average_price_per_customer.id_for_label }}" class="form-label">{{ form.average_price_per_customer.label }}</label>
+                    <div class="input-group">
+                        {{ form.average_price_per_customer }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.average_price_per_customer.errors %}
+                    <div class="text-danger small">{{ form.average_price_per_customer.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-primary" onclick="showSection(2)">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション2: 投資情報 -->
+    <div class="card mb-4 section-content" id="section2">
+        <div class="card-header">
+            <h5 class="card-title mb-0">投資情報</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.initial_investment.id_for_label }}" class="form-label">{{ form.initial_investment.label }}</label>
+                    <div class="input-group">
+                        {{ form.initial_investment }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.initial_investment.errors %}
+                    <div class="text-danger small">{{ form.initial_investment.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.monthly_rent.id_for_label }}" class="form-label">{{ form.monthly_rent.label }}</label>
+                    <div class="input-group">
+                        {{ form.monthly_rent }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.monthly_rent.errors %}
+                    <div class="text-danger small">{{ form.monthly_rent.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(1)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(3)">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション3: 人件費 -->
+    <div class="card mb-4 section-content" id="section3">
+        <div class="card-header">
+            <h5 class="card-title mb-0">人件費</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.number_of_staff.id_for_label }}" class="form-label">{{ form.number_of_staff.label }}</label>
+                    {{ form.number_of_staff }}
+                    {% if form.number_of_staff.errors %}
+                    <div class="text-danger small">{{ form.number_of_staff.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.staff_monthly_salary.id_for_label }}" class="form-label">{{ form.staff_monthly_salary.label }}</label>
+                    <div class="input-group">
+                        {{ form.staff_monthly_salary }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.staff_monthly_salary.errors %}
+                    <div class="text-danger small">{{ form.staff_monthly_salary.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.part_time_hours_per_month.id_for_label }}" class="form-label">{{ form.part_time_hours_per_month.label }}</label>
+                    {{ form.part_time_hours_per_month }}
+                    {% if form.part_time_hours_per_month.errors %}
+                    <div class="text-danger small">{{ form.part_time_hours_per_month.errors }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="{{ form.part_time_hourly_wage.id_for_label }}" class="form-label">{{ form.part_time_hourly_wage.label }}</label>
+                    <div class="input-group">
+                        {{ form.part_time_hourly_wage }}
+                        <span class="input-group-text">円</span>
+                    </div>
+                    {% if form.part_time_hourly_wage.errors %}
+                    <div class="text-danger small">{{ form.part_time_hourly_wage.errors }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(2)">戻る</button>
+                <button type="button" class="btn btn-primary" onclick="showSection(4)">次へ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- セクション4: 売上係数 -->
+    <div class="card mb-4 section-content" id="section4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">売上係数設定</h5>
+        </div>
+        <div class="card-body">
+            <p class="text-muted mb-3">曜日別・祝前日の売上係数を設定してください。1.0を基準として、高い日は1.0より大きく、低い日は1.0より小さく設定します。</p>
+            <div class="row" id="salesCoefficientsContainer">
+                <!-- JavaScriptで動的に生成 -->
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+                <button type="button" class="btn btn-outline-secondary" onclick="showSection(3)">戻る</button>
+                <div>
+                    <button type="submit" name="save_draft" value="1" class="btn btn-outline-primary me-2">
+                        <i class="ti ti-device-floppy me-1"></i>保存して下書き
+                    </button>
+                    <button type="submit" name="calculate" value="1" class="btn btn-primary">
+                        <i class="ti ti-calculator me-1"></i>計算してプレビュー
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+let currentSection = 1;
+const defaultCoefficients = {{ default_coefficients|safe }};
+
+function showSection(sectionNum) {
+    // 現在のセクションを非表示
+    document.querySelectorAll('.section-content').forEach(section => {
+        section.classList.remove('active');
+    });
+    document.querySelectorAll('.progress-section').forEach(section => {
+        section.classList.remove('active', 'completed');
+    });
+    
+    // 新しいセクションを表示
+    document.getElementById(`section${sectionNum}`).classList.add('active');
+    document.querySelector(`.progress-section[data-section="${sectionNum}"]`).classList.add('active');
+    
+    // 以前のセクションを完了としてマーク
+    for (let i = 1; i < sectionNum; i++) {
+        document.querySelector(`.progress-section[data-section="${i}"]`).classList.add('completed');
+    }
+    
+    currentSection = sectionNum;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 売上係数の入力フィールドを生成
+function initializeSalesCoefficients() {
+    const container = document.getElementById('salesCoefficientsContainer');
+    const coefficients = {{ form.sales_coefficients.value|default:"{}"|safe }};
+    const defaultCoeffs = defaultCoefficients;
+    
+    const days = [
+        { key: 'monday', label: '月曜日', default: defaultCoeffs.monday || 0.8 },
+        { key: 'tuesday', label: '火曜日', default: defaultCoeffs.tuesday || 0.9 },
+        { key: 'wednesday', label: '水曜日', default: defaultCoeffs.wednesday || 0.9 },
+        { key: 'thursday', label: '木曜日', default: defaultCoeffs.thursday || 1.0 },
+        { key: 'friday', label: '金曜日', default: defaultCoeffs.friday || 1.2 },
+        { key: 'saturday', label: '土曜日', default: defaultCoeffs.saturday || 1.3 },
+        { key: 'sunday', label: '日曜日', default: defaultCoeffs.sunday || 1.1 },
+        { key: 'holiday_eve', label: '祝前日', default: defaultCoeffs.holiday_eve || 1.5 },
+    ];
+    
+    days.forEach(day => {
+        const value = coefficients[day.key] || day.default;
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-3 mb-3';
+        col.innerHTML = `
+            <label class="form-label">${day.label}</label>
+            <input type="number" 
+                   class="form-control coefficient-input" 
+                   data-key="${day.key}"
+                   value="${value}" 
+                   step="0.1" 
+                   min="0" 
+                   required>
+        `;
+        container.appendChild(col);
+    });
+    
+    // フォーム送信時にJSON形式で値を設定
+    document.getElementById('izakayaPlanForm').addEventListener('submit', function(e) {
+        const coefficients = {};
+        document.querySelectorAll('.coefficient-input').forEach(input => {
+            coefficients[input.dataset.key] = parseFloat(input.value) || 0;
+        });
+        
+        // 隠しフィールドを作成または更新
+        let hiddenInput = document.getElementById('id_sales_coefficients');
+        if (!hiddenInput) {
+            hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'sales_coefficients';
+            hiddenInput.id = 'id_sales_coefficients';
+            this.appendChild(hiddenInput);
+        }
+        hiddenInput.value = JSON.stringify(coefficients);
+    });
+}
+
+// ページ読み込み時に初期化
+document.addEventListener('DOMContentLoaded', function() {
+    initializeSalesCoefficients();
+    
+    // 下書き保存ボタンの処理
+    document.querySelector('button[name="save_draft"]').addEventListener('click', function(e) {
+        document.getElementById('id_is_draft').value = 'true';
+    });
+    
+    // 計算ボタンの処理
+    document.querySelector('button[name="calculate"]').addEventListener('click', function(e) {
+        document.getElementById('id_is_draft').value = 'false';
+    });
+});
+</script>
+{% endblock %}
+

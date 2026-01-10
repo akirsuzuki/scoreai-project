@@ -10,10 +10,23 @@
     <div class="col-12 mb-4">
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
             <h4 class="fw-semibold mb-0">AI相談センター</h4>
+            <a href="{% url 'industry_consultation_center' %}" class="btn btn-outline-primary">
+                <i class="ti ti-building me-1"></i>業界別相談室
+            </a>
+        </div>
+    </div>
+    <div class="col-12 mb-4">
+        <div class="alert alert-info">
+            <i class="ti ti-info-circle me-2"></i>
+            <strong>業界別相談室</strong>では、業界特有の課題に対応した専門的な相談や、銀行提出用の書類作成が可能です。
+            <a href="{% url 'industry_consultation_center' %}" class="alert-link">こちらからアクセス</a>
         </div>
     </div>
     <div class="col-12">
         <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">汎用相談室</h5>
+            </div>
             <div class="card-body">
                 <p class="mb-4">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
                 

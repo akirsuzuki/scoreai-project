@@ -1,0 +1,51 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+            <a href="{% url 'ai_consultation_center' %}" class="btn btn-outline-primary">
+                <i class="ti ti-arrow-left me-1"></i>汎用相談室に戻る
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    {% for category in categories %}
+    <div class="col-12 col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    {% if category.icon %}
+                    <i class="{{ category.icon }} fs-1 text-primary me-3"></i>
+                    {% else %}
+                    <i class="ti ti-building fs-1 text-primary me-3"></i>
+                    {% endif %}
+                    <h5 class="card-title mb-0">{{ category.name }}</h5>
+                </div>
+                {% if category.description %}
+                <p class="text-muted mb-3">{{ category.description }}</p>
+                {% endif %}
+                <a href="{% url 'industry_category_detail' category_id=category.id %}" class="btn btn-primary">
+                    <i class="ti ti-arrow-right me-1"></i>詳細を見る
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="ti ti-info-circle me-2"></i>現在、利用可能な業界別相談室はありません。
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+

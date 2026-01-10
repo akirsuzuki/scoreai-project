@@ -23,6 +23,15 @@ from .views.ai_consultation_views import (
     AIConsultationAPIView,
     AIConsultationHistoryView,
 )
+from .views.industry_consultation_views import (
+    IndustryConsultationCenterView,
+    IndustryCategoryDetailView,
+    IzakayaPlanCreateView,
+    IzakayaPlanUpdateView,
+    IzakayaPlanPreviewView,
+    IzakayaPlanListView,
+)
+from .views.izakaya_plan_export_views import IzakayaPlanExportView
 from .views.fiscal_ai_diagnosis_views import (
     FiscalAIDiagnosisGenerateView,
     FiscalAIDiagnosisChatView,
@@ -323,6 +332,16 @@ urlpatterns = [
     # AI相談関連
     path('ai-consultation/', AIConsultationCenterView.as_view(), name='ai_consultation_center'),
     path('ai-consultation/history/', AIConsultationHistoryView.as_view(), name='ai_consultation_history'),
+    # 業界別相談室（より具体的なパスを先に配置）
+    path('ai-consultation/industry/', IndustryConsultationCenterView.as_view(), name='industry_consultation_center'),
+    path('ai-consultation/industry/<str:category_id>/', IndustryCategoryDetailView.as_view(), name='industry_category_detail'),
+    # 居酒屋出店計画
+    path('ai-consultation/industry/food-service/izakaya-plan/create/', IzakayaPlanCreateView.as_view(), name='izakaya_plan_create'),
+    path('ai-consultation/industry/food-service/izakaya-plan/<str:plan_id>/update/', IzakayaPlanUpdateView.as_view(), name='izakaya_plan_update'),
+    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/preview/', IzakayaPlanPreviewView.as_view(), name='izakaya_plan_preview'),
+    path('ai-consultation/industry/food-service/izakaya-plan/<str:plan_id>/export/<str:format_type>/', IzakayaPlanExportView.as_view(), name='izakaya_plan_export'),
+    path('ai-consultation/industry/food-service/izakaya-plan/list/', IzakayaPlanListView.as_view(), name='izakaya_plan_list'),
+    # 汎用AI相談（より一般的なパスを後に配置）
     path('ai-consultation/<str:consultation_type_id>/api/', AIConsultationAPIView.as_view(), name='ai_consultation_api'),
     path('ai-consultation/<str:consultation_type_id>/', AIConsultationView.as_view(), name='ai_consultation'),
     # スクリプト管理（管理者用）

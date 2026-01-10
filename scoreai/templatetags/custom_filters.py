@@ -132,3 +132,23 @@ def markdown_filter(value):
         return ''
     md = markdown.Markdown(extensions=['extra', 'codehilite', 'tables', 'nl2br'])
     return mark_safe(md.convert(str(value)))
+
+
+@register.filter(name='intcomma')
+def intcomma(value):
+    """
+    数値をカンマ区切りで表示
+    Usage: {{ value|intcomma }}
+    """
+    try:
+        if value is None:
+            return ''
+        # Decimal型の場合はfloatに変換
+        if hasattr(value, 'quantize'):
+            value = float(value)
+        else:
+            value = float(value)
+        # カンマ区切りでフォーマット
+        return f"{value:,.0f}" if value == int(value) else f"{value:,.2f}"
+    except (ValueError, TypeError):
+        return value

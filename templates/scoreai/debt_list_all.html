@@ -42,6 +42,22 @@
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
       <h4 class="fw-semibold mb-0">借入管理</h4>
       <div class="d-flex gap-2 flex-wrap">
+        <div class="btn-group" role="group">
+          <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="ti ti-download me-1"></i>エクスポート
+          </button>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="{% url 'export_debts' 'csv' %}">
+              <i class="ti ti-file-text me-2"></i>CSV形式
+            </a></li>
+            <li><a class="dropdown-item" href="{% url 'export_debts' 'excel' %}">
+              <i class="ti ti-file-spreadsheet me-2"></i>Excel形式
+            </a></li>
+            <li><a class="dropdown-item" href="{% url 'export_debts' 'pdf' %}">
+              <i class="ti ti-file-type-pdf me-2"></i>PDF形式
+            </a></li>
+          </ul>
+        </div>
         <a href="{% url 'debts_all' %}" class="btn btn-primary btn-sm">借入一覧</a>
         <a href="{% url 'debts_byBank' %}" class="btn btn-outline-primary btn-sm">金融機関別</a>
         <a href="{% url 'debts_bySecuredType' %}" class="btn btn-outline-primary btn-sm">保証別</a>
