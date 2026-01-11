@@ -83,11 +83,11 @@ class IzakayaPlanService:
             return Decimal('0')
         
         # 営業日数の計算（月間）
-        # 24時間営業の場合は全曜日（7日）として扱う
-        if is_24hours:
-            operating_days_count = 7
-        else:
-            operating_days_count = len(operating_days) if operating_days else 0
+        # 営業曜日が全曜日（7日）の場合は24時間営業として扱う
+        operating_days_count = len(operating_days) if operating_days else 0
+        if operating_days_count == 7:
+            # 24時間営業として扱う
+            pass
         
         if operating_days_count == 0:
             return Decimal('0')
@@ -126,28 +126,30 @@ class IzakayaPlanService:
         total_revenue = Decimal('0')
         
         # 昼の営業時間帯の売上
-        if plan.lunch_24hours or (plan.lunch_start_time and plan.lunch_end_time and plan.lunch_operating_days):
+        if plan.lunch_customer_count > 0 and plan.lunch_price_per_customer > 0 and plan.lunch_operating_days:
             lunch_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
-                start_time=plan.lunch_start_time,
-                end_time=plan.lunch_end_time,
                 operating_days=plan.lunch_operating_days or [],
                 price_per_customer=Decimal(str(plan.lunch_price_per_customer)),
+                customer_count=plan.lunch_customer_count,
                 monthly_coefficients=plan.lunch_monthly_coefficients or {},
-                is_24hours=plan.lunch_24hours
+                is_24hours=False
             )
             total_revenue += lunch_revenue
         
         # 夜の営業時間帯の売上
-        if plan.dinner_24hours or (plan.dinner_start_time and plan.dinner_end_time and plan.dinner_operating_days):
+        if plan.dinner_customer_count > 0 and plan.dinner_price_per_customer > 0 and plan.dinner_operating_days:
+            operating_days = plan.dinner_operating_days or []
+            # 営業曜日が全曜日（7日）の場合は24時間営業として扱う
+            is_24hours = len(operating_days) == 7
+            
             dinner_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
-                start_time=plan.dinner_start_time,
-                end_time=plan.dinner_end_time,
-                operating_days=plan.dinner_operating_days or [],
+                operating_days=operating_days,
                 price_per_customer=Decimal(str(plan.dinner_price_per_customer)),
+                customer_count=plan.dinner_customer_count,
                 monthly_coefficients=plan.dinner_monthly_coefficients or {},
-                is_24hours=plan.dinner_24hours
+                is_24hours=is_24hours
             )
             total_revenue += dinner_revenue
         
@@ -222,10 +224,9 @@ class IzakayaPlanService:
         
         # 夜の営業時間帯の原価
         if plan.dinner_price_per_customer > 0 and plan.dinner_customer_count > 0:
-            # 24時間営業の場合は全曜日として扱う
             operating_days = plan.dinner_operating_days or []
-            if plan.dinner_24hours:
-                operating_days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
+            # 営業曜日が全曜日（7日）の場合は24時間営業として扱う
+            is_24hours = len(operating_days) == 7
             
             dinner_revenue = IzakayaPlanService.calculate_time_slot_revenue(
                 plan=plan,
@@ -233,7 +234,7 @@ class IzakayaPlanService:
                 price_per_customer=Decimal(str(plan.dinner_price_per_customer)),
                 customer_count=plan.dinner_customer_count,
                 monthly_coefficients=plan.dinner_monthly_coefficients or {},
-                is_24hours=plan.dinner_24hours
+                is_24hours=is_24hours
             )
             dinner_cost_rate = Decimal(str(plan.dinner_cost_rate)) / Decimal('100')
             total_cost += dinner_revenue * dinner_cost_rate

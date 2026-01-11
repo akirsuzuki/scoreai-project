@@ -20603,3 +20603,261 @@ WARNING 2026-01-11 08:36:21,443 export_service Japanese font not found. PDF expo
 WARNING 2026-01-11 08:36:31,073 export_service Japanese font not found. PDF export may have character encoding issues.
 WARNING 2026-01-11 08:36:51,190 export_service Japanese font not found. PDF export may have character encoding issues.
 WARNING 2026-01-11 08:36:59,977 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:39:40,374 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:39:40,599 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:39:45,123 basehttp "GET / HTTP/1.1" 200 60481
+INFO 2026-01-11 08:39:45,144 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-11 08:39:49,123 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-11 08:39:51,350 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 38552
+INFO 2026-01-11 08:39:52,956 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 31071
+INFO 2026-01-11 08:39:54,302 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 67949
+INFO 2026-01-11 08:41:16,178 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-11 08:41:21,541 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39593
+INFO 2026-01-11 08:41:24,727 basehttp "GET /debts_bySecuredType/2/ HTTP/1.1" 200 37901
+INFO 2026-01-11 08:41:28,472 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 08:41:29,152 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:41:29,359 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:41:41,132 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 08:41:41,450 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:41:41,635 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:41:49,273 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 08:41:49,601 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:41:49,815 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:41:58,470 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 08:41:58,876 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:41:59,073 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-11 08:43:08,524 export_service Japanese font not found. PDF export may have character encoding issues.
+WARNING 2026-01-11 08:43:31,294 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:44:06,625 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 08:44:06,904 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 08:44:07,075 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 08:45:25,796 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 39619
+INFO 2026-01-11 09:38:03,678 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:38:14,272 basehttp "GET /debts_bySecuredType/1/ HTTP/1.1" 200 37904
+INFO 2026-01-11 09:38:17,610 basehttp "GET /debts_bySecuredType/2/ HTTP/1.1" 200 37901
+INFO 2026-01-11 09:38:23,177 basehttp "GET /debt/01KEKY5TQBZK6E67BNW1BZJTCA/ HTTP/1.1" 200 45261
+INFO 2026-01-11 09:41:14,597 basehttp "GET /debts_all/ HTTP/1.1" 200 70965
+INFO 2026-01-11 09:41:43,974 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41553
+INFO 2026-01-11 09:41:55,148 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:41:59,611 basehttp "GET /debts_archived/ HTTP/1.1" 200 32773
+INFO 2026-01-11 09:43:09,184 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41553
+INFO 2026-01-11 09:43:20,892 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:43:23,988 basehttp "GET /debts_byBank/ HTTP/1.1" 200 41553
+INFO 2026-01-11 09:45:41,478 basehttp "GET /debts_all/ HTTP/1.1" 200 75107
+INFO 2026-01-11 09:46:52,703 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50575
+INFO 2026-01-11 09:47:24,248 basehttp "GET /debts_all/ HTTP/1.1" 200 74449
+INFO 2026-01-11 09:48:19,422 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50575
+INFO 2026-01-11 09:48:21,740 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:48:24,797 basehttp "GET /debts_archived/ HTTP/1.1" 200 32773
+INFO 2026-01-11 09:48:26,695 basehttp "GET /debts_all/ HTTP/1.1" 200 74449
+INFO 2026-01-11 09:48:29,930 basehttp "GET / HTTP/1.1" 200 60481
+INFO 2026-01-11 09:48:37,246 basehttp "GET /debt/01JDF2B2X12NXTFCEFPEJRWND8/ HTTP/1.1" 200 47311
+INFO 2026-01-11 09:48:45,563 basehttp "GET /debts_all/ HTTP/1.1" 200 74449
+INFO 2026-01-11 09:48:53,327 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:48:55,940 basehttp "GET /debts_archived/ HTTP/1.1" 200 32773
+INFO 2026-01-11 09:51:03,962 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-11 09:51:06,953 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 38552
+INFO 2026-01-11 09:51:09,590 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 200 39108
+INFO 2026-01-11 09:51:16,072 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 31071
+INFO 2026-01-11 09:51:17,447 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 65588
+INFO 2026-01-11 09:51:50,896 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 200 66030
+ERROR 2026-01-11 09:52:58,100 mixins Unexpected error in IzakayaPlanUpdateView.dispatch: name 'time' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 206, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 150, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 326, in full_clean
+    self._clean_form()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 342, in _clean_form
+    cleaned_data = self.clean()
+                   ^^^^^^^^^^^^
+  File "/app/scoreai/izakaya_plan_forms.py", line 289, in clean
+    if isinstance(dinner_end, time) and dinner_start >= dinner_end:
+                              ^^^^
+NameError: name 'time' is not defined. Did you forget to import 'time'
+ERROR 2026-01-11 09:52:58,112 log Internal Server Error: /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 206, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 150, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 326, in full_clean
+    self._clean_form()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 342, in _clean_form
+    cleaned_data = self.clean()
+                   ^^^^^^^^^^^^
+  File "/app/scoreai/izakaya_plan_forms.py", line 289, in clean
+    if isinstance(dinner_end, time) and dinner_start >= dinner_end:
+                              ^^^^
+NameError: name 'time' is not defined. Did you forget to import 'time'
+ERROR 2026-01-11 09:52:58,114 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 500 124819
+INFO 2026-01-11 09:53:10,282 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 200 66554
+INFO 2026-01-11 09:53:13,537 basehttp "GET /debts_all/ HTTP/1.1" 200 74561
+INFO 2026-01-11 09:53:25,095 autoreload /app/scoreai/izakaya_plan_forms.py changed, reloading.
+INFO 2026-01-11 09:53:25,754 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 09:53:26,138 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 09:53:27,569 basehttp "GET / HTTP/1.1" 200 60481
+INFO 2026-01-11 09:53:32,065 autoreload /app/scoreai/izakaya_plan_forms.py changed, reloading.
+INFO 2026-01-11 09:53:32,504 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 09:53:32,716 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 09:53:38,197 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 48781
+INFO 2026-01-11 09:53:42,349 basehttp "GET /debts_bySecuredType/1/ HTTP/1.1" 200 37904
+INFO 2026-01-11 09:54:03,430 basehttp "GET /debts_bySecuredType/2/ HTTP/1.1" 200 37901
+INFO 2026-01-11 09:54:39,231 basehttp "GET /debts_bySecuredType/1/ HTTP/1.1" 200 37904
+INFO 2026-01-11 09:54:46,625 basehttp "GET /debts_all/ HTTP/1.1" 200 74561
+INFO 2026-01-11 09:55:32,751 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-11 09:55:34,147 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 38552
+INFO 2026-01-11 09:55:36,048 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 200 66030
+INFO 2026-01-11 09:56:16,455 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 09:56:16,479 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 200 39656
+INFO 2026-01-11 09:57:01,089 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 200 66031
+INFO 2026-01-11 09:57:22,257 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 09:57:22,274 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 200 39656
+INFO 2026-01-11 09:58:42,212 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 200 39108
+INFO 2026-01-11 09:58:51,053 basehttp "GET /debts_all/ HTTP/1.1" 200 74561
+INFO 2026-01-11 09:58:53,706 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 44644
+INFO 2026-01-11 09:59:05,089 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 09:59:05,618 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 09:59:06,019 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 09:59:07,775 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 52927
+INFO 2026-01-11 09:59:11,720 basehttp "GET /debts_bySecuredType/3/ HTTP/1.1" 200 35720
+INFO 2026-01-11 09:59:15,586 basehttp "GET /debt/01JDEP65ZQ5NHP8W3QW0AX1DWS/ HTTP/1.1" 200 44625
+INFO 2026-01-11 09:59:25,094 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 52927
+INFO 2026-01-11 09:59:25,172 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 09:59:25,765 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 09:59:26,007 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 09:59:26,842 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50575
+INFO 2026-01-11 10:00:24,081 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-11 10:00:31,451 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 10:00:31,898 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:00:32,113 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:00:50,268 autoreload /app/scoreai/services/izakaya_plan_service.py changed, reloading.
+INFO 2026-01-11 10:00:50,619 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:00:50,823 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:00:54,072 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 38552
+ERROR 2026-01-11 10:00:55,331 mixins Unexpected error in IzakayaPlanPreviewView.dispatch: cannot access local variable 'Decimal' where it is not associated with a value
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:00:55,344 log Internal Server Error: /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:00:55,346 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 500 92008
+ERROR 2026-01-11 10:00:57,426 mixins Unexpected error in IzakayaPlanPreviewView.dispatch: cannot access local variable 'Decimal' where it is not associated with a value
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:00:57,436 log Internal Server Error: /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:00:57,437 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 500 92501
+WARNING 2026-01-11 10:02:06,512 export_service Japanese font not found. PDF export may have character encoding issues.

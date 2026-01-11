@@ -2025,12 +2025,11 @@ class IzakayaPlan(models.Model):
     lunch_monthly_coefficients = models.JSONField(default=dict, verbose_name="昼の月毎指数", blank=True, help_text="{'1': 1.0, '2': 1.1, ...}の形式（1-12月）")
     
     # 夜の営業時間帯
-    dinner_24hours = models.BooleanField(verbose_name="24時間営業", default=False, help_text="24時間営業（昼夜連続）の場合はチェック")
     dinner_start_time = models.TimeField(verbose_name="夜の営業開始時間", null=True, blank=True, help_text="参考情報（売上計算には使用しません）")
     dinner_end_time = models.CharField(verbose_name="夜の営業終了時間", max_length=5, null=True, blank=True, help_text="参考情報（売上計算には使用しません）。28時（翌日4時）まで入力可能。例: 28:00")
-    dinner_operating_days = models.JSONField(default=list, verbose_name="夜の営業曜日", blank=True, help_text="['monday', 'tuesday', ...]の形式。24時間営業の場合は全曜日")
+    dinner_operating_days = models.JSONField(default=list, verbose_name="夜の営業曜日", blank=True, help_text="['monday', 'tuesday', ...]の形式。24時間営業の場合は全曜日を選択")
     dinner_price_per_customer = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="夜の客単価（円）", default=0)
-    dinner_customer_count = models.IntegerField(verbose_name="夜の客数（人/日）", default=0, help_text="1日あたりの客数。24時間営業の場合は合計客数を入力")
+    dinner_customer_count = models.IntegerField(verbose_name="夜の客数（人/日）", default=0, help_text="1日あたりの客数。全曜日を選択した場合は24時間営業として扱われ、合計客数を入力")
     dinner_cost_rate = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="夜の原価率（%）", default=30.0, help_text="0-100の値")
     dinner_monthly_coefficients = models.JSONField(default=dict, verbose_name="夜の月毎指数", blank=True, help_text="{'1': 1.0, '2': 1.1, ...}の形式（1-12月）")
     

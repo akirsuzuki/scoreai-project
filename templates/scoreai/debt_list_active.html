@@ -37,7 +37,13 @@
             {% for debt in debt_list %}
             <tr data-href="{% url 'debt_detail' debt.id %}">
               <td>{{ debt.financial_institution.short_name }}</td>
-              <td>{% if debt.start_date < today %}返済中{% else %}<span class="text-danger">【 返済前 】</span>{% endif %}</td>
+              <td>
+                {% if debt.start_date <= today %}
+                  <span class="badge bg-success">返済中</span>
+                {% else %}
+                  <span class="badge bg-danger">返済前</span>
+                {% endif %}
+              </td>
               <td>{{ debt.principal|to_thousands|intcomma}}</td>
               <td>{{ debt.secured_type }}</td>
               <td>{{ debt.interest_rate }}%</td>
@@ -50,8 +56,20 @@
               <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
               <td>{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
               <td>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
-              <td>{% if debt.is_securedby_management %}あり{% else %}なし{% endif %}</td>
-              <td>{% if debt.is_collateraled %} あり {% else %} なし {% endif %}</td>
+              <td>
+                {% if debt.is_securedby_management %}
+                  <span class="badge bg-info">あり</span>
+                {% else %}
+                  <span class="badge bg-light text-muted">なし</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if debt.is_collateraled %}
+                  <span class="badge bg-info">あり</span>
+                {% else %}
+                  <span class="badge bg-light text-muted">なし</span>
+                {% endif %}
+              </td>
             </tr>
             {% endfor %}
           </tbody>
@@ -134,7 +152,6 @@
       ],
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
-        // Remove the formatting to get integer data for summation
         let intVal = function (i) {
           return typeof i === 'string'
             ? i.replace(/[\$,]/g, '') * 1
@@ -142,14 +159,10 @@
               ? i
               : 0;
         };
-        // Total over all pages
+        
+        // 元本の合計
         let principalTotal = api
           .column(2)
-          .data()
-          .reduce((a, b) => intVal(a) + intVal(b), 0);
-        // Total over this page
-        let principalPageTotal = api
-          .column(2, { page: 'current' })
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
@@ -158,14 +171,24 @@
           .column(7)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
-        let monthlyRepaymentPageTotal = api
-          .column(7, { page: 'current' })
+        
+        // 今月末残高の合計
+        let balanceTotal = api
+          .column(11)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
-        // Update footer
-        $(api.column(2).footer()).html(principalPageTotal.toLocaleString('ja-JP') + '千円');
-        $(api.column(7).footer()).html(monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円');
+        // 決算時残高の合計
+        let balanceFy1Total = api
+          .column(13)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // フッターに表示
+        $(api.column(2).footer()).html(principalTotal.toLocaleString('ja-JP'));
+        $(api.column(7).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        $(api.column(11).footer()).html(balanceTotal.toLocaleString('ja-JP'));
+        $(api.column(13).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
       }
     });
 

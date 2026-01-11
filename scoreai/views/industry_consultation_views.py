@@ -202,10 +202,91 @@ class IzakayaPlanPreviewView(SelectedCompanyMixin, LoginRequiredMixin, DetailVie
             cumulative_profit_data.append(float(cumulative_profit))
         
         import json
+        from decimal import Decimal
+        
+        # 計算根拠データを準備
+        # 昼の売上計算根拠
+        lunch_operating_days_count = len(plan.lunch_operating_days) if plan.lunch_operating_days else 0
+        lunch_monthly_operating_days = Decimal(str(lunch_operating_days_count)) * Decimal('4.33') if lunch_operating_days_count > 0 else Decimal('0')
+        lunch_avg_coefficient = Decimal(str(sum(plan.lunch_monthly_coefficients.values()) / len(plan.lunch_monthly_coefficients))) if plan.lunch_monthly_coefficients else Decimal('1.0')
+        lunch_revenue_calculation = {
+            'price_per_customer': float(plan.lunch_price_per_customer or 0),
+            'customer_count': plan.lunch_customer_count or 0,
+            'operating_days_count': lunch_operating_days_count,
+            'monthly_operating_days': float(lunch_monthly_operating_days),
+            'avg_coefficient': float(lunch_avg_coefficient),
+            'calculated_revenue': float(IzakayaPlanService.calculate_time_slot_revenue(
+                plan=plan,
+                operating_days=plan.lunch_operating_days or [],
+                price_per_customer=Decimal(str(plan.lunch_price_per_customer or 0)),
+                customer_count=plan.lunch_customer_count or 0,
+                monthly_coefficients=plan.lunch_monthly_coefficients or {},
+                is_24hours=False
+            ))
+        }
+        
+        # 夜の売上計算根拠
+        dinner_operating_days_count = len(plan.dinner_operating_days) if plan.dinner_operating_days else 0
+        dinner_is_24hours = dinner_operating_days_count == 7
+        dinner_monthly_operating_days = Decimal('30') if dinner_is_24hours else (Decimal(str(dinner_operating_days_count)) * Decimal('4.33') if dinner_operating_days_count > 0 else Decimal('0'))
+        dinner_avg_coefficient = Decimal(str(sum(plan.dinner_monthly_coefficients.values()) / len(plan.dinner_monthly_coefficients))) if plan.dinner_monthly_coefficients else Decimal('1.0')
+        dinner_revenue_calculation = {
+            'price_per_customer': float(plan.dinner_price_per_customer or 0),
+            'customer_count': plan.dinner_customer_count or 0,
+            'operating_days_count': dinner_operating_days_count,
+            'is_24hours': dinner_is_24hours,
+            'monthly_operating_days': float(dinner_monthly_operating_days),
+            'avg_coefficient': float(dinner_avg_coefficient),
+            'calculated_revenue': float(IzakayaPlanService.calculate_time_slot_revenue(
+                plan=plan,
+                operating_days=plan.dinner_operating_days or [],
+                price_per_customer=Decimal(str(plan.dinner_price_per_customer or 0)),
+                customer_count=plan.dinner_customer_count or 0,
+                monthly_coefficients=plan.dinner_monthly_coefficients or {},
+                is_24hours=dinner_is_24hours
+            ))
+        }
+        
+        # 原価計算根拠
+        cost_of_goods_sold_calculation = {
+            'lunch_revenue': lunch_revenue_calculation['calculated_revenue'],
+            'lunch_cost_rate': float(plan.lunch_cost_rate or 0),
+            'lunch_cost': lunch_revenue_calculation['calculated_revenue'] * (float(plan.lunch_cost_rate or 0) / 100),
+            'dinner_revenue': dinner_revenue_calculation['calculated_revenue'],
+            'dinner_cost_rate': float(plan.dinner_cost_rate or 0),
+            'dinner_cost': dinner_revenue_calculation['calculated_revenue'] * (float(plan.dinner_cost_rate or 0) / 100),
+            'total_cost': (lunch_revenue_calculation['calculated_revenue'] * (float(plan.lunch_cost_rate or 0) / 100)) + 
+                         (dinner_revenue_calculation['calculated_revenue'] * (float(plan.dinner_cost_rate or 0) / 100))
+        }
+        
+        # 経費計算根拠
+        staff_cost = float(plan.number_of_staff or 0) * float(plan.staff_monthly_salary or 0)
+        part_time_cost = float(plan.part_time_hours_per_month or 0) * float(plan.part_time_hourly_wage or 0)
+        cost_calculation = {
+            'rent': float(plan.monthly_rent or 0),
+            'staff_count': plan.number_of_staff or 0,
+            'staff_salary': float(plan.staff_monthly_salary or 0),
+            'staff_cost': staff_cost,
+            'part_time_hours': plan.part_time_hours_per_month or 0,
+            'part_time_wage': float(plan.part_time_hourly_wage or 0),
+            'part_time_cost': part_time_cost,
+            'total_labor_cost': staff_cost + part_time_cost,
+            'utilities': float(plan.monthly_utilities or 0),
+            'supplies': float(plan.monthly_supplies or 0),
+            'advertising': float(plan.monthly_advertising or 0),
+            'fees': float(plan.monthly_fees or 0),
+            'other_expenses': float(plan.monthly_other_expenses or 0),
+            'total_cost': float(plan.monthly_cost or 0)
+        }
+        
         context['monthly_revenue_data'] = json.dumps(monthly_revenue_data)
         context['monthly_cost_data'] = json.dumps(monthly_cost_data)
         context['monthly_profit_data'] = json.dumps(monthly_profit_data)
         context['cumulative_profit_data'] = json.dumps(cumulative_profit_data)
+        context['lunch_revenue_calculation'] = lunch_revenue_calculation
+        context['dinner_revenue_calculation'] = dinner_revenue_calculation
+        context['cost_of_goods_sold_calculation'] = cost_of_goods_sold_calculation
+        context['cost_calculation'] = cost_calculation
         context['title'] = '居酒屋出店計画 - プレビュー'
         return context
 

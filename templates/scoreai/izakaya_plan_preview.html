@@ -134,6 +134,239 @@
     </div>
 </div>
 
+<!-- 計算根拠 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">計算根拠</h5>
+            </div>
+            <div class="card-body">
+                <!-- 売上計算 -->
+                <h6 class="fw-semibold mb-3">売上計算</h6>
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">昼の売上</h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2">
+                                    <strong>計算式:</strong><br>
+                                    客単価 × 客数 × 営業日数 × 月毎指数
+                                </p>
+                                <table class="table table-sm mb-0">
+                                    <tr>
+                                        <td>客単価:</td>
+                                        <td class="text-end">{{ lunch_revenue_calculation.price_per_customer|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>客数（1日あたり）:</td>
+                                        <td class="text-end">{{ lunch_revenue_calculation.customer_count }}人</td>
+                                    </tr>
+                                    <tr>
+                                        <td>営業曜日数:</td>
+                                        <td class="text-end">{{ lunch_revenue_calculation.operating_days_count }}日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>月間営業日数:</td>
+                                        <td class="text-end">{{ lunch_revenue_calculation.monthly_operating_days|floatformat:1 }}日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>月毎指数（平均）:</td>
+                                        <td class="text-end">{{ lunch_revenue_calculation.avg_coefficient|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr class="table-primary">
+                                        <td><strong>昼の月間売上:</strong></td>
+                                        <td class="text-end"><strong>{{ lunch_revenue_calculation.calculated_revenue|intcomma }}円</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">夜の売上</h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2">
+                                    <strong>計算式:</strong><br>
+                                    客単価 × 客数 × 営業日数 × 月毎指数
+                                </p>
+                                <table class="table table-sm mb-0">
+                                    <tr>
+                                        <td>客単価:</td>
+                                        <td class="text-end">{{ dinner_revenue_calculation.price_per_customer|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>客数（1日あたり）:</td>
+                                        <td class="text-end">{{ dinner_revenue_calculation.customer_count }}人</td>
+                                    </tr>
+                                    <tr>
+                                        <td>営業曜日数:</td>
+                                        <td class="text-end">
+                                            {% if dinner_revenue_calculation.is_24hours %}
+                                            全曜日（24時間営業）
+                                            {% else %}
+                                            {{ dinner_revenue_calculation.operating_days_count }}日
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>月間営業日数:</td>
+                                        <td class="text-end">{{ dinner_revenue_calculation.monthly_operating_days|floatformat:1 }}日</td>
+                                    </tr>
+                                    <tr>
+                                        <td>月毎指数（平均）:</td>
+                                        <td class="text-end">{{ dinner_revenue_calculation.avg_coefficient|floatformat:2 }}</td>
+                                    </tr>
+                                    <tr class="table-success">
+                                        <td><strong>夜の月間売上:</strong></td>
+                                        <td class="text-end"><strong>{{ dinner_revenue_calculation.calculated_revenue|intcomma }}円</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 原価計算 -->
+                <h6 class="fw-semibold mb-3">原価計算</h6>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-warning">
+                            <div class="card-header bg-warning text-dark">
+                                <h6 class="mb-0">売上原価</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm mb-0">
+                                    <tr>
+                                        <td>昼の売上:</td>
+                                        <td class="text-end">{{ cost_of_goods_sold_calculation.lunch_revenue|intcomma }}円</td>
+                                        <td>×</td>
+                                        <td>原価率 {{ cost_of_goods_sold_calculation.lunch_cost_rate|floatformat:2 }}%</td>
+                                        <td>=</td>
+                                        <td class="text-end">{{ cost_of_goods_sold_calculation.lunch_cost|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>夜の売上:</td>
+                                        <td class="text-end">{{ cost_of_goods_sold_calculation.dinner_revenue|intcomma }}円</td>
+                                        <td>×</td>
+                                        <td>原価率 {{ cost_of_goods_sold_calculation.dinner_cost_rate|floatformat:2 }}%</td>
+                                        <td>=</td>
+                                        <td class="text-end">{{ cost_of_goods_sold_calculation.dinner_cost|intcomma }}円</td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td colspan="4"><strong>合計売上原価:</strong></td>
+                                        <td class="text-end"><strong>{{ cost_of_goods_sold_calculation.total_cost|intcomma }}円</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 経費計算 -->
+                <h6 class="fw-semibold mb-3">経費計算</h6>
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card border-info">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">月間経費内訳</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm mb-0">
+                                    <tr>
+                                        <td>家賃:</td>
+                                        <td class="text-end">{{ cost_calculation.rent|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>人件費（社員）:</td>
+                                        <td class="text-end">
+                                            {{ cost_calculation.staff_count }}人 × {{ cost_calculation.staff_salary|intcomma }}円 = {{ cost_calculation.staff_cost|intcomma }}円
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>人件費（アルバイト）:</td>
+                                        <td class="text-end">
+                                            {{ cost_calculation.part_time_hours }}時間 × {{ cost_calculation.part_time_wage|intcomma }}円 = {{ cost_calculation.part_time_cost|intcomma }}円
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>人件費合計:</td>
+                                        <td class="text-end">{{ cost_calculation.total_labor_cost|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>光熱費:</td>
+                                        <td class="text-end">{{ cost_calculation.utilities|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>消耗品費:</td>
+                                        <td class="text-end">{{ cost_calculation.supplies|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>広告宣伝費:</td>
+                                        <td class="text-end">{{ cost_calculation.advertising|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>手数料:</td>
+                                        <td class="text-end">{{ cost_calculation.fees|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>その他販管費:</td>
+                                        <td class="text-end">{{ cost_calculation.other_expenses|intcomma }}円</td>
+                                    </tr>
+                                    <tr class="table-info">
+                                        <td><strong>月間経費合計:</strong></td>
+                                        <td class="text-end"><strong>{{ cost_calculation.total_cost|intcomma }}円</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 利益計算 -->
+                <h6 class="fw-semibold mb-3">利益計算</h6>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">月間利益の計算</h6>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-sm mb-0">
+                                    <tr>
+                                        <td>月間売上:</td>
+                                        <td class="text-end">{{ plan.monthly_revenue|intcomma }}円</td>
+                                    </tr>
+                                    <tr>
+                                        <td>売上原価:</td>
+                                        <td class="text-end">- {{ plan.monthly_cost_of_goods_sold|default:0|intcomma }}円</td>
+                                    </tr>
+                                    <tr class="table-warning">
+                                        <td><strong>粗利益:</strong></td>
+                                        <td class="text-end"><strong>{{ plan.monthly_gross_profit|default:0|intcomma }}円</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>月間経費:</td>
+                                        <td class="text-end">- {{ plan.monthly_cost|intcomma }}円</td>
+                                    </tr>
+                                    <tr class="table-success">
+                                        <td><strong>月間利益:</strong></td>
+                                        <td class="text-end"><strong>{{ plan.monthly_profit|intcomma }}円</strong></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 基本情報 -->
 <div class="row mb-4">
     <div class="col-12">
@@ -152,16 +385,8 @@
                         {{ plan.number_of_seats }}席
                     </div>
                     <div class="col-md-6 mb-3">
-                        <strong>営業時間:</strong><br>
-                        {{ plan.opening_hours_start|time:"H:i" }} ～ {{ plan.opening_hours_end|time:"H:i" }}
-                    </div>
-                    <div class="col-md-6 mb-3">
                         <strong>ターゲット顧客:</strong><br>
                         {{ plan.target_customer|default:"未設定" }}
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <strong>客単価:</strong><br>
-                        {{ plan.average_price_per_customer|intcomma }}円
                     </div>
                 </div>
             </div>

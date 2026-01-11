@@ -225,17 +225,6 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-12 mb-3">
-                    <div class="form-check">
-                        {{ form.dinner_24hours }}
-                        <label class="form-check-label" for="{{ form.dinner_24hours.id_for_label }}">
-                            {{ form.dinner_24hours.label }}
-                        </label>
-                    </div>
-                    {% if form.dinner_24hours.errors %}
-                    <div class="text-danger small">{{ form.dinner_24hours.errors }}</div>
-                    {% endif %}
-                </div>
                 <div class="col-md-6 mb-3">
                     <label for="{{ form.dinner_start_time.id_for_label }}" class="form-label">{{ form.dinner_start_time.label }}</label>
                     {{ form.dinner_start_time }}
@@ -561,44 +550,6 @@ function updateMonthlyCoefficients() {
     }
 }
 
-// 24時間営業チェックボックスの処理（夜のみ）
-function toggle24HoursFields(checkboxId, startTimeId, endTimeId, operatingDaysWidget) {
-    const checkbox = document.getElementById(checkboxId);
-    const startTime = document.getElementById(startTimeId);
-    const endTime = document.getElementById(endTimeId);
-    
-    if (!checkbox) return;
-    
-    function updateFields() {
-        if (checkbox.checked) {
-            // 24時間営業の場合は全曜日を選択
-            if (operatingDaysWidget) {
-                const checkboxes = operatingDaysWidget.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    cb.checked = true;
-                    cb.disabled = true;
-                });
-            }
-            // 時間入力は参考情報なので必須ではないが、無効化してもよい
-            if (startTime) startTime.disabled = true;
-            if (endTime) endTime.disabled = true;
-        } else {
-            // 24時間営業を解除した場合は全曜日の選択を解除可能にする
-            if (operatingDaysWidget) {
-                const checkboxes = operatingDaysWidget.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach(cb => {
-                    cb.disabled = false;
-                });
-            }
-            if (startTime) startTime.disabled = false;
-            if (endTime) endTime.disabled = false;
-        }
-    }
-    
-    checkbox.addEventListener('change', updateFields);
-    updateFields(); // 初期状態を設定
-}
-
 // 28時表記のバリデーション
 function validate28HourTime(input) {
     const value = input.value.trim();
@@ -619,10 +570,6 @@ function validate28HourTime(input) {
 
 // ページ読み込み時に初期化
 document.addEventListener('DOMContentLoaded', function() {
-    // 24時間営業チェックボックスの処理（夜のみ）
-    const dinnerOperatingDaysContainer = document.getElementById('dinner_operating_days_container');
-    toggle24HoursFields('id_dinner_24hours', 'id_dinner_start_time', 'id_dinner_end_time', dinnerOperatingDaysContainer);
-    
     // 28時表記のバリデーション
     const dinnerEndTime = document.getElementById('id_dinner_end_time');
     if (dinnerEndTime) {

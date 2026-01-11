@@ -1,6 +1,7 @@
 """
 居酒屋出店計画のフォーム
 """
+from datetime import time
 from django import forms
 from scoreai.models import IzakayaPlan
 from scoreai.services.izakaya_plan_service import IzakayaPlanService
@@ -49,7 +50,7 @@ class IzakayaPlanForm(forms.ModelForm):
             'lunch_start_time', 'lunch_end_time', 'lunch_price_per_customer', 'lunch_customer_count',
             'lunch_cost_rate', 'lunch_monthly_coefficients',
             # 夜の営業時間帯
-            'dinner_24hours', 'dinner_start_time', 'dinner_end_time', 'dinner_price_per_customer', 'dinner_customer_count',
+            'dinner_start_time', 'dinner_end_time', 'dinner_price_per_customer', 'dinner_customer_count',
             'dinner_cost_rate', 'dinner_monthly_coefficients',
             # 投資情報
             'initial_investment', 'monthly_rent',
@@ -105,10 +106,6 @@ class IzakayaPlanForm(forms.ModelForm):
             }),
             'lunch_monthly_coefficients': forms.HiddenInput(),  # JavaScriptで処理
             # 夜の営業時間帯
-            'dinner_24hours': forms.CheckboxInput(attrs={
-                'class': 'form-check-input',
-                'id': 'id_dinner_24hours'
-            }),
             'dinner_start_time': forms.TimeInput(attrs={
                 'class': 'form-control',
                 'type': 'time',
@@ -206,7 +203,6 @@ class IzakayaPlanForm(forms.ModelForm):
             'lunch_customer_count': '昼の客数（人/日）',
             'lunch_cost_rate': '昼の原価率（%）',
             'lunch_monthly_coefficients': '昼の月毎指数',
-            'dinner_24hours': '24時間営業',
             'dinner_start_time': '夜の営業開始時間',
             'dinner_end_time': '夜の営業終了時間',
             'dinner_price_per_customer': '夜の客単価（円）',
@@ -249,11 +245,6 @@ class IzakayaPlanForm(forms.ModelForm):
     def clean_dinner_end_time(self):
         """夜の終了時間のバリデーション（28時表記対応）"""
         end_time = self.cleaned_data.get('dinner_end_time')
-        dinner_24hours = self.cleaned_data.get('dinner_24hours', False)
-        
-        # 24時間営業の場合は時間入力不要
-        if dinner_24hours:
-            return None
         
         # 文字列の場合は28時表記を処理
         if end_time:
@@ -285,29 +276,20 @@ class IzakayaPlanForm(forms.ModelForm):
         cleaned_data['lunch_operating_days'] = lunch_days
         cleaned_data['dinner_operating_days'] = dinner_days
         
-        # 24時間営業の場合は時間入力をクリア（参考情報なので必須ではない）
-        dinner_24hours = cleaned_data.get('dinner_24hours', False)
+        # 時間の検証
+        lunch_start = cleaned_data.get('lunch_start_time')
+        lunch_end = cleaned_data.get('lunch_end_time')
+        if lunch_start and lunch_end and lunch_start >= lunch_end:
+            # 終了時間が開始時間より前の場合は翌日とみなす（エラーにしない）
+            pass
         
-        if dinner_24hours:
-            # 24時間営業の場合は全曜日として扱う
-            cleaned_data['dinner_operating_days'] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-        
-        # 時間の検証（24時間営業でない場合のみ）
-        if not lunch_24hours:
-            lunch_start = cleaned_data.get('lunch_start_time')
-            lunch_end = cleaned_data.get('lunch_end_time')
-            if lunch_start and lunch_end and lunch_start >= lunch_end:
+        dinner_start = cleaned_data.get('dinner_start_time')
+        dinner_end = cleaned_data.get('dinner_end_time')
+        if dinner_start and dinner_end:
+            # 28時表記の場合は文字列なので、timeオブジェクトとの比較はスキップ
+            if isinstance(dinner_end, time) and dinner_start >= dinner_end:
                 # 終了時間が開始時間より前の場合は翌日とみなす（エラーにしない）
                 pass
-        
-        if not dinner_24hours:
-            dinner_start = cleaned_data.get('dinner_start_time')
-            dinner_end = cleaned_data.get('dinner_end_time')
-            if dinner_start and dinner_end:
-                # 28時表記の場合は文字列なので、timeオブジェクトとの比較はスキップ
-                if isinstance(dinner_end, time) and dinner_start >= dinner_end:
-                    # 終了時間が開始時間より前の場合は翌日とみなす（エラーにしない）
-                    pass
         
         return cleaned_data
     

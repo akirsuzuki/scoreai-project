@@ -36,6 +36,38 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- 円グラフセクション -->
+<div class="row mb-4">
+  <div class="col-12 col-md-6 mb-4 mb-md-0">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-0">保証協会別残高シェア</h5>
+      </div>
+      <div class="card-body">
+        <div style="position: relative; height: 400px;">
+          <canvas id="bySecuredTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-0">金融機関別・保証別残高シェア</h5>
+      </div>
+      <div class="card-body">
+        <div style="position: relative; height: 400px;">
+          <canvas id="byBankAndSecuredTypeChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- テーブルセクション -->
+<div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-header">
@@ -82,6 +114,17 @@
               </tr>
               {% endfor %}
             </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="1" style="text-align:right">合計：</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -105,8 +148,8 @@
                 <th>保証タイプ</th>
                 <th>合計元本(千円)</th>
                 <th>合計月返済額</th>
-                <th>合計現在残高</th>
-                <th>合計今期末残高</th>
+                <th>合計現在残高<br>シェア</th>
+                <th>合計今期末残高<br>シェア</th>
                 <th>加重平均金利</th>
               </tr>
             </thead>
@@ -123,6 +166,16 @@
               </tr>
               {% endfor %}
             </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="2" style="text-align:right">合計：</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -132,34 +185,340 @@
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
+    // 保証協会別円グラフ
+    const bySecuredTypeCtx = document.getElementById('bySecuredTypeChart');
+    if (bySecuredTypeCtx) {
+      const bySecuredTypeLabels = [
+        {% for debt in debt_list_bySecuredType %}
+        '{{ debt.secured_type.name|escapejs }}',
+        {% endfor %}
+      ];
+      const bySecuredTypeValues = [
+        {% for debt in debt_list_bySecuredType %}
+        {{ debt.balances_monthly.0|default:0 }},
+        {% endfor %}
+      ];
+      
+      const bySecuredTypeData = {
+        labels: bySecuredTypeLabels,
+        datasets: [{
+          data: bySecuredTypeValues,
+          backgroundColor: function() {
+            const colors = [
+              'rgba(54, 162, 235, 0.8)',
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(255, 206, 86, 0.8)',
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(153, 102, 255, 0.8)',
+              'rgba(255, 159, 64, 0.8)',
+              'rgba(199, 199, 199, 0.8)',
+              'rgba(83, 102, 255, 0.8)',
+              'rgba(255, 99, 255, 0.8)',
+              'rgba(99, 255, 132, 0.8)',
+            ];
+            return bySecuredTypeValues.map((_, i) => colors[i % colors.length]);
+          }(),
+          borderColor: function() {
+            const colors = [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(199, 199, 199, 1)',
+              'rgba(83, 102, 255, 1)',
+              'rgba(255, 99, 255, 1)',
+              'rgba(99, 255, 132, 1)',
+            ];
+            return bySecuredTypeValues.map((_, i) => colors[i % colors.length]);
+          }(),
+          borderWidth: 2
+        }]
+      };
+
+      new Chart(bySecuredTypeCtx, {
+        type: 'pie',
+        data: bySecuredTypeData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 15,
+                font: {
+                  size: 12
+                },
+                generateLabels: function(chart) {
+                  const data = chart.data;
+                  if (data.labels.length && data.datasets.length) {
+                    const dataset = data.datasets[0];
+                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                    return data.labels.map((label, i) => {
+                      const value = dataset.data[i];
+                      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                      return {
+                        text: label + ' (' + percentage + '%)',
+                        fillStyle: dataset.backgroundColor[i],
+                        strokeStyle: dataset.borderColor[i],
+                        lineWidth: dataset.borderWidth,
+                        hidden: false,
+                        index: i
+                      };
+                    });
+                  }
+                  return [];
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.parsed || 0;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return label + ': ' + (value / 1000000).toFixed(1) + '百万円 (' + percentage + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // 金融機関別・保証別円グラフ
+    const byBankAndSecuredTypeCtx = document.getElementById('byBankAndSecuredTypeChart');
+    if (byBankAndSecuredTypeCtx) {
+      const byBankAndSecuredTypeLabels = [
+        {% for debt in debt_list_byBankAndSecuredType %}
+        '{{ debt.financial_institution.short_name|escapejs }} - {{ debt.secured_type.name|escapejs }}',
+        {% endfor %}
+      ];
+      const byBankAndSecuredTypeValues = [
+        {% for debt in debt_list_byBankAndSecuredType %}
+        {{ debt.balances_monthly.0|default:0 }},
+        {% endfor %}
+      ];
+      
+      const byBankAndSecuredTypeData = {
+        labels: byBankAndSecuredTypeLabels,
+        datasets: [{
+          data: byBankAndSecuredTypeValues,
+          backgroundColor: function() {
+            const colors = [
+              'rgba(54, 162, 235, 0.8)',
+              'rgba(255, 99, 132, 0.8)',
+              'rgba(255, 206, 86, 0.8)',
+              'rgba(75, 192, 192, 0.8)',
+              'rgba(153, 102, 255, 0.8)',
+              'rgba(255, 159, 64, 0.8)',
+              'rgba(199, 199, 199, 0.8)',
+              'rgba(83, 102, 255, 0.8)',
+              'rgba(255, 99, 255, 0.8)',
+              'rgba(99, 255, 132, 0.8)',
+            ];
+            return byBankAndSecuredTypeValues.map((_, i) => colors[i % colors.length]);
+          }(),
+          borderColor: function() {
+            const colors = [
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 99, 132, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(199, 199, 199, 1)',
+              'rgba(83, 102, 255, 1)',
+              'rgba(255, 99, 255, 1)',
+              'rgba(99, 255, 132, 1)',
+            ];
+            return byBankAndSecuredTypeValues.map((_, i) => colors[i % colors.length]);
+          }(),
+          borderWidth: 2
+        }]
+      };
+
+      new Chart(byBankAndSecuredTypeCtx, {
+        type: 'pie',
+        data: byBankAndSecuredTypeData,
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                padding: 15,
+                font: {
+                  size: 11
+                },
+                generateLabels: function(chart) {
+                  const data = chart.data;
+                  if (data.labels.length && data.datasets.length) {
+                    const dataset = data.datasets[0];
+                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                    return data.labels.map((label, i) => {
+                      const value = dataset.data[i];
+                      const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                      return {
+                        text: label + ' (' + percentage + '%)',
+                        fillStyle: dataset.backgroundColor[i],
+                        strokeStyle: dataset.borderColor[i],
+                        lineWidth: dataset.borderWidth,
+                        hidden: false,
+                        index: i
+                      };
+                    });
+                  }
+                  return [];
+                }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const label = context.label || '';
+                  const value = context.parsed || 0;
+                  const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                  const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                  return label + ': ' + (value / 1000000).toFixed(1) + '百万円 (' + percentage + '%)';
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
     // DataTable初期化 - 保証協会別テーブル（レスポンシブ対応）
     const table1 = new DataTable('#debt_list_bySecuredType_table', {
-      responsive: true,
+      responsive: false,
       scrollX: true,
+      scrollCollapse: true,
+      autoWidth: false,
       pageLength: 25,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
       },
       order: [[0, 'asc']], // 保証タイプで昇順ソート
       dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rtip',
-      pageLength: 25,
       lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "すべて"]],
-      pagingType: 'full_numbers'
+      pagingType: 'full_numbers',
+      footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+        let intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+              ? i
+              : 0;
+        };
+        
+        // 元本の合計
+        let principalTotal = api
+          .column(1)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 月返済額の合計
+        let monthlyRepaymentTotal = api
+          .column(2)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 現在残高の合計
+        let balanceTotal = api
+          .column(3)
+          .data()
+          .reduce((a, b) => {
+            // セル内の改行で分割された最初の値（残高）を取得
+            const value = typeof b === 'string' ? b.split('<br>')[0] : b;
+            return intVal(a) + intVal(value);
+          }, 0);
+        
+        // 今期末残高の合計
+        let balanceFy1Total = api
+          .column(4)
+          .data()
+          .reduce((a, b) => {
+            // セル内の改行で分割された最初の値（残高）を取得
+            const value = typeof b === 'string' ? b.split('<br>')[0] : b;
+            return intVal(a) + intVal(value);
+          }, 0);
+        
+        // フッターに表示
+        $(api.column(1).footer()).html(principalTotal.toLocaleString('ja-JP'));
+        $(api.column(2).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        $(api.column(3).footer()).html(balanceTotal.toLocaleString('ja-JP'));
+        $(api.column(4).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
+      }
     });
 
     // DataTable初期化 - 金融機関別・保証別テーブル（レスポンシブ対応）
     const table2 = new DataTable('#debt_list_byBankAndSecuredType_table', {
-      responsive: true,
+      responsive: false,
       scrollX: true,
+      scrollCollapse: true,
+      autoWidth: false,
       pageLength: 25,
       language: {
         url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
       },
       order: [[0, 'asc']], // 銀行名で昇順ソート
       dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>rtip',
-      pageLength: 25,
       lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "すべて"]],
-      pagingType: 'full_numbers'
+      pagingType: 'full_numbers',
+      footerCallback: function (row, data, start, end, display) {
+        let api = this.api();
+        let intVal = function (i) {
+          return typeof i === 'string'
+            ? i.replace(/[\$,]/g, '') * 1
+            : typeof i === 'number'
+              ? i
+              : 0;
+        };
+        
+        // 元本の合計
+        let principalTotal = api
+          .column(2)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 月返済額の合計
+        let monthlyRepaymentTotal = api
+          .column(3)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // 現在残高の合計
+        let balanceTotal = api
+          .column(4)
+          .data()
+          .reduce((a, b) => {
+            // セル内の改行で分割された最初の値（残高）を取得
+            const value = typeof b === 'string' ? b.split('<br>')[0] : b;
+            return intVal(a) + intVal(value);
+          }, 0);
+        
+        // 今期末残高の合計
+        let balanceFy1Total = api
+          .column(5)
+          .data()
+          .reduce((a, b) => {
+            // セル内の改行で分割された最初の値（残高）を取得
+            const value = typeof b === 'string' ? b.split('<br>')[0] : b;
+            return intVal(a) + intVal(value);
+          }, 0);
+        
+        // フッターに表示
+        $(api.column(2).footer()).html(principalTotal.toLocaleString('ja-JP'));
+        $(api.column(3).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        $(api.column(4).footer()).html(balanceTotal.toLocaleString('ja-JP'));
+        $(api.column(5).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
+      }
     });
   });
 </script>

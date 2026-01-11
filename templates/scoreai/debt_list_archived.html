@@ -65,12 +65,38 @@
                 <td>{{ debt.issue_date|date:"y年n月" }}</td>
                 <td>{{ debt.start_date|date:"y年n月" }}</td>
                 <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
-                <td>{% if debt.is_securedby_management %}あり{% else %}{% endif %}</td>
-                <td>{{ debt.is_collateraled }}</td>
+                <td>
+                  {% if debt.is_securedby_management %}
+                    <span class="badge bg-info">あり</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted">なし</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if debt.is_collateraled %}
+                    <span class="badge bg-info">あり</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted">なし</span>
+                  {% endif %}
+                </td>
                 <td>{{ debt.memo_short }}</td>
               </tr>
               {% endfor %}
             </tbody>
+            <tfoot>
+              <tr>
+                <th colspan="1" style="text-align:right">合計：</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
           </table>
         </div>
       </div>
@@ -80,17 +106,55 @@
 
 
   <script>
-    new DataTable('#archived_debt_list', {
-      responsive: true,
-      paging: false,
-      scrollY: 600
-    });
-  
     document.addEventListener('DOMContentLoaded', function () {
-      const rows = document.querySelectorAll('#archived_debt_list tbody tr');
-      rows.forEach(row => {
-        row.addEventListener('click', function () {
-          window.location.href = this.dataset.href;
+      const table = new DataTable('#archived_debt_list', {
+        responsive: false,
+        scrollX: true,
+        scrollCollapse: true,
+        autoWidth: false,
+        pageLength: 25,
+        pagingType: 'full_numbers',
+        language: {
+          url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
+        },
+        footerCallback: function (row, data, start, end, display) {
+          let api = this.api();
+          let intVal = function (i) {
+            return typeof i === 'string'
+              ? i.replace(/[\$,]/g, '') * 1
+              : typeof i === 'number'
+                ? i
+                : 0;
+          };
+          
+          // 元本の合計
+          let principalTotal = api
+            .column(1)
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+          
+          // 月返済額の合計
+          let monthlyRepaymentTotal = api
+            .column(6)
+            .data()
+            .reduce((a, b) => intVal(a) + intVal(b), 0);
+          
+          // フッターに表示
+          $(api.column(1).footer()).html(principalTotal.toLocaleString('ja-JP'));
+          $(api.column(6).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        }
+      });
+
+      // 行クリックで詳細ページに遷移
+      table.on('draw', function () {
+        const rows = document.querySelectorAll('#archived_debt_list tbody tr');
+        rows.forEach(row => {
+          row.addEventListener('click', function () {
+            const href = this.getAttribute('data-href');
+            if (href) {
+              window.location.href = href;
+            }
+          });
         });
       });
     });
