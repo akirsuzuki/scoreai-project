@@ -829,12 +829,13 @@ class Debt(models.Model):
     DEBT_TYPE_CHOICES = [
         ('certificate', '証書貸付'),
         ('corporate_bond', '社債'),
+        ('promissory_note', '手形貸付'),
     ]
     
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     financial_institution = models.ForeignKey(FinancialInstitution, on_delete=models.CASCADE, verbose_name="金融機関名")
-    debt_type = models.CharField("借入区分", max_length=20, choices=DEBT_TYPE_CHOICES, default='certificate', help_text="証書貸付: 毎月返済、社債: 指定月のみ返済")
+    debt_type = models.CharField("借入区分", max_length=20, choices=DEBT_TYPE_CHOICES, default='certificate', help_text="証書貸付: 毎月返済、社債: 指定月のみ返済、手形貸付: 期日一括償還")
     principal = models.IntegerField("借入元本", help_text="単位：円")
     issue_date = models.DateField("実行日")
     start_date = models.DateField("返済開始日")
@@ -949,6 +950,12 @@ class Debt(models.Model):
                         projected_balance = self.principal - (self.monthly_repayment * repayment_count + self.adjusted_amount_first)
                 else:
                     projected_balance = self.principal
+            elif self.debt_type == 'promissory_note':
+                # 手形貸付の場合: 返済開始日に全額返済
+                if months > 0:
+                    projected_balance = 0
+                else:
+                    projected_balance = self.principal
             else:
                 # 証書貸付の場合: 従来通り
                 projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
@@ -960,19 +967,46 @@ class Debt(models.Model):
     # 月々の残高
     @property
     def balances_monthly(self):
-        """今後12ヶ月間の各月の残高を計算（社債対応）"""
+        """今後12ヶ月間の各月の残高を計算（社債・手形貸付対応）"""
         start_month = self.elapsed_months
         balances = []
         current_balance = self.principal
         
-        # 返済開始前の残高を計算
+        # 手形貸付の場合の特別処理
+        if self.debt_type == 'promissory_note':
+            from datetime import date
+            current_date = datetime.now().date()
+            
+            for i in range(12):
+                # 現在からiヶ月後の日付を計算
+                target_year = current_date.year
+                target_month = current_date.month + i
+                while target_month > 12:
+                    target_month -= 12
+                    target_year += 1
+                
+                target_date = date(target_year, target_month, 1)
+                
+                # 返済開始日からの経過月数
+                months_from_start = (target_year - self.start_date.year) * 12 + (target_month - self.start_date.month)
+                
+                if months_from_start <= 0:
+                    # 返済開始前は元本
+                    balances.append(current_balance)
+                else:
+                    # 返済開始後は残高0（期日一括償還）
+                    balances.append(0)
+            
+            return balances
+        
+        # 返済開始前の残高を計算（証書貸付・社債）
         if start_month <= 0:
             # 返済開始前は元本
             for i in range(12):
                 balances.append(current_balance)
             return balances
         
-        # 返済開始後の残高を計算
+        # 返済開始後の残高を計算（証書貸付・社債）
         from datetime import date, timedelta
         current_date = datetime.now().date()
         
@@ -1087,6 +1121,12 @@ class Debt(models.Model):
             if self.monthly_repayment is None or self.monthly_repayment <= 0:
                 raise ValidationError({
                     'monthly_repayment': "返済額は正の数でなければなりません。"
+                })
+        elif self.debt_type == 'promissory_note':
+            # 手形貸付の場合: 返済開始日に全額返済
+            if self.monthly_repayment is None or self.monthly_repayment != self.principal:
+                raise ValidationError({
+                    'monthly_repayment': "手形貸付の場合は、返済額は元本と同一である必要があります（期日一括償還）。"
                 })
         else:
             # 証書貸付の場合

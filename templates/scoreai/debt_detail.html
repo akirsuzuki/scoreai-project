@@ -68,6 +68,18 @@
             <td>{{ debt.financial_institution }}</td>
           </tr>
           <tr>
+            <td class="table-light">区分</td>
+            <td>
+              {% if debt.debt_type == 'corporate_bond' %}
+                <span class="badge bg-warning text-dark">社債</span>
+              {% elif debt.debt_type == 'promissory_note' %}
+                <span class="badge bg-success">手形貸付</span>
+              {% else %}
+                <span class="badge bg-primary">証書貸付</span>
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
             <td class="table-light">元本</td>
             <td>{{ debt.principal|to_thousands|intcomma }}千円</td>
           </tr>
@@ -81,11 +93,23 @@
           </tr>
           <tr>
             <td class="table-light">代表者保証</td>
-            <td>{% if debt.is_securedby_management %}あり{% else %}なし{% endif %}</td>
+            <td>
+              {% if debt.is_securedby_management %}
+                <span class="badge bg-info">あり</span>
+              {% else %}
+                <span class="badge bg-light text-muted">なし</span>
+              {% endif %}
+            </td>
           </tr>
           <tr>
             <td class="table-light">担保</td>
-            <td>{% if debt.is_collateraled %}あり{% else %}なし{% endif %}</td>
+            <td>
+              {% if debt.is_collateraled %}
+                <span class="badge bg-info">あり</span>
+              {% else %}
+                <span class="badge bg-light text-muted">なし</span>
+              {% endif %}
+            </td>
           </tr>
           <tr>
             <td class="table-light">実行日</td>
@@ -94,6 +118,22 @@
           <tr>
             <td class="table-light">返済開始</td>
             <td>{{ debt.start_date }}</td>
+          </tr>
+          <tr>
+            <td class="table-light">返済月</td>
+            <td>
+              {% if debt.debt_type == 'corporate_bond' %}
+                {% if debt.repayment_months %}
+                  {% for month in debt.repayment_months %}{{ month }}月{% if not forloop.last %}、{% endif %}{% endfor %}
+                {% else %}
+                  （未設定）
+                {% endif %}
+              {% elif debt.debt_type == 'promissory_note' %}
+                期日一括償還
+              {% else %}
+                毎月
+              {% endif %}
+            </td>
           </tr>
           <tr>
             <td class="table-light">月返済額</td>

@@ -94,6 +94,8 @@ class DebtService:
                     'company': company_name,
                     'financial_institution': financial_institution,
                     'financial_institution_short_name': financial_institution_short_name,
+                    'debt_type': debt.debt_type,
+                    'repayment_months': debt.repayment_months,
                     'principal': debt.principal,
                     'issue_date': debt.issue_date,
                     'start_date': debt.start_date,

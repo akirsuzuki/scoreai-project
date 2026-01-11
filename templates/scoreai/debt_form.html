@@ -298,26 +298,6 @@
           </div>
 
           <div class="row">
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label for="{{ form.adjusted_amount_first.id_for_label }}" class="form-label">{{ form.adjusted_amount_first.label }}</label>
-                {{ form.adjusted_amount_first }}
-                {% if form.adjusted_amount_first.help_text %}
-                  <small class="form-text text-muted">{{ form.adjusted_amount_first.help_text }}</small>
-                {% endif %}
-              </div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label for="{{ form.adjusted_amount_last.id_for_label }}" class="form-label">{{ form.adjusted_amount_last.label }}</label>
-                {{ form.adjusted_amount_last }}
-                {% if form.adjusted_amount_last.help_text %}
-                  <small class="form-text text-muted">{{ form.adjusted_amount_last.help_text }}</small>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-          <div class="row">
             <div class="col-md-12">
               <div class="form-group mb-3">
                 <label for="{{ form.memo_long.id_for_label }}" class="form-label">{{ form.memo_long.label }}</label>
@@ -507,6 +487,29 @@ $(document).ready(function() {
                 repaymentMonthsField.prop('required', true);
             }
             console.log('Repayment months group display:', repaymentMonthsGroup.css('display'));
+        } else if (debtType === 'promissory_note') {
+            // 手形貸付の場合
+            console.log('Hiding repayment months group for promissory note');
+            repaymentMonthsGroup.css('display', 'none');
+            adjustedAmountGroup.css('display', 'none');
+            if (monthlyRepaymentLabel.length) {
+                monthlyRepaymentLabel.text('返済額（期日一括償還）');
+            }
+            if (repaymentMonthsField.length) {
+                repaymentMonthsField.prop('required', false);
+            }
+            // 元本が変更されたら、月返済額も自動的に更新
+            const principalField = $('#id_principal');
+            const monthlyRepaymentField = $('#id_monthly_repayment');
+            if (principalField.length && monthlyRepaymentField.length) {
+                principalField.on('change', function() {
+                    monthlyRepaymentField.val($(this).val());
+                });
+                // 初期値も設定
+                if (principalField.val() && !monthlyRepaymentField.val()) {
+                    monthlyRepaymentField.val(principalField.val());
+                }
+            }
         } else {
             // 証書貸付の場合
             console.log('Hiding repayment months group');

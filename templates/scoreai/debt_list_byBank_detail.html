@@ -45,6 +45,7 @@
             <thead>
               <tr>
                 <th>ステータス</th>
+                <th>区分</th>
                 <th>元本(千円)</th>
                 <th>保証</th>
                 <th>利息</th>
@@ -52,24 +53,32 @@
                 <th>返済開始日</th>
                 <th>月返済額</th>
                 <th>残高シェア</th>
-                <th>残り回数</th>
+                <th>残り月数</th>
                 <th>支払回数</th>
                 <th>今月末残高</th>
                 <th>今月概算利息</th>
                 <th>決算時残高</th>
                 <th>代表者保証</th>
                 <th>担保</th>
-                <th>操作</th>
               </tr>
             </thead>
             <tbody>
               {% for debt in debt_list %}
-              <tr>
+              <tr data-href="{% url 'debt_detail' debt.id %}">
                 <td>
                   {% if debt.start_date <= today %}
                     <span class="badge bg-success">返済中</span>
                   {% else %}
                     <span class="badge bg-danger">返済前</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if debt.debt_type == 'corporate_bond' %}
+                    <span class="badge bg-warning text-dark">社債</span>
+                  {% elif debt.debt_type == 'promissory_note' %}
+                    <span class="badge bg-success">手形貸付</span>
+                  {% else %}
+                    <span class="badge bg-primary">証書貸付</span>
                   {% endif %}
                 </td>
                 <td>{{ debt.principal|to_thousands|intcomma }}</td>
@@ -98,17 +107,12 @@
                     <span class="badge bg-secondary">なし</span>
                   {% endif %}
                 </td>
-                <td>
-                  <a href="{% url 'debt_detail' debt.id %}" class="btn btn-sm btn-primary">
-                    <i class="ti ti-eye me-1"></i>詳細
-                  </a>
-                </td>
               </tr>
               {% endfor %}
             </tbody>
             <tfoot>
               <tr>
-                <th colspan="1" style="text-align:right">合計：</th>
+                <th colspan="2" style="text-align:right">合計：</th>
                 <th>{{ bank_totals.principal|to_thousands|intcomma }}</th>
                 <th></th>
                 <th></th>
@@ -121,7 +125,6 @@
                 <th>{{ bank_totals.balances_monthly.0|to_thousands|intcomma }}</th>
                 <th></th>
                 <th>{{ bank_totals.balance_fy1|to_thousands|intcomma }}</th>
-                <th></th>
                 <th></th>
                 <th></th>
               </tr>
@@ -154,36 +157,55 @@
               : 0;
         };
         
-        // 元本の合計
+        // 元本の合計（列インデックスが1から2に変更）
         let principalTotal = api
-          .column(1)
+          .column(2)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
-        // 月返済額の合計
+        // 月返済額の合計（列インデックスが6から7に変更）
         let monthlyRepaymentTotal = api
-          .column(6)
+          .column(7)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
-        // 今月末残高の合計
+        // 今月末残高の合計（列インデックスが10から11に変更）
         let balanceTotal = api
-          .column(10)
+          .column(11)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
-        // 決算時残高の合計
+        // 決算時残高の合計（列インデックスが12から13に変更）
         let balanceFy1Total = api
-          .column(12)
+          .column(13)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // フッターに表示
-        $(api.column(1).footer()).html(principalTotal.toLocaleString());
-        $(api.column(6).footer()).html(monthlyRepaymentTotal.toLocaleString());
-        $(api.column(10).footer()).html(balanceTotal.toLocaleString());
-        $(api.column(12).footer()).html(balanceFy1Total.toLocaleString());
+        $(api.column(2).footer()).html(principalTotal.toLocaleString());
+        $(api.column(7).footer()).html(monthlyRepaymentTotal.toLocaleString());
+        $(api.column(11).footer()).html(balanceTotal.toLocaleString());
+        $(api.column(13).footer()).html(balanceFy1Total.toLocaleString());
       }
+    });
+
+    // 行クリックで詳細ページに遷移
+    table.on('draw', function () {
+      const rows = document.querySelectorAll('#debt_list_byBank_detail_table tbody tr');
+      rows.forEach(row => {
+        row.addEventListener('click', function (e) {
+          // リンクやボタンがクリックされた場合は無視
+          if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('a') || e.target.closest('button')) {
+            return;
+          }
+          const href = this.getAttribute('data-href');
+          if (href) {
+            window.location.href = href;
+          }
+        });
+        // ホバー時にカーソルをポインターに変更
+        row.style.cursor = 'pointer';
+      });
     });
   });
 </script>

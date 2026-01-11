@@ -335,6 +335,18 @@ class DebtForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.setup_form_fields()
         
+        # adjusted_amount_firstとadjusted_amount_lastの初期値を設定（空欄の場合は0）
+        if 'adjusted_amount_first' not in self.initial or self.initial.get('adjusted_amount_first') == '':
+            self.initial['adjusted_amount_first'] = 0
+        if 'adjusted_amount_last' not in self.initial or self.initial.get('adjusted_amount_last') == '':
+            self.initial['adjusted_amount_last'] = 0
+        
+        # adjusted_amount_firstとadjusted_amount_lastの初期値を設定（空欄の場合は0）
+        if 'adjusted_amount_first' not in self.initial or self.initial.get('adjusted_amount_first') == '':
+            self.initial['adjusted_amount_first'] = 0
+        if 'adjusted_amount_last' not in self.initial or self.initial.get('adjusted_amount_last') == '':
+            self.initial['adjusted_amount_last'] = 0
+        
         # 既存インスタンスの場合、repayment_monthsを文字列に変換
         if self.instance and self.instance.pk:
             if self.instance.repayment_months:
@@ -354,8 +366,11 @@ class DebtForm(forms.ModelForm):
             self.fields['adjusted_amount_first'].required = False
             self.fields['adjusted_amount_last'].required = False
         else:
-            # 証書貸付の場合: repayment_monthsを非表示
+            # 証書貸付の場合: repayment_monthsを非表示・不要
             self.fields['repayment_months'].required = False
+            # 証書貸付の場合、adjusted_amount_firstとadjusted_amount_lastは必須ではない（デフォルト0でOK）
+            self.fields['adjusted_amount_first'].required = False
+            self.fields['adjusted_amount_last'].required = False
 
     def setup_form_fields(self):
         self.fields['financial_institution'].widget.attrs.update({'class': 'form-control select2'})
@@ -366,6 +381,20 @@ class DebtForm(forms.ModelForm):
     def clean_repayment_months(self):
         """返済月フィールドをリストに変換"""
         repayment_months_str = self.cleaned_data.get('repayment_months', '')
+        
+        # 証書貸付の場合は空欄を許可（毎月返済のため）
+        # cleaned_dataから取得できない場合は、self.dataから取得を試みる
+        debt_type = self.cleaned_data.get('debt_type')
+        if not debt_type and hasattr(self, 'data') and self.data:
+            debt_type = self.data.get('debt_type', 'certificate')
+        if not debt_type:
+            debt_type = 'certificate'  # デフォルトは証書貸付
+        
+        if debt_type == 'certificate' or debt_type == 'promissory_note':
+            # 証書貸付・手形貸付の場合は空リストを返す（毎月返済または期日一括償還のため）
+            return []
+        
+        # 社債の場合のみバリデーション
         if not repayment_months_str or repayment_months_str.strip() == '':
             return []
         
@@ -386,10 +415,24 @@ class DebtForm(forms.ModelForm):
         debt_type = cleaned_data.get('debt_type')
         repayment_months = cleaned_data.get('repayment_months')
         
+        # adjusted_amount_firstとadjusted_amount_lastが空欄の場合は0に設定
+        if cleaned_data.get('adjusted_amount_first') == '' or cleaned_data.get('adjusted_amount_first') is None:
+            cleaned_data['adjusted_amount_first'] = 0
+        if cleaned_data.get('adjusted_amount_last') == '' or cleaned_data.get('adjusted_amount_last') is None:
+            cleaned_data['adjusted_amount_last'] = 0
+        
         if debt_type == 'corporate_bond':
             if not repayment_months or len(repayment_months) == 0:
                 raise forms.ValidationError({
                     'repayment_months': "社債の場合は返済月を指定してください。"
+                })
+        elif debt_type == 'promissory_note':
+            # 手形貸付の場合: 返済額は元本と同一である必要がある
+            principal = cleaned_data.get('principal')
+            monthly_repayment = cleaned_data.get('monthly_repayment')
+            if principal and monthly_repayment and principal != monthly_repayment:
+                raise forms.ValidationError({
+                    'monthly_repayment': "手形貸付の場合は、返済額は元本と同一である必要があります（期日一括償還）。"
                 })
         
         return cleaned_data

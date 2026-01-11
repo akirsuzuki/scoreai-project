@@ -25,7 +25,7 @@
               <th>返済開始日</th>
               <th>月返済額</th>
               <th>残高シェア</th>
-              <th>残り回数</th>
+              <th>残り月数</th>
               <th>支払回数</th>
               <th>今月末残高</th>
               <th>今月概算利息</th>
@@ -41,6 +41,8 @@
               <td>
                 {% if debt.debt_type == 'corporate_bond' %}
                   <span class="badge bg-warning text-dark">社債</span>
+                {% elif debt.debt_type == 'promissory_note' %}
+                  <span class="badge bg-success">手形貸付</span>
                 {% else %}
                   <span class="badge bg-primary">証書貸付</span>
                 {% endif %}
@@ -151,7 +153,7 @@
         { targets: 7, width: '100px' },   // 返済開始日
         { targets: 8, width: '100px' },   // 月返済額
         { targets: 9, width: '80px' },   // 残高シェア
-        { targets: 10, width: '70px' },    // 残り回数
+        { targets: 10, width: '70px' },    // 残り月数
         { targets: 11, width: '80px' },   // 支払回数
         { targets: 12, width: '110px' },  // 今月末残高
         { targets: 13, width: '110px' },  // 今月概算利息
