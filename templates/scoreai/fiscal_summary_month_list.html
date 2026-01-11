@@ -214,6 +214,9 @@
     
     if (!chartData || !chartData.years || chartData.years.length === 0) return;
     
+    // 年度を昇順にソート（左から古い年度→新しい年度の順で表示）
+    chartData.years.sort((a, b) => a - b);
+    
     // 色の配列を定義
     const colors = [
       { border: 'rgba(75, 192, 192, 1)', background: 'rgba(75, 192, 192, 0.3)' },

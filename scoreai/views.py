@@ -1001,7 +1001,9 @@ class ImportFiscalSummary_Year(SelectedCompanyMixin, TransactionMixin, FormView)
                         )
                         return self.form_invalid(form)
                     else:
-                        defaults['is_budget'] = False  # 実績として設定
+                        # 実績データとして設定（is_budget=False）
+                        defaults['is_budget'] = False
+                        defaults['is_draft'] = False  # 下書きではない
                         defaults['version'] = 1  # versionは常に1に設定
                         FiscalSummary_Year.objects.update_or_create(
                             company=self.this_company,
@@ -1409,9 +1411,9 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
         
         if start_year and end_year:
             # 開始年度から終了年度までの年度リストを作成（最大5年）
-            # 新しい年度から古い年度へと降順で並べる
+            # 古い年度から新しい年度へと昇順で並べる（グラフの棒グラフ表示順序のため）
             years_to_compare = [year for year in range(start_year, end_year + 1) if year in available_years]
-            years_to_compare.sort(reverse=True)  # 降順にソート
+            years_to_compare.sort()  # 昇順にソート
             # 最大5年までに制限
             if len(years_to_compare) > 5:
                 years_to_compare = years_to_compare[:5]
