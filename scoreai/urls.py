@@ -25,7 +25,7 @@ from .views.ai_consultation_views import (
 )
 from .views.industry_consultation_views import (
     IndustryConsultationCenterView,
-    IndustryCategoryDetailView,
+    IndustryClassificationDetailView,
     IzakayaPlanCreateView,
     IzakayaPlanUpdateView,
     IzakayaPlanPreviewView,
@@ -345,23 +345,24 @@ urlpatterns = [
     path('ai-consultation/history/', AIConsultationHistoryView.as_view(), name='ai_consultation_history'),
     # 業界別相談室（より具体的なパスを先に配置）
     path('ai-consultation/industry/', IndustryConsultationCenterView.as_view(), name='industry_consultation_center'),
-    path('ai-consultation/industry/<str:category_id>/', IndustryCategoryDetailView.as_view(), name='industry_category_detail'),
+    path('ai-consultation/industry/<int:classification_id>/', IndustryClassificationDetailView.as_view(), name='industry_classification_detail'),
     # 業界別相談室設定（Companyのmanager用）
-    path('ai-consultation/industry/settings/categories/', IndustryCategoryListView.as_view(), name='industry_category_list'),
-    path('ai-consultation/industry/settings/categories/create/', IndustryCategoryCreateView.as_view(), name='industry_category_create'),
-    path('ai-consultation/industry/settings/categories/<str:pk>/update/', IndustryCategoryUpdateView.as_view(), name='industry_category_update'),
-    path('ai-consultation/industry/settings/categories/<str:pk>/delete/', IndustryCategoryDeleteView.as_view(), name='industry_category_delete'),
-    path('ai-consultation/industry/settings/consultation-types/', IndustryConsultationTypeListView.as_view(), name='industry_consultation_type_list'),
-    path('ai-consultation/industry/settings/consultation-types/create/', IndustryConsultationTypeCreateView.as_view(), name='industry_consultation_type_create'),
-    path('ai-consultation/industry/settings/consultation-types/<str:pk>/update/', IndustryConsultationTypeUpdateView.as_view(), name='industry_consultation_type_update'),
-    path('ai-consultation/industry/settings/consultation-types/<str:pk>/delete/', IndustryConsultationTypeDeleteView.as_view(), name='industry_consultation_type_delete'),
+    # IndustryCategoryとIndustryConsultationTypeが削除されたため、設定画面は一時的に無効化
+    # path('ai-consultation/industry/settings/categories/', IndustryCategoryListView.as_view(), name='industry_category_list'),
+    # path('ai-consultation/industry/settings/categories/create/', IndustryCategoryCreateView.as_view(), name='industry_category_create'),
+    # path('ai-consultation/industry/settings/categories/<str:pk>/update/', IndustryCategoryUpdateView.as_view(), name='industry_category_update'),
+    # path('ai-consultation/industry/settings/categories/<str:pk>/delete/', IndustryCategoryDeleteView.as_view(), name='industry_category_delete'),
+    # path('ai-consultation/industry/settings/consultation-types/', IndustryConsultationTypeListView.as_view(), name='industry_consultation_type_list'),
+    # path('ai-consultation/industry/settings/consultation-types/create/', IndustryConsultationTypeCreateView.as_view(), name='industry_consultation_type_create'),
+    # path('ai-consultation/industry/settings/consultation-types/<str:pk>/update/', IndustryConsultationTypeUpdateView.as_view(), name='industry_consultation_type_update'),
+    # path('ai-consultation/industry/settings/consultation-types/<str:pk>/delete/', IndustryConsultationTypeDeleteView.as_view(), name='industry_consultation_type_delete'),
     # 居酒屋出店計画
-    path('ai-consultation/industry/food-service/izakaya-plan/create/', IzakayaPlanCreateView.as_view(), name='izakaya_plan_create'),
-    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/update/', IzakayaPlanUpdateView.as_view(), name='izakaya_plan_update'),
-    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/preview/', IzakayaPlanPreviewView.as_view(), name='izakaya_plan_preview'),
-    path('ai-consultation/industry/food-service/izakaya-plan/<str:pk>/delete/', IzakayaPlanDeleteView.as_view(), name='izakaya_plan_delete'),
-    path('ai-consultation/industry/food-service/izakaya-plan/<str:plan_id>/export/<str:format_type>/', IzakayaPlanExportView.as_view(), name='izakaya_plan_export'),
-    path('ai-consultation/industry/food-service/izakaya-plan/list/', IzakayaPlanListView.as_view(), name='izakaya_plan_list'),
+    path('ai-consultation/industry/<int:classification_id>/izakaya-plan/create/', IzakayaPlanCreateView.as_view(), name='izakaya_plan_create'),
+    path('ai-consultation/industry/izakaya-plan/<str:pk>/update/', IzakayaPlanUpdateView.as_view(), name='izakaya_plan_update'),
+    path('ai-consultation/industry/izakaya-plan/<str:pk>/preview/', IzakayaPlanPreviewView.as_view(), name='izakaya_plan_preview'),
+    path('ai-consultation/industry/izakaya-plan/<str:pk>/delete/', IzakayaPlanDeleteView.as_view(), name='izakaya_plan_delete'),
+    path('ai-consultation/industry/izakaya-plan/<str:plan_id>/export/<str:format_type>/', IzakayaPlanExportView.as_view(), name='izakaya_plan_export'),
+    path('ai-consultation/industry/izakaya-plan/list/', IzakayaPlanListView.as_view(), name='izakaya_plan_list'),
     # 汎用AI相談（より一般的なパスを後に配置）
     path('ai-consultation/<str:consultation_type_id>/api/', AIConsultationAPIView.as_view(), name='ai_consultation_api'),
     path('ai-consultation/<str:consultation_type_id>/', AIConsultationView.as_view(), name='ai_consultation'),

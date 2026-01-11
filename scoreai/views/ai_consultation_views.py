@@ -80,10 +80,10 @@ class AIConsultationCenterView(SelectedCompanyMixin, TemplateView):
         consultation_types = AIConsultationType.objects.filter(is_active=True).order_by('order', 'name')
         context['consultation_types'] = consultation_types
         
-        # 業界別相談室のカテゴリーを取得
-        from ..models import IndustryCategory
-        industry_categories = IndustryCategory.objects.filter(is_active=True).order_by('order', 'name')
-        context['industry_categories'] = industry_categories
+        # 業界別相談室の業界分類を取得
+        from ..models import IndustryClassification
+        industry_classifications = IndustryClassification.objects.all().order_by('name')
+        context['industry_classifications'] = industry_classifications
         
         context['title'] = 'AI相談センター'
         context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）

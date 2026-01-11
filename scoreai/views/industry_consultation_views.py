@@ -11,7 +11,7 @@ from django.views import View
 from django.urls import reverse, reverse_lazy
 from decimal import Decimal
 
-from ..models import IndustryCategory, IndustryConsultationType, IzakayaPlan
+from ..models import IndustryClassification, IzakayaPlan
 from ..mixins import SelectedCompanyMixin
 from ..izakaya_plan_forms import IzakayaPlanForm
 from ..services.izakaya_plan_service import IzakayaPlanService
@@ -23,8 +23,9 @@ class IndustryConsultationCenterView(SelectedCompanyMixin, LoginRequiredMixin, T
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        categories = IndustryCategory.objects.filter(is_active=True).order_by('order', 'name')
-        context['categories'] = categories
+        # IndustryClassificationを取得
+        classifications = IndustryClassification.objects.all().order_by('name')
+        context['classifications'] = classifications
         context['title'] = '業界別相談室'
         
         # Companyのmanagerかどうかを判定
@@ -51,22 +52,36 @@ class IndustryConsultationCenterView(SelectedCompanyMixin, LoginRequiredMixin, T
         return context
 
 
-class IndustryCategoryDetailView(SelectedCompanyMixin, LoginRequiredMixin, TemplateView):
-    """業界カテゴリー詳細（メニュー）ページ"""
-    template_name = 'scoreai/industry_category_detail.html'
+class IndustryClassificationDetailView(SelectedCompanyMixin, LoginRequiredMixin, TemplateView):
+    """業界分類詳細（プラン選択）ページ"""
+    template_name = 'scoreai/industry_classification_detail.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        category_id = kwargs.get('category_id')
-        category = get_object_or_404(IndustryCategory, id=category_id, is_active=True)
-        consultation_types = IndustryConsultationType.objects.filter(
-            industry_category=category,
-            is_active=True
-        ).order_by('order', 'name')
+        classification_id = kwargs.get('classification_id')
+        # IDが文字列の場合は整数に変換
+        try:
+            if isinstance(classification_id, str):
+                classification_id = int(classification_id)
+            classification = get_object_or_404(IndustryClassification, id=classification_id)
+        except (ValueError, TypeError):
+            # codeで検索を試みる
+            classification = get_object_or_404(IndustryClassification, code=classification_id)
         
-        context['category'] = category
-        context['consultation_types'] = consultation_types
-        context['title'] = f'{category.name} - 業界別相談室'
+        # この業界分類に紐づくプランが存在するかチェック
+        # 現時点ではIzakayaPlanのみ（飲食業界の場合）
+        # 飲食業界の判定（コードや名前で判定、必要に応じて調整）
+        # 例: コードが"56"で始まる場合や、名前に"飲食"が含まれる場合
+        has_izakaya_plan = False
+        # 飲食業界の判定（コードや名前で判定、必要に応じて調整）
+        # 例: コードが"56"で始まる場合や、名前に"飲食"が含まれる場合
+        if (classification.code and classification.code.startswith('56')) or '飲食' in classification.name or '外食' in classification.name:
+            # この業界分類に紐づくIzakayaPlanが存在するかチェック（将来的に他のプランも追加可能）
+            has_izakaya_plan = True  # 現時点では飲食業界なら常にTrue（将来的にプランの存在チェックに変更可能）
+        
+        context['classification'] = classification
+        context['has_izakaya_plan'] = has_izakaya_plan
+        context['title'] = f'{classification.name} - 業界別相談室'
         return context
 
 
@@ -86,6 +101,21 @@ class IzakayaPlanCreateView(SelectedCompanyMixin, LoginRequiredMixin, CreateView
         # 選択中のCompanyを自動設定
         form.instance.company = self.this_company
         form.instance.user = self.request.user
+        
+        # IndustryClassificationを設定
+        # URLパラメータから取得、またはCompanyのindustry_classificationを使用
+        classification_id = self.kwargs.get('classification_id') or self.request.GET.get('classification_id')
+        if classification_id:
+            try:
+                # IDが文字列の場合は整数に変換
+                if isinstance(classification_id, str):
+                    classification_id = int(classification_id)
+                classification = IndustryClassification.objects.get(id=classification_id)
+                form.instance.industry_classification = classification
+            except (IndustryClassification.DoesNotExist, ValueError, TypeError):
+                pass
+        elif self.this_company.industry_classification:
+            form.instance.industry_classification = self.this_company.industry_classification
         
         # 月毎指数が空の場合はデフォルト値を設定
         if not form.instance.lunch_monthly_coefficients:

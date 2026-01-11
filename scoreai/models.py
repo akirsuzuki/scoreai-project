@@ -2123,61 +2123,14 @@ class AIConsultationHistory(models.Model):
 # 業界別専門相談室 モデル
 # ============================================================================
 
-class IndustryCategory(models.Model):
-    """業界カテゴリー"""
-    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
-    name = models.CharField(max_length=100, verbose_name="業界名")  # 例: "外食業界"
-    description = models.TextField(verbose_name="説明", blank=True)
-    icon = models.CharField(max_length=50, verbose_name="アイコン", blank=True, help_text="Font Awesome等のアイコン名")  # アイコン名（Font Awesome等）
-    order = models.IntegerField(default=0, verbose_name="表示順")
-    is_active = models.BooleanField(default=True, verbose_name="有効")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
-    
-    class Meta:
-        ordering = ['order', 'name']
-        verbose_name = '業界カテゴリー'
-        verbose_name_plural = '業界カテゴリー'
-    
-    def __str__(self):
-        return self.name
-
-
-class IndustryConsultationType(models.Model):
-    """業界別相談タイプ"""
-    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
-    industry_category = models.ForeignKey(IndustryCategory, on_delete=models.CASCADE, related_name='consultation_types', verbose_name="業界カテゴリー")
-    name = models.CharField(max_length=100, verbose_name="相談タイプ名")  # 例: "居酒屋出店計画作成"
-    description = models.TextField(verbose_name="説明", blank=True)
-    template_type = models.CharField(
-        max_length=50,
-        choices=[
-            ('izakaya_plan', '居酒屋出店計画'),
-            ('cafe_plan', 'カフェ出店計画'),
-            # 将来拡張用
-        ],
-        verbose_name="テンプレートタイプ"
-    )
-    is_active = models.BooleanField(default=True, verbose_name="有効")
-    order = models.IntegerField(default=0, verbose_name="表示順")
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name="作成日時")
-    updated_at = models.DateTimeField(auto_now=True, verbose_name="更新日時")
-    
-    class Meta:
-        ordering = ['order', 'name']
-        verbose_name = '業界別相談タイプ'
-        verbose_name_plural = '業界別相談タイプ'
-    
-    def __str__(self):
-        return f"{self.industry_category.name} - {self.name}"
-
-
 class IzakayaPlan(models.Model):
     """居酒屋出店計画データ"""
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     # 必須: 選択中のCompanyを保持（SelectedCompanyMixinと連携）
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='izakaya_plans', verbose_name="会社")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='izakaya_plans', verbose_name="ユーザー")
+    # 業界分類への紐づけ（飲食業界に紐づく）
+    industry_classification = models.ForeignKey('IndustryClassification', on_delete=models.CASCADE, related_name='izakaya_plans', verbose_name="業界分類", null=True, blank=True)
     
     # 基本情報
     store_concept = models.CharField(max_length=200, verbose_name="店のコンセプト", blank=True)  # 店のコンセプト

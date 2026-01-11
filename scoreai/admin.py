@@ -30,8 +30,6 @@ from .models import (
     IndustryClassification,
     IndustrySubClassification,
     IndustryIndicator,
-    IndustryCategory,
-    IndustryConsultationType,
     IzakayaPlan,
     IndustryBenchmark,
     TechnicalTerm,

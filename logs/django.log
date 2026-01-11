@@ -20861,3 +20861,1341 @@ Traceback (most recent call last):
 UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
 ERROR 2026-01-11 10:00:57,437 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 500 92501
 WARNING 2026-01-11 10:02:06,512 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:02:53,401 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:02:53,618 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:02:56,314 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 39532
+ERROR 2026-01-11 10:02:59,387 mixins Unexpected error in IzakayaPlanPreviewView.dispatch: cannot access local variable 'Decimal' where it is not associated with a value
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:02:59,397 log Internal Server Error: /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 191, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-11 10:02:59,398 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/preview/ HTTP/1.1" 500 92008
+INFO 2026-01-11 10:03:14,605 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/delete/ HTTP/1.1" 200 33126
+INFO 2026-01-11 10:03:15,957 basehttp "POST /ai-consultation/industry/food-service/izakaya-plan/01KEKZHJB3GPTBPF36FHR81EXC/delete/ HTTP/1.1" 302 0
+INFO 2026-01-11 10:03:15,969 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 30430
+INFO 2026-01-11 10:03:21,137 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 65588
+INFO 2026-01-11 10:03:24,699 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 30430
+INFO 2026-01-11 10:03:27,670 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 65588
+INFO 2026-01-11 10:04:06,518 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:04:06,732 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:08:36,139 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-11 10:08:36,786 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:08:37,173 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:08:44,061 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-11 10:08:44,442 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:08:44,643 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:09:01,636 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 10:09:02,130 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:09:02,480 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:10:35,471 autoreload /app/scoreai/views/industry_consultation_settings_views.py changed, reloading.
+INFO 2026-01-11 10:10:36,094 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:10:36,397 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 10:10:46,375 autoreload /app/scoreai/views/industry_consultation_settings_views.py changed, reloading.
+INFO 2026-01-11 10:10:46,795 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 10:10:47,126 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 13:23:50,443 basehttp "GET /ai-consultation/ HTTP/1.1" 200 40466
+INFO 2026-01-11 13:23:53,289 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30829
+INFO 2026-01-11 13:24:11,950 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 30829
+INFO 2026-01-11 13:25:22,371 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-11 13:25:26,175 basehttp "GET /fiscal_summary_month/?years=3&start_year=2021&end_year=2025 HTTP/1.1" 200 98270
+INFO 2026-01-11 13:25:36,691 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-11 13:25:45,910 autoreload /app/scoreai/views/ai_consultation_views.py changed, reloading.
+INFO 2026-01-11 13:25:46,668 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 13:25:47,052 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 13:26:20,854 autoreload /app/scoreai/views/ai_consultation_views.py changed, reloading.
+INFO 2026-01-11 13:26:21,175 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 13:26:21,385 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 13:27:09,161 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62926
+INFO 2026-01-11 13:28:44,098 basehttp "GET /ai-consultation/ HTTP/1.1" 200 42685
+INFO 2026-01-11 13:28:59,008 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75174
+INFO 2026-01-11 13:29:01,625 basehttp "GET /ai-consultation/ HTTP/1.1" 200 42685
+INFO 2026-01-11 13:29:05,223 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62926
+INFO 2026-01-11 13:29:07,236 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89546
+INFO 2026-01-11 13:29:08,279 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50668
+INFO 2026-01-11 13:29:11,048 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36341
+INFO 2026-01-11 13:29:14,979 basehttp "GET /debts_all/ HTTP/1.1" 200 74561
+INFO 2026-01-11 13:29:19,729 basehttp "GET /ai-consultation/ HTTP/1.1" 200 42685
+INFO 2026-01-11 13:30:12,220 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75135
+INFO 2026-01-11 13:30:22,546 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62913
+INFO 2026-01-11 13:30:32,774 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36328
+INFO 2026-01-11 13:30:45,975 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50562
+INFO 2026-01-11 13:30:48,478 basehttp "GET /debts_all/ HTTP/1.1" 200 74548
+INFO 2026-01-11 13:31:25,734 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32046
+INFO 2026-01-11 13:31:40,265 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36023
+INFO 2026-01-11 13:31:42,394 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36812
+INFO 2026-01-11 13:31:57,458 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 46620
+INFO 2026-01-11 13:32:22,542 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33565
+INFO 2026-01-11 13:33:04,429 basehttp "GET /ai-consultation/ HTTP/1.1" 200 42672
+INFO 2026-01-11 13:40:18,260 basehttp "GET /ai-consultation/ HTTP/1.1" 200 42672
+INFO 2026-01-11 13:40:23,125 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:40:26,860 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 53013
+INFO 2026-01-11 13:40:28,617 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:40:28,618 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:40:28,619 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:40:28,625 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:40:28,625 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:40:28,635 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 51034
+INFO 2026-01-11 13:40:29,655 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:40:42,364 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:40:44,193 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:40:47,965 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36328
+INFO 2026-01-11 13:40:50,857 basehttp "GET /debts_all/ HTTP/1.1" 200 74548
+INFO 2026-01-11 13:40:52,506 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50562
+INFO 2026-01-11 13:40:58,779 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31877
+INFO 2026-01-11 13:41:10,802 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31877
+INFO 2026-01-11 13:41:13,419 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:41:18,839 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:41:18,841 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:41:18,841 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:41:18,845 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:41:18,846 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:41:18,857 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 51034
+INFO 2026-01-11 13:41:19,818 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 53013
+INFO 2026-01-11 13:41:21,269 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:41:21,271 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:41:21,272 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:41:21,278 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:41:21,278 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:41:21,284 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 51034
+INFO 2026-01-11 13:41:23,556 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:41:25,760 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:41:35,849 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45784
+INFO 2026-01-11 13:44:28,488 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45784
+INFO 2026-01-11 13:44:31,741 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:44:36,052 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 53013
+INFO 2026-01-11 13:44:39,032 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:44:39,033 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:44:39,034 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:44:39,037 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:44:39,038 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:44:39,045 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 51034
+INFO 2026-01-11 13:44:44,369 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:44:48,418 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:44:52,528 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51783
+INFO 2026-01-11 13:44:54,131 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:45:01,603 basehttp "GET /budget/suggest/ HTTP/1.1" 200 37362
+INFO 2026-01-11 13:45:03,299 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 36452
+INFO 2026-01-11 13:45:04,764 basehttp "GET /budget/analysis/ HTTP/1.1" 200 33624
+INFO 2026-01-11 13:45:06,198 basehttp "GET /budget/vs-actual/ HTTP/1.1" 200 56562
+INFO 2026-01-11 13:45:07,107 basehttp "GET /budget/analysis/ HTTP/1.1" 200 33624
+INFO 2026-01-11 13:45:07,847 basehttp "GET /budget/suggest/ HTTP/1.1" 200 37362
+INFO 2026-01-11 13:45:09,310 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 36452
+INFO 2026-01-11 13:45:18,216 basehttp "GET /debts_all/ HTTP/1.1" 200 75756
+INFO 2026-01-11 13:45:20,280 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51582
+INFO 2026-01-11 13:45:21,449 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53930
+INFO 2026-01-11 13:45:23,184 basehttp "GET /debts_archived/ HTTP/1.1" 200 36004
+INFO 2026-01-11 13:45:28,918 basehttp "GET /debts_all/ HTTP/1.1" 200 75756
+INFO 2026-01-11 13:45:37,175 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32890
+INFO 2026-01-11 13:45:38,717 basehttp "GET /stock_event_list/ HTTP/1.1" 200 32731
+INFO 2026-01-11 13:45:42,893 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36859
+INFO 2026-01-11 13:45:46,706 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37160
+INFO 2026-01-11 13:45:53,616 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 46620
+INFO 2026-01-11 13:46:02,960 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33565
+INFO 2026-01-11 13:46:05,731 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:46:06,949 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 53013
+INFO 2026-01-11 13:49:02,644 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 13:49:02,922 export_service Japanese font not found. PDF export may have character encoding issues.
+INFO 2026-01-11 13:49:17,781 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76333
+INFO 2026-01-11 13:49:52,521 autoreload /app/scoreai/services/export_service.py changed, reloading.
+INFO 2026-01-11 13:49:53,302 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 13:50:10,570 autoreload /app/scoreai/services/export_service.py changed, reloading.
+INFO 2026-01-11 13:50:11,014 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 13:50:51,930 autoreload /app/scoreai/services/export_service.py changed, reloading.
+INFO 2026-01-11 13:50:52,444 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 13:50:57,179 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 53013
+INFO 2026-01-11 13:50:58,315 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:50:58,316 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:50:58,336 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:50:58,344 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:50:58,345 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:50:58,354 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 51034
+INFO 2026-01-11 13:51:01,267 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:51:02,560 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:51:04,548 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:51:05,817 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89547
+INFO 2026-01-11 13:51:06,717 autoreload /app/scoreai/services/export_service.py changed, reloading.
+INFO 2026-01-11 13:51:07,344 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 13:51:16,477 autoreload /app/scoreai/services/export_service.py changed, reloading.
+INFO 2026-01-11 13:51:16,840 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 13:51:17,854 basehttp "GET /fiscal-summary-year/latest/?year=2023&is_budget=false HTTP/1.1" 200 90045
+INFO 2026-01-11 13:51:33,080 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:51:40,460 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:51:42,057 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51783
+INFO 2026-01-11 13:51:42,978 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 64115
+INFO 2026-01-11 13:51:52,952 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51783
+INFO 2026-01-11 13:52:10,828 basehttp "GET /budget/suggest/ HTTP/1.1" 200 37362
+INFO 2026-01-11 13:52:24,961 basehttp "GET /debts_all/ HTTP/1.1" 200 75756
+INFO 2026-01-11 13:52:26,374 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51582
+INFO 2026-01-11 13:52:27,263 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53930
+INFO 2026-01-11 13:52:28,562 basehttp "GET /debts_archived/ HTTP/1.1" 200 36004
+INFO 2026-01-11 13:52:31,540 basehttp "GET /debt/create/ HTTP/1.1" 200 98168
+INFO 2026-01-11 13:52:31,572 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2026-01-11 13:52:31,574 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2026-01-11 13:52:31,575 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2026-01-11 13:52:31,575 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2026-01-11 13:52:31,576 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2026-01-11 13:52:34,889 basehttp "GET /debts_all/ HTTP/1.1" 200 75756
+INFO 2026-01-11 13:52:40,459 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32890
+INFO 2026-01-11 13:52:41,862 basehttp "GET /stock_event_list/ HTTP/1.1" 200 32731
+INFO 2026-01-11 13:52:44,566 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36859
+INFO 2026-01-11 13:52:50,854 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37160
+INFO 2026-01-11 13:52:53,546 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36812
+INFO 2026-01-11 13:52:57,655 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36859
+INFO 2026-01-11 13:52:58,949 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36812
+INFO 2026-01-11 13:53:07,379 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 47740
+INFO 2026-01-11 13:53:09,339 basehttp "GET /import_industry_benchmark/ HTTP/1.1" 200 31070
+INFO 2026-01-11 13:53:20,404 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 34930
+INFO 2026-01-11 13:53:22,359 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 34577
+INFO 2026-01-11 13:53:24,352 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 34930
+INFO 2026-01-11 13:53:25,148 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 38296
+INFO 2026-01-11 13:53:47,968 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47133
+INFO 2026-01-11 13:53:49,544 basehttp "GET /assigned-clients/ HTTP/1.1" 200 33812
+INFO 2026-01-11 13:53:56,841 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 38856
+INFO 2026-01-11 13:54:00,510 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 46921
+INFO 2026-01-11 13:54:08,293 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/ HTTP/1.1" 200 32536
+INFO 2026-01-11 13:54:20,255 basehttp "GET /budget/suggest/ HTTP/1.1" 200 37362
+INFO 2026-01-11 13:56:26,226 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36596
+ERROR 2026-01-11 13:56:44,246 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 13:56:44,248 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 191168
+ERROR 2026-01-11 13:56:51,977 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 13:56:51,979 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 191305
+ERROR 2026-01-11 13:56:56,016 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 13:56:56,018 basehttp "GET /fiscal_summary_month/ HTTP/1.1" 500 190652
+WARNING 2026-01-11 13:57:01,122 basehttp "GET /fiscal_summary_month/latest HTTP/1.1" 404 54754
+INFO 2026-01-11 13:57:08,507 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52247
+ERROR 2026-01-11 13:57:13,913 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 13:57:13,916 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 191176
+INFO 2026-01-11 13:57:16,609 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 13:57:16,612 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 13:57:16,614 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 13:57:16,622 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 13:57:16,622 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 13:57:16,639 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50268
+INFO 2026-01-11 13:57:19,689 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 63349
+INFO 2026-01-11 13:57:21,718 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89937
+INFO 2026-01-11 13:57:22,514 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51017
+INFO 2026-01-11 13:57:24,622 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89937
+INFO 2026-01-11 13:57:37,565 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32858
+INFO 2026-01-11 13:57:40,571 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35686
+INFO 2026-01-11 13:57:41,378 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36596
+INFO 2026-01-11 13:57:43,025 basehttp "GET /budget/vs-actual/ HTTP/1.1" 200 55796
+INFO 2026-01-11 13:57:55,000 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53164
+INFO 2026-01-11 13:57:58,160 basehttp "GET /debts_all/ HTTP/1.1" 200 74990
+INFO 2026-01-11 13:58:10,769 basehttp "GET /debt/create/ HTTP/1.1" 200 97402
+ERROR 2026-01-11 13:58:23,342 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 13:58:23,344 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 191163
+INFO 2026-01-11 13:59:51,818 basehttp "GET / HTTP/1.1" 200 59702
+ERROR 2026-01-11 14:00:07,824 log Internal Server Error: /fiscal_summary_month/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 510, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'endif'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 512, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 563, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Invalid block tag on line 397: 'endif', expected 'endblock'. Did you forget to register or load this tag?
+ERROR 2026-01-11 14:00:07,826 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 500 191153
+INFO 2026-01-11 14:20:35,013 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:20:35,752 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:20:48,413 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:20:49,322 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:21:01,514 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:21:01,985 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:21:13,545 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:21:14,117 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:21:28,961 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:21:29,505 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:21:42,427 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 14:21:42,950 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:22:04,307 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 14:22:04,798 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:22:17,300 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 14:22:17,789 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:25:09,113 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 14:25:09,737 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:26:45,331 autoreload /app/scoreai/migrations/0116_add_debt_type_and_repayment_months.py changed, reloading.
+INFO 2026-01-11 14:26:45,871 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:26:55,960 autoreload /app/scoreai/migrations/0116_add_debt_type_and_repayment_months.py changed, reloading.
+INFO 2026-01-11 14:26:56,478 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:27:25,158 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:27:31,543 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 44089
+INFO 2026-01-11 14:27:34,584 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/update/ HTTP/1.1" 200 99858
+INFO 2026-01-11 14:28:36,513 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+INFO 2026-01-11 14:28:40,918 basehttp "GET /debt/create/ HTTP/1.1" 200 101253
+INFO 2026-01-11 14:30:03,872 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 14:30:04,320 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:30:39,172 basehttp "GET /debt/create/ HTTP/1.1" 200 101726
+INFO 2026-01-11 14:32:11,562 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 14:32:12,014 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:37:01,725 basehttp "GET /debt/create/ HTTP/1.1" 200 102072
+INFO 2026-01-11 14:37:23,053 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:37:57,475 basehttp "GET /admin/scoreai/debt/ HTTP/1.1" 200 45254
+INFO 2026-01-11 14:37:57,494 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,495 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,496 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,497 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,499 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,500 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,502 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,504 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,505 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,505 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,506 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,506 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,509 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 14:37:57,509 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,510 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,512 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,534 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,535 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,541 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,541 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,542 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:57,542 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:58,982 basehttp "GET /admin/scoreai/debt/01KEKY5TQBZK6E67BNW1BZJTCA/change/ HTTP/1.1" 200 106017
+INFO 2026-01-11 14:37:58,999 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:59,001 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:59,002 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2026-01-11 14:37:59,002 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2026-01-11 14:37:59,008 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 14:37:59,009 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:59,011 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:59,012 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-11 14:37:59,070 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2026-01-11 14:43:06,519 basehttp "GET /debt/create/ HTTP/1.1" 200 102520
+INFO 2026-01-11 14:43:22,975 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+INFO 2026-01-11 14:48:56,214 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+INFO 2026-01-11 14:48:59,778 basehttp "GET /debt/create/ HTTP/1.1" 200 102520
+INFO 2026-01-11 14:49:38,937 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 14:51:26,547 basehttp "GET / HTTP/1.1" 200 59702
+WARNING 2026-01-11 14:51:26,636 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:51:26,951 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js.map HTTP/1.1" 200 333974
+INFO 2026-01-11 14:51:30,254 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+WARNING 2026-01-11 14:51:30,297 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:51:34,076 basehttp "GET /debt/create/ HTTP/1.1" 200 102584
+WARNING 2026-01-11 14:51:34,141 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+ERROR 2026-01-11 14:52:49,323 log Internal Server Error: /debt/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'foot' appears more than once
+ERROR 2026-01-11 14:52:49,325 basehttp "GET /debt/create/ HTTP/1.1" 500 193692
+WARNING 2026-01-11 14:52:49,367 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+WARNING 2026-01-11 14:52:53,536 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:52:55,872 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+WARNING 2026-01-11 14:52:55,982 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+ERROR 2026-01-11 14:53:02,543 log Internal Server Error: /debt/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader.py", line 42, in select_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 295, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 518, in parse
+    raise self.error(token, e)
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 228, in do_block
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: 'block' tag with name 'foot' appears more than once
+ERROR 2026-01-11 14:53:02,546 basehttp "GET /debt/create/ HTTP/1.1" 500 193555
+WARNING 2026-01-11 14:53:02,580 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+WARNING 2026-01-11 14:53:16,887 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+WARNING 2026-01-11 14:53:16,894 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:18,477 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+WARNING 2026-01-11 14:53:18,522 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:30,643 basehttp "GET /debt/01JFHHVVZZ3Z4DV7WCWKEZ81MV/ HTTP/1.1" 200 44089
+WARNING 2026-01-11 14:53:30,695 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:35,075 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+WARNING 2026-01-11 14:53:35,121 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:36,830 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53163
+WARNING 2026-01-11 14:53:36,863 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:40,134 basehttp "GET /debts_bySecuredType/2/ HTTP/1.1" 200 37122
+WARNING 2026-01-11 14:53:40,175 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:43,204 basehttp "GET /debt/01JDF2D9Q8R6ADABAP89QSA6CQ/ HTTP/1.1" 200 44086
+WARNING 2026-01-11 14:53:43,245 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:53:46,709 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75714
+WARNING 2026-01-11 14:53:46,757 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:54:03,485 basehttp "GET /debts_all/ HTTP/1.1" 200 76635
+WARNING 2026-01-11 14:54:03,545 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:54:08,595 basehttp "GET /debt/create/ HTTP/1.1" 200 102583
+WARNING 2026-01-11 14:54:08,639 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:55:03,912 basehttp "POST /debt/create/ HTTP/1.1" 302 0
+INFO 2026-01-11 14:55:03,936 basehttp "GET /debts_all/ HTTP/1.1" 200 78736
+WARNING 2026-01-11 14:55:04,039 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:55:16,558 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47095
+WARNING 2026-01-11 14:55:16,616 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:55:33,316 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/update/ HTTP/1.1" 200 100937
+WARNING 2026-01-11 14:55:33,376 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:55:54,239 basehttp "POST /debt/01KENSYMJ4WTSFT8F3KQANG4C9/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 14:55:54,348 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47562
+WARNING 2026-01-11 14:55:54,417 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:56:04,349 basehttp "GET /debts_all/ HTTP/1.1" 200 78182
+WARNING 2026-01-11 14:56:04,410 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:56:12,032 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50825
+WARNING 2026-01-11 14:56:12,092 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:56:32,785 basehttp "GET /debts_all/ HTTP/1.1" 200 78182
+WARNING 2026-01-11 14:56:32,857 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:56:34,909 basehttp "GET /debt/create/ HTTP/1.1" 200 102649
+WARNING 2026-01-11 14:56:34,969 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+WARNING 2026-01-11 14:56:55,148 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+WARNING 2026-01-11 14:56:55,163 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 14:58:03,430 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36213
+INFO 2026-01-11 14:58:16,589 basehttp "GET /ai-consultation/ HTTP/1.1" 200 41906
+INFO 2026-01-11 14:58:20,547 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 30292
+INFO 2026-01-11 14:58:22,583 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 64809
+INFO 2026-01-11 14:58:25,081 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/list/ HTTP/1.1" 200 29651
+INFO 2026-01-11 14:58:31,409 basehttp "GET /debts_all/ HTTP/1.1" 200 78182
+INFO 2026-01-11 14:58:33,523 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50825
+INFO 2026-01-11 14:58:34,789 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53192
+INFO 2026-01-11 14:58:36,096 basehttp "GET /debts_archived/ HTTP/1.1" 200 35238
+INFO 2026-01-11 14:58:37,280 basehttp "GET /debts_all/ HTTP/1.1" 200 78370
+INFO 2026-01-11 14:58:39,373 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50825
+INFO 2026-01-11 14:58:41,148 basehttp "GET /debts_all/ HTTP/1.1" 200 78370
+INFO 2026-01-11 14:58:42,683 basehttp "GET /debt/create/ HTTP/1.1" 200 102649
+INFO 2026-01-11 14:58:46,378 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51013
+INFO 2026-01-11 14:58:47,190 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53192
+INFO 2026-01-11 14:58:48,489 basehttp "GET /debts_archived/ HTTP/1.1" 200 35238
+INFO 2026-01-11 14:59:15,424 basehttp "GET /debts_archived/ HTTP/1.1" 200 35426
+INFO 2026-01-11 14:59:16,756 basehttp "GET /debt/create/ HTTP/1.1" 200 102649
+INFO 2026-01-11 14:59:21,324 basehttp "GET /debt/create/ HTTP/1.1" 200 102649
+INFO 2026-01-11 14:59:56,601 basehttp "POST /debt/create/ HTTP/1.1" 200 104578
+INFO 2026-01-11 15:00:09,194 basehttp "POST /debt/create/ HTTP/1.1" 200 104578
+INFO 2026-01-11 15:00:14,955 basehttp "POST /debt/create/ HTTP/1.1" 200 104578
+INFO 2026-01-11 15:00:18,366 basehttp "POST /debt/create/ HTTP/1.1" 200 104578
+INFO 2026-01-11 15:00:21,215 basehttp "GET /debts_all/ HTTP/1.1" 200 78370
+INFO 2026-01-11 15:00:25,597 basehttp "GET /debt/create/ HTTP/1.1" 200 104472
+ERROR 2026-01-11 15:00:32,647 mixins Unexpected error in DebtCreateView.dispatch: '<=' not supported between instances of 'NoneType' and 'int'
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 150, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 1625, in full_clean
+    self.clean()
+  File "/app/scoreai/models.py", line 1070, in clean
+    if self.principal <= 0:
+       ^^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'NoneType' and 'int'
+ERROR 2026-01-11 15:00:32,763 log Internal Server Error: /debt/create/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 182, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/edit.py", line 150, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 197, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 192, in errors
+    self.full_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/forms.py", line 327, in full_clean
+    self._post_clean()
+  File "/usr/local/lib/python3.12/site-packages/django/forms/models.py", line 498, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 1625, in full_clean
+    self.clean()
+  File "/app/scoreai/models.py", line 1070, in clean
+    if self.principal <= 0:
+       ^^^^^^^^^^^^^^^^^^^
+TypeError: '<=' not supported between instances of 'NoneType' and 'int'
+ERROR 2026-01-11 15:00:32,764 basehttp "POST /debt/create/ HTTP/1.1" 500 119005
+INFO 2026-01-11 15:00:41,574 basehttp "GET /debt/create/ HTTP/1.1" 200 104996
+INFO 2026-01-11 15:01:03,666 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 15:01:04,998 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:01:16,533 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 15:01:16,878 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:01:24,577 basehttp "POST /debt/create/ HTTP/1.1" 200 104579
+INFO 2026-01-11 15:01:24,994 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 15:01:25,369 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:01:28,288 basehttp "GET /debts_all/ HTTP/1.1" 200 78370
+INFO 2026-01-11 15:02:00,394 basehttp "GET /debt/create/ HTTP/1.1" 200 104472
+WARNING 2026-01-11 15:02:21,204 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:02:30,789 basehttp "POST /debt/create/ HTTP/1.1" 200 104639
+WARNING 2026-01-11 15:02:30,819 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:03:08,815 basehttp "POST /debt/create/ HTTP/1.1" 200 104619
+WARNING 2026-01-11 15:03:08,852 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:04:47,781 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 15:04:48,495 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:05:01,771 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 15:05:02,166 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:05:11,308 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 15:05:11,640 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-11 15:05:59,611 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:06:23,393 basehttp "POST /debt/create/ HTTP/1.1" 200 105558
+WARNING 2026-01-11 15:06:23,426 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:06:31,096 basehttp "POST /debt/create/ HTTP/1.1" 302 0
+INFO 2026-01-11 15:06:31,139 basehttp "GET /debts_all/ HTTP/1.1" 200 80439
+WARNING 2026-01-11 15:06:31,194 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 54817
+INFO 2026-01-11 15:10:55,892 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:10:58,280 basehttp "GET /debts_all/ HTTP/1.1" 200 79888
+INFO 2026-01-11 15:42:36,662 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47094
+INFO 2026-01-11 15:44:10,171 basehttp "GET /debts_all/ HTTP/1.1" 200 79888
+INFO 2026-01-11 15:44:14,657 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47094
+INFO 2026-01-11 15:44:17,846 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/update/ HTTP/1.1" 200 103128
+INFO 2026-01-11 15:46:30,773 basehttp "GET /debts_all/ HTTP/1.1" 200 79888
+INFO 2026-01-11 15:46:36,614 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47412
+INFO 2026-01-11 15:46:45,958 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 44368
+INFO 2026-01-11 15:46:52,215 autoreload /app/scoreai/services/debt_service.py changed, reloading.
+INFO 2026-01-11 15:46:52,894 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:47:04,740 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51013
+INFO 2026-01-11 15:47:09,156 basehttp "GET /debts_byBank/369/ HTTP/1.1" 200 33858
+INFO 2026-01-11 15:47:46,400 basehttp "GET /debts_byBank/1369/ HTTP/1.1" 200 32737
+INFO 2026-01-11 15:47:54,009 basehttp "GET /debts_byBank/368/ HTTP/1.1" 200 32746
+INFO 2026-01-11 15:48:52,865 basehttp "GET /debts_byBank/0001/ HTTP/1.1" 200 32734
+INFO 2026-01-11 15:48:58,667 basehttp "GET /debts_all/ HTTP/1.1" 200 79892
+INFO 2026-01-11 15:49:03,441 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/ HTTP/1.1" 200 47332
+INFO 2026-01-11 15:49:09,249 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51013
+INFO 2026-01-11 15:49:13,742 basehttp "GET /debts_byBank/1/ HTTP/1.1" 200 35504
+INFO 2026-01-11 15:49:31,314 basehttp "GET /user_profile/ HTTP/1.1" 200 43528
+INFO 2026-01-11 15:49:32,717 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+INFO 2026-01-11 15:49:32,744 basehttp "GET / HTTP/1.1" 200 51949
+INFO 2026-01-11 15:49:36,947 basehttp "GET /debts_all/ HTTP/1.1" 200 58140
+INFO 2026-01-11 15:49:42,860 basehttp "GET /debts_byBank/1/ HTTP/1.1" 200 32952
+INFO 2026-01-11 15:50:11,200 basehttp "GET /debts_byBank/ HTTP/1.1" 200 43230
+INFO 2026-01-11 15:50:15,086 basehttp "GET /debts_byBank/25/ HTTP/1.1" 200 33892
+INFO 2026-01-11 15:50:16,822 basehttp "GET /debt/01J9CYR2J3DGQSJ8828F4ZARWX/ HTTP/1.1" 200 43828
+INFO 2026-01-11 15:50:20,883 basehttp "GET /user_profile/ HTTP/1.1" 200 43044
+INFO 2026-01-11 15:50:23,021 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-11 15:50:23,050 basehttp "GET / HTTP/1.1" 200 61016
+INFO 2026-01-11 15:50:26,603 basehttp "GET /debts_all/ HTTP/1.1" 200 79892
+INFO 2026-01-11 15:52:42,371 basehttp "GET /debts_all/ HTTP/1.1" 200 79892
+INFO 2026-01-11 15:52:56,794 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 15:52:59,065 basehttp "GET /debts_all/ HTTP/1.1" 200 79892
+INFO 2026-01-11 15:53:39,293 basehttp "GET /debts_byBank/ HTTP/1.1" 200 51013
+INFO 2026-01-11 15:53:44,425 basehttp "GET /debts_byBank/1/ HTTP/1.1" 200 36234
+INFO 2026-01-11 15:55:22,342 basehttp "GET /debts_byBank/1/ HTTP/1.1" 200 36234
+INFO 2026-01-11 15:55:36,652 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/ HTTP/1.1" 200 47332
+INFO 2026-01-11 15:55:45,075 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 200 103132
+INFO 2026-01-11 15:57:07,794 basehttp "POST /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 200 104379
+INFO 2026-01-11 15:57:40,476 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 200 103132
+INFO 2026-01-11 15:57:48,798 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 200 101839
+INFO 2026-01-11 15:58:11,654 basehttp "POST /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 200 103082
+INFO 2026-01-11 15:59:47,771 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 15:59:48,631 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:00:05,215 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:00:05,947 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:00:31,880 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:00:32,635 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:01:04,567 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:01:05,594 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:01:23,703 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:01:24,534 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:01:43,513 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:01:44,419 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:01:56,676 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:01:57,307 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:04:46,410 basehttp "POST /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 16:04:46,509 basehttp "GET /debt/01J9CVMKWV283Q2GJ2DAB5ESWR/ HTTP/1.1" 200 46312
+INFO 2026-01-11 16:05:11,138 basehttp "GET /debts_all/ HTTP/1.1" 200 78805
+INFO 2026-01-11 16:05:11,157 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-11 16:05:39,576 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 44368
+INFO 2026-01-11 16:07:21,079 basehttp "GET /debt/01HZNYD5P8R3RVZSP0YH41MYNB/ HTTP/1.1" 200 44558
+INFO 2026-01-11 16:10:02,731 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:10:03,601 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:10:13,183 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:10:13,561 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:10:30,238 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:10:30,725 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:10:57,555 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:10:58,096 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:12:56,609 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:12:57,132 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:13:43,219 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:13:44,005 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:14:23,322 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-11 16:14:24,335 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:16:04,655 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:16:05,672 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:16:31,455 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:16:44,829 basehttp "GET /debts_all/ HTTP/1.1" 200 78805
+INFO 2026-01-11 16:16:48,015 basehttp "GET /debt/create/ HTTP/1.1" 200 104531
+INFO 2026-01-11 16:17:25,505 basehttp "POST /debt/create/ HTTP/1.1" 302 0
+INFO 2026-01-11 16:17:25,546 basehttp "GET /debts_all/ HTTP/1.1" 200 80831
+INFO 2026-01-11 16:18:06,883 basehttp "GET /debt/01KENSYMJ4WTSFT8F3KQANG4C9/ HTTP/1.1" 200 47730
+INFO 2026-01-11 16:18:09,726 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 47644
+INFO 2026-01-11 16:18:22,839 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 200 103091
+INFO 2026-01-11 16:18:27,981 basehttp "POST /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 16:18:28,002 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 48117
+INFO 2026-01-11 16:18:30,718 basehttp "GET /debts_all/ HTTP/1.1" 200 80283
+INFO 2026-01-11 16:18:50,031 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 47649
+INFO 2026-01-11 16:19:04,804 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 200 103094
+INFO 2026-01-11 16:19:09,928 basehttp "GET /debts_all/ HTTP/1.1" 200 80283
+INFO 2026-01-11 16:19:21,968 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 47649
+INFO 2026-01-11 16:19:27,430 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 200 103094
+INFO 2026-01-11 16:19:38,950 basehttp "POST /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 16:19:38,971 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 48176
+INFO 2026-01-11 16:19:46,906 basehttp "GET /debts_all/ HTTP/1.1" 200 80338
+INFO 2026-01-11 16:20:19,204 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 47708
+INFO 2026-01-11 16:20:19,281 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-11 16:20:26,036 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 200 103094
+INFO 2026-01-11 16:20:39,963 basehttp "POST /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 16:20:39,986 basehttp "GET /debt/01KENYNEBMBZ5WHQ4RAE3W59TR/ HTTP/1.1" 200 48176
+INFO 2026-01-11 16:20:42,699 basehttp "GET /debts_all/ HTTP/1.1" 200 80338
+INFO 2026-01-11 16:22:17,942 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:22:18,668 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:22:27,416 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 16:22:27,748 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:22:57,778 basehttp "GET /debts_all/ HTTP/1.1" 200 80298
+INFO 2026-01-11 16:40:27,349 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:41:06,976 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-11 16:42:25,526 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75714
+INFO 2026-01-11 16:43:03,009 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 16:43:03,970 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:43:06,396 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33811
+INFO 2026-01-11 16:43:36,253 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 16:43:36,831 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:44:03,369 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52247
+INFO 2026-01-11 16:44:07,089 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75857
+INFO 2026-01-11 16:44:28,413 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 16:44:29,123 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 16:44:40,479 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 16:44:40,876 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:19:45,332 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 21:19:47,106 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:20:02,017 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 21:20:02,574 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:20:13,935 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-11 21:20:14,409 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:20:23,598 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-11 21:20:24,085 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:20:35,303 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-11 21:20:35,978 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:45:29,064 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 21:45:33,949 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75857
+INFO 2026-01-11 21:45:48,171 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52247
+INFO 2026-01-11 21:45:53,054 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 21:45:53,056 budget_views budget_monthly_all count: 12
+INFO 2026-01-11 21:45:53,057 budget_views actual_monthly_all count: 6
+INFO 2026-01-11 21:45:53,064 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-11 21:45:53,064 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-11 21:45:53,080 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50268
+INFO 2026-01-11 21:45:56,614 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-11 21:46:12,047 basehttp "GET /user_profile/ HTTP/1.1" 200 43528
+INFO 2026-01-11 21:46:19,135 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+INFO 2026-01-11 21:46:19,162 basehttp "GET / HTTP/1.1" 200 51949
+INFO 2026-01-11 21:46:22,716 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74020
+INFO 2026-01-11 21:46:26,622 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 50808
+INFO 2026-01-11 21:46:29,093 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-11 21:46:29,094 budget_views budget_monthly_all count: 0
+INFO 2026-01-11 21:46:29,095 budget_views actual_monthly_all count: 0
+INFO 2026-01-11 21:46:29,096 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=0
+INFO 2026-01-11 21:46:29,105 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 33857
+INFO 2026-01-11 21:46:31,333 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74020
+INFO 2026-01-11 21:46:33,791 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 50808
+INFO 2026-01-11 21:46:39,361 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 60199
+INFO 2026-01-11 21:46:47,244 basehttp "GET / HTTP/1.1" 200 51428
+INFO 2026-01-11 21:47:05,882 basehttp "GET /ai-consultation/ HTTP/1.1" 200 41426
+INFO 2026-01-11 21:47:21,769 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 200 37235
+INFO 2026-01-11 21:47:28,426 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/update/ HTTP/1.1" 200 39550
+INFO 2026-01-11 21:47:38,819 basehttp "GET /ai-consultation/ HTTP/1.1" 200 41426
+INFO 2026-01-11 21:47:42,440 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 29812
+INFO 2026-01-11 21:47:43,777 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 64329
+INFO 2026-01-11 21:47:53,982 basehttp "GET /admin/ HTTP/1.1" 200 38962
+INFO 2026-01-11 21:47:54,004 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,007 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,009 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2026-01-11 21:47:54,009 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,010 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,011 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,059 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,060 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:47:54,061 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2026-01-11 21:47:54,061 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,550 basehttp "GET /admin/scoreai/industrycategory/ HTTP/1.1" 200 33212
+INFO 2026-01-11 21:48:07,570 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,573 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,574 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,575 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,578 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,579 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,581 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,580 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,581 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,580 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,584 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,586 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:48:07,587 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,596 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,597 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:07,597 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:09,364 basehttp "GET /admin/scoreai/industrycategory/01KEKDB2YTCRA6QN9RQSBYTTZ3/change/ HTTP/1.1" 200 33412
+INFO 2026-01-11 21:48:09,383 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:09,384 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:09,390 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:48:09,397 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:09,397 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-11 21:48:16,133 basehttp "GET /admin/scoreai/industrycategory/ HTTP/1.1" 200 33212
+INFO 2026-01-11 21:48:17,271 basehttp "GET /admin/ HTTP/1.1" 200 38962
+INFO 2026-01-11 21:48:20,117 basehttp "GET /admin/scoreai/industrybenchmark/ HTTP/1.1" 200 115971
+INFO 2026-01-11 21:48:20,129 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:48:22,021 basehttp "GET /admin/ HTTP/1.1" 200 38962
+INFO 2026-01-11 21:48:23,064 basehttp "GET /admin/scoreai/industrybenchmark/ HTTP/1.1" 200 115971
+INFO 2026-01-11 21:48:25,151 basehttp "GET /admin/ HTTP/1.1" 200 38962
+INFO 2026-01-11 21:48:26,957 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34344
+INFO 2026-01-11 21:48:26,974 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:48:28,615 basehttp "GET /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 200 35628
+INFO 2026-01-11 21:48:28,631 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:51:10,475 basehttp "POST /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 302 0
+INFO 2026-01-11 21:51:10,491 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34637
+INFO 2026-01-11 21:51:10,516 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:51:12,831 basehttp "GET /ai-consultation/ HTTP/1.1" 200 41426
+INFO 2026-01-11 21:51:16,830 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 29767
+INFO 2026-01-11 21:51:24,169 basehttp "GET /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 200 35628
+INFO 2026-01-11 21:51:24,197 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:51:29,032 basehttp "POST /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 302 0
+INFO 2026-01-11 21:51:29,048 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34637
+INFO 2026-01-11 21:51:29,077 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:51:31,555 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 29812
+INFO 2026-01-11 21:51:32,934 basehttp "GET /ai-consultation/industry/food-service/izakaya-plan/create/ HTTP/1.1" 200 64329
+INFO 2026-01-11 21:52:14,786 basehttp "GET /admin/scoreai/izakayaplan/ HTTP/1.1" 200 35109
+INFO 2026-01-11 21:52:14,815 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-11 21:52:14,822 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:52:16,313 basehttp "GET /admin/scoreai/izakayaplan/01KEKDNJATBRNH8JFBC8MHBZ7K/change/ HTTP/1.1" 200 47666
+INFO 2026-01-11 21:52:16,327 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:52:16,328 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-01-11 21:52:16,332 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:52:16,342 basehttp "GET /static/admin/img/tooltag-arrowright.svg HTTP/1.1" 200 280
+INFO 2026-01-11 21:52:16,378 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2026-01-11 21:53:00,029 basehttp "GET /ai-consultation/industry/settings/categories/create/ HTTP/1.1" 200 31106
+INFO 2026-01-11 21:53:03,369 basehttp "GET /ai-consultation/industry/settings/categories/ HTTP/1.1" 200 31440
+INFO 2026-01-11 21:53:06,191 basehttp "GET /ai-consultation/industry/settings/categories/01KEKDB2YTCRA6QN9RQSBYTTZ3/update/ HTTP/1.1" 200 31231
+INFO 2026-01-11 21:54:14,480 basehttp "GET /admin/ HTTP/1.1" 200 39134
+INFO 2026-01-11 21:54:26,206 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34344
+INFO 2026-01-11 21:54:26,240 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:54:27,917 basehttp "GET /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 200 35628
+INFO 2026-01-11 21:54:27,949 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:55:38,861 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34344
+INFO 2026-01-11 21:55:38,886 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:55:58,549 basehttp "GET /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 200 35628
+INFO 2026-01-11 21:55:58,588 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:56:39,419 basehttp "POST /ai-consultation/industry/settings/categories/01KEKDB2YTCRA6QN9RQSBYTTZ3/update/ HTTP/1.1" 302 0
+INFO 2026-01-11 21:56:39,453 basehttp "GET /ai-consultation/industry/settings/categories/ HTTP/1.1" 200 31917
+INFO 2026-01-11 21:56:42,556 basehttp "GET /ai-consultation/ HTTP/1.1" 200 41426
+INFO 2026-01-11 21:56:46,159 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 200 29812
+INFO 2026-01-11 21:57:15,580 basehttp "GET /admin/scoreai/industryclassification/ HTTP/1.1" 200 35280
+INFO 2026-01-11 21:57:15,625 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:57:21,622 basehttp "GET /admin/scoreai/industryconsultationtype/01KEKDB2Z3ACP7YQAF2N9F583Q/change/ HTTP/1.1" 200 35628
+INFO 2026-01-11 21:57:26,929 basehttp "GET /admin/scoreai/industrycategory/ HTTP/1.1" 200 33212
+INFO 2026-01-11 21:57:26,957 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:57:45,040 basehttp "GET /admin/scoreai/industryclassification/ HTTP/1.1" 200 35280
+INFO 2026-01-11 21:57:45,067 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:58:07,234 basehttp "GET /admin/scoreai/industryconsultationtype/ HTTP/1.1" 200 34344
+INFO 2026-01-11 21:58:07,267 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:58:43,012 basehttp "GET /admin/scoreai/izakayaplan/ HTTP/1.1" 200 35109
+INFO 2026-01-11 21:58:43,074 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 21:58:44,464 basehttp "GET /admin/scoreai/izakayaplan/01KEKDNJATBRNH8JFBC8MHBZ7K/change/ HTTP/1.1" 200 47666
+INFO 2026-01-11 21:58:44,484 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 22:00:09,354 basehttp "GET /admin/scoreai/industrysubclassification/ HTTP/1.1" 200 42622
+INFO 2026-01-11 22:00:09,396 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 22:00:18,045 basehttp "GET /admin/scoreai/industrysubclassification/25/change/ HTTP/1.1" 200 33296
+INFO 2026-01-11 22:00:18,070 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 22:00:25,887 basehttp "GET /admin/scoreai/industryclassification/ HTTP/1.1" 200 35280
+INFO 2026-01-11 22:00:25,903 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 22:00:31,200 basehttp "GET /admin/scoreai/industryclassification/32/change/ HTTP/1.1" 200 30715
+INFO 2026-01-11 22:00:31,220 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-11 22:03:21,529 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 22:03:22,176 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:03:40,294 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:03:40,852 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:03:51,627 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:03:52,146 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:04:02,585 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:04:03,111 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:04:13,264 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:04:13,611 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:04:23,916 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-11 22:04:24,355 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:05:41,254 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:05:41,902 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:05:50,976 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:05:51,444 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:06:09,077 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-11 22:06:09,609 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:06:30,253 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:06:30,675 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:06:40,112 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-11 22:06:40,526 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:06:53,529 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-11 22:06:54,002 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:07:15,196 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 22:07:15,608 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:10:00,277 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 22:10:00,736 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:10:34,147 autoreload Watching for file changes with StatReloader
+INFO 2026-01-11 22:10:49,694 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-11 22:10:50,513 autoreload Watching for file changes with StatReloader
