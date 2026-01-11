@@ -8,15 +8,52 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-primary btn-sm">ノート一覧</a>
-        <a href="{% url 'meeting_minutes_create' %}" class="btn btn-outline-primary btn-sm">新規ノート作成</a>
-      </div>
-    </div>
+    <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
+    <p class="text-muted mb-0">議事録の作成、管理、AI生成を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'meeting_minutes_list' %}" role="tab">
+          <i class="ti ti-notes me-1"></i>ノート一覧
+        </a>
+      </li>
+      {% load custom_tags %}
+      {% load plan_features_tags %}
+      {% get_user_selected_company user as selected_company %}
+      {% if selected_company %}
+        {% get_company_firm_for_plan_check selected_company as company_firm %}
+        {% if company_firm %}
+          {% check_plan_feature_access_tag company_firm 'starter' as plan_check %}
+          {% if plan_check.0 %}
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" href="{% url 'meeting_minutes_ai_generate' %}" role="tab">
+              <i class="ti ti-sparkles me-1"></i>AI議事録生成
+            </a>
+          </li>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="meetingMinutesTabsContent">
+  <!-- ノート一覧 -->
+  <div class="tab-pane fade show active" id="meeting-minutes-list" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>ノート一覧</strong>では、登録されている議事録を一覧で確認・管理できます。
+        </div>
+      </div>
+    </div>
 <div class="card">
     <div class="card-header">
         <h5 class="card-title mb-0">ノート一覧</h5>

@@ -247,18 +247,27 @@
                     <p class="mb-3 text-muted small">
                         これらの設定は、システム管理者がDjango管理画面から行うか、管理コマンド <code>python manage.py init_industry_consultation</code> を実行して初期データを設定します。
                     </p>
-                    {% if user.is_staff %}
+                    {% if user.is_manager %}
                     <div class="d-flex gap-2 flex-wrap">
-                        <a href="/admin/scoreai/industrycategory/" class="btn btn-primary btn-sm" target="_blank">
+                        <a href="{% url 'industry_category_list' %}" class="btn btn-primary btn-sm">
                             <i class="ti ti-settings me-1"></i>業界カテゴリーを設定
                         </a>
-                        <a href="/admin/scoreai/industryconsultationtype/" class="btn btn-primary btn-sm" target="_blank">
+                        <a href="{% url 'industry_consultation_type_list' %}" class="btn btn-primary btn-sm">
                             <i class="ti ti-settings me-1"></i>業界別相談タイプを設定
+                        </a>
+                    </div>
+                    {% elif user.is_staff %}
+                    <div class="d-flex gap-2 flex-wrap">
+                        <a href="/admin/scoreai/industrycategory/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="ti ti-settings me-1"></i>業界カテゴリーを設定（管理画面）
+                        </a>
+                        <a href="/admin/scoreai/industryconsultationtype/" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="ti ti-settings me-1"></i>業界別相談タイプを設定（管理画面）
                         </a>
                     </div>
                     {% else %}
                     <p class="mb-0 text-muted small">
-                        <i class="ti ti-lock me-1"></i>設定はシステム管理者のみが行えます。管理者にお問い合わせください。
+                        <i class="ti ti-lock me-1"></i>設定はCompanyのmanagerのみが行えます。管理者にお問い合わせください。
                     </p>
                     {% endif %}
                 </div>

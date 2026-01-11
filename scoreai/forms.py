@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from .models import (
     Company,
@@ -311,10 +312,18 @@ class DebtForm(forms.ModelForm):
     issue_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='実行日')
     start_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='返済開始')
     reschedule_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), label='リスケ日', required=False)
+    repayment_months = forms.CharField(
+        label='返済月',
+        required=False,
+        help_text='社債の場合のみ使用。返済月をカンマ区切りで入力（例: 1,7 で1月と7月に返済）',
+        widget=forms.TextInput(attrs={'placeholder': '例: 1,7'})
+    )
+    
     class Meta:
         model = Debt
-        fields = ['financial_institution', 'principal', 'issue_date', 'start_date', 'interest_rate', 'monthly_repayment', 'secured_type', 'is_securedby_management', 'adjusted_amount_first', 'is_collateraled', 'adjusted_amount_last','is_rescheduled', 'reschedule_date', 'reschedule_balance', 'memo_short', 'memo_long', 'is_nodisplay', 'document_url', 'document_url2', 'document_url3', 'document_url_c1', 'document_url_c2', 'document_url_c3']
+        fields = ['debt_type', 'financial_institution', 'principal', 'issue_date', 'start_date', 'interest_rate', 'monthly_repayment', 'repayment_months', 'secured_type', 'is_securedby_management', 'adjusted_amount_first', 'is_collateraled', 'adjusted_amount_last','is_rescheduled', 'reschedule_date', 'reschedule_balance', 'memo_short', 'memo_long', 'is_nodisplay', 'document_url', 'document_url2', 'document_url3', 'document_url_c1', 'document_url_c2', 'document_url_c3']
         widgets = {
+            'debt_type': forms.Select(attrs={'class': 'form-control'}),
             'financial_institution': Select2Widget,
             'is_rescheduled': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
             'is_nodisplay': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
@@ -325,12 +334,91 @@ class DebtForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_form_fields()
+        
+        # 既存インスタンスの場合、repayment_monthsを文字列に変換
+        if self.instance and self.instance.pk:
+            if self.instance.repayment_months:
+                self.initial['repayment_months'] = ','.join(map(str, self.instance.repayment_months))
+        
+        # 借入タイプに応じてフィールドの表示を制御
+        if 'debt_type' in self.data:
+            debt_type = self.data.get('debt_type')
+        elif self.instance and self.instance.pk:
+            debt_type = self.instance.debt_type
+        else:
+            debt_type = 'certificate'  # デフォルト
+        
+        if debt_type == 'corporate_bond':
+            # 社債の場合: repayment_monthsを必須に
+            self.fields['repayment_months'].required = True
+            self.fields['adjusted_amount_first'].required = False
+            self.fields['adjusted_amount_last'].required = False
+        else:
+            # 証書貸付の場合: repayment_monthsを非表示
+            self.fields['repayment_months'].required = False
 
     def setup_form_fields(self):
         self.fields['financial_institution'].widget.attrs.update({'class': 'form-control select2'})
         for field in self.fields.values():
             if 'class' not in field.widget.attrs:
                 field.widget.attrs['class'] = 'form-control'
+    
+    def clean_repayment_months(self):
+        """返済月フィールドをリストに変換"""
+        repayment_months_str = self.cleaned_data.get('repayment_months', '')
+        if not repayment_months_str or repayment_months_str.strip() == '':
+            return []
+        
+        try:
+            months = [int(m.strip()) for m in repayment_months_str.split(',') if m.strip()]
+            # 1-12の範囲内か確認
+            for month in months:
+                if month < 1 or month > 12:
+                    raise forms.ValidationError("返済月は1-12の整数で指定してください。")
+            # 重複を除去してソート
+            months = sorted(list(set(months)))
+            return months
+        except ValueError:
+            raise forms.ValidationError("返済月はカンマ区切りの整数で入力してください（例: 1,7）。")
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        debt_type = cleaned_data.get('debt_type')
+        repayment_months = cleaned_data.get('repayment_months')
+        
+        if debt_type == 'corporate_bond':
+            if not repayment_months or len(repayment_months) == 0:
+                raise forms.ValidationError({
+                    'repayment_months': "社債の場合は返済月を指定してください。"
+                })
+        
+        return cleaned_data
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        # repayment_monthsをJSONFieldに保存
+        repayment_months = self.cleaned_data.get('repayment_months', [])
+        instance.repayment_months = repayment_months
+        
+        # モデルのcleanメソッドを呼び出してバリデーション
+        try:
+            instance.clean()
+        except ValidationError as e:
+            # モデルのバリデーションエラーをフォームのエラーに変換
+            if hasattr(e, 'error_dict'):
+                for field, errors in e.error_dict.items():
+                    for error in errors:
+                        self.add_error(field, error)
+            elif hasattr(e, 'error_list'):
+                for error in e.error_list:
+                    self.add_error(None, error)
+            else:
+                self.add_error(None, str(e))
+            raise
+        
+        if commit:
+            instance.save()
+        return instance
 
 
 class Stakeholder_nameForm(forms.ModelForm):

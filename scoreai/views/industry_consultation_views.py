@@ -27,6 +27,9 @@ class IndustryConsultationCenterView(SelectedCompanyMixin, LoginRequiredMixin, T
         context['categories'] = categories
         context['title'] = '業界別相談室'
         
+        # Companyのmanagerかどうかを判定
+        context['is_company_manager'] = self.request.user.is_manager
+        
         # 選択中のCompanyの相談履歴を取得
         # 居酒屋出店計画の履歴（下書き含む）
         izakaya_plans_queryset = IzakayaPlan.objects.filter(

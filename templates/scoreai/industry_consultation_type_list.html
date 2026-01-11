@@ -1,0 +1,89 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <h4 class="fw-semibold mb-0">{{ title }}</h4>
+            <div class="d-flex gap-2 flex-wrap">
+                <a href="{% url 'industry_consultation_center' %}" class="btn btn-outline-secondary">
+                    <i class="ti ti-arrow-left me-1"></i>業界別相談室に戻る
+                </a>
+                <a href="{% url 'industry_consultation_type_create' %}" class="btn btn-primary">
+                    <i class="ti ti-plus me-1"></i>新規作成
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>表示順</th>
+                                <th>業界カテゴリー</th>
+                                <th>相談タイプ名</th>
+                                <th>説明</th>
+                                <th>テンプレートタイプ</th>
+                                <th>ステータス</th>
+                                <th class="text-end">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for consultation_type in consultation_types %}
+                            <tr>
+                                <td>{{ consultation_type.order }}</td>
+                                <td>{{ consultation_type.industry_category.name }}</td>
+                                <td>{{ consultation_type.name }}</td>
+                                <td>{{ consultation_type.description|truncatewords:20|default:"-" }}</td>
+                                <td>
+                                    {% if consultation_type.template_type == 'izakaya_plan' %}
+                                    <span class="badge bg-info">居酒屋出店計画</span>
+                                    {% elif consultation_type.template_type == 'cafe_plan' %}
+                                    <span class="badge bg-info">カフェ出店計画</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ consultation_type.template_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if consultation_type.is_active %}
+                                    <span class="badge bg-success">有効</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">無効</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a href="{% url 'industry_consultation_type_update' consultation_type.pk %}" class="btn btn-outline-primary">
+                                            <i class="ti ti-edit"></i>編集
+                                        </a>
+                                        <a href="{% url 'industry_consultation_type_delete' consultation_type.pk %}" class="btn btn-outline-danger">
+                                            <i class="ti ti-trash"></i>削除
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted">業界別相談タイプが登録されていません。</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

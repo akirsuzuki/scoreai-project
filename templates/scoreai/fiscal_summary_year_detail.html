@@ -15,23 +15,62 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">年次財務諸表</h4>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        {% if available_years and selected_year %}
-        <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
-          <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
-            {% for year in available_years %}
-            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
-            {% endfor %}
-          </select>
-          <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
-            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
-            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
-          </select>
-        </form>
-        {% endif %}
-        <div class="d-flex gap-2 flex-wrap">
+    <h4 class="fw-semibold mb-0">年次財務諸表</h4>
+    <p class="text-muted mb-0">年次財務諸表の管理と分析を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'fiscal_summary_year_list' %}?is_draft=false" role="tab">
+          <i class="ti ti-chart-line me-1"></i>決算年次推移
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'latest_fiscal_summary_year_detail' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>直近決算詳細
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_vs_actual_yearly' %}" role="tab">
+          <i class="ti ti-chart-bar me-1"></i>年次予算vs実績比較
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="fiscalYearTabsContent">
+  <!-- 直近決算詳細 -->
+  <div class="tab-pane fade show active" id="latest-detail" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>直近決算詳細</strong>では、選択した年度の決算データを詳細に表示し、財務分析やAI診断を行えます。
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+          {% if available_years and selected_year %}
+          <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
+            <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
+              {% for year in available_years %}
+              <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
+              <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
+              <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
+            </select>
+          </form>
+          {% endif %}
           {% if fiscal_summary_year %}
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
@@ -50,18 +89,14 @@
             </ul>
           </div>
           {% endif %}
-          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
-          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-primary btn-sm">直近決算詳細</a>
-          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-outline-primary btn-sm">年次予算vs実績比較</a>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">単年度決算詳細</h5>
-      </div>
+    <div class="col-lg-12 d-flex align-items-stretch">
+      <div class="card w-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0 fw-semibold">単年度決算詳細</h5>
+        </div>
       <div class="card-body">
         {% if data_not_found %}
         <div class="alert alert-warning mb-3" role="alert">
@@ -682,6 +717,6 @@
     </div>
   </div>
 </div>
-
-
+  </div>
+</div>
 {% endblock %}

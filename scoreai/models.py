@@ -826,14 +826,21 @@ class SecuredType(models.Model):
 
         
 class Debt(models.Model):
+    DEBT_TYPE_CHOICES = [
+        ('certificate', '証書貸付'),
+        ('corporate_bond', '社債'),
+    ]
+    
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     financial_institution = models.ForeignKey(FinancialInstitution, on_delete=models.CASCADE, verbose_name="金融機関名")
+    debt_type = models.CharField("借入区分", max_length=20, choices=DEBT_TYPE_CHOICES, default='certificate', help_text="証書貸付: 毎月返済、社債: 指定月のみ返済")
     principal = models.IntegerField("借入元本", help_text="単位：円")
     issue_date = models.DateField("実行日")
     start_date = models.DateField("返済開始日")
     interest_rate = models.DecimalField("利息", max_digits=6, decimal_places=4, help_text="単位：%")
-    monthly_repayment = models.IntegerField("月返済額", help_text="単位：円")
+    monthly_repayment = models.IntegerField("月返済額", help_text="単位：円。証書貸付の場合は毎月の返済額、社債の場合は返済月の返済額")
+    repayment_months = models.JSONField("返済月", default=list, blank=True, help_text="社債の場合のみ使用。返済月を指定（例: [1, 7] で1月と7月に返済）。証書貸付の場合は空欄。")
     adjusted_amount_first = models.IntegerField("初月調整額", default=0, help_text="単位：円。初月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
     adjusted_amount_last = models.IntegerField("最終月調整額", default=0, help_text="単位：円。最終月だけ返済額が異なる場合は通常月との差額を入力。差がなければゼロ。")
     is_securedby_management = models.BooleanField("経営者保証", default=False)
@@ -855,9 +862,22 @@ class Debt(models.Model):
 
     @property
     def payment_terms(self):
-        total_amount = self.principal + self.adjusted_amount_first + self.adjusted_amount_last
-        months_difference = (self.start_date.year - self.issue_date.year) * 12 + (self.start_date.month - self.issue_date.month)
-        return int(total_amount / self.monthly_repayment + months_difference)
+        """返済回数を計算（証書貸付: 毎月返済、社債: 返済月のみ）"""
+        if self.debt_type == 'corporate_bond':
+            # 社債の場合: 返済月の数で計算
+            if not self.repayment_months or len(self.repayment_months) == 0:
+                return 0
+            total_amount = self.principal + self.adjusted_amount_first + self.adjusted_amount_last
+            # 年間返済回数で割る
+            repayments_per_year = len(self.repayment_months)
+            if repayments_per_year == 0:
+                return 0
+            return int(total_amount / self.monthly_repayment * (12 / repayments_per_year))
+        else:
+            # 証書貸付の場合: 従来通り
+            total_amount = self.principal + self.adjusted_amount_first + self.adjusted_amount_last
+            months_difference = (self.start_date.year - self.issue_date.year) * 12 + (self.start_date.month - self.issue_date.month)
+            return int(total_amount / self.monthly_repayment + months_difference)
 
     @property
     def remaining_months(self):
@@ -881,13 +901,58 @@ class Debt(models.Model):
         #     return 0
         return (now.year - start_date.year) * 12 + (now.month - start_date.month) + 1
 
+    def _is_repayment_month(self, target_date):
+        """指定した日付が返済月かどうかを判定"""
+        if self.debt_type == 'corporate_bond':
+            if not self.repayment_months or len(self.repayment_months) == 0:
+                return False
+            return target_date.month in self.repayment_months
+        else:
+            # 証書貸付の場合は毎月返済
+            return True
+    
+    def _count_repayment_months(self, start_date, months):
+        """指定した期間内の返済月数をカウント"""
+        if self.debt_type == 'corporate_bond':
+            if not self.repayment_months or len(self.repayment_months) == 0:
+                return 0
+            count = 0
+            from datetime import date
+            for i in range(months):
+                # 返済開始日からiヶ月後の日付を計算
+                month = start_date.month + i
+                year = start_date.year
+                while month > 12:
+                    month -= 12
+                    year += 1
+                if month in self.repayment_months:
+                    count += 1
+            return count
+        else:
+            # 証書貸付の場合は毎月返済
+            return months
+
     # 指定した月が経過した時点の残高（最終回は考慮せず）
     # 返済開始前の場合はmonthがマイナスの値となるが、projected_balanceは元本となる。
     def balance_after_months(self, months):
         if months == 0:
             projected_balance = self.principal
         else:
-            projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
+            if self.debt_type == 'corporate_bond':
+                # 社債の場合: 返済月のみ元本を減らす
+                repayment_count = self._count_repayment_months(self.start_date, months)
+                if repayment_count > 0:
+                    # 初回返済の調整額を考慮
+                    if repayment_count == 1 and months <= 1:
+                        projected_balance = self.principal - (self.monthly_repayment + self.adjusted_amount_first)
+                    else:
+                        projected_balance = self.principal - (self.monthly_repayment * repayment_count + self.adjusted_amount_first)
+                else:
+                    projected_balance = self.principal
+            else:
+                # 証書貸付の場合: 従来通り
+                projected_balance = self.principal - (self.monthly_repayment * months + self.adjusted_amount_first)
+        
         projected_balance = min(self.principal, max(0, projected_balance))
         projected_interest_amount = projected_balance * self.interest_rate / 12 / 100
         return projected_balance, projected_interest_amount
@@ -895,17 +960,59 @@ class Debt(models.Model):
     # 月々の残高
     @property
     def balances_monthly(self):
+        """今後12ヶ月間の各月の残高を計算（社債対応）"""
         start_month = self.elapsed_months
-        return [self.balance_after_months(month)[0] for month in range(start_month, start_month + 12)]
+        balances = []
+        current_balance = self.principal
+        
+        # 返済開始前の残高を計算
+        if start_month <= 0:
+            # 返済開始前は元本
+            for i in range(12):
+                balances.append(current_balance)
+            return balances
+        
+        # 返済開始後の残高を計算
+        from datetime import date, timedelta
+        current_date = datetime.now().date()
+        
+        for i in range(12):
+            # 現在からiヶ月後の日付を計算
+            target_year = current_date.year
+            target_month = current_date.month + i
+            while target_month > 12:
+                target_month -= 12
+                target_year += 1
+            
+            target_date = date(target_year, target_month, 1)
+            
+            # 返済開始日からの経過月数
+            months_from_start = (target_year - self.start_date.year) * 12 + (target_month - self.start_date.month)
+            
+            if months_from_start <= 0:
+                # 返済開始前
+                balances.append(current_balance)
+            else:
+                # 返済開始後: balance_after_monthsを使用
+                balance, _ = self.balance_after_months(months_from_start)
+                balances.append(balance)
+        
+        return balances
 
     @property
     def interest_amount_monthly(self):
         """
-        今後12ヶ月間の各月の月次利息額を計算して返す
-        年利を12で割って月次利息率に変換し、各月の残高に掛けて計算
+        今後12ヶ月間の各月の月次利息額を計算して返す（社債対応）
+        社債の場合: 返済月以外も利息は発生する
         """
         start_month = self.elapsed_months
-        return [int(self.balance_after_months(month)[1]) for month in range(start_month, start_month + 12)]
+        interest_amounts = []
+        
+        for i in range(12):
+            balance, interest = self.balance_after_months(start_month + i)
+            interest_amounts.append(int(interest))
+        
+        return interest_amounts
 
     @property
     def fiscal_year_months(self):
@@ -959,26 +1066,48 @@ class Debt(models.Model):
         super().clean()
         if self.issue_date and self.start_date and self.issue_date > self.start_date:
             raise ValidationError("実行日は返済開始日以前でなければなりません。")
-        if self.monthly_repayment <= 0:
-            raise ValidationError({
-                'monthly_repayment': "月返済額は正の数でなければなりません。"
-            })
-        if self.principal <= 0:
+        
+        if self.principal is None or self.principal <= 0:
             raise ValidationError({
                 'principal': "借入元本は正の数でなければなりません。"
             })
-        # 初月の返済額（adjusted_amount_first + monthly_repayment）が正の数か確認
-        total_first_repayment = self.adjusted_amount_first + self.monthly_repayment
-        if total_first_repayment <= 0:
-            raise ValidationError({
-                'adjusted_amount_first': "初月調整額と月返済額の合計は正の数でなければなりません。"
-            })
-        # 最終月の返済額（adjusted_amount_last + monthly_repayment）が正の数か確認
-        total_last_repayment = self.adjusted_amount_last + self.monthly_repayment
-        if total_last_repayment <= 0:
-            raise ValidationError({
-                'adjusted_amount_last': "最終月調整額と月返済額の合計は正の数でなければなりません。"
-            })
+        
+        if self.debt_type == 'corporate_bond':
+            # 社債の場合
+            if not self.repayment_months or len(self.repayment_months) == 0:
+                raise ValidationError({
+                    'repayment_months': "社債の場合は返済月を指定してください（例: [1, 7]）。"
+                })
+            # 返済月が1-12の範囲内か確認
+            for month in self.repayment_months:
+                if not isinstance(month, int) or month < 1 or month > 12:
+                    raise ValidationError({
+                        'repayment_months': "返済月は1-12の整数で指定してください。"
+                    })
+            if self.monthly_repayment is None or self.monthly_repayment <= 0:
+                raise ValidationError({
+                    'monthly_repayment': "返済額は正の数でなければなりません。"
+                })
+        else:
+            # 証書貸付の場合
+            if self.monthly_repayment is None or self.monthly_repayment <= 0:
+                raise ValidationError({
+                    'monthly_repayment': "月返済額は正の数でなければなりません。"
+                })
+            # 初月の返済額（adjusted_amount_first + monthly_repayment）が正の数か確認
+            adjusted_amount_first = self.adjusted_amount_first or 0
+            total_first_repayment = adjusted_amount_first + self.monthly_repayment
+            if total_first_repayment <= 0:
+                raise ValidationError({
+                    'adjusted_amount_first': "初月調整額と月返済額の合計は正の数でなければなりません。"
+                })
+            # 最終月の返済額（adjusted_amount_last + monthly_repayment）が正の数か確認
+            adjusted_amount_last = self.adjusted_amount_last or 0
+            total_last_repayment = adjusted_amount_last + self.monthly_repayment
+            if total_last_repayment <= 0:
+                raise ValidationError({
+                    'adjusted_amount_last': "最終月調整額と月返済額の合計は正の数でなければなりません。"
+                })
 
 
     def save(self, *args, **kwargs):

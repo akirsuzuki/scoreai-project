@@ -14,35 +14,70 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">月次PL</h4>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        {% if available_years %}
-        <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
-          <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
-            {% for year in available_years %}
-            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
-            {% endfor %}
-          </select>
-          <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
-            <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
-            <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
-          </select>
-        </form>
-        {% endif %}
-        <div class="d-flex gap-2 flex-wrap">
-          <a href="{% url 'fiscal_summary_month_list' %}?years=3" class="btn btn-outline-primary btn-sm">月次PL一覧（3期比較）</a>
-          <a href="{% url 'latest_monthly_pl' %}" class="btn btn-primary btn-sm">単年度月次PL</a>
-          <a href="{% url 'budget_vs_actual_monthly' %}" class="btn btn-outline-primary btn-sm">予算vs実績推移表</a>
+    <h4 class="fw-semibold mb-0">月次PL</h4>
+    <p class="text-muted mb-0">月次損益計算書の管理と分析を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'fiscal_summary_month_list' %}?years=3" role="tab">
+          <i class="ti ti-calendar me-1"></i>年度別月次PL
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'latest_monthly_pl' %}" role="tab">
+          <i class="ti ti-calendar-event me-1"></i>単年度月次PL
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_vs_actual_monthly' %}" role="tab">
+          <i class="ti ti-chart-line me-1"></i>予算vs実績推移表
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="monthlyPlTabsContent">
+  <!-- 単年度月次PL -->
+  <div class="tab-pane fade show active" id="single-year" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>単年度月次PL</strong>では、選択した年度の月次データを詳細に表示できます。
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">単年度月次PL</h5>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+          {% if available_years %}
+          <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
+            <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
+              {% for year in available_years %}
+              <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
+              <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
+              <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
+            </select>
+          </form>
+          {% endif %}
+        </div>
       </div>
+    </div>
+    <div class="col-lg-12 d-flex align-items-stretch">
+      <div class="card w-100">
+        <div class="card-header">
+          <h5 class="card-title mb-0 fw-semibold">単年度月次PL</h5>
+        </div>
       <div class="card-body">
         {% if data_not_found %}
         <div class="alert alert-warning mb-3" role="alert">

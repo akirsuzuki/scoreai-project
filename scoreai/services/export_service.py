@@ -10,6 +10,8 @@ from django.utils import timezone
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
+# フォント登録時の警告を抑制（起動時のログノイズを減らす）
+logging.getLogger('reportlab').setLevel(logging.ERROR)
 
 # オプショナルな依存関係のチェック
 try:
@@ -36,10 +38,22 @@ try:
     try:
         # フォントファイルのパスを確認（複数の可能性のあるパスを試す）
         font_paths = [
-            '/usr/share/fonts/truetype/ipafont/ipagp.ttf',  # Linux (IPAゴシック)
-            '/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc',  # macOS
-            'C:/Windows/Fonts/msgothic.ttc',  # Windows
-            os.path.join(os.path.dirname(__file__), '../../static/fonts/ipaexg.ttf'),  # プロジェクト内
+            # macOS システムフォント（実際に存在するフォントを優先）
+            '/System/Library/Fonts/AppleSDGothicNeo.ttc',  # macOS で確認済み（最優先）
+            '/System/Library/Fonts/Supplemental/Hiragino Sans GB.ttc',
+            '/System/Library/Fonts/ヒラギノ角ゴシック W3.ttc',
+            '/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc',
+            '/Library/Fonts/ヒラギノ角ゴシック W3.ttc',
+            '/Library/Fonts/ヒラギノ角ゴシック W6.ttc',
+            # Linux (IPAゴシック)
+            '/usr/share/fonts/truetype/ipafont/ipagp.ttf',
+            '/usr/share/fonts/opentype/ipafont-gothic/ipagp.ttf',
+            # Windows
+            'C:/Windows/Fonts/msgothic.ttc',
+            'C:/Windows/Fonts/meiryo.ttc',
+            # プロジェクト内
+            os.path.join(os.path.dirname(__file__), '../../static/fonts/ipaexg.ttf'),
+            os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 'static/scoreai/fonts/ipaexg.ttf'),
         ]
         
         font_registered = False
@@ -48,19 +62,24 @@ try:
                 try:
                     pdfmetrics.registerFont(TTFont('JapaneseFont', font_path))
                     font_registered = True
-                    logger.info(f"Japanese font registered: {font_path}")
+                    # 成功時のみinfoレベルで記録（起動時のログを抑制）
+                    if logger.isEnabledFor(logging.INFO):
+                        logger.info(f"Japanese font registered: {font_path}")
                     break
                 except Exception as e:
-                    logger.warning(f"Failed to register font {font_path}: {e}")
+                    # エラーはdebugレベルで記録（起動時の警告を抑制）
+                    logger.debug(f"Failed to register font {font_path}: {e}")
                     continue
         
         if not font_registered:
-            logger.warning("Japanese font not found. PDF export may have character encoding issues.")
+            # 警告レベルを下げる（フォントが見つからなくてもアプリケーションは動作する）
+            # 起動時の警告を抑制するため、debugレベルに変更
+            logger.debug("Japanese font not found. PDF export will use default font (may have character encoding issues).")
             JAPANESE_FONT_AVAILABLE = False
         else:
             JAPANESE_FONT_AVAILABLE = True
     except Exception as e:
-        logger.warning(f"Error registering Japanese font: {e}")
+        logger.debug(f"Error registering Japanese font: {e}")
         JAPANESE_FONT_AVAILABLE = False
 except ImportError:
     REPORTLAB_AVAILABLE = False

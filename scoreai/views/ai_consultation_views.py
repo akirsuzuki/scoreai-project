@@ -76,8 +76,15 @@ class AIConsultationCenterView(SelectedCompanyMixin, TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # 汎用相談タイプを取得
         consultation_types = AIConsultationType.objects.filter(is_active=True).order_by('order', 'name')
         context['consultation_types'] = consultation_types
+        
+        # 業界別相談室のカテゴリーを取得
+        from ..models import IndustryCategory
+        industry_categories = IndustryCategory.objects.filter(is_active=True).order_by('order', 'name')
+        context['industry_categories'] = industry_categories
+        
         context['title'] = 'AI相談センター'
         context['show_title_card'] = False  # タイトルカードを非表示（他のページと統一）
         return context

@@ -1,13 +1,37 @@
 {% extends "scoreai/base.html" %}
 {% block content %}
-
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">ローカルベンチマーク</h4>
-    </div>
+    <h4 class="fw-semibold mb-0">ローカルベンチマーク</h4>
+    <p class="text-muted mb-0">業界別ベンチマークの参照と管理を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'industry_benchmark_list' %}" role="tab">
+          <i class="ti ti-chart-bar me-1"></i>業界別ベンチマーク一覧
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="benchmarkTabsContent">
+  <!-- ベンチマーク一覧 -->
+  <div class="tab-pane fade show active" id="benchmark-list" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>ベンチマーク一覧</strong>では、業界別のベンチマークデータを参照できます。
+        </div>
+      </div>
+    </div>
 <div class="row">
     <div class="col-lg-12">
       <div class="card w-100">

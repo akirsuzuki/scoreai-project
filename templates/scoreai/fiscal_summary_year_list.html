@@ -25,36 +25,75 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">決算年次推移</h4>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        {% if min_year and max_year %}
-        <form method="get" class="d-flex gap-2 align-items-center" id="year-range-form">
-          {% if request.GET.is_draft %}<input type="hidden" name="is_draft" value="{{ request.GET.is_draft }}">{% endif %}
-          <label for="yearsInPage" class="form-label mb-0">表示する年数:</label>
-          <select id="yearsInPage" name="years_in_page" class="form-select form-select-sm" style="width: 100px;" onchange="updateYearsInPage(this.value)">
-            <option value="5" {% if years_in_page == 5 and not show_all %}selected{% endif %}>5</option>
-            <option value="7" {% if years_in_page == 7 and not show_all %}selected{% endif %}>7</option>
-            <option value="10" {% if years_in_page == 10 and not show_all %}selected{% endif %}>10</option>
-            <option value="all" {% if show_all %}selected{% endif %}>全期間</option>
-          </select>
-          <span class="text-muted">|</span>
-          <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
-            <option value="">開始年度</option>
-            {% for year in min_year|to:max_year %}
-              <option value="{{ year }}" {% if start_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
-            {% endfor %}
-          </select>
-          <span class="text-muted">～</span>
-          <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
-            <option value="">終了年度</option>
-            {% for year in min_year|to:max_year %}
-              <option value="{{ year }}" {% if end_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
-            {% endfor %}
-          </select>
-        </form>
-        {% endif %}
-        <div class="d-flex gap-2 flex-wrap">
+    <h4 class="fw-semibold mb-0">年次財務諸表</h4>
+    <p class="text-muted mb-0">年次財務諸表の管理と分析を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'fiscal_summary_year_list' %}?is_draft=false" role="tab">
+          <i class="ti ti-chart-line me-1"></i>決算年次推移
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'latest_fiscal_summary_year_detail' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>直近決算詳細
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_vs_actual_yearly' %}" role="tab">
+          <i class="ti ti-chart-bar me-1"></i>年次予算vs実績比較
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="fiscalYearTabsContent">
+  <!-- 決算年次推移 -->
+  <div class="tab-pane fade show active" id="yearly-transition" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>決算年次推移</strong>では、複数年度の決算データを比較して推移を確認できます。
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+          {% if min_year and max_year %}
+          <form method="get" class="d-flex gap-2 align-items-center" id="year-range-form">
+            {% if request.GET.is_draft %}<input type="hidden" name="is_draft" value="{{ request.GET.is_draft }}">{% endif %}
+            <label for="yearsInPage" class="form-label mb-0">表示する年数:</label>
+            <select id="yearsInPage" name="years_in_page" class="form-select form-select-sm" style="width: 100px;" onchange="updateYearsInPage(this.value)">
+              <option value="5" {% if years_in_page == 5 and not show_all %}selected{% endif %}>5</option>
+              <option value="7" {% if years_in_page == 7 and not show_all %}selected{% endif %}>7</option>
+              <option value="10" {% if years_in_page == 10 and not show_all %}selected{% endif %}>10</option>
+              <option value="all" {% if show_all %}selected{% endif %}>全期間</option>
+            </select>
+            <span class="text-muted">|</span>
+            <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+              <option value="">開始年度</option>
+              {% for year in min_year|to:max_year %}
+                <option value="{{ year }}" {% if start_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+            <span class="text-muted">～</span>
+            <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+              <option value="">終了年度</option>
+              {% for year in min_year|to:max_year %}
+                <option value="{{ year }}" {% if end_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
+              {% endfor %}
+            </select>
+          </form>
+          {% endif %}
           <div class="btn-group" role="group">
             <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="ti ti-download me-1"></i>エクスポート
@@ -71,13 +110,9 @@
               </a></li>
             </ul>
           </div>
-          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn {% if request.GET.is_draft != 'true' %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">決算年次推移</a>
-          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
-          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-outline-primary btn-sm">年次予算vs実績比較</a>
         </div>
       </div>
-  </div>
-</div>
+    </div>
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">

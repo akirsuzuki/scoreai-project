@@ -55,7 +55,7 @@
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">月次PL一覧（3期比較）</span>
+                <span class="hide-menu">年度別月次PL</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -185,14 +185,6 @@
                 <span class="hide-menu">アーカイブ済み</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="{% url 'debt_create' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">新規借入登録</span>
-              </a>
-            </li>
           </ul>
         </li>
         
@@ -239,14 +231,6 @@
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
                 <span class="hide-menu">ノート一覧</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'meeting_minutes_create' %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">新規ノート作成</span>
               </a>
             </li>
             {% get_user_selected_company user as selected_company %}

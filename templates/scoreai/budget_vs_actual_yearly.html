@@ -14,27 +14,61 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">年次財務諸表</h4>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
-        {% if year %}
-        <form method="get" class="d-flex gap-2">
-          <select name="year" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
-            {% for y in available_years %}
-              <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
-            {% endfor %}
-          </select>
-        </form>
-        {% endif %}
-        <div class="d-flex gap-2 flex-wrap">
-          <a href="{% url 'fiscal_summary_year_list' %}?is_draft=false" class="btn btn-outline-primary btn-sm">決算年次推移</a>
-          <a href="{% url 'latest_fiscal_summary_year_detail' %}" class="btn btn-outline-primary btn-sm">直近決算詳細</a>
-          <a href="{% url 'budget_vs_actual_yearly' %}" class="btn btn-primary btn-sm">年次予算vs実績比較</a>
+    <h4 class="fw-semibold mb-0">年次財務諸表</h4>
+    <p class="text-muted mb-0">年次財務諸表の管理と分析を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'fiscal_summary_year_list' %}?is_draft=false" role="tab">
+          <i class="ti ti-chart-line me-1"></i>決算年次推移
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'latest_fiscal_summary_year_detail' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>直近決算詳細
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'budget_vs_actual_yearly' %}" role="tab">
+          <i class="ti ti-chart-bar me-1"></i>年次予算vs実績比較
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="fiscalYearTabsContent">
+  <!-- 年次予算vs実績比較 -->
+  <div class="tab-pane fade show active" id="budget-vs-actual-yearly" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>年次予算vs実績比較</strong>では、選択した年度の予算と実績を比較して表示できます。
         </div>
       </div>
     </div>
-  </div>
-</div>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+          {% if year %}
+          <form method="get" class="d-flex gap-2">
+            <select name="year" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
+              {% for y in available_years %}
+                <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
+              {% endfor %}
+            </select>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
 {% if actual_year %}
 <!-- PL比較 -->

@@ -27,17 +27,56 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">借入管理</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'debts_all' %}" class="btn btn-outline-primary btn-sm">借入一覧</a>
-        <a href="{% url 'debts_byBank' %}" class="btn btn-primary btn-sm">金融機関別</a>
-        <a href="{% url 'debts_bySecuredType' %}" class="btn btn-outline-primary btn-sm">保証別</a>
-        <a href="{% url 'debts_archived' %}" class="btn btn-outline-primary btn-sm">アーカイブ済み</a>
-      </div>
-    </div>
+    <h4 class="fw-semibold mb-0">借入管理</h4>
+    <p class="text-muted mb-0">借入情報の管理と分析を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_all' %}" role="tab">
+          <i class="ti ti-list me-1"></i>借入一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'debts_byBank' %}" role="tab">
+          <i class="ti ti-building-bank me-1"></i>金融機関別
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_bySecuredType' %}" role="tab">
+          <i class="ti ti-shield me-1"></i>保証別
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_archived' %}" role="tab">
+          <i class="ti ti-archive me-1"></i>アーカイブ済み
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debt_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規登録
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="debtTabsContent">
+  <!-- 金融機関別 -->
+  <div class="tab-pane fade show active" id="debt-by-bank" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>金融機関別</strong>では、金融機関ごとに借入情報を集計して表示できます。
+        </div>
+      </div>
+    </div>
 
 <!-- 円グラフセクション -->
 <div class="row mb-4">

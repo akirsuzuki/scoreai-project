@@ -16,6 +16,7 @@
           <thead>
             <tr>
               <th>金融機関</th>
+              <th>区分</th>
               <th>ステータス</th>
               <th>元本(千円)</th>
               <th>保証</th>
@@ -37,6 +38,13 @@
             {% for debt in debt_list %}
             <tr data-href="{% url 'debt_detail' debt.id %}">
               <td>{{ debt.financial_institution.short_name }}</td>
+              <td>
+                {% if debt.debt_type == 'corporate_bond' %}
+                  <span class="badge bg-warning text-dark">社債</span>
+                {% else %}
+                  <span class="badge bg-primary">証書貸付</span>
+                {% endif %}
+              </td>
               <td>
                 {% if debt.start_date <= today %}
                   <span class="badge bg-success">返済中</span>
@@ -75,7 +83,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="2" style="text-align:right">合計：</th>
+              <th colspan="3" style="text-align:right">合計：</th>
               <th></th>
               <th></th>
               <th></th>
@@ -134,21 +142,22 @@
       },
       columnDefs: [
         { targets: 0, width: '120px' },  // 金融機関
-        { targets: 1, width: '100px' },  // ステータス
-        { targets: 2, width: '100px' },  // 元本(千円)
-        { targets: 3, width: '100px' },  // 保証
-        { targets: 4, width: '70px' },   // 利息
-        { targets: 5, width: '80px' },   // 実行日
-        { targets: 6, width: '100px' },   // 返済開始日
-        { targets: 7, width: '100px' },   // 月返済額
-        { targets: 8, width: '80px' },   // 残高シェア
-        { targets: 9, width: '70px' },    // 残り回数
-        { targets: 10, width: '80px' },   // 支払回数
-        { targets: 11, width: '110px' },  // 今月末残高
-        { targets: 12, width: '110px' },  // 今月概算利息
-        { targets: 13, width: '110px' },  // 決算時残高
-        { targets: 14, width: '90px' },   // 代表者保証
-        { targets: 15, width: '70px' },  // 担保
+        { targets: 1, width: '90px' },   // 区分
+        { targets: 2, width: '100px' },  // ステータス
+        { targets: 3, width: '100px' },  // 元本(千円)
+        { targets: 4, width: '100px' },  // 保証
+        { targets: 5, width: '70px' },   // 利息
+        { targets: 6, width: '80px' },   // 実行日
+        { targets: 7, width: '100px' },   // 返済開始日
+        { targets: 8, width: '100px' },   // 月返済額
+        { targets: 9, width: '80px' },   // 残高シェア
+        { targets: 10, width: '70px' },    // 残り回数
+        { targets: 11, width: '80px' },   // 支払回数
+        { targets: 12, width: '110px' },  // 今月末残高
+        { targets: 13, width: '110px' },  // 今月概算利息
+        { targets: 14, width: '110px' },  // 決算時残高
+        { targets: 15, width: '90px' },   // 代表者保証
+        { targets: 16, width: '70px' },  // 担保
       ],
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
@@ -162,33 +171,33 @@
         
         // 元本の合計
         let principalTotal = api
-          .column(2)
+          .column(3)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // 月返済額の合計
         let monthlyRepaymentTotal = api
-          .column(7)
+          .column(8)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // 今月末残高の合計
         let balanceTotal = api
-          .column(11)
+          .column(12)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // 決算時残高の合計
         let balanceFy1Total = api
-          .column(13)
+          .column(14)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
         // フッターに表示
-        $(api.column(2).footer()).html(principalTotal.toLocaleString('ja-JP'));
-        $(api.column(7).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
-        $(api.column(11).footer()).html(balanceTotal.toLocaleString('ja-JP'));
-        $(api.column(13).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
+        $(api.column(3).footer()).html(principalTotal.toLocaleString('ja-JP'));
+        $(api.column(8).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        $(api.column(12).footer()).html(balanceTotal.toLocaleString('ja-JP'));
+        $(api.column(14).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
       }
     });
 

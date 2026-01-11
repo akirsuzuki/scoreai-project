@@ -17,7 +17,43 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">クライアント管理</h4>
+    <p class="text-muted mb-0">クライアント（Company）の管理とアサインを行います。</p>
+  </div>
+</div>
 
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'firm_clientslist' %}" role="tab">
+          <i class="ti ti-users me-1"></i>クライアント一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'assigned_clients_list' %}" role="tab">
+          <i class="ti ti-user-check me-1"></i>アサイン済みクライアント
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="clientTabsContent">
+  <!-- クライアント一覧 -->
+  <div class="tab-pane fade show active" id="client-list" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>クライアント一覧</strong>では、Firmに登録されているクライアントを管理できます。
+        </div>
+      </div>
+    </div>
 <!-- プラン制限情報の表示 -->
 {% if max_companies is not None %}
 <div class="row mb-4">

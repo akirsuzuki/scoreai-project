@@ -15,23 +15,59 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">予算管理</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'budget_suggest' %}" class="btn btn-outline-primary btn-sm">AI予算策定（年次）</a>
-        <a href="{% url 'budget_suggest_month' %}" class="btn btn-outline-primary btn-sm">AI予算策定（月次）</a>
-        <a href="{% url 'budget_analysis' %}?year={{ year }}" class="btn btn-outline-primary btn-sm">予算分析</a>
-        <form method="get" class="d-flex gap-2">
-          <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
-            {% for y in available_years %}
-              <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
-            {% endfor %}
-          </select>
-        </form>
-      </div>
-    </div>
+    <h4 class="fw-semibold mb-0">予算管理</h4>
+    <p class="text-muted mb-0">予算の作成、管理、実績との比較分析を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_suggest' %}" role="tab">
+          <i class="ti ti-sparkles me-1"></i>AI予算策定（年次）
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_suggest_month' %}" role="tab">
+          <i class="ti ti-sparkles me-1"></i>AI予算策定（月次）
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_analysis' %}" role="tab">
+          <i class="ti ti-chart-pie me-1"></i>予算分析
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="budgetTabsContent">
+  <!-- 予算vs実績比較（年次） -->
+  <div class="tab-pane fade show active" id="budget-vs-actual-yearly" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>予算vs実績比較（年次）</strong>では、選択した年度の予算と実績を比較して表示できます。
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 mb-3">
+        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+          <form method="get" class="d-flex gap-2">
+            <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+              {% for y in available_years %}
+                <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
 
 {% if budget_year or actual_year %}
 <div class="row">
