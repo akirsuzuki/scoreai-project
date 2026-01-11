@@ -204,6 +204,9 @@ class FiscalSummary_MonthForm(forms.ModelForm):
         model = FiscalSummary_Month
         fields = '__all__'
         exclude = ['company']
+        labels = {
+            'fiscal_summary_year': '年度',
+        }
 
 
 class MoneyForwardCsvUploadForm_Month(forms.Form):

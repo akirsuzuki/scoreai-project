@@ -22199,3 +22199,247 @@ INFO 2026-01-11 22:10:00,736 autoreload Watching for file changes with StatReloa
 INFO 2026-01-11 22:10:34,147 autoreload Watching for file changes with StatReloader
 INFO 2026-01-11 22:10:49,694 autoreload /app/scoreai/models.py changed, reloading.
 INFO 2026-01-11 22:10:50,513 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 06:21:29,428 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-12 06:21:38,156 basehttp "GET /ai-consultation/industry/01KEKDB2YTCRA6QN9RQSBYTTZ3/ HTTP/1.1" 404 52139
+INFO 2026-01-12 06:21:38,358 basehttp "GET /admin/scoreai/industryclassification/32/change/ HTTP/1.1" 200 29694
+WARNING 2026-01-12 06:21:38,399 basehttp "GET /favicon.ico HTTP/1.1" 404 52016
+INFO 2026-01-12 06:21:44,396 basehttp "GET / HTTP/1.1" 200 51428
+INFO 2026-01-12 06:21:44,412 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+ERROR 2026-01-12 06:21:47,098 log Internal Server Error: /ai-consultation/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'industry_category_list' not found. 'industry_category_list' is not a valid view function or pattern name.
+ERROR 2026-01-12 06:21:47,100 basehttp "GET /ai-consultation/ HTTP/1.1" 500 201272
+INFO 2026-01-12 06:22:57,784 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 06:22:58,345 autoreload Watching for file changes with StatReloader
+ERROR 2026-01-12 06:23:15,801 log Internal Server Error: /ai-consultation/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 327, in render
+    return nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'industry_category_list' not found. 'industry_category_list' is not a valid view function or pattern name.
+ERROR 2026-01-12 06:23:15,805 basehttp "GET /ai-consultation/ HTTP/1.1" 500 201409
+INFO 2026-01-12 06:23:23,651 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 74020
+INFO 2026-01-12 06:23:31,152 basehttp "GET /user_profile/ HTTP/1.1" 200 43044
+INFO 2026-01-12 06:23:33,720 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-12 06:23:33,760 basehttp "GET / HTTP/1.1" 200 61058
+INFO 2026-01-12 06:23:38,725 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75857
+INFO 2026-01-12 06:23:42,796 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52247
+INFO 2026-01-12 06:23:44,114 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-12 06:23:44,115 budget_views budget_monthly_all count: 12
+INFO 2026-01-12 06:23:44,117 budget_views actual_monthly_all count: 6
+INFO 2026-01-12 06:23:44,123 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-12 06:23:44,123 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-12 06:23:44,131 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50268
+INFO 2026-01-12 06:23:47,957 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 63349
+INFO 2026-01-12 06:23:51,069 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89937
+INFO 2026-01-12 06:23:53,787 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51017
+INFO 2026-01-12 06:24:09,647 basehttp "GET /budget/suggest/ HTTP/1.1" 200 36378
+INFO 2026-01-12 06:24:12,301 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35468
+INFO 2026-01-12 06:24:13,900 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32640
+INFO 2026-01-12 06:24:14,955 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 35468
+INFO 2026-01-12 06:24:31,687 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 06:24:34,354 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 06:24:35,703 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 58380
+INFO 2026-01-12 06:24:45,010 basehttp "GET /ai-consultation/industry/32/ HTTP/1.1" 200 29955
+INFO 2026-01-12 06:24:47,953 basehttp "GET /ai-consultation/industry/27/ HTTP/1.1" 200 29803
+INFO 2026-01-12 06:24:51,357 basehttp "GET /ai-consultation/industry/22/ HTTP/1.1" 200 29803
+INFO 2026-01-12 06:24:54,500 basehttp "GET /ai-consultation/industry/25/ HTTP/1.1" 200 29821
+INFO 2026-01-12 06:24:56,391 basehttp "GET /ai-consultation/industry/26/ HTTP/1.1" 200 29821
+INFO 2026-01-12 06:25:11,665 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36213
+INFO 2026-01-12 06:25:15,657 basehttp "GET /debts_all/ HTTP/1.1" 200 80298
+INFO 2026-01-12 06:26:23,294 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36213
+INFO 2026-01-12 06:27:15,359 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36412
+INFO 2026-01-12 06:27:18,180 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 36394
+INFO 2026-01-12 06:27:33,923 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36412
+INFO 2026-01-12 06:27:35,274 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36046
+INFO 2026-01-12 06:27:37,497 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36412
+INFO 2026-01-12 06:28:09,367 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 63349
+INFO 2026-01-12 06:28:16,656 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 53387
+INFO 2026-01-12 06:28:18,028 basehttp "GET /debt/create/ HTTP/1.1" 200 104531
+INFO 2026-01-12 06:28:18,041 basehttp "GET /static/django_select2/django_select2.css HTTP/1.1" 304 0
+INFO 2026-01-12 06:28:18,042 basehttp "GET /static/admin/js/vendor/select2/i18n/ja.js HTTP/1.1" 304 0
+INFO 2026-01-12 06:28:18,042 basehttp "GET /static/admin/js/vendor/select2/select2.full.min.js HTTP/1.1" 304 0
+INFO 2026-01-12 06:28:18,043 basehttp "GET /static/admin/css/vendor/select2/select2.min.css HTTP/1.1" 304 0
+INFO 2026-01-12 06:28:18,051 basehttp "GET /static/django_select2/django_select2.js HTTP/1.1" 304 0
+INFO 2026-01-12 06:28:22,385 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75857
+INFO 2026-01-12 06:28:33,662 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 63349
+INFO 2026-01-12 06:29:33,583 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37358
+INFO 2026-01-12 06:29:35,924 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36046
+INFO 2026-01-12 06:29:42,986 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32124
+INFO 2026-01-12 06:29:55,421 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 37358
+INFO 2026-01-12 06:29:56,906 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36046
+INFO 2026-01-12 06:30:00,311 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36412
+INFO 2026-01-12 06:30:37,518 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36046
+INFO 2026-01-12 06:31:05,204 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76061
+INFO 2026-01-12 06:31:09,453 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34383
+INFO 2026-01-12 06:31:59,452 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 51220
+INFO 2026-01-12 06:32:00,660 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91600
+INFO 2026-01-12 06:32:17,401 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 36412
+INFO 2026-01-12 06:32:18,630 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 37183
+INFO 2026-01-12 06:33:09,182 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52451
+INFO 2026-01-12 06:33:10,756 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34806
+INFO 2026-01-12 06:33:15,955 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 34164
+INFO 2026-01-12 06:33:18,500 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 34164
+INFO 2026-01-12 06:34:43,109 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 76061
+INFO 2026-01-12 06:34:46,130 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52451
+INFO 2026-01-12 06:34:46,916 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-12 06:34:46,917 budget_views budget_monthly_all count: 12
+INFO 2026-01-12 06:34:46,919 budget_views actual_monthly_all count: 6
+INFO 2026-01-12 06:34:46,926 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-12 06:34:46,927 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-12 06:34:46,940 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 50472
+INFO 2026-01-12 06:34:48,677 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34806
+INFO 2026-01-12 06:34:51,125 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 06:35:05,008 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-12 06:35:05,559 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 06:35:12,697 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-12 06:35:13,033 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 06:35:22,500 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 63552
+INFO 2026-01-12 06:35:23,889 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91600
+INFO 2026-01-12 06:35:27,281 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52451
+INFO 2026-01-12 06:35:28,490 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34793

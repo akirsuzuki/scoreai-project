@@ -133,15 +133,57 @@ document.addEventListener('DOMContentLoaded', function() {
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'meeting_minutes_list' %}" class="btn btn-outline-primary btn-sm">ノート一覧</a>
-        <a href="{% url 'meeting_minutes_create' %}" class="btn {% if not form.instance.pk %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm">新規ノート作成</a>
-      </div>
-    </div>
+    <h4 class="fw-semibold mb-0">ノート（議事録）</h4>
+    <p class="text-muted mb-0">議事録の作成、管理、AI生成を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'meeting_minutes_list' %}" role="tab">
+          <i class="ti ti-notes me-1"></i>ノート一覧
+        </a>
+      </li>
+      {% load custom_tags %}
+      {% load plan_features_tags %}
+      {% get_user_selected_company user as selected_company %}
+      {% if selected_company %}
+        {% get_company_firm_for_plan_check selected_company as company_firm %}
+        {% if company_firm %}
+          {% check_plan_feature_access_tag company_firm 'starter' as plan_check %}
+          {% if plan_check.0 %}
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" href="{% url 'meeting_minutes_ai_generate' %}" role="tab">
+              <i class="ti ti-sparkles me-1"></i>AI議事録生成
+            </a>
+          </li>
+          {% endif %}
+        {% endif %}
+      {% endif %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'meeting_minutes_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規登録
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="meetingMinutesTabsContent">
+  <!-- 新規登録 -->
+  <div class="tab-pane fade show active" id="meeting-minutes-create" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>新規登録</strong>では、新しい議事録を登録できます。
+        </div>
+      </div>
+    </div>
 <div class="row">
     <div class="col-lg-12">
         <form method="post" novalidate>
@@ -213,5 +255,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         </form>
     </div>
+</div>
+  </div>
 </div>
 {% endblock %}

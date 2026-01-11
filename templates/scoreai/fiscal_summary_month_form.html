@@ -36,6 +36,16 @@
         </div>
 
         <div class="card-body">
+          {% if not object %}
+          <div class="alert alert-info mb-4">
+            <i class="ti ti-info-circle me-2"></i>
+            <strong>複数の月次データを一括登録する場合</strong>は、
+            <a href="{% url 'import_fiscal_summary_month' %}" class="alert-link">
+              <i class="ti ti-file-upload me-1"></i>CSVインポート
+            </a>
+            をご利用ください。
+          </div>
+          {% endif %}
           <div class="row g-3">
             
             <!-- Fiscal Summary Year Field -->

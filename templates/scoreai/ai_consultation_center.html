@@ -84,33 +84,33 @@
                 </div>
             </div>
             <div class="col-12">
-                {% if industry_categories %}
+                {% if industry_classifications %}
                 <div class="row">
-                    {% for category in industry_categories %}
+                    {% for classification in industry_classifications %}
                     <div class="col-md-6 col-lg-4 mb-4">
                         <div class="card consultation-card h-100" style="border-top: 4px solid #10b981;">
                             <div class="card-body d-flex flex-column">
                                 <div class="d-flex align-items-center mb-3">
-                                    {% if category.icon %}
-                                    <i class="{{ category.icon }} fs-2 text-success me-3"></i>
+                                    {% if classification.icon %}
+                                    <i class="{{ classification.icon }} fs-2 text-success me-3"></i>
                                     {% else %}
                                     <i class="ti ti-building fs-2 text-success me-3"></i>
                                     {% endif %}
                                     <h5 class="card-title consultation-card-title mb-0">
-                                        {{ category.name }}
+                                        {{ classification.name }}
                                     </h5>
                                 </div>
-                                {% if category.description %}
+                                {% if classification.memo %}
                                 <p class="card-text consultation-card-description flex-grow-1">
-                                    {{ category.description|truncatewords:30 }}
+                                    {{ classification.memo|truncatewords:30 }}
                                 </p>
                                 {% else %}
                                 <p class="card-text consultation-card-description flex-grow-1 text-muted">
-                                    {{ category.name }}に関する専門的な相談や書類作成に対応します。
+                                    {{ classification.name }}に関する専門的な相談や書類作成に対応します。
                                 </p>
                                 {% endif %}
                                 <div class="text-center mt-auto">
-                                    <a href="{% url 'industry_category_detail' category_id=category.id %}" class="btn btn-success consultation-card-button">
+                                    <a href="{% url 'industry_classification_detail' classification_id=classification.id %}" class="btn btn-success consultation-card-button">
                                         詳細を見る →
                                     </a>
                                 </div>
@@ -126,34 +126,10 @@
                             <i class="ti ti-info-circle me-3 fs-4"></i>
                             <div class="flex-grow-1">
                                 <h5 class="alert-heading mb-3">業界別相談室を利用するには</h5>
-                                <p class="mb-2">業界別相談室を利用するには、以下の設定が必要です：</p>
-                                <ul class="mb-3">
-                                    <li><strong>業界カテゴリー</strong>の登録（例：外食業界、小売業界など）</li>
-                                    <li><strong>業界別相談タイプ</strong>の登録（例：居酒屋出店計画作成など）</li>
-                                </ul>
-                                {% if user.is_manager %}
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <a href="{% url 'industry_category_list' %}" class="btn btn-primary btn-sm">
-                                        <i class="ti ti-settings me-1"></i>業界カテゴリーを設定
-                                    </a>
-                                    <a href="{% url 'industry_consultation_type_list' %}" class="btn btn-primary btn-sm">
-                                        <i class="ti ti-settings me-1"></i>業界別相談タイプを設定
-                                    </a>
-                                </div>
-                                {% elif user.is_staff %}
-                                <div class="d-flex gap-2 flex-wrap">
-                                    <a href="/admin/scoreai/industrycategory/" class="btn btn-primary btn-sm" target="_blank">
-                                        <i class="ti ti-settings me-1"></i>業界カテゴリーを設定（管理画面）
-                                    </a>
-                                    <a href="/admin/scoreai/industryconsultationtype/" class="btn btn-primary btn-sm" target="_blank">
-                                        <i class="ti ti-settings me-1"></i>業界別相談タイプを設定（管理画面）
-                                    </a>
-                                </div>
-                                {% else %}
+                                <p class="mb-2">業界別相談室を利用するには、業界分類の登録が必要です。</p>
                                 <p class="mb-0 text-muted small">
-                                    <i class="ti ti-lock me-1"></i>設定はCompanyのmanagerのみが行えます。管理者にお問い合わせください。
+                                    <i class="ti ti-lock me-1"></i>業界分類の設定は管理者が行います。管理者にお問い合わせください。
                                 </p>
-                                {% endif %}
                             </div>
                         </div>
                     </div>
