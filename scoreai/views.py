@@ -1282,7 +1282,8 @@ class LatestMonthlyPLView(SelectedCompanyMixin, TemplateView):
             # 12ヶ月分のデータを作成
             monthly_dict = {m.period: m for m in monthly_data}
             for period in range(1, 13):
-                display_month = (fiscal_month + period - 1) % 12
+                # 決算月の次の月から開始（決算月が最後）
+                display_month = (fiscal_month + period) % 12
                 if display_month == 0:
                     display_month = 12
                 
@@ -1440,7 +1441,8 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
                     year_data_list = []
                     
                     for period in range(1, 13):
-                        display_month = (fiscal_month + period - 1) % 12
+                        # 決算月の次の月から開始（決算月が最後）
+                        display_month = (fiscal_month + period) % 12
                         if display_month == 0:
                             display_month = 12
                         
@@ -1530,13 +1532,9 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
             'summary_data': []
         }
         
-        # ラベル情報
-        fiscal_month = self.this_company.fiscal_month
-        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
-
-        # ラベル情報
+        # ラベル情報（決算月の次の月から開始、決算月が最後）
         fiscal_month = self.this_company.fiscal_month if hasattr(self.this_company, 'fiscal_month') else 1
-        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
+        months_label = [((fiscal_month + i) % 12) or 12 for i in range(1, 13)]
         
         context.update({
             'title': '月次PL',

@@ -143,9 +143,9 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             period_count=monthly_summaries[0]['actual_months_count'] if monthly_summaries else 0
         )
 
-        # ラベル情報
+        # ラベル情報（決算月の次の月から開始、決算月が最後）
         fiscal_month = self.this_company.fiscal_month
-        months_label = [(fiscal_month + i) % 12 or 12 for i in range(1, 13)]
+        months_label = [((fiscal_month + i) % 12) or 12 for i in range(1, 13)]
 
         # 借入情報の取得
         debt_list, debt_list_totals, debt_list_nodisplay, debt_list_rescheduled, debt_list_finished = get_debt_list(
