@@ -23189,3 +23189,34 @@ INFO 2026-01-12 22:58:26,861 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
 INFO 2026-01-12 22:58:42,068 basehttp "GET /user_create/ HTTP/1.1" 200 30895
 INFO 2026-01-12 22:58:52,727 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/invitations/01KES7YAN75XW72M83A2NR0G2D/cancel/ HTTP/1.1" 302 0
 INFO 2026-01-12 22:58:52,748 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 37569
+INFO 2026-01-13 06:44:29,976 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:44:52,685 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45625
+INFO 2026-01-13 06:44:52,711 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-13 06:45:12,783 basehttp "GET /user_profile/ HTTP/1.1" 200 42693
+INFO 2026-01-13 06:45:16,804 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-13 06:45:16,841 basehttp "GET / HTTP/1.1" 200 60423
+INFO 2026-01-13 06:45:23,581 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 37455
+INFO 2026-01-13 06:45:26,738 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 29516
+INFO 2026-01-13 06:45:31,682 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 45520
+INFO 2026-01-13 06:49:25,201 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-13 06:49:25,742 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:49:50,829 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:49:51,487 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:50:41,280 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:50:41,778 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:50:53,260 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:50:53,771 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:51:14,914 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:51:15,300 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:51:25,921 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:51:26,263 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:51:46,061 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:51:46,414 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:52:10,720 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:52:11,208 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:52:33,348 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 06:52:33,775 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 06:54:32,270 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-13 06:54:33,163 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 07:17:32,426 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-13 07:17:33,030 autoreload Watching for file changes with StatReloader
