@@ -103,13 +103,18 @@ class IzakayaPlanExportView(SelectedCompanyMixin, LoginRequiredMixin, View):
             story.append(Paragraph('1. 事業概要', title_style))
             story.append(Spacer(1, 0.2 * inch))
             
+            # 営業時間の表示（旧フィールドがNoneの場合は表示しない）
+            opening_hours_text = '未設定'
+            if plan.opening_hours_start and plan.opening_hours_end:
+                opening_hours_text = f'{plan.opening_hours_start.strftime("%H:%M")} ～ {plan.opening_hours_end.strftime("%H:%M")}'
+            
             overview_data = [
                 ['項目', '内容'],
                 ['店のコンセプト', plan.store_concept or '未設定'],
                 ['席数', f'{plan.number_of_seats}席'],
-                ['営業時間', f'{plan.opening_hours_start.strftime("%H:%M")} ～ {plan.opening_hours_end.strftime("%H:%M")}'],
+                ['営業時間', opening_hours_text],
                 ['ターゲット顧客', plan.target_customer or '未設定'],
-                ['客単価', f'{plan.average_price_per_customer:,.0f}円'],
+                ['客単価', f'{plan.average_price_per_customer:,.0f}円' if plan.average_price_per_customer else '未設定'],
             ]
             
             overview_table = Table(overview_data)
@@ -293,13 +298,18 @@ class IzakayaPlanExportView(SelectedCompanyMixin, LoginRequiredMixin, View):
             ws.cell(row=row_num, column=1).font = Font(bold=True, size=14)
             row_num += 1
             
+            # 営業時間の表示（旧フィールドがNoneの場合は表示しない）
+            opening_hours_text = '未設定'
+            if plan.opening_hours_start and plan.opening_hours_end:
+                opening_hours_text = f'{plan.opening_hours_start.strftime("%H:%M")} ～ {plan.opening_hours_end.strftime("%H:%M")}'
+            
             overview_data = [
                 ['項目', '内容'],
                 ['店のコンセプト', plan.store_concept or '未設定'],
                 ['席数', f'{plan.number_of_seats}席'],
-                ['営業時間', f'{plan.opening_hours_start.strftime("%H:%M")} ～ {plan.opening_hours_end.strftime("%H:%M")}'],
+                ['営業時間', opening_hours_text],
                 ['ターゲット顧客', plan.target_customer or '未設定'],
-                ['客単価', f'{plan.average_price_per_customer:,.0f}円'],
+                ['客単価', f'{plan.average_price_per_customer:,.0f}円' if plan.average_price_per_customer else '未設定'],
             ]
             
             for row_data in overview_data:

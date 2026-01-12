@@ -103,6 +103,28 @@
     </div>
 </div>
 
+<!-- 原価率・利益率 -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">原価率</h6>
+                <h3 class="mb-0">{{ cost_rate|floatformat:1 }}%</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card summary-card">
+            <div class="card-body">
+                <h6 class="text-muted mb-2">利益率</h6>
+                <h3 class="mb-0 {% if profit_rate < 0 %}text-danger{% else %}text-success{% endif %}">
+                    {{ profit_rate|floatformat:1 }}%
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- グラフ表示 -->
 <div class="row mb-4">
     <div class="col-12">

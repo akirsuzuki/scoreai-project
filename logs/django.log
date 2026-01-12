@@ -22443,3 +22443,263 @@ INFO 2026-01-12 06:35:22,500 basehttp "GET /fiscal_summary_year/?is_draft=false 
 INFO 2026-01-12 06:35:23,889 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 91600
 INFO 2026-01-12 06:35:27,281 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 52451
 INFO 2026-01-12 06:35:28,490 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34793
+INFO 2026-01-12 16:25:27,212 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 16:25:27,242 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-12 16:25:27,246 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-12 16:25:42,902 basehttp "GET /ai-consultation/industry/32/ HTTP/1.1" 200 29955
+INFO 2026-01-12 16:25:44,504 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 64796
+ERROR 2026-01-12 16:25:46,433 log Internal Server Error: /ai-consultation/industry/izakaya-plan/list/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 220, in _get_response
+    response = response.render()
+               ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 1008, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/base.py", line 969, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/template/defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/urls/resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'izakaya_plan_create' with no arguments not found. 1 pattern(s) tried: ['ai\\-consultation/industry/(?P<classification_id>[0-9]+)/izakaya\\-plan/create/\\Z']
+ERROR 2026-01-12 16:25:46,434 basehttp "GET /ai-consultation/industry/izakaya-plan/list/ HTTP/1.1" 500 154841
+INFO 2026-01-12 16:26:50,697 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:26:51,409 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:27:29,796 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:27:30,142 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:34:37,286 basehttp "GET /ai-consultation/industry/izakaya-plan/list/ HTTP/1.1" 200 29297
+INFO 2026-01-12 16:34:44,186 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 16:36:02,259 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:36:02,803 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:36:44,774 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 16:36:51,056 basehttp "GET /ai-consultation/industry/32/ HTTP/1.1" 200 29955
+INFO 2026-01-12 16:36:52,580 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 64796
+INFO 2026-01-12 16:36:54,462 basehttp "GET /ai-consultation/industry/izakaya-plan/list/ HTTP/1.1" 200 29297
+INFO 2026-01-12 16:43:15,105 autoreload /app/scoreai/views/export_views.py changed, reloading.
+INFO 2026-01-12 16:43:15,604 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:44:07,919 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:44:08,362 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:44:27,873 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:44:28,281 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:44:43,540 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 16:44:43,872 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 16:46:16,798 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 64838
+INFO 2026-01-12 16:55:39,103 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 63309
+WARNING 2026-01-12 16:57:51,243 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 16:58:35,900 basehttp "POST /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 302 0
+ERROR 2026-01-12 16:58:35,907 mixins Unexpected error in IzakayaPlanPreviewView.dispatch: cannot access local variable 'Decimal' where it is not associated with a value
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 265, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-12 16:58:35,926 log Internal Server Error: /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 265, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-12 16:58:35,926 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 500 92238
+WARNING 2026-01-12 16:58:35,967 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:02:34,164 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 17:02:35,006 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:02:36,838 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 64248
+WARNING 2026-01-12 17:02:36,881 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:02:43,674 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 17:02:44,008 autoreload Watching for file changes with StatReloader
+WARNING 2026-01-12 17:02:45,968 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:02:47,992 basehttp "GET /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 200 63309
+WARNING 2026-01-12 17:02:48,041 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:02:54,351 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 17:02:54,714 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:04:00,429 basehttp "POST /ai-consultation/industry/32/izakaya-plan/create/ HTTP/1.1" 302 0
+ERROR 2026-01-12 17:04:00,439 mixins Unexpected error in IzakayaPlanPreviewView.dispatch: cannot access local variable 'Decimal' where it is not associated with a value
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 265, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-12 17:04:00,449 log Internal Server Error: /ai-consultation/industry/izakaya-plan/01KERKQERGBBS76N1Y0BY9F4KR/preview/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/detail.py", line 109, in get
+    context = self.get_context_data(object=self.object)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/industry_consultation_views.py", line 265, in get_context_data
+    cumulative_profit = Decimal('0')
+                        ^^^^^^^
+UnboundLocalError: cannot access local variable 'Decimal' where it is not associated with a value
+ERROR 2026-01-12 17:04:00,450 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKQERGBBS76N1Y0BY9F4KR/preview/ HTTP/1.1" 500 92214
+WARNING 2026-01-12 17:04:00,488 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+WARNING 2026-01-12 17:04:15,785 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+WARNING 2026-01-12 17:04:15,808 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:19,622 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:05:22,013 basehttp "GET /ai-consultation/industry/32/ HTTP/1.1" 200 30894
+WARNING 2026-01-12 17:05:22,045 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:25,114 basehttp "GET /ai-consultation/industry/ HTTP/1.1" 200 49230
+WARNING 2026-01-12 17:05:25,148 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:29,353 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKQERGBBS76N1Y0BY9F4KR/delete/ HTTP/1.1" 200 31798
+WARNING 2026-01-12 17:05:29,379 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:31,748 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKQERGBBS76N1Y0BY9F4KR/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:05:31,765 basehttp "GET /ai-consultation/industry/izakaya-plan/list/ HTTP/1.1" 200 31010
+WARNING 2026-01-12 17:05:31,799 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:36,476 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 50292
+WARNING 2026-01-12 17:05:36,503 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:05:46,797 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 200 63746
+WARNING 2026-01-12 17:05:46,835 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:06:16,058 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:06:16,073 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 50644
+WARNING 2026-01-12 17:06:16,108 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:08:06,815 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 200 63743
+WARNING 2026-01-12 17:08:06,874 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:08:23,275 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:08:23,289 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 50643
+WARNING 2026-01-12 17:08:23,326 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:08:54,970 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 200 63743
+WARNING 2026-01-12 17:08:55,020 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 17:09:09,813 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:09:09,826 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 50622
+WARNING 2026-01-12 17:09:09,867 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+ERROR 2026-01-12 17:11:50,486 log Internal Server Error: /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/pdf/
+ERROR 2026-01-12 17:11:50,487 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/pdf/ HTTP/1.1" 500 147
+WARNING 2026-01-12 17:11:50,528 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+ERROR 2026-01-12 17:12:16,747 log Internal Server Error: /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/excel/
+ERROR 2026-01-12 17:12:16,747 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/excel/ HTTP/1.1" 500 149
+INFO 2026-01-12 17:12:41,637 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 17:12:42,046 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:13:37,547 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 17:13:38,022 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:14:01,358 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 17:14:01,723 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:14:19,016 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 17:14:19,497 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:14:57,379 autoreload /app/scoreai/views/izakaya_plan_export_views.py changed, reloading.
+INFO 2026-01-12 17:14:57,752 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:15:06,720 autoreload /app/scoreai/views/izakaya_plan_export_views.py changed, reloading.
+INFO 2026-01-12 17:15:07,045 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:15:24,444 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 17:15:24,829 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 17:17:10,591 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 50911
+INFO 2026-01-12 17:17:22,151 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 200 63742
+INFO 2026-01-12 17:17:39,069 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:17:39,082 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 51395
+INFO 2026-01-12 17:17:44,740 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 200 63744
+INFO 2026-01-12 17:18:03,090 basehttp "POST /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/update/ HTTP/1.1" 302 0
+INFO 2026-01-12 17:18:03,104 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/preview/ HTTP/1.1" 200 51393
+INFO 2026-01-12 17:18:27,662 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/pdf/ HTTP/1.1" 200 5694
+INFO 2026-01-12 17:18:33,412 basehttp "GET /ai-consultation/industry/izakaya-plan/01KERKDHV6V0Y4ADST05KCZG1M/export/excel/ HTTP/1.1" 200 6176
+INFO 2026-01-12 17:18:43,693 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:27,042 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:28,986 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:32,789 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:33,617 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:33,942 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:34,080 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:34,241 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:34,390 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60975
+INFO 2026-01-12 17:19:40,096 basehttp "GET /ai-consultation/industry/25/ HTTP/1.1" 200 29821
+INFO 2026-01-12 17:19:43,843 basehttp "GET /ai-consultation/ HTTP/1.1" 200 61126
+INFO 2026-01-12 17:19:46,142 basehttp "GET /ai-consultation/ HTTP/1.1" 200 61126
+INFO 2026-01-12 17:19:47,743 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 58380
+INFO 2026-01-12 17:19:57,290 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 200 58426

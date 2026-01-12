@@ -54,6 +54,27 @@
     {{ form.lunch_monthly_coefficients }}
     {{ form.dinner_monthly_coefficients }}
     
+    <!-- フォーム全体のエラー表示 -->
+    {% if form.errors %}
+    <div class="alert alert-danger" role="alert">
+        <h6 class="alert-heading">
+            <i class="ti ti-alert-circle me-2"></i>エラーが発生しました
+        </h6>
+        <ul class="mb-0">
+            {% for field in form %}
+                {% if field.errors %}
+                    <li><strong>{{ field.label }}:</strong> {{ field.errors|striptags }}</li>
+                {% endif %}
+            {% endfor %}
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+    
     <!-- プログレスバー -->
     <div class="card mb-4">
         <div class="card-body">
@@ -126,9 +147,6 @@
                     <div class="text-danger small">{{ form.target_customer.errors }}</div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="button" class="btn btn-primary" onclick="showSection(2)">次へ</button>
             </div>
         </div>
     </div>
@@ -210,10 +228,6 @@
                         <!-- JavaScriptで動的に生成 -->
                     </div>
                 </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(1)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(3)">次へ</button>
             </div>
         </div>
     </div>
@@ -297,10 +311,6 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(2)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(4)">次へ</button>
-            </div>
         </div>
     </div>
 
@@ -331,10 +341,6 @@
                     <div class="text-danger small">{{ form.monthly_rent.errors }}</div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(3)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(5)">次へ</button>
             </div>
         </div>
     </div>
@@ -380,10 +386,6 @@
                     <div class="text-danger small">{{ form.part_time_hourly_wage.errors }}</div>
                     {% endif %}
                 </div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(4)">戻る</button>
-                <button type="button" class="btn btn-primary" onclick="showSection(6)">次へ</button>
             </div>
         </div>
     </div>
@@ -446,16 +448,13 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="d-flex justify-content-between">
-                <button type="button" class="btn btn-outline-secondary" onclick="showSection(5)">戻る</button>
-                <div>
-                    <button type="submit" name="save_draft" value="1" class="btn btn-outline-primary me-2">
-                        <i class="ti ti-device-floppy me-1"></i>保存して下書き
-                    </button>
-                    <button type="submit" name="calculate" value="1" class="btn btn-primary">
-                        <i class="ti ti-calculator me-1"></i>計算してプレビュー
-                    </button>
-                </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" name="save_draft" value="1" class="btn btn-outline-primary me-2">
+                    <i class="ti ti-device-floppy me-1"></i>下書き保存
+                </button>
+                <button type="submit" name="calculate" value="1" class="btn btn-primary">
+                    <i class="ti ti-calculator me-1"></i>プレビュー
+                </button>
             </div>
         </div>
     </div>

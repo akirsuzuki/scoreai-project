@@ -2167,16 +2167,16 @@ class IzakayaPlan(models.Model):
     
     # 人件費
     number_of_staff = models.IntegerField(verbose_name="社員人数", default=0)  # 社員人数
-    staff_monthly_salary = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="社員月給（円）", default=0)  # 社員月給（円）
+    staff_monthly_salary = models.DecimalField(max_digits=7, decimal_places=0, verbose_name="社員月給（円）", default=0)  # 社員月給（円）
     part_time_hours_per_month = models.IntegerField(verbose_name="アルバイト時間数/月", default=0)  # アルバイト時間数/月
-    part_time_hourly_wage = models.DecimalField(max_digits=8, decimal_places=2, verbose_name="アルバイト時給（円）", default=0)  # アルバイト時給（円）
+    part_time_hourly_wage = models.DecimalField(max_digits=5, decimal_places=0, verbose_name="アルバイト時給（円）", default=0)  # アルバイト時給（円）
     
     # 追加経費項目
-    monthly_utilities = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="光熱費（円/月）", default=0)
-    monthly_supplies = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="消耗品費（円/月）", default=0)
-    monthly_advertising = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="広告宣伝費（円/月）", default=0)
-    monthly_fees = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="手数料（円/月）", default=0)
-    monthly_other_expenses = models.DecimalField(max_digits=10, decimal_places=0, verbose_name="その他販管費（円/月）", default=0)
+    monthly_utilities = models.DecimalField(max_digits=8, decimal_places=0, verbose_name="光熱費（円/月）", default=0)
+    monthly_supplies = models.DecimalField(max_digits=8, decimal_places=0, verbose_name="消耗品費（円/月）", default=0)
+    monthly_advertising = models.DecimalField(max_digits=8, decimal_places=0, verbose_name="広告宣伝費（円/月）", default=0)
+    monthly_fees = models.DecimalField(max_digits=8, decimal_places=0, verbose_name="手数料（円/月）", default=0)
+    monthly_other_expenses = models.DecimalField(max_digits=8, decimal_places=0, verbose_name="その他販管費（円/月）", default=0)
     
     # 計算結果（自動計算）
     monthly_revenue = models.DecimalField(max_digits=12, decimal_places=0, null=True, blank=True, verbose_name="月間売上（円）")  # 月間売上

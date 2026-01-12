@@ -96,6 +96,26 @@ class IzakayaPlanCreateView(SelectedCompanyMixin, LoginRequiredMixin, CreateView
         context['title'] = '居酒屋出店計画作成'
         return context
     
+    def post(self, request, *args, **kwargs):
+        """POSTリクエストの処理"""
+        form = self.get_form()
+        # save_draftまたはcalculateボタンが押された場合、is_draftを設定
+        if 'save_draft' in request.POST:
+            form.instance.is_draft = True
+        elif 'calculate' in request.POST:
+            form.instance.is_draft = False
+        
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
+    def form_invalid(self, form):
+        """フォームが無効な場合の処理"""
+        from django.contrib import messages
+        messages.error(self.request, '入力内容にエラーがあります。各項目を確認してください。')
+        return super().form_invalid(form)
+    
     @transaction.atomic
     def form_valid(self, form):
         # 選択中のCompanyを自動設定
@@ -164,6 +184,27 @@ class IzakayaPlanUpdateView(SelectedCompanyMixin, LoginRequiredMixin, UpdateView
         context['title'] = '居酒屋出店計画編集'
         return context
     
+    def post(self, request, *args, **kwargs):
+        """POSTリクエストの処理"""
+        self.object = self.get_object()
+        form = self.get_form()
+        # save_draftまたはcalculateボタンが押された場合、is_draftを設定
+        if 'save_draft' in request.POST:
+            form.instance.is_draft = True
+        elif 'calculate' in request.POST:
+            form.instance.is_draft = False
+        
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+    
+    def form_invalid(self, form):
+        """フォームが無効な場合の処理"""
+        from django.contrib import messages
+        messages.error(self.request, '入力内容にエラーがあります。各項目を確認してください。')
+        return super().form_invalid(form)
+    
     @transaction.atomic
     def form_valid(self, form):
         # 月毎指数が空の場合はデフォルト値を設定
@@ -216,26 +257,75 @@ class IzakayaPlanPreviewView(SelectedCompanyMixin, LoginRequiredMixin, DetailVie
             except Exception as e:
                 messages.error(self.request, f'計算中にエラーが発生しました: {str(e)}')
         
-        # 12ヶ月分の収支データを生成（グラフ用）
+        # 12ヶ月分の収支データを生成（グラフ用）- 各月の指数を反映
         monthly_revenue_data = []
         monthly_cost_data = []
         monthly_profit_data = []
         cumulative_profit_data = []
         cumulative_profit = Decimal('0')
         
+        # 各月の指数を取得（デフォルトは1.0）
+        lunch_coefficients = plan.lunch_monthly_coefficients or {}
+        dinner_coefficients = plan.dinner_monthly_coefficients or {}
+        
+        # 夜の営業日数を取得（24時間営業判定用）
+        dinner_operating_days_count = len(plan.dinner_operating_days) if plan.dinner_operating_days else 0
+        dinner_is_24hours = dinner_operating_days_count == 7
+        
+        # 基準となる月間売上（指数1.0の場合）
+        base_lunch_revenue = float(IzakayaPlanService.calculate_time_slot_revenue(
+            plan=plan,
+            operating_days=plan.lunch_operating_days or [],
+            price_per_customer=Decimal(str(plan.lunch_price_per_customer or 0)),
+            customer_count=plan.lunch_customer_count or 0,
+            monthly_coefficients={'1': 1.0},  # 基準値として1.0を使用
+            is_24hours=False
+        ))
+        
+        base_dinner_revenue = float(IzakayaPlanService.calculate_time_slot_revenue(
+            plan=plan,
+            operating_days=plan.dinner_operating_days or [],
+            price_per_customer=Decimal(str(plan.dinner_price_per_customer or 0)),
+            customer_count=plan.dinner_customer_count or 0,
+            monthly_coefficients={'1': 1.0},  # 基準値として1.0を使用
+            is_24hours=dinner_is_24hours
+        ))
+        
+        base_revenue = base_lunch_revenue + base_dinner_revenue
+        base_cost_of_goods_sold = float(plan.monthly_cost_of_goods_sold or 0)
+        base_cost = float(plan.monthly_cost or 0)
+        
         for month in range(1, 13):
-            revenue = float(plan.monthly_revenue or 0)
-            cost = float(plan.monthly_cost or 0)
-            profit = float(plan.monthly_profit or 0)
-            cumulative_profit += Decimal(str(profit))
+            month_str = str(month)
+            # 各月の指数を取得（デフォルトは1.0）
+            lunch_coeff = float(lunch_coefficients.get(month_str, 1.0))
+            dinner_coeff = float(dinner_coefficients.get(month_str, 1.0))
             
-            monthly_revenue_data.append(revenue)
-            monthly_cost_data.append(cost)
-            monthly_profit_data.append(profit)
+            # 各月の売上を計算（指数を反映）
+            month_lunch_revenue = base_lunch_revenue * lunch_coeff
+            month_dinner_revenue = base_dinner_revenue * dinner_coeff
+            month_revenue = month_lunch_revenue + month_dinner_revenue
+            
+            # 各月の売上原価を計算（売上に比例）
+            if base_revenue > 0:
+                month_cost_of_goods_sold = base_cost_of_goods_sold * (month_revenue / base_revenue)
+            else:
+                month_cost_of_goods_sold = 0
+            
+            # 経費は固定（月毎指数の影響を受けない）
+            month_cost = base_cost
+            
+            # 各月の利益を計算
+            month_profit = month_revenue - month_cost_of_goods_sold - month_cost
+            
+            cumulative_profit += Decimal(str(month_profit))
+            
+            monthly_revenue_data.append(month_revenue)
+            monthly_cost_data.append(month_cost)
+            monthly_profit_data.append(month_profit)
             cumulative_profit_data.append(float(cumulative_profit))
         
         import json
-        from decimal import Decimal
         
         # 計算根拠データを準備
         # 昼の売上計算根拠
@@ -312,6 +402,14 @@ class IzakayaPlanPreviewView(SelectedCompanyMixin, LoginRequiredMixin, DetailVie
             'total_cost': float(plan.monthly_cost or 0)
         }
         
+        # 原価率と利益率を計算
+        monthly_revenue = float(plan.monthly_revenue or 0)
+        monthly_cost_of_goods_sold = float(plan.monthly_cost_of_goods_sold or 0)
+        monthly_profit = float(plan.monthly_profit or 0)
+        
+        cost_rate = (monthly_cost_of_goods_sold / monthly_revenue * 100) if monthly_revenue > 0 else 0
+        profit_rate = (monthly_profit / monthly_revenue * 100) if monthly_revenue > 0 else 0
+        
         context['monthly_revenue_data'] = json.dumps(monthly_revenue_data)
         context['monthly_cost_data'] = json.dumps(monthly_cost_data)
         context['monthly_profit_data'] = json.dumps(monthly_profit_data)
@@ -320,6 +418,8 @@ class IzakayaPlanPreviewView(SelectedCompanyMixin, LoginRequiredMixin, DetailVie
         context['dinner_revenue_calculation'] = dinner_revenue_calculation
         context['cost_of_goods_sold_calculation'] = cost_of_goods_sold_calculation
         context['cost_calculation'] = cost_calculation
+        context['cost_rate'] = cost_rate
+        context['profit_rate'] = profit_rate
         context['title'] = '居酒屋出店計画 - プレビュー'
         return context
 
@@ -334,11 +434,35 @@ class IzakayaPlanListView(SelectedCompanyMixin, LoginRequiredMixin, ListView):
         return IzakayaPlan.objects.filter(
             company=self.this_company,
             user=self.request.user
-        ).order_by('-created_at')
+        ).select_related('industry_classification').order_by('-created_at')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = '居酒屋出店計画一覧'
+        
+        # classification_idを取得（最初のプランから、または飲食業界分類を取得）
+        queryset = self.get_queryset()
+        if queryset.exists():
+            first_plan = queryset.first()
+            if first_plan.industry_classification:
+                context['classification_id'] = first_plan.industry_classification.id
+            else:
+                # industry_classificationがない場合は、飲食業界分類を取得
+                from ..models import IndustryClassification
+                food_classification = IndustryClassification.objects.filter(
+                    code__startswith='56'
+                ).first()
+                if food_classification:
+                    context['classification_id'] = food_classification.id
+        else:
+            # プランがない場合も、飲食業界分類を取得
+            from ..models import IndustryClassification
+            food_classification = IndustryClassification.objects.filter(
+                code__startswith='56'
+            ).first()
+            if food_classification:
+                context['classification_id'] = food_classification.id
+        
         return context
 
 
