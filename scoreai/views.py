@@ -3756,14 +3756,22 @@ class ManualListView(SelectedCompanyMixin, generic.ListView):
     
     def get_queryset(self):
         # デフォルトのユーザータイプを判定
+        from ..models import UserCompany
         user = self.request.user
         default_user_type = None
         if user.is_company_user:
-            if user.is_manager:
+            # 現在の会社のUserCompanyからis_managerを取得
+            user_company = UserCompany.objects.filter(
+                user=user,
+                company=self.this_company,
+                active=True
+            ).first()
+            if user_company and user_company.is_manager:
                 default_user_type = 'company_admin'
             else:
                 default_user_type = 'company_user'
         elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            # Firm関連は後で対応（UserFirmにis_managerフィールドを追加する必要がある）
             if user.is_manager:
                 default_user_type = 'firm_admin'
             else:
@@ -3804,14 +3812,22 @@ class ManualListView(SelectedCompanyMixin, generic.ListView):
         context['show_title_card'] = False
         
         # デフォルトのユーザータイプを判定
+        from ..models import UserCompany
         user = self.request.user
         default_user_type = None
         if user.is_company_user:
-            if user.is_manager:
+            # 現在の会社のUserCompanyからis_managerを取得
+            user_company = UserCompany.objects.filter(
+                user=user,
+                company=self.this_company,
+                active=True
+            ).first()
+            if user_company and user_company.is_manager:
                 default_user_type = 'company_admin'
             else:
                 default_user_type = 'company_user'
         elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            # Firm関連は後で対応（UserFirmにis_managerフィールドを追加する必要がある）
             if user.is_manager:
                 default_user_type = 'firm_admin'
             else:
@@ -3840,11 +3856,18 @@ class ManualListView(SelectedCompanyMixin, generic.ListView):
         # ユーザータイプを表示用に取得
         user = self.request.user
         if user.is_company_user:
-            if user.is_manager:
+            # 現在の会社のUserCompanyからis_managerを取得
+            user_company = UserCompany.objects.filter(
+                user=user,
+                company=self.this_company,
+                active=True
+            ).first()
+            if user_company and user_company.is_manager:
                 user_type_display = '会社ユーザー（管理者）'
             else:
                 user_type_display = '会社ユーザー（一般）'
         elif hasattr(user, 'userfirm') and user.userfirm.exists():
+            # Firm関連は後で対応
             if user.is_manager:
                 user_type_display = 'Firmユーザー（管理者）'
             else:

@@ -1,1 +1,3 @@
 WARNING 2026-01-01 20:59:21,744 log Forbidden (CSRF cookie not set.): /import_fiscal_summary_year_MF/
+WARNING 2026-01-12 21:46:18,583 log Forbidden (CSRF token from POST incorrect.): /login/
+WARNING 2026-01-12 21:46:24,269 log Forbidden (CSRF token from POST incorrect.): /login/

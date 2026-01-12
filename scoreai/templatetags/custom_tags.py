@@ -39,6 +39,21 @@ def get_user_selected_company(user):
 
 
 @register.simple_tag
+def get_user_company(user, company):
+    """ユーザーとCompanyからUserCompanyを取得"""
+    if not user or not user.is_authenticated or not company:
+        return None
+    
+    user_company = UserCompany.objects.filter(
+        user=user,
+        company=company,
+        active=True
+    ).select_related('company', 'user').first()
+    
+    return user_company
+
+
+@register.simple_tag
 def get_user_selected_firm(user):
     """ユーザーが選択中のFirmを取得"""
     if not user or not user.is_authenticated:

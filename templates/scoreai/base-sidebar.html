@@ -322,8 +322,9 @@
         <!-- 会社設定（選択中のCompanyがある場合） -->
         {% get_user_selected_company user as selected_company %}
         {% if selected_company %}
+        {% get_user_company user selected_company as user_company %}
         <!-- 会社詳細（Company Userのみ、is_manager=Trueの場合のみ編集可能） -->
-        {% if user.is_company_user and user.is_manager %}
+        {% if user.is_company_user and user_company and user_company.is_manager %}
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'company_detail' id=selected_company.id %}" aria-expanded="false">
             <span class="hide-menu"><i class="ti ti-building me-2"></i>会社詳細</span>

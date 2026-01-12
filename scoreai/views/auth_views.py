@@ -11,8 +11,9 @@ from django.views.generic import CreateView, UpdateView
 from django.views import generic
 
 from ..mixins import SelectedCompanyMixin
-from ..models import UserCompany
+from ..models import UserCompany, CompanyInvitation, FirmInvitation
 from ..forms import CustomUserCreationForm, LoginForm, UserProfileUpdateForm
+from django.utils import timezone
 
 
 class LoginView(LoginView):  # LoginViewは認証不要なのでSelectedCompanyMixinは不要
@@ -46,6 +47,35 @@ class UserCreateView(CreateView):
         """
         response = super().form_valid(form)
         user = form.save()
+        
+        # ユーザー登録時に、招待メールのメールアドレスでCompanyInvitationを検索
+        # 見つかった場合は、is_accepted=Trueに更新してUserCompanyレコードを作成
+        email = form.cleaned_data.get('email')
+        if email:
+            # CompanyInvitationを検索（未承認のもの）
+            company_invitations = CompanyInvitation.objects.filter(
+                email=email,
+                is_accepted=False
+            )
+            
+            for invitation in company_invitations:
+                # is_acceptedをTrueに更新（save()メソッドでUserCompanyが作成される）
+                invitation.is_accepted = True
+                invitation.accepted_at = timezone.now()
+                invitation.save()
+            
+            # FirmInvitationも同様に処理
+            firm_invitations = FirmInvitation.objects.filter(
+                email=email,
+                is_accepted=False
+            )
+            
+            for invitation in firm_invitations:
+                # is_acceptedをTrueに更新（save()メソッドでUserFirmが作成される）
+                invitation.is_accepted = True
+                invitation.accepted_at = timezone.now()
+                invitation.save()
+        
         login(self.request, user)
         messages.success(self.request, 'アカウントが正常に作成されました。')
         return response
@@ -127,7 +157,13 @@ class UserProfileView(SelectedCompanyMixin, generic.TemplateView):
         # ユーザーの属性を判定
         context['is_company_user'] = user.is_company_user
         context['is_financial_consultant'] = user.is_financial_consultant
-        context['is_manager'] = user.is_manager
+        # いずれかの会社でマネージャーかどうかを判定
+        is_manager_anywhere = UserCompany.objects.filter(
+            user=user,
+            is_manager=True,
+            active=True
+        ).exists()
+        context['is_manager'] = is_manager_anywhere
         
         # ユーザーの役割を判定
         user_roles = []
@@ -135,7 +171,7 @@ class UserProfileView(SelectedCompanyMixin, generic.TemplateView):
             user_roles.append('会社ユーザー')
         if user.is_financial_consultant:
             user_roles.append('財務コンサルタント')
-        if user.is_manager:
+        if is_manager_anywhere:
             user_roles.append('マネージャー')
         
         # Companyオーナーかどうか

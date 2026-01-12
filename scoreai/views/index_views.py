@@ -9,7 +9,7 @@ from django.views import generic
 import logging
 
 from ..mixins import SelectedCompanyMixin
-from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month
+from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month, Company
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,

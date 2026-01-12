@@ -28,8 +28,14 @@ class IndustryConsultationCenterView(SelectedCompanyMixin, LoginRequiredMixin, T
         context['classifications'] = classifications
         context['title'] = '業界別相談室'
         
-        # Companyのmanagerかどうかを判定
-        context['is_company_manager'] = self.request.user.is_manager
+        # Companyのmanagerかどうかを判定（現在の会社のUserCompanyから取得）
+        from ..models import UserCompany
+        user_company = UserCompany.objects.filter(
+            user=self.request.user,
+            company=self.this_company,
+            active=True
+        ).first()
+        context['is_company_manager'] = user_company.is_manager if user_company else False
         
         # 選択中のCompanyの相談履歴を取得
         # 居酒屋出店計画の履歴（下書き含む）

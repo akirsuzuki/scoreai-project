@@ -53,11 +53,11 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
             ).first()
             
             context['is_company_owner'] = user_company.is_owner if user_company else False
-            # Userモデルのis_managerフィールドを使用（UserCompanyにはis_managerフィールドがない）
-            context['is_company_manager'] = (user_company and self.request.user.is_manager) if user_company else False
+            # UserCompanyモデルのis_managerフィールドを使用
+            context['is_company_manager'] = user_company.is_manager if user_company else False
             
             # is_managerの場合、利用枠情報を取得
-            if user_company and self.request.user.is_manager:
+            if user_company and user_company.is_manager:
                 # このCompanyに関連するFirmCompanyを取得
                 firm_companies = FirmCompany.objects.filter(
                     company=self.object,

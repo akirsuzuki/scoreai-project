@@ -176,6 +176,7 @@ class UserCompany(models.Model):
     active = models.BooleanField(default=True)
     is_selected = models.BooleanField(default=True)
     is_owner = models.BooleanField(default=False)
+    is_manager = models.BooleanField('マネージャー権限', default=False)
     as_consultant = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
@@ -361,25 +362,24 @@ class CompanyInvitation(models.Model):
             ).first()
             
             if existing_user_company:
-                # 既存のレコードがある場合は更新
-                existing_user_company.active = True
+                # 既存のレコードがある場合は更新（activeは既存の状態を維持、新規招待の場合はTrueに設定）
+                # ただし、既にactive=Trueの場合はそのまま維持
+                if not existing_user_company.active:
+                    existing_user_company.active = True
                 existing_user_company.is_owner = self.is_owner
+                existing_user_company.is_manager = self.is_manager
                 existing_user_company.is_selected = False
                 existing_user_company.save()
             else:
-                # 新規作成
+                # 新規作成（新規招待の場合はactive=True）
                 UserCompany.objects.create(
                     user=user,
                     company=self.company,
                     active=True,
                     is_owner=self.is_owner,
+                    is_manager=self.is_manager,
                     is_selected=False
                 )
-            
-            # Userモデルのis_managerを更新（UserCompanyにはis_managerフィールドがないため）
-            if self.is_manager:
-                user.is_manager = True
-                user.save()
         except User.DoesNotExist:
             # ユーザーが存在しない場合は何もしない（新規ユーザー招待の場合）
             pass

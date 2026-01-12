@@ -22703,3 +22703,489 @@ INFO 2026-01-12 17:19:43,843 basehttp "GET /ai-consultation/ HTTP/1.1" 200 61126
 INFO 2026-01-12 17:19:46,142 basehttp "GET /ai-consultation/ HTTP/1.1" 200 61126
 INFO 2026-01-12 17:19:47,743 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 58380
 INFO 2026-01-12 17:19:57,290 basehttp "GET /ai-consultation/01KDCG3BCCD90RJFVPAS5M4TQH/ HTTP/1.1" 200 58426
+INFO 2026-01-12 18:17:48,748 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 18:25:03,582 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 20:55:01,046 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 20:55:05,196 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 37585
+INFO 2026-01-12 20:55:05,268 basehttp "GET /static/scoreai/js/loading.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:14,095 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 302 0
+INFO 2026-01-12 20:55:14,128 basehttp "GET / HTTP/1.1" 200 61023
+INFO 2026-01-12 20:55:32,497 basehttp "GET /admin/scoreai/company/ HTTP/1.1" 200 34049
+INFO 2026-01-12 20:55:32,513 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,514 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,515 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,517 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,518 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,519 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,520 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,520 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,522 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,522 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,523 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,523 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,525 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,525 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,527 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,528 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 20:55:32,556 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,557 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,567 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,568 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,568 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:32,568 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:43,391 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 35300
+INFO 2026-01-12 20:55:43,408 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:43,408 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:55:43,412 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 20:56:04,737 basehttp "GET /admin/scoreai/usercompany/01JEHJPZQ489W5AGN22JK23055/change/ HTTP/1.1" 200 33909
+INFO 2026-01-12 20:56:04,753 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:56:04,753 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:56:04,759 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 20:56:04,766 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-12 20:56:04,767 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-12 20:56:04,768 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-12 20:56:08,286 basehttp "POST /admin/scoreai/usercompany/01JEHJPZQ489W5AGN22JK23055/change/ HTTP/1.1" 302 0
+INFO 2026-01-12 20:56:08,305 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 35576
+INFO 2026-01-12 20:56:08,328 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 20:56:11,758 basehttp "GET / HTTP/1.1" 200 60537
+ERROR 2026-01-12 20:56:15,318 mixins Unexpected error in CompanyMemberListView.dispatch: Cannot resolve keyword 'is_manager' into field. Choices are: active, as_consultant, company, company_id, id, is_owner, is_selected, user, user_id
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/company_member_views.py", line 59, in get_queryset
+    ).select_related('user').order_by('-is_owner', '-is_manager', 'user__username')
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1701, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/query.py", line 2249, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1768, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_manager' into field. Choices are: active, as_consultant, company, company_id, id, is_owner, is_selected, user, user_id
+ERROR 2026-01-12 20:56:15,331 log Internal Server Error: /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/company_member_views.py", line 53, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/company_member_views.py", line 59, in get_queryset
+    ).select_related('user').order_by('-is_owner', '-is_manager', 'user__username')
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1701, in order_by
+    obj.query.add_ordering(*field_names)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/query.py", line 2249, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/query.py", line 1768, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'is_manager' into field. Choices are: active, as_consultant, company, company_id, id, is_owner, is_selected, user, user_id
+ERROR 2026-01-12 20:56:15,332 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 500 110638
+INFO 2026-01-12 20:56:37,919 basehttp "GET /admin/scoreai/userfirm/ HTTP/1.1" 200 32843
+INFO 2026-01-12 20:56:37,939 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 20:56:42,512 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 34899
+INFO 2026-01-12 20:56:42,537 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:39:39,375 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:39:43,466 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 36642
+INFO 2026-01-12 21:39:48,801 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 200 31666
+INFO 2026-01-12 21:40:05,176 company_member_views Invitation email sent to cfo.akira@gmail.com for company 01HYFKMZ3NYHVDET5KNM0VTKGV
+INFO 2026-01-12 21:40:05,186 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:40:05,216 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 39227
+INFO 2026-01-12 21:40:15,115 basehttp "GET /user_create/ HTTP/1.1" 200 32011
+INFO 2026-01-12 21:40:36,658 basehttp "POST /user_create/ HTTP/1.1" 200 33077
+INFO 2026-01-12 21:40:46,896 basehttp "POST /user_create/ HTTP/1.1" 200 32903
+INFO 2026-01-12 21:41:10,682 basehttp "GET /user_create/ HTTP/1.1" 200 32011
+INFO 2026-01-12 21:41:28,742 basehttp "POST /user_create/ HTTP/1.1" 200 32903
+WARNING 2026-01-12 21:41:45,564 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+WARNING 2026-01-12 21:41:59,840 basehttp "GET /sourceMap/chrome/css/passgen_popup.css.map HTTP/1.1" 404 52109
+INFO 2026-01-12 21:42:13,380 basehttp "POST /user_create/ HTTP/1.1" 200 32773
+WARNING 2026-01-12 21:42:13,413 basehttp "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 52127
+INFO 2026-01-12 21:42:32,264 basehttp "GET /user_create/ HTTP/1.1" 200 32011
+INFO 2026-01-12 21:42:40,951 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:42:40,956 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 21:42:40,964 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 21:42:40,980 basehttp "GET /static/Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js HTTP/1.1" 200 88151
+INFO 2026-01-12 21:42:48,942 basehttp "GET /user_create/ HTTP/1.1" 200 20394
+INFO 2026-01-12 21:43:07,178 basehttp "POST /user_create/ HTTP/1.1" 200 21156
+INFO 2026-01-12 21:43:15,957 basehttp "GET /user_create/ HTTP/1.1" 200 20394
+INFO 2026-01-12 21:43:37,037 basehttp "POST /user_create/ HTTP/1.1" 302 0
+ERROR 2026-01-12 21:43:37,044 mixins Unexpected error in IndexView.dispatch: name 'Company' is not defined
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 47, in get
+    except Company.DoesNotExist:
+           ^^^^^^^
+NameError: name 'Company' is not defined
+ERROR 2026-01-12 21:43:37,054 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 47, in get
+    except Company.DoesNotExist:
+           ^^^^^^^
+NameError: name 'Company' is not defined
+ERROR 2026-01-12 21:43:37,055 basehttp "GET / HTTP/1.1" 500 98177
+INFO 2026-01-12 21:44:58,914 autoreload /app/scoreai/views/index_views.py changed, reloading.
+INFO 2026-01-12 21:44:59,304 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:45:06,252 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-12 21:45:06,533 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:45:19,513 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-12 21:45:19,812 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:45:23,531 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-12 21:45:23,865 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:45:40,329 basehttp "GET /user_create/ HTTP/1.1" 200 23803
+INFO 2026-01-12 21:46:04,807 basehttp "POST /user_create/ HTTP/1.1" 200 24024
+WARNING 2026-01-12 21:46:18,583 log Forbidden (CSRF token from POST incorrect.): /login/
+WARNING 2026-01-12 21:46:18,586 basehttp "POST /login/?next=/ HTTP/1.1" 403 2546
+WARNING 2026-01-12 21:46:24,269 log Forbidden (CSRF token from POST incorrect.): /login/
+WARNING 2026-01-12 21:46:24,270 basehttp "POST /login/?next=/ HTTP/1.1" 403 2546
+ERROR 2026-01-12 21:46:31,034 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-12 21:46:31,041 log Internal Server Error: /
+ERROR 2026-01-12 21:46:31,041 basehttp "GET / HTTP/1.1" 500 21033
+ERROR 2026-01-12 21:46:33,150 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-12 21:46:33,157 log Internal Server Error: /
+ERROR 2026-01-12 21:46:33,158 basehttp "GET / HTTP/1.1" 500 21033
+INFO 2026-01-12 21:46:38,292 basehttp "GET /user_profile/ HTTP/1.1" 200 23299
+INFO 2026-01-12 21:46:52,505 basehttp "GET /admin/ HTTP/1.1" 302 0
+ERROR 2026-01-12 21:46:52,529 log Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 676, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'groups'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 425, in login
+    **self.each_context(request),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 338, in each_context
+    "available_apps": self.get_app_list(request),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 541, in get_app_list
+    app_dict = self._build_app_dict(request, app_label)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 483, in _build_app_dict
+    has_module_perms = model_admin.has_module_permission(request)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 640, in has_module_permission
+    return request.user.has_module_perms(self.opts.app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 332, in has_module_perms
+    return _user_has_module_perms(self, app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 236, in _user_has_module_perms
+    if backend.has_module_perms(user, app_label):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 117, in has_module_perms
+    for perm in self.get_all_permissions(user_obj)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 105, in get_all_permissions
+    user_obj._perm_cache = super().get_all_permissions(user_obj)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 24, in get_all_permissions
+    *self.get_group_permissions(user_obj, obj=obj),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 99, in get_group_permissions
+    return self._get_permissions(user_obj, obj, "group")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 80, in _get_permissions
+    perms = getattr(self, "_get_%s_permissions" % from_name)(user_obj)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 62, in _get_group_permissions
+    user_groups_field = get_user_model()._meta.get_field("groups")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 678, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: User has no field named 'groups'
+ERROR 2026-01-12 21:46:52,531 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 500 141244
+INFO 2026-01-12 21:47:06,227 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:47:06,230 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 21:47:06,234 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 21:47:12,300 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:47:12,336 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 21:47:18,508 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38739
+INFO 2026-01-12 21:47:23,458 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/invitations/01KES3GX8KSVQX8G1QK0V666QJ/cancel/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:47:23,472 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 37113
+INFO 2026-01-12 21:47:29,524 basehttp "GET /admin/ HTTP/1.1" 200 37593
+INFO 2026-01-12 21:47:29,543 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-12 21:47:29,592 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2026-01-12 21:47:35,456 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 35300
+INFO 2026-01-12 21:47:35,477 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:47:38,693 basehttp "GET /admin/ HTTP/1.1" 200 37593
+INFO 2026-01-12 21:47:40,188 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35575
+INFO 2026-01-12 21:47:40,200 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:47:55,378 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 200 27441
+INFO 2026-01-12 21:47:55,387 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2026-01-12 21:47:57,323 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:47:57,339 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35051
+INFO 2026-01-12 21:47:57,355 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:48:02,908 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 36642
+INFO 2026-01-12 21:48:05,111 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 200 31666
+INFO 2026-01-12 21:48:13,257 company_member_views Invitation email sent to cfo.akira@gmail.com for company 01HYFKMZ3NYHVDET5KNM0VTKGV
+INFO 2026-01-12 21:48:13,260 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:48:13,293 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 39227
+INFO 2026-01-12 21:48:22,229 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:48:22,232 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 21:48:22,234 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 21:48:28,129 basehttp "GET /user_create/ HTTP/1.1" 200 20393
+INFO 2026-01-12 21:48:58,751 basehttp "POST /user_create/ HTTP/1.1" 302 0
+ERROR 2026-01-12 21:48:58,757 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-12 21:48:58,759 log Internal Server Error: /
+ERROR 2026-01-12 21:48:58,759 basehttp "GET / HTTP/1.1" 500 21448
+INFO 2026-01-12 21:49:25,436 basehttp "GET /user_profile/ HTTP/1.1" 200 23299
+INFO 2026-01-12 21:49:28,989 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:49:28,993 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 21:49:28,998 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 21:50:33,079 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-12 21:50:33,550 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:50:40,694 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-12 21:50:41,057 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:50:43,269 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:50:43,364 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 21:50:47,196 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38739
+INFO 2026-01-12 21:50:47,949 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-12 21:50:48,318 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 21:50:50,357 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/invitations/01KES3ZTY4X85B4T61JZT05X0V/cancel/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:50:50,387 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 37113
+INFO 2026-01-12 21:50:55,849 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35575
+INFO 2026-01-12 21:50:55,866 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:51:01,758 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 200 27441
+INFO 2026-01-12 21:51:03,605 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:51:03,621 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35051
+INFO 2026-01-12 21:51:03,643 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:51:09,901 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 35300
+INFO 2026-01-12 21:51:09,925 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 21:51:18,993 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 200 31666
+INFO 2026-01-12 21:51:28,801 company_member_views Invitation email sent to cfo.akira@gmail.com for company 01HYFKMZ3NYHVDET5KNM0VTKGV
+INFO 2026-01-12 21:51:28,804 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:51:28,836 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 39227
+INFO 2026-01-12 21:51:34,151 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:51:34,155 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 21:51:34,162 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 21:52:39,799 basehttp "GET /user_create/ HTTP/1.1" 200 20393
+INFO 2026-01-12 21:53:02,756 basehttp "POST /user_create/ HTTP/1.1" 302 0
+INFO 2026-01-12 21:53:02,788 basehttp "GET / HTTP/1.1" 200 54223
+INFO 2026-01-12 21:53:10,689 basehttp "GET /user_profile/ HTTP/1.1" 200 29777
+INFO 2026-01-12 21:53:13,876 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 69264
+INFO 2026-01-12 21:53:20,083 basehttp "GET /debts_all/ HTTP/1.1" 200 73501
+INFO 2026-01-12 21:53:26,963 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 29380
+INFO 2026-01-12 22:33:51,239 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:33:51,243 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-12 22:33:51,247 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-12 22:33:57,862 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:33:57,888 basehttp "GET / HTTP/1.1" 200 60537
+INFO 2026-01-12 22:34:04,555 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38211
+INFO 2026-01-12 22:34:08,538 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/01KES48PMVWV1P8SBSYBRB174S/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:34:08,554 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38700
+INFO 2026-01-12 22:34:14,819 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/01KES48PMVWV1P8SBSYBRB174S/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:34:14,841 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38700
+INFO 2026-01-12 22:34:18,689 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38213
+INFO 2026-01-12 22:34:30,999 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/01KES48PMVWV1P8SBSYBRB174S/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:34:31,018 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38700
+INFO 2026-01-12 22:34:34,150 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 200 31666
+INFO 2026-01-12 22:34:43,222 company_member_views Invitation email sent to cfo.akira@gmail.com for company 01HYFKMZ3NYHVDET5KNM0VTKGV
+INFO 2026-01-12 22:34:43,226 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:34:43,251 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38711
+INFO 2026-01-12 22:35:02,471 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/01KES48PMVWV1P8SBSYBRB174S/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:35:02,484 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 38700
+INFO 2026-01-12 22:35:14,719 basehttp "GET /user_profile/ HTTP/1.1" 200 44024
+INFO 2026-01-12 22:35:17,347 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:35:17,381 basehttp "GET / HTTP/1.1" 200 51949
+INFO 2026-01-12 22:35:26,015 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:35:26,053 basehttp "GET / HTTP/1.1" 200 51914
+INFO 2026-01-12 22:35:37,552 basehttp "GET /admin/scoreai/usercompany/01JEJZ8RSPSZS8F026J8SERS9D/change/ HTTP/1.1" 200 33945
+INFO 2026-01-12 22:35:37,573 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:35:40,893 basehttp "POST /admin/scoreai/usercompany/01JEJZ8RSPSZS8F026J8SERS9D/change/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:35:40,906 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 36449
+INFO 2026-01-12 22:35:40,929 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:35:47,210 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 200 36187
+INFO 2026-01-12 22:35:49,732 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/invite/ HTTP/1.1" 200 31186
+INFO 2026-01-12 22:35:57,195 company_member_views Invitation email sent to cfo.akira@gmail.com for company 01HYVV5FT11MX5PDNFCNVKSNKS
+INFO 2026-01-12 22:35:57,196 basehttp "POST /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:35:57,220 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 200 38253
+INFO 2026-01-12 22:36:13,904 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 37046
+INFO 2026-01-12 22:36:13,926 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:37:31,571 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35575
+INFO 2026-01-12 22:37:31,607 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:37:48,699 basehttp "GET /admin/scoreai/user/2/change/ HTTP/1.1" 200 56315
+INFO 2026-01-12 22:37:48,718 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-01-12 22:37:48,719 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-01-12 22:37:48,724 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:37:48,766 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2026-01-12 22:37:48,766 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+INFO 2026-01-12 22:38:23,635 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 37046
+INFO 2026-01-12 22:38:23,678 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:39:57,841 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 22:39:58,570 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:40:06,943 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-12 22:40:07,423 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:40:32,274 autoreload /app/scoreai/views/company_member_views.py changed, reloading.
+INFO 2026-01-12 22:40:32,673 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:40:43,947 autoreload /app/scoreai/views/company_views.py changed, reloading.
+INFO 2026-01-12 22:40:44,347 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:41:01,906 autoreload /app/scoreai/views/industry_consultation_views.py changed, reloading.
+INFO 2026-01-12 22:41:02,332 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:41:10,618 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-12 22:41:11,015 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:41:55,856 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-12 22:41:56,216 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:42:45,713 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-12 22:42:46,116 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:42:58,661 autoreload /app/scoreai/templatetags/custom_tags.py changed, reloading.
+INFO 2026-01-12 22:42:59,019 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:47:57,947 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-12 22:47:58,509 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:54:09,096 autoreload Watching for file changes with StatReloader
+INFO 2026-01-12 22:54:18,230 basehttp "POST /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/01KES6Q8K02MC7ZD6TCCKFJGYN/delete/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:54:18,263 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 200 37610
+INFO 2026-01-12 22:54:25,135 basehttp "GET /user_profile/ HTTP/1.1" 200 42693
+INFO 2026-01-12 22:54:30,230 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:54:30,272 basehttp "GET / HTTP/1.1" 200 60423
+INFO 2026-01-12 22:54:59,982 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-12 22:55:03,556 basehttp "GET /select_company/01JEFCNJP7DHQ9TPNFJBBHK0HR/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:55:03,576 basehttp "GET / HTTP/1.1" 200 53147
+INFO 2026-01-12 22:55:14,410 basehttp "GET /user_profile/ HTTP/1.1" 200 43063
+INFO 2026-01-12 22:55:19,121 basehttp "GET /select_company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:55:19,157 basehttp "GET / HTTP/1.1" 200 60417
+INFO 2026-01-12 22:55:24,493 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-12 22:55:32,346 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 200 34130
+INFO 2026-01-12 22:55:35,994 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 200 37603
+INFO 2026-01-12 22:55:39,244 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/invite/ HTTP/1.1" 200 31031
+INFO 2026-01-12 22:56:00,345 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/members/ HTTP/1.1" 200 37603
+INFO 2026-01-12 22:56:18,774 basehttp "GET /company/01JEFCNJP7DHQ9TPNFJBBHK0HR/ HTTP/1.1" 200 33742
+INFO 2026-01-12 22:56:23,048 basehttp "GET /company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 200 34130
+INFO 2026-01-12 22:56:40,900 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-12 22:56:44,096 basehttp "GET /select_company/01HYVV5FT11MX5PDNFCNVKSNKS/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:56:44,126 basehttp "GET / HTTP/1.1" 200 51314
+INFO 2026-01-12 22:56:47,056 basehttp "GET /user_profile/ HTTP/1.1" 200 42693
+INFO 2026-01-12 22:56:53,704 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/ HTTP/1.1" 200 33666
+INFO 2026-01-12 22:56:57,724 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 37098
+INFO 2026-01-12 22:57:02,671 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 200 30551
+INFO 2026-01-12 22:57:18,188 company_member_views Invitation email sent to cfo.akira+2@gmail.com for company 01HYFKMZ3NYHVDET5KNM0VTKGV
+INFO 2026-01-12 22:57:18,192 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/invite/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:57:18,231 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 39688
+INFO 2026-01-12 22:58:11,654 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 37046
+INFO 2026-01-12 22:58:11,677 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:58:20,803 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35575
+INFO 2026-01-12 22:58:20,822 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:58:26,848 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35575
+INFO 2026-01-12 22:58:26,861 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-12 22:58:42,068 basehttp "GET /user_create/ HTTP/1.1" 200 30895
+INFO 2026-01-12 22:58:52,727 basehttp "POST /company/01HYFKMZ3NYHVDET5KNM0VTKGV/invitations/01KES7YAN75XW72M83A2NR0G2D/cancel/ HTTP/1.1" 302 0
+INFO 2026-01-12 22:58:52,748 basehttp "GET /company/01HYFKMZ3NYHVDET5KNM0VTKGV/members/ HTTP/1.1" 200 37569

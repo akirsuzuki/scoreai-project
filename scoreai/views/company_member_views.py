@@ -56,7 +56,7 @@ class CompanyMemberListView(LoginRequiredMixin, ErrorHandlingMixin, ListView):
         """Companyに所属するメンバーを取得"""
         return UserCompany.objects.filter(
             company=self.company
-        ).select_related('user').order_by('-is_owner', '-is_manager', 'user__username')
+        ).select_related('user').order_by('-is_owner', '-user__is_manager', 'user__username')
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""
@@ -69,7 +69,7 @@ class CompanyMemberListView(LoginRequiredMixin, ErrorHandlingMixin, ListView):
         context['total_members'] = self.get_queryset().count()
         context['active_members'] = self.get_queryset().filter(active=True).count()
         context['owner_count'] = self.get_queryset().filter(is_owner=True).count()
-        context['manager_count'] = self.get_queryset().filter(is_manager=True).count()
+        context['manager_count'] = self.get_queryset().filter(user__is_manager=True).count()
         
         # 招待中のメンバーを取得
         context['pending_invitations'] = CompanyInvitation.objects.filter(
@@ -139,12 +139,8 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
                     # 非アクティブなメンバーの場合は再アクティブ化
                     existing_member.active = True
                     existing_member.is_owner = is_owner
+                    existing_member.is_manager = is_manager
                     existing_member.save()
-                    
-                    # Userモデルのis_managerを更新（UserCompanyにはis_managerフィールドがないため）
-                    if is_manager:
-                        user.is_manager = True
-                        user.save()
                     
                     messages.success(self.request, f'{email} をメンバーとして再追加しました。')
             else:
@@ -154,13 +150,9 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
                     company=self.company,
                     active=True,
                     is_owner=is_owner,
+                    is_manager=is_manager,
                     is_selected=False
                 )
-                
-                # Userモデルのis_managerを更新（UserCompanyにはis_managerフィールドがないため）
-                if is_manager:
-                    user.is_manager = True
-                    user.save()
                 
                 messages.success(self.request, f'{email} をメンバーとして追加しました。')
             
