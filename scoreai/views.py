@@ -1428,13 +1428,13 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
                     year=year,
                     is_budget=False,
                     is_draft=False
-                ).order_by('-version').first()
+                ).select_related('company').order_by('-version').first()
                 
                 if fiscal_summary_year:
                     monthly_data_list = FiscalSummary_Month.objects.filter(
                         fiscal_summary_year=fiscal_summary_year,
                         is_budget=False
-                    ).order_by('period')
+                    ).select_related('fiscal_summary_year', 'fiscal_summary_year__company').order_by('period')
                     
                     # 12ヶ月分のデータを作成
                     monthly_dict = {m.period: m for m in monthly_data_list}

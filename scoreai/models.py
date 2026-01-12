@@ -189,6 +189,14 @@ class UserCompany(models.Model):
                 self.is_selected = True
         super().save(*args, **kwargs)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['user', 'company', 'active']),
+            models.Index(fields=['user', 'is_selected', 'active']),
+            models.Index(fields=['company', 'active', 'is_owner']),
+            models.Index(fields=['company', 'active', 'is_manager']),
+        ]
+
     def __str__(self):
         return f"{self.company} - {self.user}"
 
@@ -967,7 +975,18 @@ class Debt(models.Model):
     # 月々の残高
     @property
     def balances_monthly(self):
-        """今後12ヶ月間の各月の残高を計算（社債・手形貸付対応）"""
+        """今後12ヶ月間の各月の残高を計算（社債・手形貸付対応、キャッシュ付き）"""
+        from django.core.cache import cache
+        
+        # キャッシュキーを生成（DebtのIDのみを使用、更新時はsaveメソッドで無効化）
+        cache_key = f'debt_balances_monthly_{self.id}'
+        
+        # キャッシュから取得を試みる
+        cached_balances = cache.get(cache_key)
+        if cached_balances is not None:
+            return cached_balances
+        
+        # キャッシュがない場合は計算
         start_month = self.elapsed_months
         balances = []
         current_balance = self.principal
@@ -997,6 +1016,8 @@ class Debt(models.Model):
                     # 返済開始後は残高0（期日一括償還）
                     balances.append(0)
             
+            # 結果をキャッシュ（1時間）
+            cache.set(cache_key, balances, 3600)
             return balances
         
         # 返済開始前の残高を計算（証書貸付・社債）
@@ -1004,6 +1025,8 @@ class Debt(models.Model):
             # 返済開始前は元本
             for i in range(12):
                 balances.append(current_balance)
+            # 結果をキャッシュ（1時間）
+            cache.set(cache_key, balances, 3600)
             return balances
         
         # 返済開始後の残高を計算（証書貸付・社債）
@@ -1031,6 +1054,8 @@ class Debt(models.Model):
                 balance, _ = self.balance_after_months(months_from_start)
                 balances.append(balance)
         
+        # 結果をキャッシュ（1時間）
+        cache.set(cache_key, balances, 3600)
         return balances
 
     @property
@@ -1149,10 +1174,27 @@ class Debt(models.Model):
                     'adjusted_amount_last': "最終月調整額と月返済額の合計は正の数でなければなりません。"
                 })
 
-
     def save(self, *args, **kwargs):
         self.clean()
+        # 保存前にキャッシュを無効化
+        from django.core.cache import cache
+        if self.pk:
+            # 既存レコードの更新時はキャッシュを削除
+            cache.delete(f'debt_balances_monthly_{self.id}')
         super().save(*args, **kwargs)
+        # 保存後も念のためキャッシュをクリア
+        if self.pk:
+            cache.delete(f'debt_balances_monthly_{self.id}')
+
+    class Meta:
+        verbose_name = '借入'
+        verbose_name_plural = '借入'
+        indexes = [
+            models.Index(fields=['company', 'is_nodisplay', 'is_rescheduled']),
+            models.Index(fields=['company', 'financial_institution']),
+            models.Index(fields=['company', 'start_date']),
+            models.Index(fields=['company', 'debt_type']),
+        ]
 
     def __str__(self):
         return f"{self.company.name} - {self.issue_date} - ¥{self.principal:,}"
@@ -1515,6 +1557,11 @@ class FiscalSummary_Year(models.Model):
         unique_together = ('company', 'year', 'is_budget')
         verbose_name = '年次決算情報'
         verbose_name_plural = '年次決算情報'
+        indexes = [
+            models.Index(fields=['company', 'year', 'is_budget', 'is_draft']),
+            models.Index(fields=['company', 'is_budget', 'is_draft', '-year']),
+            models.Index(fields=['year', 'is_budget']),
+        ]
 
     def __str__(self):
         budget_label = "予算" if self.is_budget else "実績"
@@ -1552,6 +1599,10 @@ class FiscalSummary_Month(models.Model):
         unique_together = ('fiscal_summary_year', 'period', 'is_budget')
         verbose_name = '月次決算情報'
         verbose_name_plural = '月次決算情報'
+        indexes = [
+            models.Index(fields=['fiscal_summary_year', 'period', 'is_budget']),
+            models.Index(fields=['fiscal_summary_year', 'period']),
+        ]
 
     def __str__(self):
         return f"{self.fiscal_summary_year.company.name} - {self.fiscal_summary_year.year} - 月{self.period}"
@@ -2107,6 +2158,10 @@ class AIConsultationHistory(models.Model):
         ordering = ['-created_at']
         verbose_name = 'AI相談履歴'
         verbose_name_plural = 'AI相談履歴'
+        indexes = [
+            models.Index(fields=['user', 'company', '-created_at']),
+            models.Index(fields=['company', 'consultation_type', '-created_at']),
+        ]
     
     def __str__(self):
         return f"{self.user.username} - {self.consultation_type.name} - {self.created_at}"
