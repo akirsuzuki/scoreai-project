@@ -194,6 +194,7 @@ from .views import (
     MeetingMinutesListView,
     MeetingMinutesDetailView,
     MeetingMinutesDeleteView,
+    MeetingMinutesImportView,
     MeetingMinutesAIGenerateView,
     MeetingMinutesAIResultView,
     MeetingMinutesAISaveView,
@@ -307,6 +308,7 @@ urlpatterns = [
     path('stockevent/<int:stock_event_pk>/line/add/', StockEventLineCreateView.as_view(), name='stockeventline_create'),
     path('stockeventline/<int:pk>/edit/', StockEventLineUpdateView.as_view(), name='stockeventline_update'),
     path('meeting_minutes/create/', MeetingMinutesCreateView.as_view(), name='meeting_minutes_create'),
+    path('meeting_minutes/import/', MeetingMinutesImportView.as_view(), name='meeting_minutes_import'),
     path('meeting_minutes/<str:company_id>/<str:pk>/update/', MeetingMinutesUpdateView.as_view(), name='meeting_minutes_update'),
     path('meeting_minutes/<str:company_id>/<str:pk>/delete/', MeetingMinutesDeleteView.as_view(), name='meeting_minutes_delete'),
     

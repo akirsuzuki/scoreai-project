@@ -522,6 +522,39 @@ class MeetingMinutesForm(forms.ModelForm):
         }
 
 
+class MeetingMinutesImportForm(forms.Form):
+    """議事録インポート用フォーム（複数ファイル対応）"""
+    files = forms.FileField(
+        label='インポートファイル',
+        help_text='Google Documentsからエクスポートしたファイル（.docx, .txt, .md）を選択してください。複数ファイルを選択できます。',
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.docx,.txt,.md,.doc'
+        }),
+        required=True
+    )
+    default_meeting_date = forms.DateField(
+        label='デフォルトミーティング日',
+        widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        help_text='ファイル名から日付を抽出できない場合に使用される日付を指定してください。',
+        required=False
+    )
+    category = forms.ChoiceField(
+        label='カテゴリ',
+        choices=MeetingMinutes.CATEGORY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        initial='meeting',
+        help_text='議事録のカテゴリを選択してください（全ファイル共通）。'
+    )
+    extract_date_from_filename = forms.BooleanField(
+        label='ファイル名から日付を自動抽出',
+        required=False,
+        initial=True,
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        help_text='ファイル名に日付が含まれている場合、自動的に抽出します（例：2024-01-15_議事録.docx）。'
+    )
+
+
 class IndustryClassificationImportForm(forms.Form):
     file = forms.FileField(label='CSVファイル', widget=forms.FileInput(attrs={'class': 'form-control', 'accept': '.csv'}))
 

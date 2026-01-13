@@ -161,6 +161,7 @@ MeetingMinutesUpdateView = _views_py.MeetingMinutesUpdateView
 MeetingMinutesListView = _views_py.MeetingMinutesListView
 MeetingMinutesDetailView = _views_py.MeetingMinutesDetailView
 MeetingMinutesDeleteView = _views_py.MeetingMinutesDeleteView
+MeetingMinutesImportView = _views_py.MeetingMinutesImportView
 AboutView = _views_py.AboutView
 from .about_links_views import AboutLinksView
 NewsListView = _views_py.NewsListView
@@ -253,6 +254,7 @@ __all__ = [
     'MeetingMinutesListView',
     'MeetingMinutesDetailView',
     'MeetingMinutesDeleteView',
+    'MeetingMinutesImportView',
     # MeetingMinutes AI
     'MeetingMinutesAIGenerateView',
     'MeetingMinutesAIResultView',

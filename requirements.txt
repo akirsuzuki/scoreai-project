@@ -27,6 +27,7 @@ google-auth-oauthlib
 Pillow
 pdf2image
 chardet
+python-docx
 stripe
 markdown
 boxsdk

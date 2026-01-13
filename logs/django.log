@@ -23220,3 +23220,113 @@ INFO 2026-01-13 06:54:32,270 autoreload /app/scoreai/views.py changed, reloading
 INFO 2026-01-13 06:54:33,163 autoreload Watching for file changes with StatReloader
 INFO 2026-01-13 07:17:32,426 autoreload /app/scoreai/models.py changed, reloading.
 INFO 2026-01-13 07:17:33,030 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 07:19:05,603 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 07:19:07,299 basehttp "GET / HTTP/1.1" 200 59902
+INFO 2026-01-13 07:19:10,712 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34158
+INFO 2026-01-13 07:19:17,375 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62917
+INFO 2026-01-13 07:19:21,553 basehttp "GET /debts_all/ HTTP/1.1" 200 79663
+INFO 2026-01-13 07:19:24,894 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50379
+INFO 2026-01-13 07:19:25,745 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 52752
+INFO 2026-01-13 07:19:26,534 basehttp "GET /debts_archived/ HTTP/1.1" 200 34791
+INFO 2026-01-13 07:19:32,658 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50379
+INFO 2026-01-13 07:19:33,634 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 52752
+INFO 2026-01-13 07:19:36,808 basehttp "GET /storage/setting/ HTTP/1.1" 200 31096
+INFO 2026-01-13 07:19:39,745 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 31489
+INFO 2026-01-13 07:19:41,309 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-13 07:19:45,586 basehttp "GET / HTTP/1.1" 200 59902
+INFO 2026-01-13 07:19:47,152 basehttp "GET /ai-consultation/ HTTP/1.1" 200 60491
+INFO 2026-01-13 07:19:48,420 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZGWBCEA/ HTTP/1.1" 200 57745
+INFO 2026-01-13 07:20:32,789 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 07:20:33,890 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 45520
+INFO 2026-01-13 08:35:09,941 basehttp "GET / HTTP/1.1" 200 59902
+INFO 2026-01-13 18:46:56,909 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:08:31,078 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:08:33,487 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:08:33,512 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:08:36,120 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 32570
+INFO 2026-01-13 19:17:19,151 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-13 19:17:19,589 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:19:50,846 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:20:12,818 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:21:34,775 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:21:37,756 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 36723
+INFO 2026-01-13 19:21:40,717 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36548
+INFO 2026-01-13 19:21:48,004 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:21:49,346 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:21:50,227 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36548
+INFO 2026-01-13 19:21:51,239 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:21:52,823 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 36723
+INFO 2026-01-13 19:21:53,862 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36548
+INFO 2026-01-13 19:22:37,364 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:22:38,160 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:23:55,007 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 34508
+INFO 2026-01-13 19:23:55,030 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,030 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,031 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,034 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,035 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,035 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,036 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,041 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,045 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,046 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,048 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,048 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,050 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:23:55,051 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,053 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,056 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,078 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,083 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,084 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,085 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,087 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:55,088 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,587 basehttp "GET /admin/scoreai/meetingminutes/add/ HTTP/1.1" 200 33888
+INFO 2026-01-13 19:23:58,609 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,610 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,611 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,612 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,616 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:23:58,620 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,621 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,622 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:23:58,676 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:24:04,267 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 34508
+INFO 2026-01-13 19:24:17,773 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:24:20,515 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36752
+INFO 2026-01-13 19:24:21,221 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 36927
+INFO 2026-01-13 19:24:21,797 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:24:22,584 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:24:26,364 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 62917
+INFO 2026-01-13 19:24:28,054 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 90965
+INFO 2026-01-13 19:24:31,983 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75426
+INFO 2026-01-13 19:24:33,182 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34158
+INFO 2026-01-13 19:24:35,813 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-13 19:24:35,816 budget_views budget_monthly_all count: 12
+INFO 2026-01-13 19:24:35,818 budget_views actual_monthly_all count: 6
+INFO 2026-01-13 19:24:35,825 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-13 19:24:35,825 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-13 19:24:35,841 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49837
+INFO 2026-01-13 19:24:36,512 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51816
+INFO 2026-01-13 19:24:38,805 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 34158
+INFO 2026-01-13 19:25:07,140 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-13 19:25:07,142 budget_views budget_monthly_all count: 12
+INFO 2026-01-13 19:25:07,142 budget_views actual_monthly_all count: 6
+INFO 2026-01-13 19:25:07,147 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-13 19:25:07,147 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-13 19:25:07,157 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49837
+INFO 2026-01-13 19:42:58,383 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:42:59,583 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:44:25,725 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75426
+INFO 2026-01-13 19:44:26,651 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51816
+INFO 2026-01-13 19:44:27,369 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-13 19:44:27,371 budget_views budget_monthly_all count: 12
+INFO 2026-01-13 19:44:27,372 budget_views actual_monthly_all count: 6
+INFO 2026-01-13 19:44:27,385 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-13 19:44:27,386 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-13 19:44:27,420 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 49837
+INFO 2026-01-13 19:44:28,226 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 35445
+INFO 2026-01-13 19:44:51,094 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 35445
+INFO 2026-01-13 19:44:56,112 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
+INFO 2026-01-13 19:44:57,159 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351

@@ -80,6 +80,7 @@ from .forms import (
     CsvUploadForm,
     ChatForm,
     MeetingMinutesForm,
+    MeetingMinutesImportForm,
     IndustryClassificationImportForm,
     IndustrySubClassificationImportForm,
 )
@@ -2781,6 +2782,173 @@ class MeetingMinutesDeleteView(SelectedCompanyMixin, DeleteView):
         context['title'] = 'ノート（議事録）'
         context['show_title_card'] = False
         return context
+
+
+class MeetingMinutesImportView(SelectedCompanyMixin, TransactionMixin, FormView):
+    """Google Documentsからエクスポートしたファイルをインポート（複数ファイル対応）"""
+    form_class = MeetingMinutesImportForm
+    template_name = 'scoreai/meeting_minutes_import.html'
+    success_url = reverse_lazy('meeting_minutes_list')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = '議事録インポート'
+        context['show_title_card'] = False
+        return context
+
+    def _extract_date_from_filename(self, filename):
+        """ファイル名から日付を抽出
+        
+        対応パターン:
+        - YYYY-MM-DD_*.docx
+        - YYYYMMDD_*.docx
+        - YYYY年MM月DD日_*.docx
+        - YYYY/MM/DD_*.docx
+        """
+        import re
+        from datetime import datetime
+        
+        # YYYY-MM-DD形式
+        match = re.search(r'(\d{4})-(\d{2})-(\d{2})', filename)
+        if match:
+            try:
+                return datetime.strptime(f"{match.group(1)}-{match.group(2)}-{match.group(3)}", "%Y-%m-%d").date()
+            except ValueError:
+                pass
+        
+        # YYYYMMDD形式
+        match = re.search(r'(\d{4})(\d{2})(\d{2})', filename)
+        if match:
+            try:
+                return datetime.strptime(f"{match.group(1)}-{match.group(2)}-{match.group(3)}", "%Y-%m-%d").date()
+            except ValueError:
+                pass
+        
+        # YYYY年MM月DD日形式
+        match = re.search(r'(\d{4})年(\d{1,2})月(\d{1,2})日', filename)
+        if match:
+            try:
+                year = int(match.group(1))
+                month = int(match.group(2))
+                day = int(match.group(3))
+                return datetime(year, month, day).date()
+            except ValueError:
+                pass
+        
+        # YYYY/MM/DD形式
+        match = re.search(r'(\d{4})/(\d{2})/(\d{2})', filename)
+        if match:
+            try:
+                return datetime.strptime(f"{match.group(1)}-{match.group(2)}-{match.group(3)}", "%Y-%m-%d").date()
+            except ValueError:
+                pass
+        
+        return None
+
+    def _extract_text_from_file(self, uploaded_file):
+        """ファイルからテキストを抽出"""
+        file_name = uploaded_file.name.lower()
+        
+        if file_name.endswith('.docx'):
+            # .docxファイルの場合
+            try:
+                from docx import Document
+                doc = Document(uploaded_file)
+                return '\n'.join([paragraph.text for paragraph in doc.paragraphs])
+            except ImportError:
+                raise ValueError('python-docxライブラリがインストールされていません。')
+        elif file_name.endswith(('.txt', '.md')):
+            # テキストファイルの場合
+            uploaded_file.seek(0)
+            # エンコーディングを自動検出（chardetが利用可能な場合）
+            try:
+                import chardet
+                raw_data = uploaded_file.read()
+                detected = chardet.detect(raw_data)
+                encoding = detected.get('encoding', 'utf-8')
+                return raw_data.decode(encoding, errors='ignore')
+            except ImportError:
+                # chardetがインストールされていない場合はUTF-8で試行
+                uploaded_file.seek(0)
+                try:
+                    return uploaded_file.read().decode('utf-8')
+                except UnicodeDecodeError:
+                    # UTF-8で失敗した場合はshift-jisで試行
+                    uploaded_file.seek(0)
+                    return uploaded_file.read().decode('shift-jis', errors='ignore')
+        elif file_name.endswith('.doc'):
+            raise ValueError('.doc形式はサポートされていません。Google Documentsから.docx形式でエクスポートしてください。')
+        else:
+            raise ValueError('サポートされていないファイル形式です。.docx、.txt、.md形式のファイルをアップロードしてください。')
+
+    def form_valid(self, form):
+        uploaded_files = self.request.FILES.getlist('files')
+        default_meeting_date = form.cleaned_data.get('default_meeting_date')
+        category = form.cleaned_data['category']
+        extract_date_from_filename = form.cleaned_data.get('extract_date_from_filename', True)
+        
+        if not uploaded_files:
+            messages.error(self.request, 'ファイルが選択されていません。')
+            return self.form_invalid(form)
+        
+        success_count = 0
+        error_count = 0
+        error_messages = []
+        
+        for uploaded_file in uploaded_files:
+            try:
+                # ファイル名から日付を抽出
+                meeting_date = None
+                if extract_date_from_filename:
+                    meeting_date = self._extract_date_from_filename(uploaded_file.name)
+                
+                # 日付が抽出できなかった場合はデフォルト日付を使用
+                if not meeting_date:
+                    if default_meeting_date:
+                        meeting_date = default_meeting_date
+                    else:
+                        error_messages.append(f'{uploaded_file.name}: 日付を抽出できませんでした。デフォルト日付を指定してください。')
+                        error_count += 1
+                        continue
+                
+                # テキストを抽出
+                text_content = self._extract_text_from_file(uploaded_file)
+                
+                if not text_content or not text_content.strip():
+                    error_messages.append(f'{uploaded_file.name}: ファイルが空か、テキストを抽出できませんでした。')
+                    error_count += 1
+                    continue
+                
+                # 議事録を作成
+                MeetingMinutes.objects.create(
+                    company=self.this_company,
+                    created_by=self.request.user,
+                    meeting_date=meeting_date,
+                    category=category,
+                    notes=text_content.strip()
+                )
+                success_count += 1
+                
+            except Exception as e:
+                logger.error(f"Meeting minutes import error for {uploaded_file.name}: {e}", exc_info=True)
+                error_messages.append(f'{uploaded_file.name}: {str(e)}')
+                error_count += 1
+        
+        # 結果メッセージを表示
+        if success_count > 0:
+            messages.success(
+                self.request,
+                f'{success_count}件の議事録をインポートしました。'
+            )
+        
+        if error_count > 0:
+            for error_msg in error_messages:
+                messages.error(self.request, error_msg)
+        
+        if success_count == 0:
+            return self.form_invalid(form)
+        
+        return redirect('meeting_minutes_list')
 
 
 ##########################################################################
