@@ -30,6 +30,12 @@ User = get_user_model()
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True, label='メールアドレス')
+    # reCAPTCHAフィールド（フロントエンドで検証、バックエンドで確認）
+    g_recaptcha_response = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput(),
+        label=''
+    )
     
     class Meta:
         model = User
@@ -40,6 +46,23 @@ class CustomUserCreationForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("このメールアドレスは既に使用されています。")
         return email
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        if username:
+            # 不審なパターンをチェック
+            suspicious_patterns = [
+                'test', 'admin', 'root', 'user', 'guest', 'demo',
+                'temp', 'tmp', 'spam', 'bot', 'fake'
+            ]
+            username_lower = username.lower()
+            for pattern in suspicious_patterns:
+                if pattern in username_lower and len(username) <= 8:
+                    # 短いユーザー名で不審なパターンが含まれている場合
+                    raise forms.ValidationError(
+                        "このユーザー名は使用できません。別のユーザー名を選択してください。"
+                    )
+        return username
 
     def save(self, commit=True):
         user = super().save(commit=False)

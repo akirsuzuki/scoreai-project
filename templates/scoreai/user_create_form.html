@@ -16,6 +16,40 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
 
+<!-- reCAPTCHA v3 -->
+{% if RECAPTCHA_SITE_KEY %}
+<script src="https://www.google.com/recaptcha/api.js?render={{ RECAPTCHA_SITE_KEY }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            grecaptcha.ready(function() {
+                grecaptcha.execute('{{ RECAPTCHA_SITE_KEY }}', {action: 'submit'}).then(function(token) {
+                    // トークンをhiddenフィールドに設定
+                    const tokenField = document.getElementById('id_g_recaptcha_response');
+                    if (tokenField) {
+                        tokenField.value = token;
+                    } else {
+                        // フィールドが存在しない場合は作成
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'g-recaptcha-response';
+                        hiddenInput.id = 'id_g_recaptcha_response';
+                        hiddenInput.value = token;
+                        form.appendChild(hiddenInput);
+                    }
+                    // フォームを送信
+                    form.submit();
+                });
+            });
+        });
+    }
+});
+</script>
+{% endif %}
+
 {% endblock %}
 
 {% block content %}

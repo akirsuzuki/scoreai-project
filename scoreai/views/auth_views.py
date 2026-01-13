@@ -9,11 +9,22 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 from django.views import generic
+from django.conf import settings
+import logging
 
 from ..mixins import SelectedCompanyMixin
 from ..models import UserCompany, CompanyInvitation, FirmInvitation
 from ..forms import CustomUserCreationForm, LoginForm, UserProfileUpdateForm
+from ..utils.security import (
+    get_client_ip,
+    check_rate_limit,
+    reset_rate_limit,
+    verify_recaptcha,
+    log_suspicious_activity
+)
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 
 class LoginView(LoginView):  # LoginViewは認証不要なのでSelectedCompanyMixinは不要
@@ -31,10 +42,40 @@ class UserCreateView(CreateView):
     """ユーザー作成ビュー
     
     新規ユーザーアカウントを作成します。
+    セキュリティ対策として、レート制限とreCAPTCHA検証を実装しています。
     """
     form_class = CustomUserCreationForm
     template_name = 'scoreai/user_create_form.html'
     success_url = reverse_lazy('index')
+
+    def dispatch(self, request, *args, **kwargs):
+        """リクエスト処理前のレート制限チェック"""
+        # GETリクエストの場合は通常通り処理
+        if request.method == 'GET':
+            return super().dispatch(request, *args, **kwargs)
+        
+        # POSTリクエストの場合のみレート制限チェック
+        is_allowed, error_message = check_rate_limit(
+            request,
+            key_prefix='user_registration',
+            max_attempts=3,  # 5分間に3回まで
+            time_window=300,  # 5分
+            block_duration=3600  # 1時間ブロック
+        )
+        
+        if not is_allowed:
+            log_suspicious_activity(
+                request,
+                'user_registration_rate_limit_exceeded',
+                {'ip': get_client_ip(request)}
+            )
+            messages.error(request, error_message)
+            # フォームを取得してエラーを表示
+            form = self.get_form()
+            form.add_error(None, error_message)
+            return self.form_invalid(form)
+        
+        return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
         """フォームバリデーション成功時の処理
@@ -45,12 +86,33 @@ class UserCreateView(CreateView):
         Returns:
             レスポンスオブジェクト
         """
+        # reCAPTCHA検証（設定されている場合）
+        recaptcha_secret = getattr(settings, 'RECAPTCHA_SECRET_KEY', None)
+        if recaptcha_secret:
+            recaptcha_token = self.request.POST.get('g-recaptcha-response')
+            is_valid, error_message = verify_recaptcha(recaptcha_token, recaptcha_secret)
+            
+            if not is_valid:
+                log_suspicious_activity(
+                    self.request,
+                    'user_registration_recaptcha_failed',
+                    {
+                        'ip': get_client_ip(self.request),
+                        'email': form.cleaned_data.get('email'),
+                        'username': form.cleaned_data.get('username')
+                    }
+                )
+                messages.error(self.request, error_message or 'reCAPTCHA検証に失敗しました。')
+                return self.form_invalid(form)
+        
         response = super().form_valid(form)
         user = form.save()
         
-        # ユーザー登録時に、招待メールのメールアドレスでCompanyInvitationを検索
-        # 見つかった場合は、is_accepted=Trueに更新してUserCompanyレコードを作成
+        # セキュリティ強化: 新規ユーザーはメール認証まで無効化
+        # 招待メールがある場合は有効化（既存の動作を維持）
         email = form.cleaned_data.get('email')
+        has_invitation = False
+        
         if email:
             # CompanyInvitationを検索（未承認のもの）
             company_invitations = CompanyInvitation.objects.filter(
@@ -58,11 +120,13 @@ class UserCreateView(CreateView):
                 is_accepted=False
             )
             
-            for invitation in company_invitations:
-                # is_acceptedをTrueに更新（save()メソッドでUserCompanyが作成される）
-                invitation.is_accepted = True
-                invitation.accepted_at = timezone.now()
-                invitation.save()
+            if company_invitations.exists():
+                has_invitation = True
+                for invitation in company_invitations:
+                    # is_acceptedをTrueに更新（save()メソッドでUserCompanyが作成される）
+                    invitation.is_accepted = True
+                    invitation.accepted_at = timezone.now()
+                    invitation.save()
             
             # FirmInvitationも同様に処理
             firm_invitations = FirmInvitation.objects.filter(
@@ -70,14 +134,40 @@ class UserCreateView(CreateView):
                 is_accepted=False
             )
             
-            for invitation in firm_invitations:
-                # is_acceptedをTrueに更新（save()メソッドでUserFirmが作成される）
-                invitation.is_accepted = True
-                invitation.accepted_at = timezone.now()
-                invitation.save()
+            if firm_invitations.exists():
+                has_invitation = True
+                for invitation in firm_invitations:
+                    # is_acceptedをTrueに更新（save()メソッドでUserFirmが作成される）
+                    invitation.is_accepted = True
+                    invitation.accepted_at = timezone.now()
+                    invitation.save()
         
-        login(self.request, user)
-        messages.success(self.request, 'アカウントが正常に作成されました。')
+        # 招待がない場合は、メール認証まで無効化
+        if not has_invitation:
+            user.is_active = False
+            user.save()
+            # TODO: メール認証機能を実装する場合はここでメール送信
+        
+        # レート制限をリセット（成功時）
+        reset_rate_limit(self.request, 'user_registration')
+        
+        # ログイン（is_active=Trueの場合のみ）
+        if user.is_active:
+            login(self.request, user)
+            messages.success(self.request, 'アカウントが正常に作成されました。')
+        else:
+            messages.success(
+                self.request,
+                'アカウントが作成されました。メール認証を完了してください。'
+            )
+        
+        # 登録ログを記録
+        logger.info(
+            f"User registration successful: username={user.username}, "
+            f"email={user.email}, ip={get_client_ip(self.request)}, "
+            f"has_invitation={has_invitation}, is_active={user.is_active}"
+        )
+        
         return response
 
     def form_invalid(self, form):

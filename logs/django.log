@@ -23330,3 +23330,65 @@ INFO 2026-01-13 19:44:28,226 basehttp "GET /fiscal_summary_month/create/ HTTP/1.
 INFO 2026-01-13 19:44:51,094 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 35445
 INFO 2026-01-13 19:44:56,112 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 35981
 INFO 2026-01-13 19:44:57,159 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:46:02,079 basehttp "POST /meeting_minutes/import/ HTTP/1.1" 302 0
+INFO 2026-01-13 19:46:02,328 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 11674822
+INFO 2026-01-13 19:46:10,159 basehttp "GET /meeting_minutes/01HYFKMZ3NYHVDET5KNM0VTKGV/16/ HTTP/1.1" 200 1297366
+INFO 2026-01-13 19:47:01,277 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 38645
+INFO 2026-01-13 19:47:01,293 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:47:03,434 basehttp "GET /admin/scoreai/meetingminutes/6/change/ HTTP/1.1" 200 34169
+INFO 2026-01-13 19:47:03,455 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:47:05,267 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 38645
+INFO 2026-01-13 19:47:08,474 basehttp "GET /admin/scoreai/meetingminutes/16/change/ HTTP/1.1" 200 1326284
+INFO 2026-01-13 19:47:08,495 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:54:25,079 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34351
+INFO 2026-01-13 19:54:35,191 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 38645
+INFO 2026-01-13 19:56:13,365 autoreload /app/scoreai/admin.py changed, reloading.
+INFO 2026-01-13 19:56:14,181 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 19:56:16,047 basehttp "GET /admin/scoreai/meetingminutes/ HTTP/1.1" 200 41062
+INFO 2026-01-13 19:56:16,075 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:56:18,042 basehttp "GET /admin/scoreai/meetingminutes/?o=4.-2 HTTP/1.1" 200 41778
+INFO 2026-01-13 19:56:18,063 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:56:19,341 basehttp "GET /admin/scoreai/meetingminutes/?o=-4.-2 HTTP/1.1" 200 41817
+INFO 2026-01-13 19:56:19,358 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:56:29,067 basehttp "POST /admin/scoreai/meetingminutes/?o=-4.-2 HTTP/1.1" 200 28867
+INFO 2026-01-13 19:56:29,085 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 304 0
+INFO 2026-01-13 19:56:30,966 basehttp "POST /admin/scoreai/meetingminutes/?o=-4.-2 HTTP/1.1" 302 0
+INFO 2026-01-13 19:56:30,984 basehttp "GET /admin/scoreai/meetingminutes/?o=-4.-2 HTTP/1.1" 200 37008
+INFO 2026-01-13 19:56:31,018 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 19:56:31,031 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-13 19:56:34,761 autoreload /app/scoreai/admin.py changed, reloading.
+INFO 2026-01-13 19:56:35,186 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:30:05,802 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:30:09,473 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35576
+INFO 2026-01-13 20:30:09,490 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-13 20:30:09,496 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 20:30:16,011 basehttp "GET /admin/scoreai/company/ HTTP/1.1" 200 34050
+INFO 2026-01-13 20:30:16,040 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 20:30:23,998 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 37047
+INFO 2026-01-13 20:30:24,022 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-13 20:33:49,332 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-13 20:33:49,979 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:34:15,917 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-13 20:34:16,563 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:34:34,116 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-13 20:34:34,875 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:35:11,951 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-13 20:35:12,555 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:35:32,181 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-13 20:35:32,673 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:35:52,277 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-13 20:35:52,967 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:36:10,759 autoreload /app/scoreai/utils/security.py changed, reloading.
+INFO 2026-01-13 20:36:11,263 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:36:18,596 autoreload /app/scoreai/utils/security.py changed, reloading.
+INFO 2026-01-13 20:36:19,143 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:36:26,799 autoreload /app/scoreai/utils/security.py changed, reloading.
+INFO 2026-01-13 20:36:27,185 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 20:36:42,814 autoreload /app/score/settings.py changed, reloading.
+INFO 2026-01-13 20:36:43,299 autoreload Watching for file changes with StatReloader
+INFO 2026-01-13 21:00:11,743 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 34377
+INFO 2026-01-13 21:00:15,225 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-13 21:00:15,228 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-13 21:00:15,233 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-13 21:00:21,394 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-13 21:00:21,427 basehttp "GET / HTTP/1.1" 200 59902

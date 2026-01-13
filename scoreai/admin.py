@@ -284,11 +284,11 @@ admin.site.register(SecuredType)
 
 @admin.register(MeetingMinutes)
 class MeetingMinutesAdmin(admin.ModelAdmin):
-    list_display = ('company', 'meeting_date', 'created_by')
+    list_display = ('company', 'meeting_date', 'created_by', 'created_at')
     list_display_links = ('meeting_date',)
     search_fields = ('company__name', 'created_by__username')
-    list_filter = ('company', 'meeting_date')
-    ordering = ('meeting_date',)
+    list_filter = ('company', 'meeting_date', 'created_at')
+    ordering = ('-meeting_date', '-created_at')
 
 @admin.register(Stakeholder_name)
 class Stakeholder_nameAdmin(admin.ModelAdmin):
