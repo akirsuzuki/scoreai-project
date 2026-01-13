@@ -7,8 +7,14 @@
 <div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title fw-semibold">現在アクティブな借入</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title fw-semibold mb-0">現在アクティブな借入</h5>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="toggleSubtotals" checked>
+          <label class="form-check-label" for="toggleSubtotals">
+            <small>サブトータル表示</small>
+          </label>
+        </div>
       </div>
       <div class="card-body">
         <div style="overflow-x: auto;">
@@ -139,11 +145,19 @@
       autoWidth: false,
       pageLength: 25,
       pagingType: 'full_numbers',
+      order: [[0, 'asc']], // 金融機関でソート
+      rowGroup: {
+        dataSrc: 0, // 金融機関列（0列目）でグループ化
+        startClassName: 'group-start',
+        endClassName: 'group-end',
+        emptyDataGroup: null,
+        enable: true
+      },
       fixedColumns: {
         left: 1  // 左側に1列（金融機関）を固定
       },
       columnDefs: [
-        { targets: 0, width: '120px' },  // 金融機関
+        { targets: 0, width: '120px', visible: true },  // 金融機関
         { targets: 1, width: '90px' },   // 区分
         { targets: 2, width: '100px' },  // ステータス
         { targets: 3, width: '100px' },  // 元本(千円)
@@ -161,6 +175,69 @@
         { targets: 15, width: '90px' },   // 代表者保証
         { targets: 16, width: '70px' },  // 担保
       ],
+      drawCallback: function (settings) {
+        // サブトータル表示が有効な場合のみ処理
+        if (!$('#toggleSubtotals').is(':checked')) {
+          $('.subtotal-row').remove();
+          return;
+        }
+        
+        // 既存のサブトータル行を削除
+        $('.subtotal-row').remove();
+        
+        // 全体の残高合計を取得（残高シェア計算用）
+        let api = this.api();
+        let totalBalance = 0;
+        api.rows({ page: 'all' }).every(function () {
+          if (!$(this.node()).hasClass('subtotal-row')) {
+            let data = this.data();
+            totalBalance += parseFloat(String(data[12] || '0').replace(/[,]/g, '')) || 0;
+          }
+          return true;
+        });
+        
+        // 金融機関ごとのサブトータルを計算して表示
+        let rows = api.rows({ page: 'current' }).nodes();
+        let lastBank = null;
+        let groupData = [];
+        let groupStartIndex = 0;
+        let rowIndex = 0;
+        
+        api.rows({ page: 'current' }).every(function (rowIdx) {
+          let data = this.data();
+          let bank = data[0]; // 金融機関名
+          
+          // サブトータル行はスキップ
+          if ($(this.node()).hasClass('subtotal-row')) {
+            return true;
+          }
+          
+          if (lastBank !== null && bank !== lastBank) {
+            // 前のグループのサブトータルを追加
+            addSubtotalRow(api, rows, groupStartIndex, rowIndex - 1, lastBank, groupData, totalBalance);
+            groupData = [];
+            groupStartIndex = rowIndex;
+          }
+          
+          // データをグループに追加
+          groupData.push({
+            principal: parseFloat(String(data[3] || '0').replace(/[,]/g, '')) || 0,
+            monthlyRepayment: parseFloat(String(data[8] || '0').replace(/[,]/g, '')) || 0,
+            balance: parseFloat(String(data[12] || '0').replace(/[,]/g, '')) || 0,
+            interest: parseFloat(String(data[13] || '0').replace(/[,]/g, '')) || 0,
+            balanceFy1: parseFloat(String(data[14] || '0').replace(/[,]/g, '')) || 0
+          });
+          
+          lastBank = bank;
+          rowIndex++;
+          return true;
+        });
+        
+        // 最後のグループのサブトータルを追加
+        if (lastBank !== null && groupData.length > 0) {
+          addSubtotalRow(api, rows, groupStartIndex, rowIndex - 1, lastBank, groupData, totalBalance);
+        }
+      },
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
         let intVal = function (i) {
@@ -202,12 +279,49 @@
         $(api.column(14).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
       }
     });
+    
+    // サブトータル行を追加する関数
+    function addSubtotalRow(api, rows, startIdx, endIdx, bankName, groupData, totalBalance) {
+      // サブトータルを計算
+      let subtotal = {
+        principal: groupData.reduce((sum, d) => sum + d.principal, 0),
+        monthlyRepayment: groupData.reduce((sum, d) => sum + d.monthlyRepayment, 0),
+        balance: groupData.reduce((sum, d) => sum + d.balance, 0),
+        interest: groupData.reduce((sum, d) => sum + d.interest, 0),
+        balanceFy1: groupData.reduce((sum, d) => sum + d.balanceFy1, 0)
+      };
+      
+      // 残高シェアを計算（パーセンテージ）
+      let balanceShare = totalBalance > 0 ? (subtotal.balance / totalBalance * 100) : 0;
+      
+      // サブトータル行を作成（クリック不可）
+      let subtotalRow = $('<tr class="subtotal-row" style="background-color: #f8f9fa; font-weight: bold; cursor: default;">')
+        .append($('<td colspan="3" style="text-align: right;">').html('<strong>' + bankName + ' 小計</strong>'))
+        .append($('<td style="text-align: right;">').html(subtotal.principal.toLocaleString('ja-JP')))
+        .append($('<td colspan="4">'))
+        .append($('<td style="text-align: right;">').html(subtotal.monthlyRepayment.toLocaleString('ja-JP')))
+        .append($('<td style="text-align: right;">').html(balanceShare.toFixed(2) + '%'))
+        .append($('<td colspan="2">'))
+        .append($('<td style="text-align: right;">').html(subtotal.balance.toLocaleString('ja-JP')))
+        .append($('<td style="text-align: right;">').html(subtotal.interest.toLocaleString('ja-JP')))
+        .append($('<td style="text-align: right;">').html(subtotal.balanceFy1.toLocaleString('ja-JP')))
+        .append($('<td colspan="2">'));
+      
+      // グループの最後の行の後に挿入
+      if (endIdx >= 0 && endIdx < rows.length) {
+        $(rows[endIdx]).after(subtotalRow);
+      } else if (rows.length > 0) {
+        // 最後の行の後に追加
+        $(rows[rows.length - 1]).after(subtotalRow);
+      }
+    }
 
-    // 行クリックで詳細ページに遷移
+    // 行クリックで詳細ページに遷移（サブトータル行は除外）
     table.on('draw', function () {
-      const rows = document.querySelectorAll('#active_debt_list tbody tr');
+      const rows = document.querySelectorAll('#active_debt_list tbody tr:not(.subtotal-row)');
       rows.forEach(row => {
-        row.addEventListener('click', function () {
+        // 既存のイベントリスナーを削除してから追加
+        $(row).off('click').on('click', function () {
           const href = this.getAttribute('data-href');
           if (href) {
             window.location.href = href;
@@ -215,5 +329,30 @@
         });
       });
     });
+    
+    // サブトータル表示/非表示のトグル
+    $('#toggleSubtotals').on('change', function() {
+      table.draw(false);
+    });
   });
 </script>
+
+<style>
+  .subtotal-row {
+    background-color: #f8f9fa !important;
+    font-weight: bold;
+  }
+  .subtotal-row:hover {
+    background-color: #e9ecef !important;
+  }
+  .subtotal-row td {
+    border-top: 2px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+  }
+  .group-start {
+    border-top: 2px solid #dee2e6;
+  }
+  .group-end {
+    border-bottom: 2px solid #dee2e6;
+  }
+</style>
