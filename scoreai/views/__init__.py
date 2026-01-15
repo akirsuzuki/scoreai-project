@@ -13,6 +13,12 @@ from .auth_views import (
     UserCreateView,
     UserProfileView,
     UserProfileUpdateView,
+    CustomPasswordChangeView,
+    CustomPasswordChangeDoneView,
+    CustomPasswordResetView,
+    CustomPasswordResetDoneView,
+    CustomPasswordResetConfirmView,
+    CustomPasswordResetCompleteView,
 )
 
 # Company views
@@ -194,6 +200,12 @@ __all__ = [
     'UserCreateView',
     'UserProfileView',
     'UserProfileUpdateView',
+    'CustomPasswordChangeView',
+    'CustomPasswordChangeDoneView',
+    'CustomPasswordResetView',
+    'CustomPasswordResetDoneView',
+    'CustomPasswordResetConfirmView',
+    'CustomPasswordResetCompleteView',
     # Company
     'CompanyDetailView',
     'CompanyUpdateView',

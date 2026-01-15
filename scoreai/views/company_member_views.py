@@ -86,7 +86,7 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
     form_class = CompanyMemberInviteForm
     
     def dispatch(self, request, *args, **kwargs):
-        """Companyのオーナーであることを確認"""
+        """CompanyのオーナーまたはFirmのUser（コンサルタント）であることを確認"""
         if not request.user.is_authenticated:
             return self.handle_no_permission()
         
@@ -101,11 +101,35 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
             active=True
         ).first()
         
+        # オーナーでない場合、FirmのUser（コンサルタント）としてアサインされているか確認
         if not user_company:
-            messages.error(request, 'このCompanyのオーナー権限がありません。')
-            return redirect('index')
+            # 選択中のCompanyを確認
+            selected_user_company = UserCompany.objects.filter(
+                user=request.user,
+                is_selected=True,
+                active=True
+            ).select_related('company').first()
+            
+            if selected_user_company and selected_user_company.company.id == company.id:
+                # コンサルタントとしてアサインされているか確認
+                consultant_user_company = UserCompany.objects.filter(
+                    user=request.user,
+                    company=company,
+                    as_consultant=True,
+                    active=True
+                ).first()
+                
+                if consultant_user_company:
+                    user_company = consultant_user_company
+                else:
+                    messages.error(request, 'このCompanyのオーナー権限、またはコンサルタントとしてのアサインがありません。')
+                    return redirect('index')
+            else:
+                messages.error(request, 'このCompanyのオーナー権限、またはコンサルタントとしてのアサインがありません。')
+                return redirect('index')
         
         self.company = company
+        self.user_company = user_company
         return super().dispatch(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
@@ -114,6 +138,8 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
         context['title'] = '会社メンバー管理'
         context['show_title_card'] = False
         context['company'] = self.company
+        context['user_company'] = self.user_company
+        context['is_owner'] = self.user_company.is_owner if hasattr(self, 'user_company') else False
         return context
     
     def form_valid(self, form):
@@ -121,6 +147,11 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
         email = form.cleaned_data['email']
         is_owner = form.cleaned_data.get('is_owner', False)
         is_manager = form.cleaned_data.get('is_manager', False)
+        
+        # コンサルタントの場合は、オーナー権限を付与できない
+        if not self.user_company.is_owner and is_owner:
+            messages.error(self.request, 'コンサルタントはオーナー権限を付与できません。')
+            return self.form_invalid(form)
         
         # 既存のユーザーを確認
         try:
@@ -137,6 +168,9 @@ class CompanyMemberInviteView(LoginRequiredMixin, ErrorHandlingMixin, FormView):
                     messages.warning(self.request, f'{email} は既にこのCompanyのメンバーです。')
                 else:
                     # 非アクティブなメンバーの場合は再アクティブ化
+                    # コンサルタントの場合は、オーナー権限を変更できない
+                    if not self.user_company.is_owner:
+                        is_owner = existing_member.is_owner
                     existing_member.active = True
                     existing_member.is_owner = is_owner
                     existing_member.is_manager = is_manager

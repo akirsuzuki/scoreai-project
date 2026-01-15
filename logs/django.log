@@ -23397,3 +23397,470 @@ INFO 2026-01-14 06:30:19,875 basehttp "GET /static/scoreai/js/loading.js HTTP/1.
 INFO 2026-01-14 06:30:44,475 basehttp "GET /debt/01KEKY5TQBZK6E67BNW1BZJTCA/ HTTP/1.1" 200 51315
 INFO 2026-01-14 06:31:02,467 basehttp "GET /debts_byBank/ HTTP/1.1" 200 50379
 INFO 2026-01-14 06:33:15,787 basehttp "GET /debts_all/ HTTP/1.1" 200 85531
+INFO 2026-01-15 07:04:38,911 basehttp "GET /debts_all/ HTTP/1.1" 200 85531
+INFO 2026-01-15 07:04:38,991 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-15 07:04:38,994 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-15 07:04:45,187 basehttp "GET /debts_all/ HTTP/1.1" 200 85519
+INFO 2026-01-15 07:05:00,956 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 75426
+INFO 2026-01-15 07:05:02,971 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 50585
+INFO 2026-01-15 07:05:04,767 basehttp "GET /budget/analysis/ HTTP/1.1" 200 32005
+INFO 2026-01-15 07:05:06,423 basehttp "GET /budget/suggest-month/ HTTP/1.1" 200 34833
+INFO 2026-01-15 07:05:07,145 basehttp "GET /budget/suggest/ HTTP/1.1" 200 35743
+INFO 2026-01-15 07:05:09,108 basehttp "GET /debts_bySecuredType/ HTTP/1.1" 200 52752
+INFO 2026-01-15 07:05:12,492 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 31489
+INFO 2026-01-15 07:05:14,668 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-15 07:05:16,630 basehttp "GET /stock_event/create/ HTTP/1.1" 200 31821
+INFO 2026-01-15 07:05:29,490 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 31489
+INFO 2026-01-15 07:06:04,776 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-15 07:06:08,092 basehttp "GET /stock_event/create/ HTTP/1.1" 200 31821
+INFO 2026-01-15 07:06:19,053 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 30921
+INFO 2026-01-15 07:06:27,507 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-15 07:06:28,872 basehttp "GET /stock_event/create/ HTTP/1.1" 200 31821
+INFO 2026-01-15 07:06:33,219 basehttp "GET /stockevent/4/ HTTP/1.1" 200 31206
+INFO 2026-01-15 07:06:38,235 basehttp "GET /stockevent/4/ HTTP/1.1" 200 31206
+INFO 2026-01-15 07:06:43,137 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-15 07:06:46,962 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 31489
+INFO 2026-01-15 07:07:19,986 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 30921
+INFO 2026-01-15 07:08:02,438 basehttp "GET /stakeholder_name/01J9E6TQQ3EYBXE0YYY6B26SB5/update/ HTTP/1.1" 200 30947
+INFO 2026-01-15 07:08:07,025 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31330
+INFO 2026-01-15 07:08:08,137 basehttp "GET /stock_event/create/ HTTP/1.1" 200 31821
+INFO 2026-01-15 07:10:49,426 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-15 07:10:50,277 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 07:11:05,856 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-15 07:11:06,278 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 07:11:42,428 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-15 07:11:43,063 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 08:44:29,601 basehttp "GET /stock_event/create/ HTTP/1.1" 200 33199
+INFO 2026-01-15 08:44:32,507 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 32414
+INFO 2026-01-15 08:44:33,816 basehttp "GET /stock_event_list/ HTTP/1.1" 200 31743
+INFO 2026-01-15 08:44:34,702 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 31902
+INFO 2026-01-15 08:44:41,277 basehttp "GET /meeting_minutes/ai/generate/ HTTP/1.1" 200 36927
+INFO 2026-01-15 08:44:42,732 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 36752
+INFO 2026-01-15 08:44:50,946 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 46132
+INFO 2026-01-15 08:44:57,351 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33529
+INFO 2026-01-15 08:44:59,804 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33176
+INFO 2026-01-15 08:45:01,070 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 36895
+INFO 2026-01-15 08:45:02,159 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33176
+INFO 2026-01-15 08:45:03,735 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 36182
+INFO 2026-01-15 08:45:03,752 basehttp "GET /static/scoreai/img/MFimport_year.png HTTP/1.1" 200 91423
+INFO 2026-01-15 08:45:14,905 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33529
+INFO 2026-01-15 08:46:40,102 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-15 08:46:43,852 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 36355
+INFO 2026-01-15 08:46:54,185 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:46:57,297 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 29517
+INFO 2026-01-15 08:47:06,005 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:47:09,759 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 29517
+INFO 2026-01-15 08:47:12,236 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 33501
+INFO 2026-01-15 08:48:05,106 basehttp "GET /debts_all/ HTTP/1.1" 200 85519
+INFO 2026-01-15 08:48:49,788 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:48:52,316 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 29517
+INFO 2026-01-15 08:48:53,958 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45732
+INFO 2026-01-15 08:49:06,272 basehttp "GET /assigned-clients/ HTTP/1.1" 200 32411
+INFO 2026-01-15 08:49:11,818 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45732
+INFO 2026-01-15 08:49:38,371 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 29516
+INFO 2026-01-15 08:49:41,366 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 37455
+INFO 2026-01-15 08:49:43,729 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 30616
+INFO 2026-01-15 08:50:47,581 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45732
+INFO 2026-01-15 08:51:33,112 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45732
+INFO 2026-01-15 08:51:39,649 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33529
+INFO 2026-01-15 08:51:41,876 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 37048
+INFO 2026-01-15 08:51:41,904 basehttp "GET /static/scoreai/img/MFimport_month2.png HTTP/1.1" 200 41752
+INFO 2026-01-15 08:51:41,906 basehttp "GET /static/scoreai/img/MFimport_month.png HTTP/1.1" 200 130385
+INFO 2026-01-15 08:51:44,809 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 36895
+INFO 2026-01-15 08:51:45,610 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33176
+INFO 2026-01-15 08:51:46,673 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 38117
+INFO 2026-01-15 08:51:54,829 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33529
+INFO 2026-01-15 08:51:55,952 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 37048
+INFO 2026-01-15 08:52:00,045 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33176
+INFO 2026-01-15 08:52:01,210 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 38117
+INFO 2026-01-15 08:52:02,969 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 36895
+INFO 2026-01-15 08:52:03,719 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 33529
+INFO 2026-01-15 08:52:04,875 basehttp "GET /import_fiscal_summary_month_MF/ HTTP/1.1" 200 37048
+INFO 2026-01-15 08:52:30,525 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 33176
+INFO 2026-01-15 08:52:32,130 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 200 38117
+INFO 2026-01-15 08:53:06,404 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 08:53:11,835 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35593
+INFO 2026-01-15 08:53:14,368 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 29516
+INFO 2026-01-15 08:53:18,027 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 29516
+INFO 2026-01-15 08:53:20,010 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 45520
+INFO 2026-01-15 08:53:22,888 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 29517
+INFO 2026-01-15 08:53:24,862 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 30616
+INFO 2026-01-15 08:53:31,721 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/ HTTP/1.1" 200 31135
+INFO 2026-01-15 08:53:37,432 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 08:53:45,070 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:54:00,354 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:54:04,024 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 29517
+INFO 2026-01-15 08:54:20,527 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 08:54:21,946 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 34228
+INFO 2026-01-15 08:54:25,822 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 200 35332
+INFO 2026-01-15 08:54:28,123 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWHHCZ3D0Z8J4SZDC1PX/ HTTP/1.1" 200 36734
+INFO 2026-01-15 08:54:31,787 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 34228
+INFO 2026-01-15 08:54:33,497 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 200 35332
+INFO 2026-01-15 08:54:58,695 basehttp "GET /assigned-clients/ HTTP/1.1" 200 32171
+INFO 2026-01-15 08:55:11,822 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-15 08:56:41,603 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 08:56:44,800 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35593
+INFO 2026-01-15 08:56:53,253 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 08:56:58,167 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/company/01HYFKMZ3NYHVDET5KNM0VTKGV/limit/ HTTP/1.1" 200 32136
+INFO 2026-01-15 08:57:06,777 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:57:22,212 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30666
+INFO 2026-01-15 08:57:30,163 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30666
+INFO 2026-01-15 08:57:35,729 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:58:12,806 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 08:58:20,117 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30666
+INFO 2026-01-15 08:58:34,865 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:58:53,164 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 08:59:15,562 basehttp "GET /user_profile/ HTTP/1.1" 200 43177
+INFO 2026-01-15 08:59:49,575 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 39364
+INFO 2026-01-15 08:59:56,286 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/invite/ HTTP/1.1" 200 30448
+INFO 2026-01-15 09:00:10,890 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31834
+INFO 2026-01-15 09:00:20,838 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 09:00:31,557 basehttp "GET /assigned-clients/ HTTP/1.1" 200 32171
+INFO 2026-01-15 09:01:42,753 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 40907
+INFO 2026-01-15 09:01:45,535 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 09:01:49,650 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 09:01:52,296 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 40977
+INFO 2026-01-15 09:01:57,629 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 09:02:05,697 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 40977
+INFO 2026-01-15 09:02:08,219 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 09:02:10,808 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 09:02:22,250 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45509
+INFO 2026-01-15 09:03:08,935 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 09:03:12,413 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30741
+INFO 2026-01-15 09:03:14,358 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 47117
+INFO 2026-01-15 09:03:16,201 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31834
+INFO 2026-01-15 09:03:18,165 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/notifications/ HTTP/1.1" 200 31135
+INFO 2026-01-15 09:03:19,856 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30741
+INFO 2026-01-15 09:03:23,967 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35593
+INFO 2026-01-15 09:04:04,406 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30666
+INFO 2026-01-15 09:04:05,547 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31834
+INFO 2026-01-15 09:04:06,666 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 09:04:08,416 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35593
+INFO 2026-01-15 09:04:10,247 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39527
+INFO 2026-01-15 09:04:19,565 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 34228
+INFO 2026-01-15 09:04:21,116 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:04:21,132 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35576
+INFO 2026-01-15 09:04:27,398 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30266
+INFO 2026-01-15 09:04:29,232 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:04:32,468 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:04:34,299 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 200 34857
+INFO 2026-01-15 09:04:36,604 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:05:16,833 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/ HTTP/1.1" 200 28547
+INFO 2026-01-15 09:05:18,808 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:05:23,207 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191
+INFO 2026-01-15 09:05:24,378 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30266
+INFO 2026-01-15 09:05:25,260 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:05:27,429 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:05:30,405 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:05:45,966 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31359
+INFO 2026-01-15 09:05:49,938 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31359
+INFO 2026-01-15 09:05:54,884 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:06:01,663 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 41706
+INFO 2026-01-15 09:06:09,455 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 46642
+INFO 2026-01-15 09:06:17,183 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 41706
+INFO 2026-01-15 09:06:34,310 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35576
+INFO 2026-01-15 09:06:34,330 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,331 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,333 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,333 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,335 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,335 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,337 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,337 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,338 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,341 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,343 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,343 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,345 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,346 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,347 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,348 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:06:34,349 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,374 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,375 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,377 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,381 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,382 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:06:34,382 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:07:32,925 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 41706
+INFO 2026-01-15 09:07:36,768 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:08:07,592 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:08:13,796 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:08:18,859 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:08:26,294 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 41220
+INFO 2026-01-15 09:08:36,525 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191
+INFO 2026-01-15 09:08:43,559 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/members/ HTTP/1.1" 200 41220
+INFO 2026-01-15 09:08:56,519 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:09:04,572 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191
+INFO 2026-01-15 09:09:33,649 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191
+INFO 2026-01-15 09:09:40,316 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 46642
+INFO 2026-01-15 09:09:42,128 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:09:43,791 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30266
+INFO 2026-01-15 09:09:44,840 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 46642
+INFO 2026-01-15 09:09:45,811 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191
+INFO 2026-01-15 09:09:48,127 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/settings/ HTTP/1.1" 200 31359
+INFO 2026-01-15 09:09:49,316 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:09:52,038 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:09:53,353 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 39065
+INFO 2026-01-15 09:09:56,161 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 35086
+INFO 2026-01-15 09:10:00,469 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/subscription/history/ HTTP/1.1" 200 30266
+INFO 2026-01-15 09:10:07,489 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:10:07,494 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:10:07,502 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:10:30,792 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:10:30,823 basehttp "GET / HTTP/1.1" 200 53946
+INFO 2026-01-15 09:10:49,482 basehttp "GET /admin/scoreai/user/1/change/ HTTP/1.1" 200 56280
+INFO 2026-01-15 09:10:49,515 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,516 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,516 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,517 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,521 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:10:49,556 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,557 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,669 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:49,670 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:10:51,227 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35569
+INFO 2026-01-15 09:11:06,918 basehttp "GET /user_profile/ HTTP/1.1" 200 34440
+INFO 2026-01-15 09:11:43,095 basehttp "GET /admin/scoreai/user/7/change/ HTTP/1.1" 200 56266
+INFO 2026-01-15 09:11:43,117 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:11:52,430 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:11:52,434 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:11:52,439 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:11:58,717 basehttp "POST /login/?next=/ HTTP/1.1" 200 3399
+INFO 2026-01-15 09:12:02,569 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:12:02,578 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:06,322 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:12:06,332 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:07,147 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:12:07,152 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:10,566 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:11,360 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:13,121 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:12:18,909 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:12:18,940 basehttp "GET /admin/login/?next=/admin/scoreai/user/ HTTP/1.1" 200 4312
+INFO 2026-01-15 09:12:18,962 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2026-01-15 09:12:34,871 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:12:34,897 basehttp "GET / HTTP/1.1" 200 53946
+INFO 2026-01-15 09:12:46,605 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 25946
+INFO 2026-01-15 09:12:50,384 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 29546
+INFO 2026-01-15 09:12:53,553 basehttp "GET /debts_archived/ HTTP/1.1" 200 28835
+INFO 2026-01-15 09:12:57,552 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 40176
+INFO 2026-01-15 09:13:01,471 basehttp "GET /admin/ai-scripts/ HTTP/1.1" 200 34634
+INFO 2026-01-15 09:13:24,453 basehttp "GET /admin/ HTTP/1.1" 200 37828
+INFO 2026-01-15 09:13:24,481 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-15 09:13:24,532 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:13:27,736 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35569
+INFO 2026-01-15 09:13:27,763 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:13:39,068 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:13:39,070 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:13:39,074 basehttp "GET /login/?next=/ HTTP/1.1" 200 3037
+INFO 2026-01-15 09:13:46,322 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:13:46,328 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:13:46,332 log Internal Server Error: /
+ERROR 2026-01-15 09:13:46,332 basehttp "GET / HTTP/1.1" 500 21705
+INFO 2026-01-15 09:13:49,085 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 25690
+INFO 2026-01-15 09:13:50,726 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 25337
+INFO 2026-01-15 09:13:55,313 basehttp "GET /user_profile/ HTTP/1.1" 200 23961
+WARNING 2026-01-15 09:14:03,178 mixins ValueError in DebtsAllListView.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:14:03,180 basehttp "GET /debts_all/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:14:03,192 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:14:03,198 log Internal Server Error: /
+ERROR 2026-01-15 09:14:03,198 basehttp "GET / HTTP/1.1" 500 22111
+INFO 2026-01-15 09:14:14,487 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 25337
+INFO 2026-01-15 09:16:04,350 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-15 09:16:05,142 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:16:16,522 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-15 09:16:16,798 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:16:28,799 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-15 09:16:29,067 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:19:54,209 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-15 09:19:54,456 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:20:26,176 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-15 09:20:26,401 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:29:31,395 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:30:14,007 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:30:52,099 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:35:07,713 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:36:56,909 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:37:00,492 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 25337
+INFO 2026-01-15 09:37:04,276 basehttp "GET /user_profile/ HTTP/1.1" 200 24211
+INFO 2026-01-15 09:37:12,165 basehttp "GET /user_profile/ HTTP/1.1" 200 24211
+INFO 2026-01-15 09:37:15,712 basehttp "GET /password_change/ HTTP/1.1" 200 22488
+INFO 2026-01-15 09:37:29,842 basehttp "POST /password_change/ HTTP/1.1" 200 22812
+INFO 2026-01-15 09:37:32,696 basehttp "GET /user_profile/ HTTP/1.1" 200 24211
+INFO 2026-01-15 09:37:38,026 basehttp "GET /password_change/ HTTP/1.1" 200 22488
+INFO 2026-01-15 09:37:49,594 basehttp "POST /password_change/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:37:49,601 basehttp "GET /password_change/done/ HTTP/1.1" 200 21167
+INFO 2026-01-15 09:37:51,214 basehttp "GET /user_profile/ HTTP/1.1" 200 24211
+INFO 2026-01-15 09:37:55,329 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:37:55,331 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:37:55,335 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-15 09:37:59,802 basehttp "GET /user_create/ HTTP/1.1" 200 20496
+INFO 2026-01-15 09:38:00,480 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-15 09:38:01,500 basehttp "GET /password_reset/ HTTP/1.1" 200 18885
+INFO 2026-01-15 09:38:15,207 basehttp "POST /password_reset/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:38:15,211 basehttp "GET /password_reset/done/ HTTP/1.1" 200 19020
+INFO 2026-01-15 09:39:17,952 basehttp "GET /password_reset/confirm/Nw/d2fxfq-4c18439ef9b1fbdee47a26f49677db2a/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:39:17,962 basehttp "GET /password_reset/confirm/Nw/set-password/ HTTP/1.1" 200 18982
+INFO 2026-01-15 09:39:29,940 basehttp "POST /password_reset/confirm/Nw/set-password/ HTTP/1.1" 200 19306
+INFO 2026-01-15 09:39:40,662 basehttp "POST /password_reset/confirm/Nw/set-password/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:39:40,668 basehttp "GET /password_reset/complete/ HTTP/1.1" 200 17985
+INFO 2026-01-15 09:39:42,003 basehttp "GET /login/ HTTP/1.1" 200 3052
+INFO 2026-01-15 09:39:50,066 basehttp "POST /login/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:39:50,072 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:39:50,076 log Internal Server Error: /
+ERROR 2026-01-15 09:39:50,076 basehttp "GET / HTTP/1.1" 500 21030
+INFO 2026-01-15 09:39:57,299 basehttp "GET /user_profile/ HTTP/1.1" 200 23543
+WARNING 2026-01-15 09:40:01,402 mixins ValueError in FiscalSummary_MonthListView.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:40:01,405 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 302 0
+ERROR 2026-01-15 09:40:01,415 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:01,421 log Internal Server Error: /
+ERROR 2026-01-15 09:40:01,421 basehttp "GET / HTTP/1.1" 500 21436
+INFO 2026-01-15 09:40:04,275 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 25015
+ERROR 2026-01-15 09:40:05,382 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:05,388 log Internal Server Error: /
+ERROR 2026-01-15 09:40:05,389 basehttp "GET / HTTP/1.1" 500 21030
+INFO 2026-01-15 09:40:06,588 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 24662
+WARNING 2026-01-15 09:40:14,711 mixins ValueError in LatestFiscalSummaryYearDetailView.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:40:14,713 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:40:14,724 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:14,729 log Internal Server Error: /
+ERROR 2026-01-15 09:40:14,729 basehttp "GET / HTTP/1.1" 500 21436
+WARNING 2026-01-15 09:40:18,296 mixins ValueError in FiscalSummary_YearListView.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:40:18,298 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 302 0
+ERROR 2026-01-15 09:40:18,307 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:18,310 log Internal Server Error: /
+ERROR 2026-01-15 09:40:18,310 basehttp "GET / HTTP/1.1" 500 21436
+INFO 2026-01-15 09:40:20,516 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 24662
+INFO 2026-01-15 09:40:27,315 basehttp "GET /download_fiscal_summary_year_csv/sample/ HTTP/1.1" 200 1144
+WARNING 2026-01-15 09:40:30,859 mixins ValueError in ImportFiscalSummary_Year_FromMoneyforward.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:40:30,860 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:40:30,869 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:30,876 log Internal Server Error: /
+ERROR 2026-01-15 09:40:30,877 basehttp "GET / HTTP/1.1" 500 21436
+INFO 2026-01-15 09:40:33,341 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 24662
+WARNING 2026-01-15 09:40:34,816 mixins ValueError in ImportFiscalSummary_Year_FromMoneyforward.dispatch: 選択された会社がありません。
+INFO 2026-01-15 09:40:34,817 basehttp "GET /import_fiscal_summary_year_MF/ HTTP/1.1" 302 0
+ERROR 2026-01-15 09:40:34,822 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 42, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    company=self.this_company,
+            ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-15 09:40:34,826 log Internal Server Error: /
+ERROR 2026-01-15 09:40:34,826 basehttp "GET / HTTP/1.1" 500 21436
+INFO 2026-01-15 09:40:59,391 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:40:59,397 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-15 09:40:59,401 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-15 09:41:05,844 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-15 09:41:05,882 basehttp "GET / HTTP/1.1" 200 59427
+INFO 2026-01-15 09:41:13,236 basehttp "GET /admin/scoreai/user/7/change/ HTTP/1.1" 200 56309
+INFO 2026-01-15 09:41:13,267 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:41:33,659 basehttp "GET /admin/scoreai/usercompany/ HTTP/1.1" 200 37047
+INFO 2026-01-15 09:41:33,682 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:41:33,691 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-15 09:41:54,085 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35576
+INFO 2026-01-15 09:41:54,110 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-15 09:42:10,732 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:42:14,322 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/company/01JEFCNJP7DHQ9TPNFJBBHK0HR/limit/ HTTP/1.1" 200 31656
+INFO 2026-01-15 09:42:18,175 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:44:14,962 autoreload /app/scoreai/views/company_member_views.py changed, reloading.
+INFO 2026-01-15 09:44:15,472 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:44:27,696 autoreload /app/scoreai/views/company_member_views.py changed, reloading.
+INFO 2026-01-15 09:44:27,971 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:44:44,099 autoreload /app/scoreai/views/company_member_views.py changed, reloading.
+INFO 2026-01-15 09:44:44,378 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:45:04,641 autoreload /app/scoreai/views/company_member_views.py changed, reloading.
+INFO 2026-01-15 09:45:05,046 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:50:52,022 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47142
+INFO 2026-01-15 09:52:28,225 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-15 09:52:28,759 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:52:37,959 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-15 09:52:38,312 autoreload Watching for file changes with StatReloader
+INFO 2026-01-15 09:59:36,241 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 47268
+INFO 2026-01-15 09:59:57,311 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/billing/history/ HTTP/1.1" 200 30191

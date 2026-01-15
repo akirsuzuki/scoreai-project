@@ -95,6 +95,69 @@ class UserProfileUpdateForm(forms.ModelForm):
             raise forms.ValidationError("このメールアドレスは既に使用されています。")
         return email
 
+
+class CustomPasswordResetForm(PasswordResetForm):
+    """カスタムパスワードリセットフォーム（日本語ラベル対応）"""
+    email = forms.EmailField(
+        label='メールアドレス',
+        max_length=254,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'メールアドレス',
+            'autocomplete': 'email'
+        })
+    )
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    """カスタムパスワード変更フォーム（日本語ラベル対応）"""
+    old_password = forms.CharField(
+        label='現在のパスワード',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': '現在のパスワード',
+            'autocomplete': 'current-password'
+        })
+    )
+    new_password1 = forms.CharField(
+        label='新しいパスワード',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': '新しいパスワード',
+            'autocomplete': 'new-password'
+        }),
+        help_text='パスワードは6文字以上である必要があります。'
+    )
+    new_password2 = forms.CharField(
+        label='新しいパスワード（確認）',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': '新しいパスワード（確認）',
+            'autocomplete': 'new-password'
+        })
+    )
+
+
+class CustomSetPasswordForm(SetPasswordForm):
+    """カスタムパスワード設定フォーム（日本語ラベル対応）"""
+    new_password1 = forms.CharField(
+        label='新しいパスワード',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': '新しいパスワード',
+            'autocomplete': 'new-password'
+        }),
+        help_text='パスワードは6文字以上である必要があります。'
+    )
+    new_password2 = forms.CharField(
+        label='新しいパスワード（確認）',
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': '新しいパスワード（確認）',
+            'autocomplete': 'new-password'
+        })
+    )
+
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company

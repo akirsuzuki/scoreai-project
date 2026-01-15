@@ -32,6 +32,7 @@
             {% endif %}
           </div>
           
+          {% if is_owner %}
           <div class="mb-3">
             <div class="form-check">
               {{ form.is_owner }}
@@ -50,6 +51,9 @@
             </div>
             {% endif %}
           </div>
+          {% else %}
+          <input type="hidden" name="is_owner" value="0">
+          {% endif %}
           
           <div class="mb-3">
             <div class="form-check">

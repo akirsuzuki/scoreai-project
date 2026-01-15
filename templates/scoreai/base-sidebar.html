@@ -403,14 +403,6 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">スタッフ管理</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
               <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
@@ -467,6 +459,14 @@
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
                 <span class="hide-menu">通知</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">スタッフ管理</span>
               </a>
             </li>
           </ul>

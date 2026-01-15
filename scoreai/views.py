@@ -2967,7 +2967,7 @@ class Stakeholder_nameCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株主情報'
+        context['title'] = '株主名登録'
         context['show_title_card'] = False
         return context
 
@@ -3078,7 +3078,7 @@ class StockEventCreateView(SelectedCompanyMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = '株主情報'
+        context['title'] = '株式発行登録'
         context['show_title_card'] = False
         return context
 
@@ -3837,8 +3837,25 @@ def add_client(request, client_id):
 
 @login_required
 def remove_client(request, client_id):
+    from .models import UserFirm
+    from django.contrib import messages
+    
     client = Company.objects.get(id=client_id)
+    
+    # FirmのOwnerであることを確認
+    user_firm = UserFirm.objects.filter(
+        user=request.user,
+        is_selected=True,
+        is_owner=True,
+        active=True
+    ).first()
+    
+    if not user_firm:
+        messages.error(request, 'この操作を実行するにはFirmのOwner権限が必要です。')
+        return redirect('firm_clientslist')
+    
     UserCompany.objects.filter(user=request.user, company=client).delete()
+    messages.success(request, f'クライアント "{client.name}" のアサインを解除しました。')
     return redirect('firm_clientslist')
 
 

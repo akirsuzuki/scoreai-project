@@ -3,7 +3,12 @@
 """
 from typing import Any, Dict
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import (
+    LoginView, LogoutView,
+    PasswordChangeView, PasswordChangeDoneView,
+    PasswordResetView, PasswordResetDoneView,
+    PasswordResetConfirmView, PasswordResetCompleteView
+)
 from django.contrib.auth import login
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -333,5 +338,105 @@ class UserProfileUpdateView(SelectedCompanyMixin, UpdateView):
         context['user_companies'] = UserCompany.objects.filter(
             user=self.request.user
         ).select_related('company')
+        return context
+
+
+class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+    """カスタムパスワード変更ビュー"""
+    template_name = 'scoreai/password_change.html'
+    success_url = reverse_lazy('password_change_done')
+    
+    def get_form_class(self):
+        """フォームクラスを取得"""
+        from ..forms import CustomPasswordChangeForm
+        return CustomPasswordChangeForm
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード変更'
+        context['show_title_card'] = False
+        return context
+
+
+class CustomPasswordChangeDoneView(LoginRequiredMixin, PasswordChangeDoneView):
+    """パスワード変更完了ビュー"""
+    template_name = 'scoreai/password_change_done.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード変更完了'
+        context['show_title_card'] = False
+        return context
+
+
+class CustomPasswordResetView(PasswordResetView):
+    """カスタムパスワードリセットビュー"""
+    template_name = 'scoreai/password_reset.html'
+    email_template_name = 'scoreai/password_reset_email.html'
+    subject_template_name = 'scoreai/password_reset_subject.txt'
+    success_url = reverse_lazy('password_reset_done')
+    
+    def get_form_class(self):
+        """フォームクラスを取得"""
+        from ..forms import CustomPasswordResetForm
+        return CustomPasswordResetForm
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード再設定'
+        context['show_title_card'] = False
+        return context
+    
+    def form_valid(self, form):
+        """フォームバリデーション成功時の処理"""
+        messages.success(
+            self.request,
+            'パスワード再設定のメールを送信しました。メールボックスを確認してください。'
+        )
+        return super().form_valid(form)
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    """パスワードリセット送信完了ビュー"""
+    template_name = 'scoreai/password_reset_done.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード再設定メール送信完了'
+        context['show_title_card'] = False
+        return context
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    """パスワードリセット確認ビュー"""
+    template_name = 'scoreai/password_reset_confirm.html'
+    success_url = reverse_lazy('password_reset_complete')
+    
+    def get_form_class(self):
+        """フォームクラスを取得"""
+        from ..forms import CustomSetPasswordForm
+        return CustomSetPasswordForm
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード再設定'
+        context['show_title_card'] = False
+        return context
+
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    """パスワードリセット完了ビュー"""
+    template_name = 'scoreai/password_reset_complete.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'パスワード再設定完了'
+        context['show_title_card'] = False
         return context
 

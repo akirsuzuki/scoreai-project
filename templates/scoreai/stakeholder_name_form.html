@@ -3,24 +3,66 @@
 
 {% block content %}
 <div class="row">
-  <div class="col-lg-12">
-    <form method="post">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0">{% if form.instance.pk %}株主名編集{% else %}新規株主名登録{% endif %}</h5>
-      </div>
-      <div class="card-body">
-          {% csrf_token %}
-          {{ form|crispy }}
-      </div>
-      <div class="card-footer text-end">
-        <button type="submit" class="btn btn-primary me-2">保存</button>
-        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">キャンセル</button>        {% if form.instance.pk %}
-        <a href="{% url 'stakeholder_name_delete' form.instance.pk %}" class="btn btn-danger">削除</a>
-        {% endif %}
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">株主情報</h4>
+    <p class="text-muted mb-0">株主情報と株式発行履歴の管理を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stakeholder_name_list' %}" role="tab">
+          <i class="ti ti-users me-1"></i>株主名一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stock_event_list' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>株式発行一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'stakeholder_name_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規株主登録
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stock_event_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規株式発行登録
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="stakeholderTabsContent">
+  <!-- 新規株主登録 -->
+  <div class="tab-pane fade show active" id="stakeholder-create" role="tabpanel">
+    <div class="row">
+      <div class="col-lg-12">
+        <form method="post">
+        <div class="card w-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">{% if form.instance.pk %}株主名編集{% else %}株主名登録{% endif %}</h5>
+          </div>
+          <div class="card-body">
+              {% csrf_token %}
+              {{ form|crispy }}
+          </div>
+          <div class="card-footer text-end">
+            <button type="submit" class="btn btn-primary me-2">保存</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="history.back()">キャンセル</button>
+            {% if form.instance.pk %}
+            <a href="{% url 'stakeholder_name_delete' form.instance.pk %}" class="btn btn-danger">削除</a>
+            {% endif %}
+          </div>
+        </div>
+        </form>
       </div>
     </div>
-    </form>
   </div>
 </div>
 {% endblock %}

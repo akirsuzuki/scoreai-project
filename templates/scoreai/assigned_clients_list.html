@@ -9,8 +9,8 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <h4 class="fw-semibold mb-0">クライアント管理</h4>
-    <p class="text-muted mb-0">クライアント（Company）の管理とアサインを行います。</p>
+    <h4 class="fw-semibold mb-0">コンサルタント機能</h4>
+    <p class="text-muted mb-0">コンサルタントとしての機能を管理します。</p>
   </div>
 </div>
 
@@ -19,13 +19,8 @@
   <div class="col-12">
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_clientslist' %}" role="tab">
-          <i class="ti ti-users me-1"></i>クライアント一覧
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
         <a class="nav-link active" href="{% url 'assigned_clients_list' %}" role="tab">
-          <i class="ti ti-user-check me-1"></i>アサイン済みクライアント
+          <i class="ti ti-list me-1"></i>アサイン一覧
         </a>
       </li>
     </ul>
@@ -92,7 +87,7 @@
                       <i class="ti ti-check me-1"></i>選択
                     </a>
                     {% else %}
-                    <span class="badge bg-primary">選択中</span>
+                    <span class="badge bg-success">選択中</span>
                     {% endif %}
                   </div>
                 </td>
