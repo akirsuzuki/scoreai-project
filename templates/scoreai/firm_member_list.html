@@ -56,8 +56,8 @@ function handleDeleteSubmit(form, event, username) {
         </a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'subscription_history' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-history me-1"></i>サブスクリプション履歴
+        <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
         </a>
       </li>
       <li class="nav-item" role="presentation">

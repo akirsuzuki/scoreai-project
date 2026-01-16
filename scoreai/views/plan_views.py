@@ -14,7 +14,7 @@ from django.conf import settings
 import logging
 import stripe
 
-from ..models import Firm, FirmPlan, FirmSubscription, FirmUsageTracking, UserFirm
+from ..models import Firm, FirmPlan, FirmSubscription, FirmUsageTracking, UserFirm, SubscriptionHistory
 from ..mixins import ErrorHandlingMixin, FirmOwnerMixin
 
 logger = logging.getLogger(__name__)
@@ -133,10 +133,21 @@ class SubscriptionManageView(FirmOwnerMixin, TemplateView):
             ).count()
             context['company_count'] = company_count
             
+            # プラン変更履歴を取得（最新20件）
+            histories = SubscriptionHistory.objects.filter(
+                firm=self.firm
+            ).select_related(
+                'old_plan',
+                'new_plan',
+                'changed_by'
+            ).order_by('-changed_at')[:20]
+            context['histories'] = histories
+            
         except FirmSubscription.DoesNotExist:
             context['subscription'] = None
             context['usage_tracking'] = None
             context['company_count'] = 0
+            context['histories'] = []
         
         return context
 

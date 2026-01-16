@@ -1,0 +1,480 @@
+/* ============================================
+   ダッシュボード KPIカードスタイル（Modernizeテーマ準拠）
+   ============================================ */
+
+/* KPIカードのベーススタイル */
+.kpi-card {
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.2s ease-in;
+  overflow: hidden;
+  position: relative;
+  background: #ffffff;
+  height: 100%;
+  margin-bottom: 30px;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 1;
+}
+
+.kpi-card:hover {
+  transform: translate3d(0px, -5px, 0px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15), 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* 各KPIカードの色分け */
+.kpi-sales::before {
+  background: linear-gradient(90deg, #5D87FF, #2E5CFF);
+}
+
+.kpi-profit::before {
+  background: linear-gradient(90deg, #13DEB9, #06B6D4);
+}
+
+.kpi-debt::before {
+  background: linear-gradient(90deg, #FFAE1F, #FF9500);
+}
+
+.kpi-interest::before {
+  background: linear-gradient(90deg, #8B5CF6, #7C3AED);
+}
+
+/* KPIカードボディ（Modernizeスタイル） */
+.kpi-card .card-body {
+  padding: 1.5rem;
+  position: relative;
+}
+
+.kpi-card .card-body.p-4 {
+  padding: 1.5rem !important;
+}
+
+/* KPIラベル（Modernizeスタイル） */
+.kpi-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5a6a85;
+  letter-spacing: 0.3px;
+}
+
+/* KPIアイコン（Modernizeスタイル） */
+.kpi-icon {
+  font-size: 20px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all 0.2s ease-in;
+}
+
+.kpi-sales .kpi-icon {
+  background: linear-gradient(135deg, rgba(93, 135, 255, 0.1), rgba(46, 92, 255, 0.1));
+  color: #5D87FF;
+}
+
+.kpi-profit .kpi-icon {
+  background: linear-gradient(135deg, rgba(19, 222, 185, 0.1), rgba(6, 182, 212, 0.1));
+  color: #13DEB9;
+}
+
+.kpi-debt .kpi-icon {
+  background: linear-gradient(135deg, rgba(255, 174, 31, 0.1), rgba(255, 149, 0, 0.1));
+  color: #FFAE1F;
+}
+
+.kpi-interest .kpi-icon {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.1));
+  color: #8B5CF6;
+}
+
+.kpi-card:hover .kpi-icon {
+  transform: scale(1.1);
+}
+
+/* KPI値（Modernizeスタイル） */
+.kpi-value {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0.75rem 0;
+  line-height: 1.2;
+  transition: all 0.3s ease;
+  color: #2a3547;
+}
+
+.kpi-sales .kpi-value {
+  color: #5D87FF;
+}
+
+.kpi-profit .kpi-value {
+  color: #13DEB9;
+}
+
+.kpi-debt .kpi-value {
+  color: #FFAE1F;
+}
+
+.kpi-interest .kpi-value {
+  color: #8B5CF6;
+}
+
+/* KPI単位 */
+.kpi-unit {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6c757d;
+  margin-left: 4px;
+}
+
+/* KPIトレンド（Modernizeスタイル） */
+.kpi-trend {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kpi-trend-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.kpi-trend-badge.success {
+  background-color: rgba(19, 222, 185, 0.1);
+  color: #13DEB9;
+}
+
+.kpi-trend-badge.danger {
+  background-color: rgba(250, 137, 107, 0.1);
+  color: #FA896B;
+}
+
+.kpi-trend-badge.warning {
+  background-color: rgba(255, 174, 31, 0.1);
+  color: #FFAE1F;
+}
+
+.kpi-trend-badge i {
+  font-size: 14px;
+}
+
+/* Modernizeスタイルのトレンドアイコン */
+.kpi-trend-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.kpi-trend-icon.success {
+  background-color: rgba(19, 222, 185, 0.1);
+  color: #13DEB9;
+}
+
+.kpi-trend-icon.danger {
+  background-color: rgba(250, 137, 107, 0.1);
+  color: #FA896B;
+}
+
+.kpi-trend-icon.warning {
+  background-color: rgba(255, 174, 31, 0.1);
+  color: #FFAE1F;
+}
+
+/* KPIステータス */
+.kpi-status {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.kpi-status.good {
+  background-color: rgba(19, 222, 185, 0.1);
+  color: #00B894;
+}
+
+.kpi-status.warning {
+  background-color: rgba(255, 174, 31, 0.1);
+  color: #FF9500;
+}
+
+.kpi-status.danger {
+  background-color: rgba(250, 137, 107, 0.1);
+  color: #F56565;
+}
+
+/* フェードインアニメーション */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.kpi-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.kpi-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+.kpi-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.kpi-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+.kpi-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* ゲージチャートコンテナ */
+.gauge-chart-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 280px;
+  padding-top: 20px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.gauge-chart-container > div {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  min-height: 200px;
+}
+
+.gauge-chart-container canvas {
+  position: relative;
+  z-index: 1;
+  width: 100% !important;
+  max-width: 100%;
+}
+
+.gauge-chart-info {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+  padding: 0 1rem;
+}
+
+.gauge-chart-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.gauge-value-main {
+  font-size: 48px;
+  font-weight: 700;
+  color: #2a3547;
+  line-height: 1;
+}
+
+.gauge-value-unit {
+  font-size: 28px;
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.gauge-chart-label {
+  font-size: 13px;
+  color: #6c757d;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.gauge-chart-forecast {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 2px solid #f0f0f0;
+}
+
+.forecast-label {
+  font-size: 12px;
+  color: #6c757d;
+  margin-bottom: 6px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.forecast-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #5D87FF;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.forecast-unit {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.forecast-ratio {
+  font-size: 15px;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 1199px) {
+  .kpi-value {
+    font-size: 36px;
+  }
+  
+  .gauge-value-main {
+    font-size: 40px;
+  }
+  
+  .gauge-value-unit {
+    font-size: 24px;
+  }
+  
+  .forecast-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  .kpi-value {
+    font-size: 32px;
+  }
+  
+  .kpi-card .card-body {
+    padding: 1.25rem;
+  }
+  
+  .gauge-value-main {
+    font-size: 36px;
+  }
+  
+  .gauge-value-unit {
+    font-size: 20px;
+  }
+  
+  .forecast-value {
+    font-size: 24px;
+  }
+  
+  .gauge-chart-container {
+    min-height: 250px;
+  }
+}
+
+/* ダッシュボード全体のレイアウト調整（Modernizeスタイル） */
+.dashboard-section {
+  margin-bottom: 30px;
+}
+
+.dashboard-section:last-child {
+  margin-bottom: 0;
+}
+
+/* Modernizeテーマのカードスタイル */
+.card {
+  margin-bottom: 30px;
+}
+
+.card-hover {
+  transition: 0.2s ease-in;
+}
+
+.card-hover:hover {
+  transform: translate3d(0px, -5px, 0px);
+}
+
+/* カードタイトル（Modernizeスタイル） */
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2a3547;
+}
+
+.card-title.mb-9 {
+  margin-bottom: 2.25rem !important;
+}
+
+/* フォントサイズ（Modernizeスタイル） */
+.fs-2 {
+  font-size: 0.875rem;
+}
+
+.fs-3 {
+  font-size: 0.9375rem;
+}
+
+.fs-4 {
+  font-size: 1rem;
+}
+
+.fs-6 {
+  font-size: 1.125rem;
+}
+
+/* 背景色（Modernizeスタイル） */
+.bg-light-success {
+  background-color: rgba(19, 222, 185, 0.1) !important;
+}
+
+.bg-light-danger {
+  background-color: rgba(250, 137, 107, 0.1) !important;
+}
+
+.bg-light-warning {
+  background-color: rgba(255, 174, 31, 0.1) !important;
+}
+
+.bg-light-primary {
+  background-color: rgba(93, 135, 255, 0.1) !important;
+}
+
+/* 丸いアイコン背景（Modernizeスタイル） */
+.round-20 {
+  width: 20px;
+  height: 20px;
+}
+
+.round-8 {
+  width: 8px;
+  height: 8px;
+}

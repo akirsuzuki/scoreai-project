@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
   <script src="https://kit.fontawesome.com/c0e97851db.js" crossorigin="anonymous"></script>
   <script src="{% static 'scoreai/js/sidebars.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'scoreai/css/variables.css' %}" />
   <link rel="stylesheet" href="{% static 'scoreai/css/custom.css' %}" />
   <link rel="stylesheet" href="{% static 'scoreai/css/sidebars.css' %}" />
   <link rel="stylesheet" href="{% static 'scoreai/css/loading.css' %}" />
@@ -92,6 +93,78 @@
   <script src="{% static 'Modernize-1.0.0/src/assets/js/app.min.js' %}"></script>
   <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js' %}"></script>
   <script src="{% static 'scoreai/js/loading.js' %}"></script>
+  <script>
+    // ページ読み込み後にアクティブなメニュー項目までスクロール
+    document.addEventListener('DOMContentLoaded', function() {
+      // sidebarmenu.jsが実行された後に実行されるように少し待つ
+      setTimeout(function() {
+        // アクティブなメニュー項目を検索
+        const activeMenuItem = document.querySelector('#sidebarnav .sidebar-link.active, #sidebarnav .sidebar-item.selected .sidebar-link');
+        
+        if (activeMenuItem) {
+          // 親のcollapseメニューを展開
+          const collapseMenu = activeMenuItem.closest('.collapse');
+          if (collapseMenu && !collapseMenu.classList.contains('show') && !collapseMenu.classList.contains('in')) {
+            const collapseTrigger = document.querySelector(`[data-bs-target="#${collapseMenu.id}"], [href="#${collapseMenu.id}"]`);
+            if (collapseTrigger) {
+              // Bootstrap 5のcollapseを展開
+              const bsCollapse = new bootstrap.Collapse(collapseMenu, {
+                toggle: false
+              });
+              bsCollapse.show();
+            }
+          }
+          
+          // collapseのアニメーションを待ってからスクロール
+          setTimeout(function() {
+            // SimpleBarのスクロールコンテナを取得
+            const sidebarNav = document.querySelector('.sidebar-nav[data-simplebar]');
+            if (sidebarNav) {
+              // SimpleBarのインスタンスを取得
+              const simpleBarInstance = SimpleBar.instances.get(sidebarNav);
+              if (simpleBarInstance) {
+                // アクティブな項目の位置を取得
+                const activeItemRect = activeMenuItem.getBoundingClientRect();
+                const sidebarRect = sidebarNav.getBoundingClientRect();
+                
+                // スクロール位置を計算（アクティブ項目が中央付近に来るように）
+                const scrollContainer = simpleBarInstance.getScrollElement();
+                const itemOffsetTop = activeMenuItem.offsetTop;
+                const sidebarHeight = sidebarNav.clientHeight;
+                const targetScrollTop = itemOffsetTop - (sidebarHeight / 2) + (activeItemRect.height / 2);
+                
+                // スムーズにスクロール
+                scrollContainer.scrollTo({
+                  top: Math.max(0, targetScrollTop),
+                  behavior: 'smooth'
+                });
+              } else {
+                // SimpleBarインスタンスが取得できない場合、直接スクロール
+                const scrollContainer = sidebarNav.querySelector('.simplebar-content-wrapper');
+                if (scrollContainer) {
+                  const itemOffsetTop = activeMenuItem.offsetTop;
+                  const sidebarHeight = sidebarNav.clientHeight;
+                  const targetScrollTop = itemOffsetTop - (sidebarHeight / 2);
+                  
+                  scrollContainer.scrollTo({
+                    top: Math.max(0, targetScrollTop),
+                    behavior: 'smooth'
+                  });
+                }
+              }
+            } else {
+              // SimpleBarが使われていない場合、通常のスクロール
+              activeMenuItem.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+              });
+            }
+          }, 350); // collapseのアニメーション時間を考慮
+        }
+      }, 100); // sidebarmenu.jsの実行を待つ
+    });
+  </script>
   <!-- <script src="{% static 'Modernize-1.0.0/src/assets/js/dashboard.js' %}"></script> -->
   <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/src/simplebar.js' %}"></script> -->
 

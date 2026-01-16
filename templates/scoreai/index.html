@@ -16,12 +16,25 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+<!-- ApexCharts -->
+<script src="{% static 'Modernize-1.0.0/src/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
+<!-- ダッシュボードスタイル -->
+<link rel="stylesheet" href="{% static 'scoreai/css/dashboard.css' %}">
+<script src="{% static 'scoreai/js/dashboard.js' %}"></script>
 
 {% endblock %}
 
 {% block content %}
+<!-- KPIカードセクション（最上部） -->
+{% include 'scoreai/index-row_kpi_cards.html' %}
+
+<!-- 月次売上推移とサイドバー -->
 {% include 'scoreai/index-row_salesoverview.html' %}
+
+<!-- 予算実績比較 -->
 {% include 'scoreai/budget_vs_actual_dashboard.html' %}
+
+<!-- 借入分析 -->
 {% include 'scoreai/index-row_debts.html' %}
 
 {% endblock %}

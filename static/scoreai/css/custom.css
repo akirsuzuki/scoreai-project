@@ -4,6 +4,7 @@
 
 .bg-light-red {
   background-color: #f8d7da !important;
+  /* Bootstrap standard color, keep or map to danger-subtle? */
 }
 
 /* ============================================
@@ -42,158 +43,159 @@
 
 /* プライマリボタン - Modernizeカラー */
 .btn-primary {
-  background-color: #5D87FF;
-  border-color: #5D87FF;
+  background-color: var(--mod-primary);
+  border-color: var(--mod-primary);
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background-color: #4a6fe6;
-  border-color: #4a6fe6;
+  background-color: var(--mod-primary-hover);
+  border-color: var(--mod-primary-hover);
   color: #ffffff;
 }
 
 .btn-primary:focus {
-  background-color: #4a6fe6;
-  border-color: #4a6fe6;
+  background-color: var(--mod-primary-hover);
+  border-color: var(--mod-primary-hover);
   box-shadow: 0 0 0 0.2rem rgba(93, 135, 255, 0.25);
+  /* convert to var usage if possible or keep */
 }
 
 /* セカンダリボタン - Modernizeカラー */
 .btn-secondary {
-  background-color: #49BEFF;
-  border-color: #49BEFF;
+  background-color: var(--mod-secondary);
+  border-color: var(--mod-secondary);
   color: #ffffff;
 }
 
 .btn-secondary:hover {
-  background-color: #3aa8e6;
-  border-color: #3aa8e6;
+  background-color: var(--mod-secondary-hover);
+  border-color: var(--mod-secondary-hover);
   color: #ffffff;
 }
 
 /* 成功ボタン - Modernizeカラー */
 .btn-success {
-  background-color: #13DEB9;
-  border-color: #13DEB9;
+  background-color: var(--mod-success);
+  border-color: var(--mod-success);
   color: #ffffff;
 }
 
 .btn-success:hover {
-  background-color: #11c9a6;
-  border-color: #11c9a6;
+  background-color: var(--mod-success-hover);
+  border-color: var(--mod-success-hover);
   color: #ffffff;
 }
 
 /* 警告ボタン - Modernizeカラー */
 .btn-warning {
-  background-color: #FFAE1F;
-  border-color: #FFAE1F;
+  background-color: var(--mod-warning);
+  border-color: var(--mod-warning);
   color: #ffffff;
 }
 
 .btn-warning:hover {
-  background-color: #e69d1c;
-  border-color: #e69d1c;
+  background-color: var(--mod-warning-hover);
+  border-color: var(--mod-warning-hover);
   color: #ffffff;
 }
 
 /* 危険ボタン - Modernizeカラー */
 .btn-danger {
-  background-color: #FA896B;
-  border-color: #FA896B;
+  background-color: var(--mod-danger);
+  border-color: var(--mod-danger);
   color: #ffffff;
 }
 
 .btn-danger:hover {
-  background-color: #f97552;
-  border-color: #f97552;
+  background-color: var(--mod-danger-hover);
+  border-color: var(--mod-danger-hover);
   color: #ffffff;
 }
 
 /* 情報ボタン - Modernizeカラー */
 .btn-info {
-  background-color: #539BFF;
-  border-color: #539BFF;
+  background-color: var(--mod-info);
+  border-color: var(--mod-info);
   color: #ffffff;
 }
 
 .btn-info:hover {
-  background-color: #4288e6;
-  border-color: #4288e6;
+  background-color: var(--mod-info-hover);
+  border-color: var(--mod-info-hover);
   color: #ffffff;
 }
 
 /* アウトラインボタン - Modernizeカラー */
 .btn-outline-primary {
-  color: #5D87FF;
-  border-color: #5D87FF;
+  color: var(--mod-primary);
+  border-color: var(--mod-primary);
   background-color: transparent;
 }
 
 .btn-outline-primary:hover {
-  background-color: #5D87FF;
-  border-color: #5D87FF;
+  background-color: var(--mod-primary);
+  border-color: var(--mod-primary);
   color: #ffffff;
 }
 
 .btn-outline-secondary {
-  color: #49BEFF;
-  border-color: #49BEFF;
+  color: var(--mod-secondary);
+  border-color: var(--mod-secondary);
   background-color: transparent;
 }
 
 .btn-outline-secondary:hover {
-  background-color: #49BEFF;
-  border-color: #49BEFF;
+  background-color: var(--mod-secondary);
+  border-color: var(--mod-secondary);
   color: #ffffff;
 }
 
 .btn-outline-success {
-  color: #13DEB9;
-  border-color: #13DEB9;
+  color: var(--mod-success);
+  border-color: var(--mod-success);
   background-color: transparent;
 }
 
 .btn-outline-success:hover {
-  background-color: #13DEB9;
-  border-color: #13DEB9;
+  background-color: var(--mod-success);
+  border-color: var(--mod-success);
   color: #ffffff;
 }
 
 .btn-outline-warning {
-  color: #FFAE1F;
-  border-color: #FFAE1F;
+  color: var(--mod-warning);
+  border-color: var(--mod-warning);
   background-color: transparent;
 }
 
 .btn-outline-warning:hover {
-  background-color: #FFAE1F;
-  border-color: #FFAE1F;
+  background-color: var(--mod-warning);
+  border-color: var(--mod-warning);
   color: #ffffff;
 }
 
 .btn-outline-danger {
-  color: #FA896B;
-  border-color: #FA896B;
+  color: var(--mod-danger);
+  border-color: var(--mod-danger);
   background-color: transparent;
 }
 
 .btn-outline-danger:hover {
-  background-color: #FA896B;
-  border-color: #FA896B;
+  background-color: var(--mod-danger);
+  border-color: var(--mod-danger);
   color: #ffffff;
 }
 
 .btn-outline-info {
-  color: #539BFF;
-  border-color: #539BFF;
+  color: var(--mod-info);
+  border-color: var(--mod-info);
   background-color: transparent;
 }
 
 .btn-outline-info:hover {
-  background-color: #539BFF;
-  border-color: #539BFF;
+  background-color: var(--mod-info);
+  border-color: var(--mod-info);
   color: #ffffff;
 }
 
@@ -205,14 +207,14 @@
   border-radius: 7px;
   border: 0;
   box-shadow: rgb(145 158 171 / 20%) 0px 0px 2px 0px,
-              rgb(145 158 171 / 12%) 0px 12px 24px -4px;
+    rgb(145 158 171 / 12%) 0px 12px 24px -4px;
   margin-bottom: 0;
   transition: all 0.2s ease-in;
 }
 
 .card:hover {
   box-shadow: rgb(145 158 171 / 20%) 0px 0px 4px 0px,
-              rgb(145 158 171 / 16%) 0px 16px 32px -4px;
+    rgb(145 158 171 / 16%) 0px 16px 32px -4px;
 }
 
 /* プランカードのヘッダー - 隙間をなくす */
@@ -229,13 +231,13 @@
 .card-title {
   font-size: 18px;
   font-weight: 500;
-  color: #2A3547;
+  color: var(--mod-text-dark);
   margin-bottom: 15px;
 }
 
 .card-subtitle {
   font-size: 14px;
-  color: #5A6A85;
+  color: var(--mod-text-muted);
   margin-bottom: 10px;
 }
 
@@ -245,10 +247,10 @@
 
 /* タイトルバナー - Modernizeスタイル */
 .card.bg-info-subtle {
-  background: linear-gradient(135deg, #EBF3FE 0%, #ECF2FF 100%);
+  background: var(--mod-info-bg-subtle);
   border: 0;
   box-shadow: rgb(145 158 171 / 20%) 0px 0px 2px 0px,
-              rgb(145 158 171 / 12%) 0px 12px 24px -4px;
+    rgb(145 158 171 / 12%) 0px 12px 24px -4px;
 }
 
 .card.bg-info-subtle .card-body {
@@ -259,7 +261,7 @@
 .card.bg-info-subtle h4 {
   font-size: 20px;
   font-weight: 600;
-  color: #2A3547;
+  color: var(--mod-text-dark);
   margin: 0;
   line-height: 1.4;
 }
@@ -270,31 +272,31 @@
 
 .table {
   font-size: 14px;
-  color: #5A6A85;
+  color: var(--mod-text-muted);
 }
 
 .table thead th {
   font-weight: 600;
-  color: #2A3547;
-  border-bottom: 2px solid #ebf1f6;
+  color: var(--mod-text-dark);
+  border-bottom: 2px solid var(--mod-border-color);
   padding: 16px;
 }
 
 .table tbody td {
   padding: 16px;
-  border-bottom: 1px solid #ebf1f6;
+  border-bottom: 1px solid var(--mod-border-color);
 }
 
 .table tbody tr:hover {
-  background-color: #F6F9FC;
+  background-color: var(--mod-bg-hover);
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: #EAEFF4;
+  background-color: var(--mod-bg-striped);
 }
 
 .table thead th {
-  background-color: #F6F9FC;
+  background-color: var(--mod-bg-hover);
 }
 
 .table tbody td {
@@ -581,7 +583,8 @@ div.dt-container {
 
 /* カスタムCSSファイルやstyleタグ内 */
 .text-small {
-    font-size: 0.875rem; /* 約14px */
+  font-size: 0.875rem;
+  /* 約14px */
 }
 
 .text-small a {
@@ -594,7 +597,8 @@ div.dt-container {
 
 /* カスタムCSSファイルやstyleタグ内 */
 .text-xsmall {
-  font-size: 0.75rem; /* 約12px */
+  font-size: 0.75rem;
+  /* 約12px */
 }
 
 .text-xsmall a {
@@ -603,28 +607,28 @@ div.dt-container {
 
 /* AI相談センターのスタイル */
 .ai-consultation-center {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 8px;
-    margin: 10px 5px;
-    padding: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 8px;
+  margin: 10px 5px;
+  padding: 8px;
 }
 
 .ai-consultation-center .sidebar-link {
-    color: white !important;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  color: white !important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .ai-consultation-center .sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
 }
 
 .ai-consultation-center .badge {
-    font-size: 10px;
-    padding: 2px 6px;
+  font-size: 10px;
+  padding: 2px 6px;
 }
 
 .text-xsmall a:hover {
@@ -632,7 +636,8 @@ div.dt-container {
 }
 
 .text-xxsmall {
-  font-size: 0.625rem; /* 約10px */
+  font-size: 0.625rem;
+  /* 約10px */
 }
 
 .text-xxsmall a {
@@ -663,110 +668,113 @@ div.dt-container {
 
 /* モバイル対応 */
 @media (max-width: 768px) {
-    /* カードのパディングを調整 */
-    .card {
-        margin-bottom: 1rem;
-    }
-    
-    .card-body {
-        padding: 1rem;
-    }
-    
-    /* テーブルのレスポンシブ対応 */
-    .table-responsive {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* ボタンのサイズ調整 */
-    .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
-    
-    .btn-group {
-        width: 100%;
-    }
-    
-    .btn-group .btn {
-        flex: 1;
-    }
-    
-    /* フォームの調整 */
-    .form-control {
-        font-size: 16px; /* iOSのズームを防ぐ */
-    }
-    
-    /* サイドバーの調整 */
-    .sidebar {
-        transform: translateX(-100%);
-        transition: transform 0.3s ease;
-    }
-    
-    .sidebar.show {
-        transform: translateX(0);
-    }
-    
-    /* ヘッダーの調整 */
-    .header {
-        padding: 0.5rem 1rem;
-    }
-    
-    /* コンテナのパディング調整 */
-    .container-fluid {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
+
+  /* カードのパディングを調整 */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  /* テーブルのレスポンシブ対応 */
+  .table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ボタンのサイズ調整 */
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-group {
+    width: 100%;
+  }
+
+  .btn-group .btn {
+    flex: 1;
+  }
+
+  /* フォームの調整 */
+  .form-control {
+    font-size: 16px;
+    /* iOSのズームを防ぐ */
+  }
+
+  /* サイドバーの調整 */
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.show {
+    transform: translateX(0);
+  }
+
+  /* ヘッダーの調整 */
+  .header {
+    padding: 0.5rem 1rem;
+  }
+
+  /* コンテナのパディング調整 */
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 /* タブレット対応 */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .card-body {
-        padding: 1.25rem;
-    }
-    
-    .btn {
-        padding: 0.5rem 1rem;
-    }
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+  }
 }
 
 /* 大きな画面での最適化 */
 @media (min-width: 1200px) {
-    .container-fluid {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 }
 
 /* テーブルのレスポンシブ対応（DataTables使用時） */
 @media (max-width: 768px) {
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_filter {
-        text-align: left;
-        margin-bottom: 1rem;
-    }
-    
-    .dataTables_wrapper .dataTables_info,
-    .dataTables_wrapper .dataTables_paginate {
-        text-align: center;
-        margin-top: 1rem;
-    }
+
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .dataTables_wrapper .dataTables_info,
+  .dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+    margin-top: 1rem;
+  }
 }
 
 /* カード型レイアウトの改善 */
 .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
 }
 
 @media (max-width: 768px) {
-    .card-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
 }
 
 /* プログレスバーのアニメーション無効化 */
@@ -775,118 +783,129 @@ div.dt-container {
 .progress-bar-striped,
 .progress-bar-animated,
 .progress-bar.no-animation {
-    animation: none !important;
-    -webkit-animation: none !important;
-    -moz-animation: none !important;
-    -o-animation: none !important;
-    background-image: none !important;
-    background-position: 0 0 !important;
-    background-size: auto !important;
-    transition: width 0.3s ease !important;
+  animation: none !important;
+  -webkit-animation: none !important;
+  -moz-animation: none !important;
+  -o-animation: none !important;
+  background-image: none !important;
+  background-position: 0 0 !important;
+  background-size: auto !important;
+  transition: width 0.3s ease !important;
 }
 
 /* プログレスバーのストライプパターンを完全に無効化 */
 .progress-bar::before,
 .progress-bar::after {
-    display: none !important;
-    content: none !important;
+  display: none !important;
+  content: none !important;
 }
 
 /* Bootstrapのデフォルトアニメーションを無効化 */
 @keyframes progress-bar-stripes {
-    0% { background-position: 0 0 !important; }
-    100% { background-position: 0 0 !important; }
+  0% {
+    background-position: 0 0 !important;
+  }
+
+  100% {
+    background-position: 0 0 !important;
+  }
 }
 
 /* すべてのプログレスバーアニメーションを強制的に無効化 */
 .progress .progress-bar {
-    animation: none !important;
-    -webkit-animation: none !important;
-    background-image: none !important;
-    background-position: 0 0 !important;
+  animation: none !important;
+  -webkit-animation: none !important;
+  background-image: none !important;
+  background-position: 0 0 !important;
 }
 
 /* アクセシビリティの改善 */
 @media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* タッチデバイス対応 */
 @media (hover: none) and (pointer: coarse) {
-    .btn, a, button {
-        min-height: 44px; /* タッチターゲットの最小サイズ */
-        min-width: 44px;
-    }
+
+  .btn,
+  a,
+  button {
+    min-height: 44px;
+    /* タッチターゲットの最小サイズ */
+    min-width: 44px;
+  }
 }
 
 /* フッター固定スタイル */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .page-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
 }
 
 .body-wrapper {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    min-height: 100vh;
-    position: relative;
-    padding-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 0;
 }
 
-.body-wrapper > .container-fluid {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    padding: 1.5rem 2rem;
-    padding-bottom: 0;
-    position: relative;
+.body-wrapper>.container-fluid {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 1.5rem 2rem;
+  padding-bottom: 0;
+  position: relative;
 }
 
 /* コンテンツが少ない場合でも、body-wrapperが画面全体の高さを確保 */
 .body-wrapper {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 /* コンテンツが少ないページでもフッターが最下部に来るように */
-.body-wrapper > .container-fluid {
-    /* JavaScriptで動的に調整されるが、フォールバックとして最小高さを設定 */
-    min-height: calc(100vh - 200px); /* ヘッダーとフッターの高さを考慮 */
+.body-wrapper>.container-fluid {
+  /* JavaScriptで動的に調整されるが、フォールバックとして最小高さを設定 */
+  min-height: calc(100vh - 200px);
+  /* ヘッダーとフッターの高さを考慮 */
 }
 
 /* レスポンシブ対応：モバイルではパディングを小さく */
 @media (max-width: 768px) {
-    .body-wrapper > .container-fluid {
-        padding: 1rem;
-        padding-bottom: 0;
-    }
+  .body-wrapper>.container-fluid {
+    padding: 1rem;
+    padding-bottom: 0;
+  }
 }
 
 /* タブレット対応 */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .body-wrapper > .container-fluid {
-        padding: 1.25rem 1.5rem;
-        padding-bottom: 0;
-    }
+  .body-wrapper>.container-fluid {
+    padding: 1.25rem 1.5rem;
+    padding-bottom: 0;
+  }
 }
 
 /* ============================================
@@ -899,153 +918,155 @@ body {
 
 /* モバイルファースト: 基本スタイル（モバイル向け） */
 @media (max-width: 575.98px) {
-    /* カードのパディングを小さく */
-    .card-body {
-        padding: 1rem;
-    }
-    
-    .card-header {
-        padding: 0.75rem 1rem;
-    }
-    
-    /* テーブルを横スクロール可能に */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* ボタンサイズ調整 */
-    .btn-sm {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.875rem;
-    }
-    
-    /* タイトルサイズ調整 */
-    h4 {
-        font-size: 1.25rem;
-    }
-    
-    h5 {
-        font-size: 1.1rem;
-    }
-    
-    /* カードのマージン調整 */
-    .card {
-        margin-bottom: 1rem;
-    }
-    
-    /* グラフコンテナの高さ調整 */
-    canvas {
-        max-height: 300px;
-    }
+
+  /* カードのパディングを小さく */
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+
+  /* テーブルを横スクロール可能に */
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* ボタンサイズ調整 */
+  .btn-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* タイトルサイズ調整 */
+  h4 {
+    font-size: 1.25rem;
+  }
+
+  h5 {
+    font-size: 1.1rem;
+  }
+
+  /* カードのマージン調整 */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* グラフコンテナの高さ調整 */
+  canvas {
+    max-height: 300px;
+  }
 }
 
 /* タブレット対応 */
 @media (min-width: 576px) and (max-width: 991.98px) {
-    .card-body {
-        padding: 1.25rem;
-    }
-    
-    canvas {
-        max-height: 400px;
-    }
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  canvas {
+    max-height: 400px;
+  }
 }
 
 /* DataTablesレスポンシブ対応 */
 @media (max-width: 767.98px) {
-    /* DataTablesのレスポンシブ表示を改善 */
-    .dataTables_wrapper .dataTables_length,
-    .dataTables_wrapper .dataTables_filter {
-        margin-bottom: 1rem;
-    }
-    
-    .dataTables_wrapper .dataTables_length select,
-    .dataTables_wrapper .dataTables_filter input {
-        width: 100%;
-        max-width: 200px;
-    }
-    
-    /* テーブルを横スクロール可能に */
-    .dataTables_wrapper {
-        overflow-x: auto;
-    }
-    
-    /* ページネーションを中央揃え */
-    .dataTables_wrapper .dataTables_paginate {
-        text-align: center;
-    }
-    
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        padding: 0.25rem 0.5rem;
-        margin: 0 0.125rem;
-    }
+
+  /* DataTablesのレスポンシブ表示を改善 */
+  .dataTables_wrapper .dataTables_length,
+  .dataTables_wrapper .dataTables_filter {
+    margin-bottom: 1rem;
+  }
+
+  .dataTables_wrapper .dataTables_length select,
+  .dataTables_wrapper .dataTables_filter input {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  /* テーブルを横スクロール可能に */
+  .dataTables_wrapper {
+    overflow-x: auto;
+  }
+
+  /* ページネーションを中央揃え */
+  .dataTables_wrapper .dataTables_paginate {
+    text-align: center;
+  }
+
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.125rem;
+  }
 }
 
 /* カード型レイアウトの改善（ダッシュボード用） */
 @media (max-width: 991.98px) {
-    /* カードを縦並びに */
-    .row > [class*="col-"] {
-        margin-bottom: 1rem;
-    }
-    
-    /* ダッシュボードのカードを全幅に */
-    .dashboard-card {
-        width: 100%;
-    }
+
+  /* カードを縦並びに */
+  .row>[class*="col-"] {
+    margin-bottom: 1rem;
+  }
+
+  /* ダッシュボードのカードを全幅に */
+  .dashboard-card {
+    width: 100%;
+  }
 }
 
 /* 大画面での最適化 */
 @media (min-width: 1200px) {
-    .container-fluid {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
 }
 
 /* テーブルのレスポンシブ対応 */
 .table-responsive {
-    position: relative;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* DataTablesのレスポンシブテーブルスタイル */
-table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
-table.dataTable.dtr-inline.collapsed > tbody > tr > th.child,
-table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty {
-    cursor: default !important;
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.child,
+table.dataTable.dtr-inline.collapsed>tbody>tr>th.child,
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dataTables_empty {
+  cursor: default !important;
 }
 
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > td:first-child:before,
-table.dataTable.dtr-inline.collapsed > tbody > tr[role="row"] > th:first-child:before {
-    top: 50%;
-    transform: translateY(-50%);
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>td:first-child:before,
+table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before {
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 /* モバイルでのナビゲーションボタン調整 */
 @media (max-width: 575.98px) {
-    .d-flex.gap-2 {
-        gap: 0.5rem !important;
-    }
-    
-    .btn-group {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-group .btn {
-        width: 100%;
-        margin-bottom: 0.5rem;
-    }
+  .d-flex.gap-2 {
+    gap: 0.5rem !important;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-group .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
 }
 
 /* Blog/お知らせページのカテゴリー表示 */
 .announcement .list-group-item a,
 .blog .list-group-item a {
-    word-wrap: break-word;
-    white-space: normal;
-    display: block;
-    width: 100%;
+  word-wrap: break-word;
+  white-space: normal;
+  display: block;
+  width: 100%;
 }
-

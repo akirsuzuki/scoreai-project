@@ -2,15 +2,13 @@
 {% load custom_filters %}
 
 {% if budget_year or actual_year %}
-<div class="row mt-4">
+<div class="row dashboard-section">
   <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">
+    <div class="card card-hover">
+      <div class="card-body">
+        <h5 class="card-title mb-9 fw-semibold">
           予算実績比較{% if budget_year %}{{ budget_year.year }}年{% elif actual_year %}{{ actual_year.year }}年{% endif %}
         </h5>
-      </div>
-      <div class="card-body">
         {% if budget_year and actual_year %}
         <div class="table-responsive">
           <table class="table table-bordered table-sm">

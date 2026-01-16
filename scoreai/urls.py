@@ -174,6 +174,7 @@ from .views import (
     ImportFiscalSummary_Month,
     ImportFiscalSummary_Month_FromMoneyforward,
     DebtCreateView,
+    DebtsOverviewView,
     DebtsAllListView,
     DebtsByBankListView,
     DebtsByBankDetailListView,
@@ -298,6 +299,7 @@ urlpatterns = [
     # 追加
     path('get-monthly-totals/', FiscalSummary_YearCreateView.as_view(http_method_names=['get']), name='get_monthly_totals'),
     path('debt/create/', DebtCreateView.as_view(), name='debt_create'),
+    path('debts_overview/', DebtsOverviewView.as_view(), name='debts_overview'),
     path('debts_all/', DebtsAllListView.as_view(), name='debts_all'),
     path('debts_all/export/<str:format_type>/', export_debts, name='export_debts'),
     path('debts_byBank/', DebtsByBankListView.as_view(), name='debts_byBank'),
@@ -442,9 +444,9 @@ urlpatterns = [
     
     # 通知機能
     path('firm/<str:firm_id>/notifications/', NotificationListView.as_view(), name='notification_list'),
-    path('firm/<str:firm_id>/notifications/<str:notification_id>/', NotificationDetailView.as_view(), name='notification_detail'),
-    path('firm/<str:firm_id>/notifications/<str:notification_id>/mark-read/', NotificationMarkReadView.as_view(), name='notification_mark_read'),
     path('firm/<str:firm_id>/notifications/mark-all-read/', NotificationMarkAllReadView.as_view(), name='notification_mark_all_read'),
+    path('firm/<str:firm_id>/notifications/<str:notification_id>/mark-read/', NotificationMarkReadView.as_view(), name='notification_mark_read'),
+    path('firm/<str:firm_id>/notifications/<str:notification_id>/', NotificationDetailView.as_view(), name='notification_detail'),
     # Stripe Webhook
     path('stripe/webhook/', StripeWebhookView.as_view(), name='stripe_webhook'),
 ]

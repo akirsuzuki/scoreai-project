@@ -2,148 +2,33 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<div class="row">
-  <div class="col-lg-8 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title fw-semibold">PL月次推移</h5>
-      </div>
+<div class="row dashboard-section">
+  <div class="col-lg-12 d-flex align-items-stretch">
+    <div class="card w-100 card-hover">
       <div class="card-body">
         <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-          <div>
-            <div id="profitSelector">
-              <input type="checkbox" id="showGrossProfit">
-              <label for="showGrossProfit">粗利益を表示</label>
-              <input type="checkbox" id="showOperatingProfit">
-              <label for="showOperatingProfit">営業利益を表示</label>
-            </div>
+          <div class="mb-3 mb-sm-0">
+            <h5 class="card-title fw-semibold mb-0">PL月次推移</h5>
+          </div>
+        </div>
+        <div id="profitSelector" class="mb-3">
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="showGrossProfit">
+            <label class="form-check-label" for="showGrossProfit">粗利益を表示</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="showOperatingProfit">
+            <label class="form-check-label" for="showOperatingProfit">営業利益を表示</label>
           </div>
         </div>
         <!-- チャート記述 start -->
-         <canvas id="salesChart" width="400" height="200"></canvas>
-
+        <canvas id="salesChart" width="400" height="200"></canvas>
       </div>
-      <div class="card-footer">
+      <div class="card-footer bg-transparent border-top-0">
         <div class="d-flex justify-content-end">
           <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
           <span class="mx-2"></span>
           <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-lg-4">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="card overflow-hidden">
-          <div class="card-header">
-            <h5 class="card-title fw-semibold">売上高対前比</h5>
-          </div>
-          <div class="card-body p-4">
-            <div class="row align-items-center">
-              <div class="col-12">
-                <h4 class="fw-semibold mb-3">{{ monthly_summaries_total.sum_sales|floatformat:0|intcomma }}千円<small>/{{monthly_summaries.0.actual_months_count}}ヶ月</small></h4>
-                {% if monthly_summaries_total_last_year.year %}
-                  <h4 class="fw-semibold mb-3 fs-3">前年同期間：{{ monthly_summaries_total_last_year.sum_sales|floatformat:0|intcomma }}千円</h4>
-                <div class="d-flex align-items-center mb-3">
-                  <span
-                  class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                  {% if monthly_summaries_total.sum_sales|divide:monthly_summaries_total_last_year.sum_sales|multiply:100 > 100 %}
-                      <i class="ti ti-arrow-up-left text-success"></i>
-                  {% elif monthly_summaries_total.sum_sales|divide:monthly_summaries_total_last_year.sum_sales|multiply:100 < 100 %}
-                      <i class="ti ti-arrow-down-left text-danger"></i>
-                  {% else %}
-                      <i class="ti ti-arrow-left text-warning"></i>
-                  {% endif %}
-                  </span>
-                  <p class="text-dark me-1 fs-3 mb-0">{{ monthly_summaries_total.sum_sales|divide:monthly_summaries_total_last_year.sum_sales|multiply:100|floatformat:2 }}%</p>
-                  <p class="fs-3 mb-0">前年比</p>
-                </div>
-                {% else %}
-                  <p class="text-danger">前年データがありません</p>
-                {% endif %}
-              </div>
-              <div class="col-4">
-                <div class="d-flex justify-content-center">
-                  <div id="breakup"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-12">
-        <!-- Monthly Earnings -->
-        <div class="card">
-          <div class="card-header">
-            <h5 class="card-title fw-semibold">利益率対前比</h5>
-          </div>
-          <div class="card-body p-4">
-            <div class="row align-items-center">
-              <div class="col-12">
-                <p>粗利益</p>
-                <h4 class="fw-semibold mb-3">{{ monthly_summaries_total.sum_gross_profit|floatformat:0|intcomma }}千円<small>/{{monthly_summaries.0.actual_months_count}}ヶ月</small></h4>
-                {% if monthly_summaries_total_last_year.year %}
-                <h4 class="fw-semibold mb-3 fs-3">前年同期間：{{ monthly_summaries_total_last_year.sum_gross_profit|floatformat:0|intcomma }}千円</h4>
-                <div class="d-flex align-items-center mb-3">
-                  <span
-                  class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                  {% if monthly_summaries_total.sum_gross_profit > 0 and monthly_summaries_total_last_year.sum_gross_profit > 0 %}
-                    {% if monthly_summaries_total.sum_gross_profit|divide:monthly_summaries_total_last_year.sum_gross_profit|multiply:100 > 100 %}
-                        <i class="ti ti-arrow-up-left text-success"></i>
-                    {% elif monthly_summaries_total.sum_gross_profit|divide:monthly_summaries_total_last_year.sum_gross_profit|multiply:100 < 100 %}
-                        <i class="ti ti-arrow-down-left text-danger"></i>
-                    {% else %}
-                        <i class="ti ti-arrow-left text-warning"></i>
-                    {% endif %}
-                  {% else %}
-                    <span class="text-info">—</span>
-                  {% endif %}
-                  </span>
-                  {% if monthly_summaries_total_last_year.year %}
-                    <p class="text-dark me-1 fs-3 mb-0">{{ monthly_summaries_total.sum_gross_profit|divide:monthly_summaries_total_last_year.sum_gross_profit|multiply:100|floatformat:2 }}%</p>
-                    <p class="fs-3 mb-0">前年比</p>
-                  {% endif %}
-                {% else %}
-                  <p class="text-danger">前年データがありません</p>
-                {% endif %}
-                </div>
-                <hr>
-                <p>営業利益</p>
-                <h4 class="fw-semibold mb-3">{{ monthly_summaries_total.sum_operating_profit|floatformat:0|intcomma }}千円<small>/{{monthly_summaries.0.actual_months_count}}ヶ月</small></h4>
-                {% if monthly_summaries_total_last_year.year %}
-                <h4 class="fw-semibold mb-3 fs-3">前年同期間：{{ monthly_summaries_total_last_year.sum_operating_profit|floatformat:0|intcomma }}千円</h4>
-                <div class="d-flex align-items-center mb-3">
-                  <span
-                  class="me-1 rounded-circle bg-light-success round-20 d-flex align-items-center justify-content-center">
-                  {% if monthly_summaries_total.sum_operating_profit > 0 and monthly_summaries_total_last_year.sum_operating_profit > 0 %}
-                    {% if monthly_summaries_total.sum_operating_profit|divide:monthly_summaries_total_last_year.sum_operating_profit|multiply:100 > 100 %}
-                      <i class="ti ti-arrow-up-left text-success"></i>
-                    {% elif monthly_summaries_total.sum_operating_profit|divide:monthly_summaries_total_last_year.sum_operating_profit|multiply:100 < 100 %}
-                        <i class="ti ti-arrow-down-left text-danger"></i>
-                    {% else %}
-                        <i class="ti ti-arrow-left text-info"></i>
-                    {% endif %}
-                  {% else %}
-                    <span class="text-warning">—</span>
-                  {% endif %}
-                  </span>
-                  {% if monthly_summaries_total_last_year.year %} 
-                    <p class="text-dark me-1 fs-3 mb-0">{{ monthly_summaries_total.sum_operating_profit|divide:monthly_summaries_total_last_year.sum_operating_profit|multiply:100|floatformat:2 }}%</p>
-                    <p class="fs-3 mb-0">前年比</p>
-                  {% endif %}
-                {% else %}
-                  <p class="text-danger">前年データがありません</p>
-                {% endif %}
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="d-flex justify-content-center">
-                  <div id="breakup"></div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

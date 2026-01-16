@@ -1,8 +1,8 @@
 <script>
-  const monthlySummaries = {{ monthly_summaries|safe }}.reverse();
-  const monthsLabel = {{ months_label|safe }};
-  const budgetChartData = {{ budget_chart_data|safe }};
-  const actualChartData = {{ actual_chart_data|safe }};
+  const monthlySummaries = {{ monthly_summaries_json|safe }}.reverse();
+  const monthsLabel = {{ months_label_json|safe }};
+  const budgetChartData = {{ budget_chart_data_json|safe }};
+  const actualChartData = {{ actual_chart_data_json|safe }};
   const salesData = [];
   const grossProfitData = [];
   const operatingProfitData = [];

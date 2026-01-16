@@ -21,6 +21,55 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
     context_object_name = 'company'
     slug_field = 'id'
     slug_url_kwarg = 'id'
+    
+    def dispatch(self, request, *args, **kwargs):
+        """アクセス権限をチェック（CompanyのメンバーまたはFirmユーザーとしてアサインされている場合）"""
+        response = super().dispatch(request, *args, **kwargs)
+        
+        # Companyオブジェクトを取得
+        company = self.get_object()
+        
+        # ユーザーがこのCompanyのメンバーかどうかを確認
+        user_company = UserCompany.objects.filter(
+            user=request.user,
+            company=company,
+            active=True
+        ).first()
+        
+        # メンバーでない場合、Firmユーザー（コンサルタント）としてアサインされているか確認
+        if not user_company:
+            from ..models import UserFirm, FirmCompany
+            
+            # 選択中のFirmを取得
+            user_firm = UserFirm.objects.filter(
+                user=request.user,
+                is_selected=True,
+                active=True
+            ).first()
+            
+            if user_firm:
+                # このCompanyが選択中のFirmに属しているか確認
+                firm_company = FirmCompany.objects.filter(
+                    firm=user_firm.firm,
+                    company=company,
+                    active=True
+                ).first()
+                
+                # コンサルタントとしてアサインされているか確認
+                consultant_user_company = UserCompany.objects.filter(
+                    user=request.user,
+                    company=company,
+                    as_consultant=True,
+                    active=True
+                ).first()
+                
+                if not firm_company or not consultant_user_company:
+                    from django.contrib import messages
+                    from django.shortcuts import redirect
+                    messages.error(request, 'このCompanyへのアクセス権限がありません。')
+                    return redirect('index')
+        
+        return response
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得

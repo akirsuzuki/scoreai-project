@@ -1,0 +1,80 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">借入管理</h4>
+    <p class="text-muted mb-0">借入情報の管理と分析を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'debts_overview' %}" role="tab">
+          <i class="ti ti-chart-pie me-1"></i>概要
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_all' %}" role="tab">
+          <i class="ti ti-list me-1"></i>借入一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_byBank' %}" role="tab">
+          <i class="ti ti-building-bank me-1"></i>金融機関別
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_bySecuredType' %}" role="tab">
+          <i class="ti ti-shield me-1"></i>保証別
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debts_archived' %}" role="tab">
+          <i class="ti ti-archive me-1"></i>アーカイブ済み
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'debt_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規登録
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="debtTabsContent">
+  <!-- 概要 -->
+  <div class="tab-pane fade show active" id="debt-overview" role="tabpanel">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="alert alert-light border">
+          <i class="ti ti-info-circle me-2 text-primary"></i>
+          <strong>概要</strong>では、借入情報の全体像を確認できます。
+        </div>
+      </div>
+    </div>
+    <p id="dashboard"></p>
+    {% include 'scoreai/debt_dashboard.html' %}
+  </div>
+</div>
+{% endblock %}

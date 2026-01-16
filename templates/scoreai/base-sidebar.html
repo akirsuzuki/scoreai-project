@@ -154,6 +154,14 @@
           </a>
           <ul id="collapseBorrowingManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
             <li class="sidebar-item">
+              <a href="{% url 'debts_overview' %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">概要</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
               <a href="{% url 'debts_all' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
@@ -430,11 +438,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="{% url 'subscription_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+              <a href="{% url 'subscription_manage' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">サブスクリプション履歴</span>
+                <span class="hide-menu">サブスクリプション管理</span>
               </a>
             </li>
             <li class="sidebar-item">

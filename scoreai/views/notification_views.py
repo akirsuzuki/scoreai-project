@@ -47,6 +47,7 @@ class NotificationDetailView(FirmOwnerMixin, DetailView):
     model = FirmNotification
     template_name = 'scoreai/notification_detail.html'
     context_object_name = 'notification'
+    pk_url_kwarg = 'notification_id'  # URLパターンのnotification_idをpkとして使用
     
     def get_queryset(self):
         """Firmの通知のみを取得"""

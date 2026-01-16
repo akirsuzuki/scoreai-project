@@ -19,8 +19,8 @@
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <h4 class="fw-semibold mb-0">プラン・サブスクリプション管理</h4>
-    <p class="text-muted mb-0">プランとサブスクリプションの管理を行います。</p>
+    <h4 class="fw-semibold mb-0">クライアント管理</h4>
+    <p class="text-muted mb-0">クライアント（Company）の管理とアサインを行います。</p>
   </div>
 </div>
 
@@ -29,52 +29,25 @@
   <div class="col-12">
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'plan_list' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-package me-1"></i>プラン一覧
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'subscription_manage' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'subscription_history' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-history me-1"></i>プラン変更履歴
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'usage_report' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-chart-line me-1"></i>利用状況レポート
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'billing_history' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-file-invoice me-1"></i>請求履歴
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_settings' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-settings me-1"></i>Firm設定
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_member_list' firm_id=user_firm.firm.id %}" role="tab">
-          <i class="ti ti-users me-1"></i>スタッフ管理
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
         <a class="nav-link active" href="{% url 'firm_clientslist' %}" role="tab">
-          <i class="ti ti-building me-1"></i>クライアント管理
+          <i class="ti ti-building me-1"></i>クライアント一覧
         </a>
       </li>
+      {% get_user_firm_owner user as user_firm_owner %}
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-file-invoice me-1"></i>請求管理
+        </a>
+      </li>
+      {% endif %}
     </ul>
   </div>
 </div>
 
 <!-- タブコンテンツ -->
-<div class="tab-content" id="subscriptionTabsContent">
-  <!-- クライアント管理 -->
+<div class="tab-content" id="clientManagementTabsContent">
+  <!-- クライアント一覧 -->
   <div class="tab-pane fade show active" id="client-list" role="tabpanel">
     <div class="row mb-3">
       <div class="col-12">
@@ -218,7 +191,11 @@
               {% for client in clients %}
               <tr>
                 <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
+                    <h6 class="fw-semibold mb-1">
+                      <a href="{% url 'company_detail' id=client.company.id %}" class="text-decoration-none">
+                        {{ client.company.name }}
+                      </a>
+                    </h6>
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ client.company.fiscal_month}}月</p>
@@ -332,7 +309,11 @@
               {% with firm_company=firm_companies_dict|get_item:client.company.id %}
               <tr>
                 <td class="border-bottom-0">
-                    <h6 class="fw-semibold mb-1">{{ client.company.name }}</h6>
+                    <h6 class="fw-semibold mb-1">
+                      <a href="{% url 'company_detail' id=client.company.id %}" class="text-decoration-none">
+                        {{ client.company.name }}
+                      </a>
+                    </h6>
                 </td>
                 <td class="border-bottom-0">
                   <p class="mb-0 fw-normal">{{ client.company.fiscal_month}}月</p>
