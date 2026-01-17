@@ -1070,3 +1070,21 @@ table.dataTable.dtr-inline.collapsed>tbody>tr[role="row"]>th:first-child:before 
   display: block;
   width: 100%;
 }
+
+/* ボディラッパーのFlexboxレイアウト */
+.body-wrapper-flex {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* コンテンツラッパー */
+.main-content-wrapper {
+  flex: 1;
+}
+
+/* すべてのページでフッターが表示されるように */
+body {
+  padding-bottom: 0;
+}

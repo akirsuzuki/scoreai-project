@@ -1,0 +1,159 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Score_AI | Firm登録完了</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
+  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    .success-section {
+      min-height: 100vh;
+      background: #f5f7fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .success-card {
+      max-width: 600px;
+      width: 100%;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+    }
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .step-circle.completed {
+      background: #4ecdc4;
+      color: #fff;
+    }
+    .step-circle.current {
+      background: #5D87FF;
+      color: #fff;
+    }
+    .step-circle.pending {
+      background: #e0e0e0;
+      color: #666;
+    }
+    .step-line {
+      width: 60px;
+      height: 3px;
+      background: #e0e0e0;
+      margin: 0 0.5rem;
+    }
+    .step-line.completed {
+      background: #4ecdc4;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .next-step-card {
+      background: linear-gradient(135deg, #5D87FF 0%, #49BEFF 100%);
+      color: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="success-section">
+    <div class="success-card">
+      <!-- ロゴ -->
+      <div class="text-center mb-4">
+        <img src="{% static 'scoreai/img/LogoSCore_Ai.png' %}" width="150" alt="SCore_Ai">
+      </div>
+      
+      <!-- ステップインジケーター -->
+      <div class="step-indicator">
+        <div class="step flex-column">
+          <div class="step-circle completed">
+            <i class="ti ti-check"></i>
+          </div>
+          <div class="step-label">アカウント作成</div>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step flex-column">
+          <div class="step-circle completed">
+            <i class="ti ti-check"></i>
+          </div>
+          <div class="step-label">Firm登録</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step flex-column">
+          <div class="step-circle current">3</div>
+          <div class="step-label">クライアント登録</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step flex-column">
+          <div class="step-circle pending">4</div>
+          <div class="step-label">分析開始</div>
+        </div>
+      </div>
+      
+      <!-- 完了メッセージ -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body text-center p-4">
+          <div class="mb-3">
+            <i class="ti ti-circle-check text-success" style="font-size: 4rem;"></i>
+          </div>
+          <h4 class="mb-2">Firm登録が完了しました！</h4>
+          {% if firm %}
+          <p class="text-muted mb-0">
+            「<strong>{{ firm.name }}</strong>」が登録されました。<br>
+            あなたはOwnerとして設定されています。
+          </p>
+          {% endif %}
+        </div>
+      </div>
+      
+      <!-- 次のステップ -->
+      <div class="next-step-card mb-4">
+        <div class="mb-3">
+          <i class="ti ti-building" style="font-size: 3rem;"></i>
+        </div>
+        <h5 class="mb-2">次のステップ：クライアント企業を登録</h5>
+        <p class="mb-4 opacity-90">
+          財務分析を行うクライアント企業の情報を登録しましょう。<br>
+          登録後すぐにダッシュボードで分析を開始できます。
+        </p>
+        <a href="{% url 'firm_company_register' %}" class="btn btn-light btn-lg">
+          <i class="ti ti-plus me-2"></i>クライアント企業を登録する
+        </a>
+      </div>
+      
+      <div class="text-center">
+        <a href="{% url 'welcome' %}" class="text-muted">
+          <small>後で登録する（ダッシュボードへ）</small>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

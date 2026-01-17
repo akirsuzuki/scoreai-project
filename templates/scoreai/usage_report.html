@@ -23,10 +23,24 @@
   <div class="col-12">
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'plan_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-package me-1"></i>プラン・サブスクリプション
+        <a class="nav-link" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-settings me-1"></i>Firm設定
         </a>
       </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-users me-1"></i>スタッフ管理
+        </a>
+      </li>
+      {% load custom_tags %}
+      {% get_user_firm_owner user as user_firm_owner %}
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_clientslist' %}" role="tab">
+          <i class="ti ti-building me-1"></i>クライアント一覧
+        </a>
+      </li>
+      {% endif %}
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
           <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
@@ -37,19 +51,16 @@
           <i class="ti ti-chart-line me-1"></i>利用状況レポート
         </a>
       </li>
+      {% if user_firm_owner %}
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-settings me-1"></i>Firm設定
+        <a class="nav-link" href="{% url 'billing_history' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-file-invoice me-1"></i>請求管理
         </a>
       </li>
+      {% endif %}
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'notification_list' firm_id=firm.id %}" role="tab">
           <i class="ti ti-bell me-1"></i>通知
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-users me-1"></i>スタッフ管理
         </a>
       </li>
     </ul>

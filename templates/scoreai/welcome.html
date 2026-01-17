@@ -1,0 +1,313 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Score_AI | ようこそ</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
+  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    .welcome-hero {
+      background: linear-gradient(135deg, #1a1f36 0%, #2d3a5f 100%);
+      color: #fff;
+      padding: 3rem 2rem;
+      border-radius: 1rem;
+      margin-bottom: 2rem;
+    }
+    .step-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      height: 100%;
+    }
+    .step-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: #4ecdc4;
+      color: #1a1f36;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      background: #f5f7fa;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .step-icon i {
+      font-size: 2rem;
+      color: #5D87FF;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+    }
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .step-circle.completed {
+      background: #4ecdc4;
+      color: #fff;
+    }
+    .step-circle.current {
+      background: #5D87FF;
+      color: #fff;
+    }
+    .step-circle.pending {
+      background: #e0e0e0;
+      color: #666;
+    }
+    .step-line {
+      width: 60px;
+      height: 3px;
+      background: #e0e0e0;
+      margin: 0 0.5rem;
+    }
+    .step-line.completed {
+      background: #4ecdc4;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="body-wrapper">
+      <div class="container-fluid">
+        <div class="row justify-content-center py-5">
+          <div class="col-lg-10 col-xl-8">
+            
+            <!-- ヒーローセクション -->
+            <div class="welcome-hero text-center">
+              <div class="mb-4">
+                <img src="{% static 'scoreai/img/LogoSCore_Ai.png' %}" 
+                     width="200" 
+                     height="auto"
+                     alt="SCore_Ai" 
+                     class="mb-4"
+                     style="filter: brightness(0) invert(1); max-width: 100%; height: auto;"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <div style="display: none; font-size: 2rem; font-weight: 700; letter-spacing: 2px;">
+                  SCore_Ai
+                </div>
+              </div>
+              <h1 class="mb-3">ようこそ SCore_Ai へ</h1>
+              <p class="mb-0 opacity-90" style="font-size: 1.1rem;">
+                {{ request.user.username }} さん、ご登録ありがとうございます。<br>
+                まずはFirmを登録して、財務分析を始めましょう。
+              </p>
+            </div>
+            
+            <!-- ステップインジケーター -->
+            <div class="step-indicator">
+              <div class="step flex-column">
+                <div class="step-circle completed">
+                  <i class="ti ti-check"></i>
+                </div>
+                <div class="step-label">アカウント作成</div>
+              </div>
+              <div class="step-line completed"></div>
+              <div class="step flex-column">
+                <div class="step-circle {% if not has_firm %}current{% else %}completed{% endif %}">
+                  {% if has_firm %}<i class="ti ti-check"></i>{% else %}2{% endif %}
+                </div>
+                <div class="step-label">Firm登録</div>
+              </div>
+              <div class="step-line {% if has_firm %}completed{% endif %}"></div>
+              <div class="step flex-column">
+                <div class="step-circle {% if has_firm %}current{% else %}pending{% endif %}">
+                  {% if has_firm %}3{% else %}3{% endif %}
+                </div>
+                <div class="step-label">クライアント登録</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step flex-column">
+                <div class="step-circle pending">4</div>
+                <div class="step-label">分析開始</div>
+              </div>
+            </div>
+            
+            <!-- ステップカード -->
+            <div class="row g-4 mb-4">
+              {% if not has_firm %}
+              <!-- Firm未登録の場合 -->
+              <div class="col-md-6">
+                <div class="card step-card">
+                  <div class="card-body p-4 text-center">
+                    <div class="step-number mx-auto">1</div>
+                    <div class="step-icon mx-auto">
+                      <i class="ti ti-building-community"></i>
+                    </div>
+                    <h5 class="mb-2">Firmを登録</h5>
+                    <p class="text-muted mb-4">
+                      あなたのコンサルティングファーム・事務所を登録します。
+                    </p>
+                    <a href="{% url 'firm_register' %}" class="btn btn-primary w-100">
+                      <i class="ti ti-plus me-2"></i>Firmを登録する
+                    </a>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="card step-card" style="opacity: 0.6;">
+                  <div class="card-body p-4 text-center">
+                    <div class="step-number mx-auto" style="background: #ccc;">2</div>
+                    <div class="step-icon mx-auto">
+                      <i class="ti ti-building"></i>
+                    </div>
+                    <h5 class="mb-2">クライアント企業を登録</h5>
+                    <p class="text-muted mb-4">
+                      Firm登録後、顧客企業を登録できるようになります。
+                    </p>
+                    <button class="btn btn-secondary w-100" disabled>
+                      まずFirmを登録してください
+                    </button>
+                  </div>
+                </div>
+              </div>
+              
+              {% else %}
+              <!-- Firm登録済みの場合 -->
+              <div class="col-12">
+                <div class="card step-card">
+                  <div class="card-body p-4">
+                    <div class="row align-items-center">
+                      <div class="col-md-8">
+                        <div class="d-flex align-items-center mb-3">
+                          <div class="step-icon me-3" style="margin-bottom: 0;">
+                            <i class="ti ti-building"></i>
+                          </div>
+                          <div>
+                            <h5 class="mb-1">クライアント企業を登録しましょう</h5>
+                            <p class="text-muted mb-0">
+                              Firm「<strong>{{ user_firm.firm.name }}</strong>」に顧客企業を追加して、財務分析を始めましょう。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                        <a href="{% url 'firm_company_register' %}" class="btn btn-primary btn-lg">
+                          <i class="ti ti-plus me-2"></i>企業を登録
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+            
+            {% if has_companies %}
+            <!-- 既存のCompanyがある場合 -->
+            <div class="card">
+              <div class="card-header">
+                <h5 class="mb-0">登録済みの企業</h5>
+              </div>
+              <div class="card-body">
+                <p class="text-muted mb-3">以下の企業を選択してダッシュボードを表示できます。</p>
+                <div class="list-group">
+                  {% for uc in user_companies %}
+                  <a href="{% url 'select_company' uc.company.id %}" 
+                     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="mb-0">{{ uc.company.name }}</h6>
+                      <small class="text-muted">
+                        {% if uc.is_owner %}オーナー{% endif %}
+                        {% if uc.as_consultant %}コンサルタント{% endif %}
+                      </small>
+                    </div>
+                    <i class="ti ti-chevron-right text-muted"></i>
+                  </a>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            
+            <!-- SCore_Aiでできること -->
+            <div class="card mt-4">
+              <div class="card-header">
+                <h5 class="mb-0">SCore_Ai でできること</h5>
+              </div>
+              <div class="card-body">
+                <div class="row g-4">
+                  <div class="col-md-4">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0">
+                        <i class="ti ti-chart-line text-primary" style="font-size: 1.5rem;"></i>
+                      </div>
+                      <div class="ms-3">
+                        <h6>財務分析</h6>
+                        <p class="text-muted small mb-0">決算データの可視化と予算実績比較</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0">
+                        <i class="ti ti-building-bank text-primary" style="font-size: 1.5rem;"></i>
+                      </div>
+                      <div class="ms-3">
+                        <h6>借入管理</h6>
+                        <p class="text-muted small mb-0">借入金の一元管理と返済シミュレーション</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="d-flex">
+                      <div class="flex-shrink-0">
+                        <i class="ti ti-brain text-primary" style="font-size: 1.5rem;"></i>
+                      </div>
+                      <div class="ms-3">
+                        <h6>AI分析</h6>
+                        <p class="text-muted small mb-0">AIによる経営診断と改善提案</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

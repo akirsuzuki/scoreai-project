@@ -84,19 +84,68 @@
           <h5 class="card-title mb-0 fw-semibold">単年度月次PL</h5>
         </div>
       <div class="card-body">
-        {% if data_not_found %}
-        <div class="alert alert-warning mb-3" role="alert">
-          <i class="fas fa-exclamation-triangle me-2"></i>
-          {% if data_not_found_year %}
-            {{ data_not_found_year }}年{% if data_not_found_is_budget %}・予算{% else %}・実績{% endif %}のデータが見つかりませんでした。
-          {% else %}
-            選択された年度・予算/実績のデータが見つかりませんでした。
-          {% endif %}
-        </div>
-        {% endif %}
-        {% if not monthly_data %}
-        <div class="alert alert-danger" role="alert">
-          <i class="fas fa-exclamation-circle me-2"></i>表示するデータがありません。
+        {% if data_not_found or not monthly_data %}
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-warning">
+              <i class="ti ti-alert-triangle me-2"></i>
+              {% if data_not_found_year %}
+                {{ data_not_found_year }}年{% if data_not_found_is_budget %}・予算{% else %}・実績{% endif %}の月次データが見つかりません。先に月次予算と月次実績データを登録してください。
+              {% else %}
+                選択された年度・予算/実績の月次データが見つかりません。先に月次予算と月次実績データを登録してください。
+              {% endif %}
+            </div>
+            <div class="card mt-3">
+              <div class="card-body">
+                <h5 class="card-title mb-3">月次データの登録方法</h5>
+                <p class="text-muted mb-3">以下の方法で月次データを登録できます：</p>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <div class="card border-primary h-100">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="ti ti-file-plus text-primary fs-4 me-2"></i>
+                          <h6 class="card-title mb-0 fw-semibold">手動で新規登録</h6>
+                        </div>
+                        <p class="text-muted small mb-3">月次データを手動で入力して登録します。</p>
+                        <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary btn-sm w-100">
+                          <i class="ti ti-plus me-1"></i>新規登録
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card border-success h-100">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="ti ti-file-spreadsheet text-success fs-4 me-2"></i>
+                          <h6 class="card-title mb-0 fw-semibold">CSVで一括インポート</h6>
+                        </div>
+                        <p class="text-muted small mb-3">CSVファイルを準備してアップロードすると、一括で月次データを取り込みます。</p>
+                        <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-success btn-sm w-100">
+                          <i class="ti ti-upload me-1"></i>CSVインポート
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card border-info h-100">
+                      <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                          <i class="ti ti-brand-moneyforward text-info fs-4 me-2"></i>
+                          <h6 class="card-title mb-0 fw-semibold">マネーフォワードから取り込み</h6>
+                        </div>
+                        <p class="text-muted small mb-3">マネーフォワードの残高試算表CSVから月次データを取り込みます。</p>
+                        <a href="{% url 'import_fiscal_summary_month_MF' %}" class="btn btn-info btn-sm w-100">
+                          <i class="ti ti-upload me-1"></i>マネーフォワードから取り込み
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         {% else %}
         <div class="fiscal-summary-table-container">
@@ -181,10 +230,6 @@
           </table>
         </div>
         {% endif %}
-      </div>
-      <div class="card-footer text-end">
-        <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
-        <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
       </div>
     </div>
   </div>

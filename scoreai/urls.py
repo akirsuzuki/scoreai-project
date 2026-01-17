@@ -23,6 +23,11 @@ from .views import (
     load_industry_subclassifications,
     ImportFiscalSummaryFromOcrView,
 )
+from .views.auth_views import (
+    EmailVerificationSentView,
+    EmailVerifyView,
+    WelcomeView,
+)
 from .views.ai_consultation_views import (
     AIConsultationCenterView,
     AIConsultationView,
@@ -85,6 +90,7 @@ from .views.blog_views import (
 from .views.plan_views import (
     PlanListView,
     PlanDetailView,
+    PlanDetailPublicView,
     SubscriptionManageView,
     SubscriptionCreateView,
     SubscriptionSuccessView,
@@ -107,6 +113,12 @@ from .views.subscription_history_views import (
 )
 from .views.firm_settings_views import (
     FirmSettingsView,
+)
+from .views.firm_registration_views import (
+    FirmRegistrationView,
+    FirmRegistrationSuccessView,
+    FirmCompanyRegistrationView,
+    CompanyRegistrationSuccessView,
 )
 from .views.notification_views import (
     NotificationListView,
@@ -232,8 +244,17 @@ from .views import (
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
     path('user_create/', UserCreateView.as_view(), name='user_create'),
+    path('email/verification-sent/', EmailVerificationSentView.as_view(), name='email_verification_sent'),
+    path('email/verify/<str:token>/', EmailVerifyView.as_view(), name='email_verify'),
+    path('welcome/', WelcomeView.as_view(), name='welcome'),
     path("login/", LoginView.as_view(), name="login"),
     path('logout/', ScoreLogoutView.as_view(), name='logout'),
+    # Firm登録
+    path('firm/register/', FirmRegistrationView.as_view(), name='firm_register'),
+    path('firm/register/success/', FirmRegistrationSuccessView.as_view(), name='firm_registration_success'),
+    # Company登録（Firm配下）
+    path('firm/company/register/', FirmCompanyRegistrationView.as_view(), name='firm_company_register'),
+    path('company/register/success/<str:company_id>/', CompanyRegistrationSuccessView.as_view(), name='company_registration_success'),
     path('user_profile/', UserProfileView.as_view(), name='user_profile'),
     path('user_profile_update/', UserProfileUpdateView.as_view(), name='user_profile_update'),
     # パスワード変更（ログイン済みユーザー用）
@@ -343,6 +364,7 @@ urlpatterns = [
     path('manual/', ManualListView.as_view(), name='manual_list'),
     path('manual/<str:pk>/', ManualDetailView.as_view(), name='manual_detail'),
     path('faq/', FAQView.as_view(), name='faq'),
+    path('support/plans/<str:plan_id>/', PlanDetailPublicView.as_view(), name='plan_detail_public'),
     path('terms_of_service/', TermsOfServiceView.as_view(), name='terms_of_service'),
     path('privacy_policy/', PrivacyPolicyView.as_view(), name='privacy_policy'),
     path('legal_notice/', LegalNoticeView.as_view(), name='legal_notice'),

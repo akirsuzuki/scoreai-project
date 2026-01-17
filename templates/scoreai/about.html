@@ -2,54 +2,248 @@
 {% load static %}
 
 {% block title %}
-{{ title }}
+SCore_AIについて
 {% endblock %}
 
 {% block head %}
+<style>
+  .feature-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    height: 100%;
+  }
+  .feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #5D87FF 0%, #49BEFF 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .value-proposition {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border-left: 4px solid #5D87FF;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">{{ title }}</h4>
+{% include 'scoreai/part_about_header.html' with title="SCore_AIについて" subtitle="コンサルタント・士業の方向け財務分析プラットフォーム" %}
+
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row align-items-center mb-4">
+          <div class="col-md-8">
+            <h3 class="fw-semibold mb-3">財務分析を、もっと簡単に、もっと深く。</h3>
+            <p class="lead text-muted mb-4">
+              SCore_AIは、コンサルタント・税理士・公認会計士などの専門家が、<br>
+              クライアント企業の財務データを一元管理し、AIを活用した分析・提案を支援するプラットフォームです。
+            </p>
+          </div>
+          <div class="col-md-4 text-center">
+            <img src="{% static 'scoreai/img/LogoSCore_Ai.png' %}" alt="SCore_AI" class="img-fluid" style="max-width: 200px;">
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-<div class="row">
-    <div class="col-lg-12 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">{{ title }}</h5>
-            </div>
-            <div class="card-body">
-                <p>作成中</p>
-                <p>作成中</p>
-                <p>作成中</p>
-                <p>作成中</p>
-                <p>作成中</p>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
 
-            </div>
-            <div class="card-footer text-end">
-                <a href="{% url 'index' %}" class="btn btn-secondary">Dashboardへ</a>
-                <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
-            </div>
+<!-- 主な機能 -->
+<div class="row mb-4">
+  <div class="col-12 mb-3">
+    <h5 class="fw-semibold mb-0">
+      <i class="ti ti-sparkles me-2 text-primary"></i>主な機能
+    </h5>
+  </div>
+</div>
+
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-chart-line"></i>
         </div>
+        <h6 class="fw-semibold mb-2">財務分析</h6>
+        <p class="text-muted small mb-0">
+          決算データの可視化と予算実績比較により、企業の財務状況を多角的に分析できます。
+        </p>
+      </div>
     </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-building-bank"></i>
+        </div>
+        <h6 class="fw-semibold mb-2">借入管理</h6>
+        <p class="text-muted small mb-0">
+          借入金の一元管理と返済シミュレーションで、資金繰りを効率的に管理できます。
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-brain"></i>
+        </div>
+        <h6 class="fw-semibold mb-2">AI分析</h6>
+        <p class="text-muted small mb-0">
+          AIによる経営診断と改善提案で、データに基づいた意思決定をサポートします。
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-users"></i>
+        </div>
+        <h6 class="fw-semibold mb-2">クライアント管理</h6>
+        <p class="text-muted small mb-0">
+          複数のクライアント企業のデータを一元管理し、効率的に業務を進められます。
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-file-report"></i>
+        </div>
+        <h6 class="fw-semibold mb-2">レポート生成</h6>
+        <p class="text-muted small mb-0">
+          分析結果をレポート形式で出力し、クライアントへの説明資料として活用できます。
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-6 col-lg-4">
+    <div class="card feature-card h-100">
+      <div class="card-body">
+        <div class="feature-icon mx-auto">
+          <i class="ti ti-cloud"></i>
+        </div>
+        <h6 class="fw-semibold mb-2">クラウドストレージ連携</h6>
+        <p class="text-muted small mb-0">
+          各種クラウドストレージと連携し、ドキュメントを安全に管理できます。
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 価値提案 -->
+<div class="value-proposition">
+  <div class="row">
+    <div class="col-md-8">
+      <h5 class="fw-semibold mb-3">
+        <i class="ti ti-target me-2"></i>私たちのミッション
+      </h5>
+      <p class="mb-3">
+        コンサルタント・士業の皆様が、より多くの時間をクライアントへの価値提供に集中できるよう、<br>
+        データ管理や分析の煩雑な作業を効率化し、AIの力を活用した意思決定支援を提供します。
+      </p>
+      <p class="mb-0">
+        <strong>SCore_AI</strong>は、専門家の皆様と共に成長し、<br>
+        日本の中小企業の財務健全化と持続的な成長を支援します。
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 対象ユーザー -->
+<div class="row mb-4">
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <i class="ti ti-user-check me-2"></i>このような方におすすめ
+        </h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="d-flex align-items-start">
+              <i class="ti ti-check-circle text-success me-2 mt-1"></i>
+              <div>
+                <strong>経営コンサルタント</strong>
+                <p class="text-muted small mb-0">クライアント企業の財務分析と経営改善提案を行っている方</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-start">
+              <i class="ti ti-check-circle text-success me-2 mt-1"></i>
+              <div>
+                <strong>税理士・公認会計士</strong>
+                <p class="text-muted small mb-0">複数のクライアント企業の財務データを管理している方</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-start">
+              <i class="ti ti-check-circle text-success me-2 mt-1"></i>
+              <div>
+                <strong>中小企業診断士</strong>
+                <p class="text-muted small mb-0">企業の財務診断と経営支援を行っている方</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex align-items-start">
+              <i class="ti ti-check-circle text-success me-2 mt-1"></i>
+              <div>
+                <strong>金融機関担当者</strong>
+                <p class="text-muted small mb-0">融資先企業の財務状況を分析・管理している方</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- お問い合わせ -->
+<div class="row">
+  <div class="col-12">
+    <div class="card bg-light">
+      <div class="card-body text-center">
+        <h5 class="fw-semibold mb-3">ご質問・お問い合わせ</h5>
+        <p class="text-muted mb-3">
+          SCore_AIに関するご質問やお問い合わせは、<br>
+          お気軽にご連絡ください。
+        </p>
+        <a href="{% url 'about_links' %}" class="btn btn-primary">
+          <i class="ti ti-mail me-2"></i>お問い合わせ方法を確認
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -51,7 +51,7 @@ class PlanListView(FirmOwnerMixin, ListView):
 
 
 class PlanDetailView(FirmOwnerMixin, DetailView):
-    """プラン詳細ビュー"""
+    """プラン詳細ビュー（Firm管理用）"""
     model = FirmPlan
     template_name = 'scoreai/plan_detail.html'
     context_object_name = 'plan'
@@ -86,6 +86,65 @@ class PlanDetailView(FirmOwnerMixin, DetailView):
             context['current_subscription'] = None
             context['is_current_plan'] = False
             context['downgrade_warning'] = False
+        
+        return context
+
+
+class PlanDetailPublicView(DetailView):
+    """プラン詳細ビュー（Supportセクション用、一般公開）"""
+    model = FirmPlan
+    template_name = 'scoreai/plan_detail_public.html'
+    context_object_name = 'plan'
+    slug_field = 'id'
+    slug_url_kwarg = 'plan_id'
+    
+    def get_queryset(self):
+        """有効なプランのみを取得"""
+        return FirmPlan.objects.filter(is_active=True)
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'{self.object.name} - プラン詳細'
+        context['subtitle'] = f'{self.object.name}の詳細情報'
+        
+        # ログインしている場合、Firm情報を取得
+        if self.request.user.is_authenticated:
+            try:
+                user_firm = UserFirm.objects.filter(
+                    user=self.request.user,
+                    is_selected=True,
+                    is_owner=True,
+                    active=True
+                ).first()
+                
+                if user_firm:
+                    context['user_firm'] = user_firm
+                    context['firm'] = user_firm.firm
+                    
+                    # 現在のサブスクリプションを取得
+                    try:
+                        subscription = user_firm.firm.subscription
+                        context['current_subscription'] = subscription
+                        context['is_current_plan'] = subscription.plan == self.object
+                    except FirmSubscription.DoesNotExist:
+                        context['current_subscription'] = None
+                        context['is_current_plan'] = False
+                else:
+                    context['user_firm'] = None
+                    context['firm'] = None
+                    context['current_subscription'] = None
+                    context['is_current_plan'] = False
+            except Exception:
+                context['user_firm'] = None
+                context['firm'] = None
+                context['current_subscription'] = None
+                context['is_current_plan'] = False
+        else:
+            context['user_firm'] = None
+            context['firm'] = None
+            context['current_subscription'] = None
+            context['is_current_plan'] = False
         
         return context
 

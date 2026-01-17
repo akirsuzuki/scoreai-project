@@ -26947,3 +26947,992 @@ INFO 2026-01-16 19:57:46,522 basehttp "GET /ai-consultation/01KDCG3BC8091CSN0KKZ
 INFO 2026-01-16 19:57:48,534 basehttp "GET / HTTP/1.1" 200 74149
 INFO 2026-01-16 19:57:48,561 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 200 8188
 INFO 2026-01-16 19:57:56,088 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 78731
+INFO 2026-01-16 20:55:35,245 basehttp "GET /fiscal_summary_month/?years=3&start_year=2022&end_year=2025 HTTP/1.1" 200 90296
+INFO 2026-01-16 20:55:35,264 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-16 20:55:35,265 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-16 20:56:05,033 basehttp "GET /fiscal_summary_month/?years=3&start_year=2013&end_year=2015 HTTP/1.1" 200 77918
+INFO 2026-01-16 20:56:10,711 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 55121
+INFO 2026-01-16 20:56:33,743 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-16 20:56:33,745 budget_views budget_monthly_all count: 12
+INFO 2026-01-16 20:56:33,746 budget_views actual_monthly_all count: 6
+INFO 2026-01-16 20:56:33,753 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-16 20:56:33,754 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-16 20:56:33,769 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 53142
+INFO 2026-01-16 20:56:35,192 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 78731
+INFO 2026-01-16 20:56:39,322 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 66201
+INFO 2026-01-16 21:01:37,236 basehttp "GET / HTTP/1.1" 200 74149
+INFO 2026-01-16 21:01:37,250 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-16 21:01:37,252 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 200 1825
+INFO 2026-01-16 21:01:50,439 basehttp "GET / HTTP/1.1" 200 74149
+INFO 2026-01-16 21:01:50,518 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 200 8188
+INFO 2026-01-16 21:01:50,519 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-16 21:01:50,535 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 200 1825
+INFO 2026-01-16 21:02:11,642 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 78731
+INFO 2026-01-16 21:02:37,639 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 55121
+INFO 2026-01-16 21:02:40,219 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-16 21:02:40,221 budget_views budget_monthly_all count: 12
+INFO 2026-01-16 21:02:40,222 budget_views actual_monthly_all count: 6
+INFO 2026-01-16 21:02:40,230 budget_views Period 1: budget_month=株式会社VanCreworth - 2025 - 月1, actual_month=株式会社VanCreworth - 2025 - 月1
+INFO 2026-01-16 21:02:40,231 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=12
+INFO 2026-01-16 21:02:40,245 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 53142
+INFO 2026-01-16 21:03:08,083 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 66201
+INFO 2026-01-16 21:03:31,427 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 92810
+INFO 2026-01-16 21:03:56,152 basehttp "GET /debts_overview/ HTTP/1.1" 200 45325
+INFO 2026-01-16 21:04:08,354 basehttp "GET /debts_all/ HTTP/1.1" 200 69836
+INFO 2026-01-16 22:15:23,185 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-16 22:15:25,770 autoreload Watching for file changes with StatReloader
+INFO 2026-01-16 22:16:03,903 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-16 22:16:04,773 autoreload Watching for file changes with StatReloader
+INFO 2026-01-16 22:16:12,363 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-16 22:16:13,222 autoreload Watching for file changes with StatReloader
+INFO 2026-01-16 22:16:20,115 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-16 22:16:20,754 autoreload Watching for file changes with StatReloader
+INFO 2026-01-16 22:17:07,087 autoreload /app/scoreai/views/firm_registration_views.py changed, reloading.
+INFO 2026-01-16 22:17:08,953 autoreload Watching for file changes with StatReloader
+INFO 2026-01-16 22:26:01,427 basehttp "GET / HTTP/1.1" 200 74149
+INFO 2026-01-16 22:26:01,473 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-16 22:26:01,476 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 304 0
+INFO 2026-01-16 22:26:01,479 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-16 22:29:15,522 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-16 22:29:15,529 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-16 22:29:15,552 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-16 22:29:18,575 basehttp "GET /user_create/ HTTP/1.1" 200 24544
+INFO 2026-01-17 00:02:41,057 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 00:02:41,063 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 00:02:47,508 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 00:02:47,544 basehttp "GET / HTTP/1.1" 200 74149
+INFO 2026-01-17 00:02:47,590 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-17 00:02:47,595 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-17 00:02:47,598 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 304 0
+INFO 2026-01-17 07:09:24,385 basehttp "GET / HTTP/1.1" 200 74149
+INFO 2026-01-17 07:09:24,424 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-17 07:09:24,427 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-17 07:09:24,434 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 304 0
+INFO 2026-01-17 07:09:24,435 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 200 21446
+INFO 2026-01-17 07:09:34,619 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 07:09:34,622 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 07:09:34,632 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 07:09:37,412 basehttp "GET /user_create/ HTTP/1.1" 200 24544
+INFO 2026-01-17 07:09:49,235 basehttp "GET /ai-consultation/ HTTP/1.1" 302 0
+INFO 2026-01-17 07:09:49,248 basehttp "GET /login/?next=/ai-consultation/ HTTP/1.1" 200 3052
+INFO 2026-01-17 07:10:03,560 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 302 0
+INFO 2026-01-17 07:10:03,567 basehttp "GET /login/?next=/stakeholder_name/list/ HTTP/1.1" 200 3052
+INFO 2026-01-17 07:12:44,823 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 07:12:52,347 basehttp "GET /user_create/ HTTP/1.1" 200 5900
+INFO 2026-01-17 07:13:00,139 basehttp "GET /login/ HTTP/1.1" 200 3052
+INFO 2026-01-17 11:58:40,225 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 11:58:54,431 basehttp "GET /user_create/ HTTP/1.1" 200 5900
+INFO 2026-01-17 12:35:33,570 basehttp "GET /user_create/ HTTP/1.1" 200 11547
+WARNING 2026-01-17 12:35:33,600 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 12:36:46,728 basehttp "GET /user_create/ HTTP/1.1" 200 11960
+WARNING 2026-01-17 12:36:46,875 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 12:36:51,986 basehttp "GET /user_create/ HTTP/1.1" 200 11960
+WARNING 2026-01-17 12:36:52,013 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 13:36:59,388 basehttp "GET /user_create/ HTTP/1.1" 200 11960
+WARNING 2026-01-17 13:36:59,514 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 13:53:35,036 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 13:53:35,134 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 14:48:45,626 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 14:48:45,668 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 14:49:30,429 basehttp "POST /user_create/ HTTP/1.1" 200 12236
+WARNING 2026-01-17 14:49:30,460 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 14:50:25,581 auth_views User registration successful: username=akirsuzuki+123, email=akirsuzuki+123@gmail.com, ip=192.168.65.1, has_invitation=False, is_active=False
+INFO 2026-01-17 14:50:25,582 basehttp "POST /user_create/ HTTP/1.1" 302 0
+INFO 2026-01-17 14:50:25,585 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 14:50:25,597 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 14:52:08,904 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 14:52:09,157 basehttp "GET / HTTP/1.1" 200 75121
+INFO 2026-01-17 14:52:09,660 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-17 14:52:09,660 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-17 14:52:09,661 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-17 14:52:09,662 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-17 14:52:09,663 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 304 0
+INFO 2026-01-17 14:53:16,252 basehttp "GET /debts_all/ HTTP/1.1" 200 69836
+INFO 2026-01-17 14:53:23,227 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-17 14:53:26,173 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:03:36,648 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 15:03:36,689 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,690 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,690 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,694 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,695 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,698 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,699 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,700 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,708 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,709 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,713 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,722 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,724 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,733 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:03:36,734 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,739 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-01-17 15:03:36,740 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-01-17 15:03:36,754 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,754 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,764 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,767 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,768 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:36,769 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:37,163 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 15:03:37,203 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:03:55,877 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 200 27447
+INFO 2026-01-17 15:03:56,399 basehttp "GET /static/admin/js/cancel.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:03:57,749 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:03:57,763 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35728
+INFO 2026-01-17 15:03:57,800 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:04:04,018 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:04:04,020 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 15:04:04,026 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 15:04:33,816 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 15:04:33,860 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 15:04:36,393 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 15:04:54,360 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 15:04:54,387 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 15:05:31,064 auth_views User registration successful: username=akirsuzuki+123, email=akirsuzuki+123@gmail.com, ip=192.168.65.1, has_invitation=False, is_active=True
+INFO 2026-01-17 15:05:31,067 basehttp "POST /user_create/ HTTP/1.1" 302 0
+ERROR 2026-01-17 15:05:31,073 index_views Unexpected error in IndexView.get: 選択された会社がありません。
+Traceback (most recent call last):
+  File "/app/scoreai/views/index_views.py", line 43, in get
+    context = self.get_context_data()
+              ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/index_views.py", line 78, in get_context_data
+    monthly_summaries = get_monthly_summaries(self.this_company, num_years=3)
+                                              ^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 63, in this_company
+    raise ValueError("選択された会社がありません。")
+ValueError: 選択された会社がありません。
+ERROR 2026-01-17 15:05:31,081 log Internal Server Error: /
+ERROR 2026-01-17 15:05:31,082 basehttp "GET / HTTP/1.1" 500 25505
+INFO 2026-01-17 15:06:02,758 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:06:02,762 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 15:06:02,767 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 15:13:38,851 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-17 15:13:40,019 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:14:09,996 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-17 15:14:11,382 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:14:55,995 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-17 15:14:57,274 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:15:18,457 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-17 15:15:18,950 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:15:36,919 autoreload /app/scoreai/mixins.py changed, reloading.
+INFO 2026-01-17 15:15:37,516 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:16:04,077 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-17 15:16:04,718 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:16:26,292 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-17 15:16:26,955 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:17:30,864 autoreload /app/scoreai/views/__init__.py changed, reloading.
+INFO 2026-01-17 15:17:31,873 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:22:25,253 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 15:22:25,305 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 15:22:44,226 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:22:44,248 basehttp "GET /admin/login/?next=/admin/scoreai/user/ HTTP/1.1" 200 4312
+INFO 2026-01-17 15:22:44,300 basehttp "GET /static/admin/css/login.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:22:56,184 basehttp "POST /admin/login/?next=/admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:22:56,208 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 15:22:56,254 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:23:14,908 basehttp "GET /admin/scoreai/userfirm/ HTTP/1.1" 200 32647
+INFO 2026-01-17 15:23:14,948 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:23:14,962 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:23:21,347 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 29595
+INFO 2026-01-17 15:23:21,370 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:23:24,785 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 15:23:24,812 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+ERROR 2026-01-17 15:23:32,490 log Internal Server Error: /admin/scoreai/user/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.OperationalError: no such table: scoreai_emailverificationtoken
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 718, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 241, in inner
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 188, in _view_wrapper
+    result = _process_exception(request, e)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 186, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 2034, in changelist_view
+    response = self.response_action(
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 1666, in response_action
+    response = func(self, request, queryset)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/actions.py", line 39, in delete_selected
+    ) = modeladmin.get_deleted_objects(queryset, request)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 2176, in get_deleted_objects
+    return get_deleted_objects(objs, request, self.admin_site)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/utils.py", line 138, in get_deleted_objects
+    collector.collect(objs)
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/utils.py", line 205, in collect
+    return super().collect(objs, source_attr=source_attr, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/deletion.py", line 344, in collect
+    if getattr(on_delete, "lazy_sub_objs", False) or sub_objs:
+                                                     ^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 414, in __bool__
+    self._fetch_all()
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1574, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: no such table: scoreai_emailverificationtoken
+ERROR 2026-01-17 15:23:32,493 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 500 215868
+INFO 2026-01-17 15:27:51,203 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:27:53,744 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 15:27:57,746 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 200 27447
+INFO 2026-01-17 15:27:59,126 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:27:59,136 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35728
+INFO 2026-01-17 15:27:59,150 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:28:54,398 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 29595
+INFO 2026-01-17 15:28:54,471 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:28:56,688 basehttp "GET /admin/scoreai/firm/01KDHGX8MB5GNY9W4B3928MB5D/change/ HTTP/1.1" 200 32259
+INFO 2026-01-17 15:28:56,714 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:28:56,717 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:28:56,724 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 15:28:56,726 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 304 0
+INFO 2026-01-17 15:28:56,728 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-17 15:28:56,732 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 304 0
+INFO 2026-01-17 15:31:46,494 autoreload /app/scoreai/models.py changed, reloading.
+INFO 2026-01-17 15:31:47,626 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:36:04,783 autoreload /app/scoreai/forms.py changed, reloading.
+INFO 2026-01-17 15:36:07,087 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 15:50:13,742 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 15:50:13,794 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 15:50:46,648 auth_views Verification email sent to akirsuzuki+123@gmail.com
+INFO 2026-01-17 15:50:46,650 auth_views User registration: username=akirsuzuki+123, email=akirsuzuki+123@gmail.com, ip=192.168.65.1, has_invitation=False, verification_sent=True
+INFO 2026-01-17 15:50:46,652 basehttp "POST /user_create/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:50:46,674 basehttp "GET /email/verification-sent/ HTTP/1.1" 200 2730
+INFO 2026-01-17 15:51:42,667 auth_views Email verified for user: akirsuzuki+123@gmail.com
+INFO 2026-01-17 15:51:42,672 basehttp "GET /email/verify/nuoCuYOkISJ-nlK6Xkt9qq0PQD0cH8j5xHgH1u0x1vM/ HTTP/1.1" 302 0
+INFO 2026-01-17 15:51:42,702 basehttp "GET /welcome/ HTTP/1.1" 200 6656
+INFO 2026-01-17 15:59:54,921 basehttp "GET /firm/register/ HTTP/1.1" 200 11057
+INFO 2026-01-17 16:01:37,118 basehttp "POST /firm/register/ HTTP/1.1" 302 0
+INFO 2026-01-17 16:01:37,174 basehttp "GET /firm/register/success/ HTTP/1.1" 200 4749
+INFO 2026-01-17 16:02:22,307 basehttp "GET /firm/company/register/ HTTP/1.1" 200 31801
+INFO 2026-01-17 16:02:33,742 basehttp "GET /ajax/load-industry-subclassifications/?industry_classification=26 HTTP/1.1" 200 408
+INFO 2026-01-17 16:02:39,362 basehttp "POST /firm/company/register/ HTTP/1.1" 302 0
+INFO 2026-01-17 16:02:39,392 basehttp "GET /company/register/success/01KF5C6PZ7S0BF6A169T44G06T/ HTTP/1.1" 200 31096
+INFO 2026-01-17 16:08:26,746 basehttp "GET /company/register/success/01KF5C6PZ7S0BF6A169T44G06T/ HTTP/1.1" 200 33034
+INFO 2026-01-17 16:09:16,442 autoreload /app/scoreai/views/firm_registration_views.py changed, reloading.
+INFO 2026-01-17 16:09:18,164 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 16:09:33,040 basehttp "GET /company/register/success/01KF5C6PZ7S0BF6A169T44G06T/ HTTP/1.1" 200 33034
+INFO 2026-01-17 16:09:35,714 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 88379
+INFO 2026-01-17 16:10:03,516 basehttp "POST /fiscal_summary_year/create/ HTTP/1.1" 302 0
+INFO 2026-01-17 16:10:03,546 basehttp "GET /fiscal_summary_year/ HTTP/1.1" 200 50809
+INFO 2026-01-17 16:10:06,903 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 82338
+INFO 2026-01-17 16:10:10,049 basehttp "GET / HTTP/1.1" 200 44044
+INFO 2026-01-17 16:10:16,980 basehttp "GET /user_profile/ HTTP/1.1" 200 36487
+INFO 2026-01-17 16:10:30,768 basehttp "GET /user_profile_update/ HTTP/1.1" 200 27283
+INFO 2026-01-17 16:10:36,615 basehttp "GET /user_profile_update/ HTTP/1.1" 200 27283
+INFO 2026-01-17 16:10:41,345 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 27847
+INFO 2026-01-17 16:10:47,289 basehttp "GET /user_profile/ HTTP/1.1" 200 36487
+INFO 2026-01-17 16:11:10,850 basehttp "GET /company/01KF5C6PZ7S0BF6A169T44G06T/ HTTP/1.1" 200 31376
+INFO 2026-01-17 16:11:14,268 basehttp "GET /company/01KF5C6PZ7S0BF6A169T44G06T/ HTTP/1.1" 200 31376
+INFO 2026-01-17 16:11:15,317 basehttp "GET /company/01KF5C6PZ7S0BF6A169T44G06T/members/ HTTP/1.1" 200 31986
+INFO 2026-01-17 16:11:52,214 basehttp "GET /user_profile/ HTTP/1.1" 200 36487
+INFO 2026-01-17 16:12:25,715 autoreload /app/scoreai/views/firm_settings_views.py changed, reloading.
+INFO 2026-01-17 16:12:26,504 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 16:13:03,206 basehttp "GET /user_profile/ HTTP/1.1" 200 40435
+INFO 2026-01-17 16:13:09,790 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/settings/ HTTP/1.1" 200 41781
+INFO 2026-01-17 16:13:20,143 basehttp "GET /plans/01KF5C4T4T8VY3ECX2K3MNK1SP/ HTTP/1.1" 200 40551
+INFO 2026-01-17 16:13:21,217 basehttp "GET /plans/01KF5C4T4T8VY3ECX2K3MNK1SP/subscription/ HTTP/1.1" 200 31834
+INFO 2026-01-17 16:13:21,959 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/usage/report/ HTTP/1.1" 200 45993
+INFO 2026-01-17 16:13:23,599 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/settings/ HTTP/1.1" 200 41781
+INFO 2026-01-17 16:13:24,982 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/notifications/ HTTP/1.1" 200 32359
+INFO 2026-01-17 16:13:25,748 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/members/ HTTP/1.1" 200 39962
+INFO 2026-01-17 16:15:45,256 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/members/ HTTP/1.1" 200 40056
+INFO 2026-01-17 16:15:48,992 basehttp "GET /firm/01KF5C4T4T8VY3ECX2K3MNK1SP/members/ HTTP/1.1" 200 40056
+INFO 2026-01-17 16:15:53,885 basehttp "GET /budget/suggest/ HTTP/1.1" 200 37077
+INFO 2026-01-17 16:16:00,953 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 47601
+INFO 2026-01-17 16:16:03,707 basehttp "GET /settings/my-scripts/ HTTP/1.1" 200 31889
+INFO 2026-01-17 16:16:06,145 basehttp "GET /industry_benchmark_list/ HTTP/1.1" 200 47601
+INFO 2026-01-17 16:16:10,293 basehttp "GET /about-links/ HTTP/1.1" 200 35010
+INFO 2026-01-17 16:16:15,811 basehttp "GET /import_fiscal_summary_month/ HTTP/1.1" 200 34998
+INFO 2026-01-17 16:16:18,957 basehttp "GET /import_fiscal_summary_ocr/ HTTP/1.1" 200 38364
+INFO 2026-01-17 16:16:21,589 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32316
+INFO 2026-01-17 16:16:24,918 basehttp "GET /stock_event_list/ HTTP/1.1" 200 32562
+INFO 2026-01-17 16:16:27,096 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 33883
+INFO 2026-01-17 16:16:27,916 basehttp "GET /stock_event/create/ HTTP/1.1" 200 33431
+INFO 2026-01-17 16:16:29,244 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32316
+INFO 2026-01-17 16:16:33,008 basehttp "GET /stakeholder_name/create/ HTTP/1.1" 200 33883
+INFO 2026-01-17 16:16:36,203 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32316
+INFO 2026-01-17 16:16:49,310 basehttp "GET /ai-consultation/ HTTP/1.1" 200 61960
+INFO 2026-01-17 16:16:51,311 basehttp "GET / HTTP/1.1" 200 48086
+INFO 2026-01-17 16:17:40,870 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 52034
+INFO 2026-01-17 16:17:50,146 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51782
+INFO 2026-01-17 16:17:54,281 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-17 16:17:54,283 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 16:17:54,285 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 16:17:54,288 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=0
+INFO 2026-01-17 16:17:54,304 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 34815
+INFO 2026-01-17 16:17:57,075 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 35638
+INFO 2026-01-17 16:17:58,343 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 52034
+INFO 2026-01-17 16:18:21,539 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 51782
+INFO 2026-01-17 16:18:25,073 budget_views BudgetVsActualMonthlyComparisonView: year=2025
+INFO 2026-01-17 16:18:25,075 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 16:18:25,076 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 16:18:25,078 budget_views BudgetVsActualMonthlyComparisonView: year=2025, monthly_comparison_count=0
+INFO 2026-01-17 16:18:25,090 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 34815
+INFO 2026-01-17 16:18:27,101 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 35638
+INFO 2026-01-17 16:18:30,286 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 54409
+INFO 2026-01-17 16:19:10,349 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 86380
+INFO 2026-01-17 16:30:16,884 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89399
+INFO 2026-01-17 16:30:20,968 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57428
+INFO 2026-01-17 16:30:23,235 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57428
+INFO 2026-01-17 16:30:44,434 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89399
+INFO 2026-01-17 16:30:45,370 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 53422
+INFO 2026-01-17 16:30:46,386 basehttp "GET /fiscal_summary_year/create/ HTTP/1.1" 200 95453
+INFO 2026-01-17 16:30:51,407 basehttp "GET / HTTP/1.1" 200 51105
+INFO 2026-01-17 16:38:56,687 basehttp "GET / HTTP/1.1" 200 51587
+INFO 2026-01-17 16:39:03,057 basehttp "GET /fiscal_summary_year/?is_draft=false HTTP/1.1" 200 57910
+INFO 2026-01-17 16:39:08,701 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89881
+INFO 2026-01-17 16:39:10,696 basehttp "GET /budget/vs-actual-yearly/ HTTP/1.1" 200 53904
+INFO 2026-01-17 16:39:17,251 basehttp "GET /budget/suggest/ HTTP/1.1" 200 40578
+INFO 2026-01-17 16:39:19,199 basehttp "GET /fiscal-summary-year/latest/ HTTP/1.1" 200 89881
+INFO 2026-01-17 16:39:24,381 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 38146
+INFO 2026-01-17 16:45:53,134 basehttp "GET /import_fiscal_summary_year/ HTTP/1.1" 200 34261
+INFO 2026-01-17 16:45:56,102 basehttp "GET / HTTP/1.1" 200 47702
+INFO 2026-01-17 16:46:11,296 basehttp "GET /about-links/ HTTP/1.1" 200 34626
+INFO 2026-01-17 16:46:38,316 basehttp "GET /about/ HTTP/1.1" 200 30437
+INFO 2026-01-17 16:47:05,552 basehttp "GET /company_profile/ HTTP/1.1" 200 30524
+INFO 2026-01-17 16:47:14,815 basehttp "GET /company_profile/ HTTP/1.1" 200 30524
+INFO 2026-01-17 16:47:36,618 basehttp "GET /help/ HTTP/1.1" 200 31295
+ERROR 2026-01-17 16:47:38,563 mixins Unexpected error in ManualListView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:47:38,584 log Internal Server Error: /manual/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 68, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:47:38,586 basehttp "GET /manual/ HTTP/1.1" 500 93131
+INFO 2026-01-17 16:47:46,044 basehttp "GET /faq/ HTTP/1.1" 200 43153
+INFO 2026-01-17 16:47:48,500 basehttp "GET /terms_of_service/ HTTP/1.1" 200 31451
+INFO 2026-01-17 16:47:50,695 basehttp "GET /privacy_policy/ HTTP/1.1" 200 31819
+INFO 2026-01-17 16:47:52,556 basehttp "GET /legal_notice/ HTTP/1.1" 200 31188
+INFO 2026-01-17 16:47:54,083 basehttp "GET /security_policy/ HTTP/1.1" 200 31138
+INFO 2026-01-17 16:49:19,506 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 16:49:20,738 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 16:51:26,053 basehttp "GET /about-links/ HTTP/1.1" 200 36042
+INFO 2026-01-17 16:51:40,313 basehttp "GET /about/ HTTP/1.1" 200 39102
+INFO 2026-01-17 16:52:59,219 basehttp "GET /terms_of_service/ HTTP/1.1" 200 33114
+INFO 2026-01-17 16:53:24,950 basehttp "GET /privacy_policy/ HTTP/1.1" 200 33483
+INFO 2026-01-17 16:53:30,126 basehttp "GET / HTTP/1.1" 200 47702
+INFO 2026-01-17 16:53:30,166 basehttp "GET /static/scoreai/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-17 16:53:30,168 basehttp "GET /static/scoreai/js/dashboard.js HTTP/1.1" 304 0
+INFO 2026-01-17 16:54:01,300 basehttp "GET /company_profile/ HTTP/1.1" 200 41665
+INFO 2026-01-17 16:54:29,522 basehttp "GET /about-links/ HTTP/1.1" 200 35324
+INFO 2026-01-17 16:55:03,096 basehttp "GET /about-links/ HTTP/1.1" 200 35324
+INFO 2026-01-17 16:55:09,659 basehttp "GET /faq/ HTTP/1.1" 200 42629
+ERROR 2026-01-17 16:55:14,499 mixins Unexpected error in ManualListView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:55:14,528 log Internal Server Error: /manual/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 68, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:55:14,529 basehttp "GET /manual/ HTTP/1.1" 500 93131
+INFO 2026-01-17 16:55:16,338 basehttp "GET /help/ HTTP/1.1" 200 31819
+INFO 2026-01-17 16:55:19,222 basehttp "GET /company_profile/ HTTP/1.1" 200 40946
+INFO 2026-01-17 16:55:21,926 basehttp "GET /help/ HTTP/1.1" 200 31295
+INFO 2026-01-17 16:58:55,682 basehttp "GET /about-links/ HTTP/1.1" 200 35324
+INFO 2026-01-17 16:58:57,160 basehttp "GET /faq/ HTTP/1.1" 200 42629
+ERROR 2026-01-17 16:59:05,188 mixins Unexpected error in ManualListView.dispatch: attempted relative import beyond top-level package
+Traceback (most recent call last):
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:59:05,215 log Internal Server Error: /manual/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 68, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/mixins.py", line 19, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/generic/list.py", line 154, in get
+    self.object_list = self.get_queryset()
+                       ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views.py", line 1885, in get_queryset
+    from ..models import UserCompany
+ImportError: attempted relative import beyond top-level package
+ERROR 2026-01-17 16:59:05,216 basehttp "GET /manual/ HTTP/1.1" 500 93131
+INFO 2026-01-17 17:00:07,879 basehttp "GET /login/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:00:15,179 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 302 0
+ERROR 2026-01-17 17:00:15,241 log Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 676, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'groups'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 425, in login
+    **self.each_context(request),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 338, in each_context
+    "available_apps": self.get_app_list(request),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 541, in get_app_list
+    app_dict = self._build_app_dict(request, app_label)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 483, in _build_app_dict
+    has_module_perms = model_admin.has_module_permission(request)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 640, in has_module_permission
+    return request.user.has_module_perms(self.opts.app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 332, in has_module_perms
+    return _user_has_module_perms(self, app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 236, in _user_has_module_perms
+    if backend.has_module_perms(user, app_label):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 117, in has_module_perms
+    for perm in self.get_all_permissions(user_obj)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 105, in get_all_permissions
+    user_obj._perm_cache = super().get_all_permissions(user_obj)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 24, in get_all_permissions
+    *self.get_group_permissions(user_obj, obj=obj),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 99, in get_group_permissions
+    return self._get_permissions(user_obj, obj, "group")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 80, in _get_permissions
+    perms = getattr(self, "_get_%s_permissions" % from_name)(user_obj)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 62, in _get_group_permissions
+    user_groups_field = get_user_model()._meta.get_field("groups")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 678, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: User has no field named 'groups'
+ERROR 2026-01-17 17:00:15,245 basehttp "GET /admin/login/?next=/admin/scoreai/firm/ HTTP/1.1" 500 142119
+INFO 2026-01-17 17:00:15,539 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:00:16,716 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:00:24,586 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:00:25,646 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:00:28,131 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 302 0
+ERROR 2026-01-17 17:00:28,301 log Internal Server Error: /admin/login/
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 676, in get_field
+    return self.fields_map[field_name]
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^
+KeyError: 'groups'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/views/decorators/cache.py", line 80, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 425, in login
+    **self.each_context(request),
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 338, in each_context
+    "available_apps": self.get_app_list(request),
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 541, in get_app_list
+    app_dict = self._build_app_dict(request, app_label)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/sites.py", line 483, in _build_app_dict
+    has_module_perms = model_admin.has_module_permission(request)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/admin/options.py", line 640, in has_module_permission
+    return request.user.has_module_perms(self.opts.app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 332, in has_module_perms
+    return _user_has_module_perms(self, app_label)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/models.py", line 236, in _user_has_module_perms
+    if backend.has_module_perms(user, app_label):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 117, in has_module_perms
+    for perm in self.get_all_permissions(user_obj)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 105, in get_all_permissions
+    user_obj._perm_cache = super().get_all_permissions(user_obj)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 24, in get_all_permissions
+    *self.get_group_permissions(user_obj, obj=obj),
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 99, in get_group_permissions
+    return self._get_permissions(user_obj, obj, "group")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 80, in _get_permissions
+    perms = getattr(self, "_get_%s_permissions" % from_name)(user_obj)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/contrib/auth/backends.py", line 62, in _get_group_permissions
+    user_groups_field = get_user_model()._meta.get_field("groups")
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/options.py", line 678, in get_field
+    raise FieldDoesNotExist(
+django.core.exceptions.FieldDoesNotExist: User has no field named 'groups'
+ERROR 2026-01-17 17:00:28,309 basehttp "GET /admin/login/?next=/admin/scoreai/user/ HTTP/1.1" 500 142091
+INFO 2026-01-17 17:00:41,659 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:00:43,114 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:00:46,119 basehttp "GET /user_profile/ HTTP/1.1" 200 40669
+INFO 2026-01-17 17:00:54,905 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:00:54,910 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:00:54,917 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:01:01,059 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:01:01,112 basehttp "GET / HTTP/1.1" 200 73570
+INFO 2026-01-17 17:01:09,233 basehttp "GET /admin/ HTTP/1.1" 200 37195
+INFO 2026-01-17 17:01:09,299 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-17 17:01:09,355 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2026-01-17 17:01:14,253 basehttp "GET /admin/scoreai/firmnotification/ HTTP/1.1" 200 32747
+INFO 2026-01-17 17:01:14,290 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:16,948 basehttp "GET /admin/scoreai/firminvitation/ HTTP/1.1" 200 33061
+INFO 2026-01-17 17:01:16,976 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:19,871 basehttp "GET /admin/scoreai/firmusagetracking/ HTTP/1.1" 200 35105
+INFO 2026-01-17 17:01:19,896 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:24,968 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 30052
+INFO 2026-01-17 17:01:24,992 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:27,374 basehttp "GET /admin/scoreai/firm/01KF5C4T4T8VY3ECX2K3MNK1SP/change/ HTTP/1.1" 200 39422
+INFO 2026-01-17 17:01:27,405 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:28,785 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 30052
+INFO 2026-01-17 17:01:32,346 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 17:01:32,368 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:33,228 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 30052
+INFO 2026-01-17 17:01:35,388 basehttp "GET /admin/scoreai/firmcompany/ HTTP/1.1" 200 34965
+INFO 2026-01-17 17:01:35,416 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:01:40,543 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 17:01:40,567 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:02:53,218 autoreload /app/scoreai/views/auth_views.py changed, reloading.
+INFO 2026-01-17 17:02:54,256 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:04:27,809 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 17:04:27,833 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:04:34,256 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 30052
+INFO 2026-01-17 17:04:34,284 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:04:39,204 basehttp "POST /admin/scoreai/firm/ HTTP/1.1" 200 27903
+INFO 2026-01-17 17:04:43,315 basehttp "POST /admin/scoreai/firm/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:04:43,337 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 29747
+INFO 2026-01-17 17:04:43,358 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:04:47,293 basehttp "GET /admin/scoreai/userfirm/ HTTP/1.1" 200 32663
+INFO 2026-01-17 17:04:47,318 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:04:50,938 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 17:04:50,966 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:04:57,637 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 200 27776
+INFO 2026-01-17 17:04:59,492 basehttp "POST /admin/scoreai/user/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:04:59,507 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 35728
+INFO 2026-01-17 17:04:59,534 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:05:10,896 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:05:10,901 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:05:10,910 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:05:13,327 basehttp "GET /user_create/ HTTP/1.1" 200 11782
+WARNING 2026-01-17 17:05:13,350 basehttp "GET /static/scoreai/img/LogoSCore_Ai_white.png HTTP/1.1" 404 1916
+INFO 2026-01-17 17:05:48,769 auth_views Verification email sent to akirsuzuki+123@gmail.com
+INFO 2026-01-17 17:05:48,771 auth_views User registration: username=akirsuzuki+123, email=akirsuzuki+123@gmail.com, ip=192.168.65.1, has_invitation=False, verification_sent=True
+INFO 2026-01-17 17:05:48,773 basehttp "POST /user_create/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:05:48,781 basehttp "GET /email/verification-sent/ HTTP/1.1" 200 2730
+INFO 2026-01-17 17:05:59,599 auth_views Email verified for user: akirsuzuki+123@gmail.com
+INFO 2026-01-17 17:05:59,604 basehttp "GET /email/verify/L3F-SxxrO0RuJUoesrMbCA0AH-j6kmfGCfit36NiJg8/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:05:59,614 basehttp "GET /welcome/ HTTP/1.1" 200 9115
+INFO 2026-01-17 17:06:04,097 basehttp "GET /firm/register/ HTTP/1.1" 200 12917
+INFO 2026-01-17 17:06:19,019 basehttp "POST /firm/register/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:06:19,027 basehttp "GET /firm/register/success/ HTTP/1.1" 200 4718
+INFO 2026-01-17 17:06:21,434 basehttp "GET /firm/company/register/ HTTP/1.1" 200 36364
+INFO 2026-01-17 17:06:34,969 basehttp "GET /ajax/load-industry-subclassifications/?industry_classification=21 HTTP/1.1" 200 35
+INFO 2026-01-17 17:06:40,840 basehttp "POST /firm/company/register/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:06:40,860 basehttp "GET /company/register/success/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 200 38213
+INFO 2026-01-17 17:06:44,900 basehttp "GET / HTTP/1.1" 200 45392
+INFO 2026-01-17 17:06:52,931 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/settings/ HTTP/1.1" 200 42262
+INFO 2026-01-17 17:06:55,956 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 41231
+INFO 2026-01-17 17:06:59,485 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 36226
+INFO 2026-01-17 17:07:01,723 basehttp "POST /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/create/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:07:01,753 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38518
+INFO 2026-01-17 17:07:06,795 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/members/ HTTP/1.1" 200 40642
+INFO 2026-01-17 17:07:14,010 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45316
+INFO 2026-01-17 17:07:19,274 basehttp "POST /firm/01KF5FV94195PWWYZQ5TTVZZXQ/distribute-limits-evenly/api/ HTTP/1.1" 200 226
+INFO 2026-01-17 17:07:22,187 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44836
+INFO 2026-01-17 17:07:24,683 basehttp "POST /firm/01KF5FV94195PWWYZQ5TTVZZXQ/distribute-limits-evenly/ocr/ HTTP/1.1" 200 225
+INFO 2026-01-17 17:07:26,563 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43824
+INFO 2026-01-17 17:07:28,732 basehttp "POST /remove_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:07:28,750 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 40228
+INFO 2026-01-17 17:07:33,328 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39701
+INFO 2026-01-17 17:07:36,965 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/company/01KF5FVYDJVQPQ36MKNVZJG8KR/limit/ HTTP/1.1" 200 32299
+INFO 2026-01-17 17:07:38,815 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39701
+INFO 2026-01-17 17:09:15,772 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:09:16,555 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:09:19,345 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:09:20,270 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:12:36,133 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39842
+INFO 2026-01-17 17:13:00,354 basehttp "GET /company/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:13:00,366 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:13:00,378 basehttp "GET /welcome/ HTTP/1.1" 200 8755
+INFO 2026-01-17 17:13:02,945 basehttp "GET /firm/company/register/ HTTP/1.1" 200 36332
+INFO 2026-01-17 17:13:03,704 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:13:05,189 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:13:11,461 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:13:12,468 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:13:18,459 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39900
+INFO 2026-01-17 17:13:18,963 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:13:20,662 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:13:43,764 basehttp "GET /user_profile/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:13:43,780 basehttp "GET /welcome/ HTTP/1.1" 200 8755
+INFO 2026-01-17 17:13:52,994 basehttp "GET /user_profile/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:13:53,004 basehttp "GET /welcome/ HTTP/1.1" 200 8755
+INFO 2026-01-17 17:14:08,978 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39900
+INFO 2026-01-17 17:14:17,918 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:14:17,922 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:14:17,934 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:14:33,444 basehttp "POST /login/?next=/ HTTP/1.1" 200 3410
+INFO 2026-01-17 17:14:38,395 basehttp "POST /login/?next=/ HTTP/1.1" 200 3410
+INFO 2026-01-17 17:14:55,148 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:14:55,155 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:14:55,163 basehttp "GET /welcome/ HTTP/1.1" 200 8755
+INFO 2026-01-17 17:14:57,992 basehttp "GET /firm/company/register/ HTTP/1.1" 200 35843
+INFO 2026-01-17 17:15:14,690 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39900
+INFO 2026-01-17 17:15:17,199 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/company/01KF5FVYDJVQPQ36MKNVZJG8KR/limit/ HTTP/1.1" 200 32299
+INFO 2026-01-17 17:15:19,045 basehttp "POST /firm/01KF5FV94195PWWYZQ5TTVZZXQ/company/01KF5FVYDJVQPQ36MKNVZJG8KR/limit/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:15:19,066 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 40371
+INFO 2026-01-17 17:16:04,408 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:16:05,359 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:17:29,992 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39834
+INFO 2026-01-17 17:17:32,645 basehttp "POST /add_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:32,671 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44284
+INFO 2026-01-17 17:17:35,909 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43757
+INFO 2026-01-17 17:17:39,144 basehttp "POST /remove_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:39,173 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 40381
+INFO 2026-01-17 17:17:43,092 basehttp "POST /add_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:43,112 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44284
+INFO 2026-01-17 17:17:49,609 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:49,614 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:49,628 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:17:55,921 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:17:55,970 basehttp "GET / HTTP/1.1" 200 73570
+INFO 2026-01-17 17:18:00,940 basehttp "GET /admin/ HTTP/1.1" 200 37195
+INFO 2026-01-17 17:18:08,254 basehttp "GET /admin/scoreai/userfirm/ HTTP/1.1" 200 33475
+INFO 2026-01-17 17:18:08,293 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:14,783 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-17 17:18:14,815 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:32,733 basehttp "GET /admin/scoreai/firmplan/ HTTP/1.1" 200 36444
+INFO 2026-01-17 17:18:32,763 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:35,716 basehttp "GET /admin/scoreai/firm/ HTTP/1.1" 200 29990
+INFO 2026-01-17 17:18:35,750 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:37,530 basehttp "GET /admin/scoreai/firm/01KF5FV94195PWWYZQ5TTVZZXQ/change/ HTTP/1.1" 200 39032
+INFO 2026-01-17 17:18:37,572 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:46,011 basehttp "GET /admin/scoreai/firmplan/ HTTP/1.1" 200 36444
+INFO 2026-01-17 17:18:46,047 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:49,534 basehttp "GET /admin/scoreai/firmusagetracking/ HTTP/1.1" 200 35812
+INFO 2026-01-17 17:18:49,568 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-17 17:18:57,876 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:18:57,879 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:18:57,883 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:19:07,157 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:19:07,176 basehttp "GET / HTTP/1.1" 200 45392
+INFO 2026-01-17 17:19:10,170 basehttp "GET /user_profile/ HTTP/1.1" 200 42746
+INFO 2026-01-17 17:19:13,557 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/settings/ HTTP/1.1" 200 42262
+INFO 2026-01-17 17:19:15,801 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 41562
+INFO 2026-01-17 17:19:19,615 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38028
+INFO 2026-01-17 17:19:20,306 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/usage/report/ HTTP/1.1" 200 46673
+INFO 2026-01-17 17:19:21,123 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/settings/ HTTP/1.1" 200 42262
+INFO 2026-01-17 17:19:22,586 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/members/ HTTP/1.1" 200 40642
+INFO 2026-01-17 17:19:30,479 basehttp "GET /user_profile/ HTTP/1.1" 200 42746
+INFO 2026-01-17 17:19:34,452 basehttp "GET /assigned-clients/ HTTP/1.1" 200 33352
+INFO 2026-01-17 17:19:42,122 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43757
+INFO 2026-01-17 17:19:46,852 basehttp "POST /remove_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:19:46,878 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 40381
+INFO 2026-01-17 17:20:24,398 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:20:25,061 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:30:16,838 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39854
+INFO 2026-01-17 17:30:16,893 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-17 17:30:16,897 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 200 21782
+INFO 2026-01-17 17:30:19,191 basehttp "POST /add_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:30:19,220 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44342
+INFO 2026-01-17 17:30:21,276 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43815
+INFO 2026-01-17 17:30:25,601 basehttp "POST /remove_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:30:25,625 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 40381
+INFO 2026-01-17 17:30:46,530 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 39854
+INFO 2026-01-17 17:30:47,954 basehttp "POST /add_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:30:47,973 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44342
+INFO 2026-01-17 17:30:50,342 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43815
+INFO 2026-01-17 17:33:02,444 autoreload /app/scoreai/views.py changed, reloading.
+INFO 2026-01-17 17:33:04,243 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:33:15,803 basehttp "GET /assigned-clients/ HTTP/1.1" 200 33352
+INFO 2026-01-17 17:33:21,703 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 33382
+INFO 2026-01-17 17:33:23,524 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 33894
+INFO 2026-01-17 17:33:26,498 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 33382
+INFO 2026-01-17 17:33:28,817 basehttp "GET /fiscal_summary_month/create/ HTTP/1.1" 200 36128
+INFO 2026-01-17 17:33:36,784 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 33894
+INFO 2026-01-17 17:33:38,009 budget_views BudgetVsActualMonthlyComparisonView: year=2026
+INFO 2026-01-17 17:33:38,011 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 17:33:38,012 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 17:33:38,014 budget_views BudgetVsActualMonthlyComparisonView: year=2026, monthly_comparison_count=0
+INFO 2026-01-17 17:33:38,038 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 35086
+INFO 2026-01-17 17:33:43,528 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 33894
+INFO 2026-01-17 17:33:45,695 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 33382
+INFO 2026-01-17 17:33:47,558 budget_views BudgetVsActualMonthlyComparisonView: year=2026
+INFO 2026-01-17 17:33:47,560 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 17:33:47,561 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 17:33:47,563 budget_views BudgetVsActualMonthlyComparisonView: year=2026, monthly_comparison_count=0
+INFO 2026-01-17 17:33:47,577 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 35086
+INFO 2026-01-17 17:34:06,058 basehttp "GET /ai-consultation/ HTTP/1.1" 200 62546
+INFO 2026-01-17 17:34:08,212 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 33382
+INFO 2026-01-17 17:34:27,912 budget_views BudgetVsActualMonthlyComparisonView: year=2026
+INFO 2026-01-17 17:34:27,914 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 17:34:27,914 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 17:34:27,916 budget_views BudgetVsActualMonthlyComparisonView: year=2026, monthly_comparison_count=0
+INFO 2026-01-17 17:34:27,927 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 35086
+INFO 2026-01-17 17:34:42,818 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 33382
+INFO 2026-01-17 17:34:51,274 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 33894
+INFO 2026-01-17 17:35:00,019 budget_views BudgetVsActualMonthlyComparisonView: year=2026
+INFO 2026-01-17 17:35:00,021 budget_views budget_monthly_all count: 0
+INFO 2026-01-17 17:35:00,022 budget_views actual_monthly_all count: 0
+INFO 2026-01-17 17:35:00,023 budget_views BudgetVsActualMonthlyComparisonView: year=2026, monthly_comparison_count=0
+INFO 2026-01-17 17:35:00,033 basehttp "GET /budget/vs-actual-monthly/ HTTP/1.1" 200 35086
+INFO 2026-01-17 17:40:26,716 basehttp "GET /monthly-pl/single-year/ HTTP/1.1" 200 36855
+INFO 2026-01-17 17:40:26,763 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-17 17:40:59,084 basehttp "GET /fiscal_summary_month/?years=3 HTTP/1.1" 200 36522
+INFO 2026-01-17 17:41:08,238 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43820
+INFO 2026-01-17 17:41:12,281 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/company/01KF5FVYDJVQPQ36MKNVZJG8KR/limit/ HTTP/1.1" 200 34183
+INFO 2026-01-17 17:41:17,828 basehttp "POST /remove_client/01KF5FVYDJVQPQ36MKNVZJG8KR/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:41:17,867 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 44323
+INFO 2026-01-17 17:41:25,505 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/billing/history/ HTTP/1.1" 200 31757
+INFO 2026-01-17 17:41:30,874 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/usage/report/ HTTP/1.1" 200 46673
+INFO 2026-01-17 17:41:33,661 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/billing/history/ HTTP/1.1" 200 31757
+INFO 2026-01-17 17:41:39,588 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43820
+INFO 2026-01-17 17:41:46,185 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/billing/history/ HTTP/1.1" 200 31757
+INFO 2026-01-17 17:41:48,798 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 43820
+INFO 2026-01-17 17:41:50,576 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/members/ HTTP/1.1" 200 40642
+INFO 2026-01-17 17:52:12,571 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/settings/ HTTP/1.1" 200 42745
+INFO 2026-01-17 17:52:12,596 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-17 17:52:16,526 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/members/ HTTP/1.1" 200 41125
+INFO 2026-01-17 17:52:22,002 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45206
+INFO 2026-01-17 17:52:26,354 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 42045
+INFO 2026-01-17 17:52:30,954 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:52:40,292 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 42045
+INFO 2026-01-17 17:52:43,042 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 42045
+INFO 2026-01-17 17:52:52,382 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:52:54,368 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 42045
+INFO 2026-01-17 17:53:10,369 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 42045
+INFO 2026-01-17 17:53:11,759 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:53:12,911 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:53:13,656 basehttp "GET /firm/01KF5FV94195PWWYZQ5TTVZZXQ/usage/report/ HTTP/1.1" 200 47156
+INFO 2026-01-17 17:53:19,612 basehttp "GET /about-links/ HTTP/1.1" 200 36294
+INFO 2026-01-17 17:53:26,234 basehttp "GET /about/ HTTP/1.1" 200 39353
+INFO 2026-01-17 17:53:43,181 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:56:33,923 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:56:37,124 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 41556
+INFO 2026-01-17 17:56:48,002 basehttp "GET /stakeholder_name/list/ HTTP/1.1" 200 32902
+INFO 2026-01-17 17:56:52,361 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 45206
+INFO 2026-01-17 17:56:54,973 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 41556
+INFO 2026-01-17 17:56:56,044 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/subscription/ HTTP/1.1" 200 38511
+INFO 2026-01-17 17:56:57,444 basehttp "GET /plans/01KF5FV94195PWWYZQ5TTVZZXQ/ HTTP/1.1" 200 41556
+INFO 2026-01-17 17:57:02,308 basehttp "POST /logout/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:57:02,311 basehttp "GET / HTTP/1.1" 302 0
+INFO 2026-01-17 17:57:02,320 basehttp "GET /login/?next=/ HTTP/1.1" 200 3052
+INFO 2026-01-17 17:57:18,182 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 17:57:26,489 basehttp "POST /login/?next=/ HTTP/1.1" 302 0
+INFO 2026-01-17 17:57:26,599 basehttp "GET / HTTP/1.1" 200 73570
+INFO 2026-01-17 17:57:31,024 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 42227
+INFO 2026-01-17 18:00:03,952 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41809
+INFO 2026-01-17 18:00:03,975 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-17 18:00:10,104 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 50109
+INFO 2026-01-17 18:00:12,162 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38525
+INFO 2026-01-17 18:00:13,590 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41809
+INFO 2026-01-17 18:00:15,869 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41809
+INFO 2026-01-17 18:00:51,523 basehttp "GET /about-links/ HTTP/1.1" 200 36547
+INFO 2026-01-17 18:01:00,296 basehttp "GET /about/ HTTP/1.1" 200 39606
+INFO 2026-01-17 18:01:05,487 basehttp "GET /about/ HTTP/1.1" 200 39606
+INFO 2026-01-17 18:01:36,082 basehttp "GET /manual/ HTTP/1.1" 200 32937
+INFO 2026-01-17 18:01:37,988 basehttp "GET /faq/ HTTP/1.1" 200 43852
+INFO 2026-01-17 18:01:40,246 basehttp "GET /about/ HTTP/1.1" 200 39606
+INFO 2026-01-17 18:02:42,546 autoreload /app/scoreai/views/plan_views.py changed, reloading.
+INFO 2026-01-17 18:02:42,978 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 18:02:45,977 autoreload /app/scoreai/urls.py changed, reloading.
+INFO 2026-01-17 18:02:46,368 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 18:03:02,112 autoreload /app/scoreai/views/about_links_views.py changed, reloading.
+INFO 2026-01-17 18:03:02,620 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 18:03:17,916 autoreload /app/scoreai/views/plan_views.py changed, reloading.
+INFO 2026-01-17 18:03:18,758 autoreload Watching for file changes with StatReloader
+INFO 2026-01-17 18:05:04,994 basehttp "GET /about-links/ HTTP/1.1" 200 37923
+INFO 2026-01-17 18:05:08,249 basehttp "GET /support/plans/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 35297
+INFO 2026-01-17 18:05:13,755 basehttp "GET /support/plans/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 200 36547
+INFO 2026-01-17 18:05:18,255 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38525
+INFO 2026-01-17 18:05:20,228 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41809
+INFO 2026-01-17 18:05:55,725 basehttp "GET /about-links/ HTTP/1.1" 200 37923
+INFO 2026-01-17 18:05:57,020 basehttp "GET /support/plans/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 35297
+INFO 2026-01-17 18:06:00,793 basehttp "GET /support/plans/01KDHGHWG1QW8B72ST1CVMVCK1/ HTTP/1.1" 200 37482
+INFO 2026-01-17 18:06:05,471 basehttp "GET /support/plans/01KDHGHWHHCZ3D0Z8J4SZDC1PX/ HTTP/1.1" 200 37958
+INFO 2026-01-17 18:06:10,378 basehttp "GET /support/plans/01KDHGHWB6EM8EWQB5JXMR8MAB/ HTTP/1.1" 200 35297
+INFO 2026-01-17 18:06:14,423 basehttp "GET /support/plans/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 200 36547
+INFO 2026-01-17 18:06:16,369 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 302 0
+INFO 2026-01-17 18:06:20,749 basehttp "GET /about-links/ HTTP/1.1" 200 37923
+INFO 2026-01-17 18:06:37,017 basehttp "GET / HTTP/1.1" 200 73152

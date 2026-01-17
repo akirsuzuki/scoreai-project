@@ -1,0 +1,146 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block head %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">顧客企業登録</h4>
+                    {% if firm %}
+                    <p class="text-muted mb-4">
+                        Firm「<strong>{{ firm.name }}</strong>」配下に顧客企業を登録します。<br>
+                        登録後、あなたは自動的にこの企業のOwnerとして設定されます。
+                    </p>
+                    {% endif %}
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.name.id_for_label }}" class="form-label">
+                                {{ form.name.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                            <div class="text-danger">
+                                {% for error in form.name.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.fiscal_month.id_for_label }}" class="form-label">
+                                {{ form.fiscal_month.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.fiscal_month }}
+                            {% if form.fiscal_month.errors %}
+                            <div class="text-danger">
+                                {% for error in form.fiscal_month.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.industry_classification.id_for_label }}" class="form-label">
+                                {{ form.industry_classification.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.industry_classification }}
+                            {% if form.industry_classification.errors %}
+                            <div class="text-danger">
+                                {% for error in form.industry_classification.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.industry_subclassification.id_for_label }}" class="form-label">
+                                {{ form.industry_subclassification.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.industry_subclassification }}
+                            {% if form.industry_subclassification.errors %}
+                            <div class="text-danger">
+                                {% for error in form.industry_subclassification.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.company_size.id_for_label }}" class="form-label">
+                                {{ form.company_size.label }}
+                                <span class="text-danger">*</span>
+                            </label>
+                            {{ form.company_size }}
+                            {% if form.company_size.errors %}
+                            <div class="text-danger">
+                                {% for error in form.company_size.errors %}
+                                <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'index' %}" class="btn btn-secondary">キャンセル</a>
+                            <button type="submit" class="btn btn-primary">登録する</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// 業種分類が変更されたときに業種小分類を更新
+$(document).ready(function() {
+    $('#id_industry_classification').change(function() {
+        const classificationId = $(this).val();
+        if (classificationId) {
+            $.ajax({
+                url: '{% url "ajax_load_industry_subclassifications" %}',
+                data: {
+                    'industry_classification': classificationId
+                },
+                success: function(data) {
+                    const subclassSelect = $('#id_industry_subclassification');
+                    subclassSelect.empty();
+                    subclassSelect.append('<option value="">---------</option>');
+                    $.each(data, function(index, item) {
+                        subclassSelect.append(
+                            $('<option></option>')
+                                .attr('value', item.id)
+                                .text(item.name)
+                        );
+                    });
+                }
+            });
+        } else {
+            $('#id_industry_subclassification').empty();
+            $('#id_industry_subclassification').append('<option value="">---------</option>');
+        }
+    });
+});
+</script>
+{% endblock %}

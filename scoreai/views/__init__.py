@@ -19,6 +19,9 @@ from .auth_views import (
     CustomPasswordResetDoneView,
     CustomPasswordResetConfirmView,
     CustomPasswordResetCompleteView,
+    EmailVerificationSentView,
+    EmailVerifyView,
+    WelcomeView,
 )
 
 # Company views
@@ -26,6 +29,14 @@ from .company_views import (
     CompanyDetailView,
     CompanyUpdateView,
     load_industry_subclassifications,
+)
+
+# Firm registration views
+from .firm_registration_views import (
+    FirmRegistrationView,
+    FirmRegistrationSuccessView,
+    FirmCompanyRegistrationView,
+    CompanyRegistrationSuccessView,
 )
 
 # Company member views
@@ -219,6 +230,11 @@ __all__ = [
     'CompanyDetailView',
     'CompanyUpdateView',
     'load_industry_subclassifications',
+    # Firm registration
+    'FirmRegistrationView',
+    'FirmRegistrationSuccessView',
+    'FirmCompanyRegistrationView',
+    'CompanyRegistrationSuccessView',
     # Company member
     'CompanyMemberListView',
     'CompanyMemberInviteView',

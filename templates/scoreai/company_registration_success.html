@@ -1,0 +1,140 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<style>
+    .step-indicator {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+    .step {
+        display: flex;
+        align-items: center;
+    }
+    .step-circle {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+    }
+    .step-circle.completed {
+        background: #4ecdc4;
+        color: #fff;
+    }
+    .step-circle.current {
+        background: #5D87FF;
+        color: #fff;
+    }
+    .step-circle.pending {
+        background: #e0e0e0;
+        color: #666;
+    }
+    .step-line {
+        width: 60px;
+        height: 3px;
+        background: #e0e0e0;
+        margin: 0 0.5rem;
+    }
+    .step-line.completed {
+        background: #4ecdc4;
+    }
+    .step-label {
+        font-size: 0.75rem;
+        text-align: center;
+        margin-top: 0.5rem;
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <!-- ステップインジケーター -->
+                    <div class="step-indicator">
+                        <div class="step flex-column">
+                            <div class="step-circle completed">
+                                <i class="ti ti-check"></i>
+                            </div>
+                            <div class="step-label">アカウント作成</div>
+                        </div>
+                        <div class="step-line completed"></div>
+                        <div class="step flex-column">
+                            <div class="step-circle completed">
+                                <i class="ti ti-check"></i>
+                            </div>
+                            <div class="step-label">Firm登録</div>
+                        </div>
+                        <div class="step-line completed"></div>
+                        <div class="step flex-column">
+                            <div class="step-circle completed">
+                                <i class="ti ti-check"></i>
+                            </div>
+                            <div class="step-label">クライアント登録</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step flex-column">
+                            <div class="step-circle current">4</div>
+                            <div class="step-label">分析開始</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <i class="ti ti-check-circle text-success" style="font-size: 4rem;"></i>
+                    </div>
+                    <h4 class="card-title mb-4">顧客企業登録が完了しました</h4>
+                    
+                    {% if company %}
+                    <p class="text-muted mb-4">
+                        顧客企業「<strong>{{ company.name }}</strong>」を登録しました。<br>
+                        あなたはOwnerとして設定されました。
+                    </p>
+                    {% endif %}
+                    
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5 class="mb-3">次のステップ</h5>
+                            <p class="text-muted mb-4">以下の情報を登録して、ダッシュボードを充実させましょう。</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-3 mb-4">
+                        {% for step in next_steps %}
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <div class="mb-3">
+                                        <i class="{{ step.icon }} text-primary" style="font-size: 2.5rem;"></i>
+                                    </div>
+                                    <h6 class="card-title">{{ step.title }}</h6>
+                                    <p class="card-text text-muted small">{{ step.description }}</p>
+                                    <a href="{{ step.url }}" class="btn btn-outline-primary btn-sm">
+                                        {{ step.button_text|default:"登録する" }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-center gap-3 mt-4">
+                        <a href="{% url 'index' %}" class="btn btn-primary">
+                            <i class="ti ti-dashboard me-2"></i>ダッシュボードへ
+                        </a>
+                        <a href="{% url 'firm_company_register' %}" class="btn btn-outline-secondary">
+                            <i class="ti ti-plus me-2"></i>別の企業を登録
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

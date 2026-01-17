@@ -207,14 +207,91 @@ class Firm(models.Model):
         ('openai', 'OpenAI'),
     ]
     
+    ENTITY_TYPE_CHOICES = [
+        ('individual', '個人'),
+        ('corporation', '法人'),
+    ]
+    
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
-    name = models.CharField(max_length=255)
+    name = models.CharField('事務所名', max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='firms')
+    
+    # 基本情報
+    entity_type = models.CharField(
+        '個人/法人区分',
+        max_length=20,
+        choices=ENTITY_TYPE_CHOICES,
+        default='corporation'
+    )
+    representative_name = models.CharField(
+        '代表者名',
+        max_length=100,
+        blank=True,
+        help_text='代表者のお名前'
+    )
+    website_url = models.URLField(
+        'Webサイト',
+        max_length=255,
+        blank=True,
+        help_text='事務所のWebサイトURL'
+    )
+    
+    # 住所情報
+    postal_code = models.CharField(
+        '郵便番号',
+        max_length=8,
+        blank=True,
+        help_text='ハイフンなし7桁（例：1000001）'
+    )
+    prefecture = models.CharField(
+        '都道府県',
+        max_length=10,
+        blank=True
+    )
+    city = models.CharField(
+        '市区町村',
+        max_length=50,
+        blank=True
+    )
+    address = models.CharField(
+        '町名・番地',
+        max_length=100,
+        blank=True
+    )
+    building = models.CharField(
+        'ビル名・階数',
+        max_length=100,
+        blank=True
+    )
+    
+    # インボイス制度
+    invoice_number = models.CharField(
+        'インボイス登録番号',
+        max_length=14,
+        blank=True,
+        help_text='T+13桁の番号（例：T1234567890123）'
+    )
+    
+    # API設定（既存）
     api_key = models.CharField('APIキー', max_length=255, blank=True, null=True, help_text='FirmのAPIキー（上限超過時に使用）')
     api_provider = models.CharField('APIプロバイダー', max_length=20, choices=API_PROVIDER_CHOICES, blank=True, null=True, help_text='APIキーのプロバイダー')
+    
+    # 登録情報
+    created_at = models.DateTimeField('登録日時', auto_now_add=True, null=True)
+    updated_at = models.DateTimeField('更新日時', auto_now=True, null=True)
+
+    class Meta:
+        verbose_name = 'Firm'
+        verbose_name_plural = 'Firms'
 
     def __str__(self):
         return self.name
+    
+    @property
+    def full_address(self):
+        """完全な住所を返す"""
+        parts = [self.prefecture, self.city, self.address, self.building]
+        return ''.join([p for p in parts if p])
 
 
 class UserFirm(models.Model):
@@ -315,6 +392,54 @@ class FirmInvitation(models.Model):
     def __str__(self):
         status = '承認済み' if self.is_accepted else '招待中'
         return f"{self.firm.name} - {self.email} ({status})"
+
+
+class EmailVerificationToken(models.Model):
+    """メール認証用トークンを管理するモデル"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_verification_tokens', verbose_name='ユーザー')
+    token = models.CharField('トークン', max_length=64, unique=True)
+    created_at = models.DateTimeField('作成日時', auto_now_add=True)
+    expires_at = models.DateTimeField('有効期限')
+    is_used = models.BooleanField('使用済み', default=False)
+    used_at = models.DateTimeField('使用日時', null=True, blank=True)
+    
+    class Meta:
+        verbose_name = 'メール認証トークン'
+        verbose_name_plural = 'メール認証トークン'
+        ordering = ['-created_at']
+    
+    @classmethod
+    def create_token(cls, user, expiry_hours=24):
+        """新しいトークンを生成"""
+        import secrets
+        from django.utils import timezone
+        from datetime import timedelta
+        
+        token = secrets.token_urlsafe(32)
+        expires_at = timezone.now() + timedelta(hours=expiry_hours)
+        
+        return cls.objects.create(
+            user=user,
+            token=token,
+            expires_at=expires_at
+        )
+    
+    def is_valid(self):
+        """トークンが有効かどうかを確認"""
+        from django.utils import timezone
+        return not self.is_used and self.expires_at > timezone.now()
+    
+    def mark_as_used(self):
+        """トークンを使用済みにする"""
+        from django.utils import timezone
+        self.is_used = True
+        self.used_at = timezone.now()
+        self.save()
+    
+    def __str__(self):
+        status = '使用済み' if self.is_used else ('有効' if self.is_valid() else '期限切れ')
+        return f"{self.user.email} ({status})"
 
 
 class CompanyInvitation(models.Model):

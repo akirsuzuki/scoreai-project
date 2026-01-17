@@ -1553,6 +1553,16 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
         user_firm = UserFirm.objects.filter(user=self.request.user, is_selected=True).first()
         context['user_firm'] = user_firm  # テンプレートで使用するため追加
         
+        # Firmのオーナーかどうかを確認（user_firmが存在しない場合もFalseに設定）
+        context['is_firm_owner'] = user_firm.is_owner if user_firm else False
+        # 既にアサインされているCompanyのIDセット（初期値は空セット）
+        context['assigned_company_ids'] = set()
+        # プラン制限関連の初期値
+        context['can_add_company'] = False
+        context['current_company_count'] = 0
+        context['max_companies'] = None
+        context['is_unlimited'] = False
+        
         if user_firm:
             # 選択中のFirmに属するCompanyのIDを取得
             firm_company_ids = FirmCompany.objects.filter(
@@ -1570,6 +1580,10 @@ class ClientsList(LoginRequiredMixin, UserPassesTestMixin, ListView):
             ).select_related('company').prefetch_related(
                 'company__firm_companies'
             ).order_by('company__name').distinct()
+            
+            # 既にアサインされているCompanyのIDセットを作成（テンプレートで使用）
+            assigned_company_ids = set(clients_assigned.values_list('company_id', flat=True))
+            context['assigned_company_ids'] = assigned_company_ids
             
             # FirmCompanyの情報を取得してコンテキストに追加
             # テンプレートでstart_dateを取得できるようにする
@@ -1729,50 +1743,52 @@ def distribute_limits_evenly(request, firm_id, limit_type):
 @login_required
 def add_client(request, client_id):
     from django.utils import timezone
-    from .utils.plan_limits import check_company_limit
     from .models import UserFirm, FirmCompany
     
     client = Company.objects.get(id=client_id)
     
-    # Firmを取得
+    # Firmを取得（Ownerであることを確認）
     user_firm = UserFirm.objects.filter(
         user=request.user,
-        is_selected=True
+        is_selected=True,
+        is_owner=True,
+        active=True
     ).first()
     
     if not user_firm:
-        messages.error(request, 'Firmが選択されていません。')
+        messages.error(request, 'この操作を実行するにはFirmのOwner権限が必要です。')
         return redirect('firm_clientslist')
     
-    # プラン制限をチェック
-    is_allowed, current_count, max_allowed = check_company_limit(user_firm.firm)
+    # 既にFirmに登録されているCompanyかどうかを確認
+    firm_company = FirmCompany.objects.filter(
+        firm=user_firm.firm,
+        company=client,
+        active=True
+    ).first()
     
-    if not is_allowed:
-        messages.error(
-            request,
-            f'プランの制限により、これ以上Companyを追加できません。'
-            f'（現在: {current_count}社 / 上限: {max_allowed}社）'
-            f'プランをアップグレードしてください。'
-        )
+    if not firm_company:
+        messages.error(request, f'クライアント "{client.name}" はこのFirmに登録されていません。')
         return redirect('firm_clientslist')
     
-    # 既に追加されているか確認
-    if UserCompany.objects.filter(user=request.user, company=client).exists():
-        messages.warning(request, f'クライアント "{client.name}" は既に追加されています。')
+    # 既に自分にアサインされているか確認
+    existing_user_company = UserCompany.objects.filter(
+        user=request.user, 
+        company=client,
+        active=True
+    ).first()
+    
+    if existing_user_company:
+        messages.warning(request, f'クライアント "{client.name}" は既にアサインされています。')
     else:
-        UserCompany.objects.create(user=request.user, company=client, as_consultant=True)
-        
-        # FirmCompanyも作成（存在しない場合）
-        FirmCompany.objects.get_or_create(
-            firm=user_firm.firm,
-            company=client,
-            defaults={
-                'active': True,
-                'start_date': timezone.now().date()
-            }
+        # 自分にアサイン（as_consultant=True）
+        UserCompany.objects.create(
+            user=request.user, 
+            company=client, 
+            as_consultant=True,
+            active=True
         )
         
-        messages.success(request, f'クライアント "{client.name}" をアサインしました。')
+        messages.success(request, f'クライアント "{client.name}" を自分にアサインしました。')
     
     return redirect('firm_clientslist')
 
@@ -1795,7 +1811,28 @@ def remove_client(request, client_id):
         messages.error(request, 'この操作を実行するにはFirmのOwner権限が必要です。')
         return redirect('firm_clientslist')
     
-    UserCompany.objects.filter(user=request.user, company=client).delete()
+    # アサイン解除対象のUserCompanyを取得
+    user_company = UserCompany.objects.filter(
+        user=request.user, 
+        company=client,
+        active=True
+    ).first()
+    
+    if not user_company:
+        messages.error(request, f'クライアント "{client.name}" はアサインされていません。')
+        return redirect('firm_clientslist')
+    
+    # FirmのOwnerが自分自身のアサイン解除をしようとした場合は禁止
+    # FirmのOwnerは強制的に全Companyにアサインされているため、自分自身のアサイン解除はできない
+    if user_firm.is_owner and user_company.user == request.user:
+        messages.error(request, f'FirmのOwnerは、自分自身のアサイン解除はできません。')
+        return redirect('firm_clientslist')
+    
+    # アサイン解除（論理削除）
+    user_company.active = False
+    user_company.as_consultant = False
+    user_company.save()
+    
     messages.success(request, f'クライアント "{client.name}" のアサインを解除しました。')
     return redirect('firm_clientslist')
 
@@ -1810,7 +1847,7 @@ class AboutView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'About'
+        context['title'] = 'SCore_AIについて'
         context['show_title_card'] = False
         return context
 
@@ -1873,136 +1910,14 @@ class HelpDetailView(generic.DetailView):
         context['show_title_card'] = False
         return context
 
-class ManualListView(SelectedCompanyMixin, generic.ListView):
-    """マニュアル一覧ページ"""
-    model = Manual
+class ManualListView(generic.TemplateView):
+    """マニュアル一覧ページ（準備中）"""
     template_name = 'scoreai/manual_list.html'
-    context_object_name = 'manuals'
-    paginate_by = 12
-    
-    def get_queryset(self):
-        # デフォルトのユーザータイプを判定
-        from ..models import UserCompany
-        user = self.request.user
-        default_user_type = None
-        if user.is_company_user:
-            # 現在の会社のUserCompanyからis_managerを取得
-            user_company = UserCompany.objects.filter(
-                user=user,
-                company=self.this_company,
-                active=True
-            ).first()
-            if user_company and user_company.is_manager:
-                default_user_type = 'company_admin'
-            else:
-                default_user_type = 'company_user'
-        elif hasattr(user, 'userfirm') and user.userfirm.exists():
-            # Firm関連は後で対応（UserFirmにis_managerフィールドを追加する必要がある）
-            if user.is_manager:
-                default_user_type = 'firm_admin'
-            else:
-                default_user_type = 'firm_user'
-        else:
-            default_user_type = 'company_user'
-        
-        # クエリパラメータからフィルタを取得
-        user_type_filter = self.request.GET.get('user_type', default_user_type)
-        category_filter = self.request.GET.get('category', '')
-        search_query = self.request.GET.get('search', '')
-        
-        # ベースクエリセット
-        queryset = Manual.objects.filter(is_active=True)
-        
-        # ユーザータイプでフィルタ
-        if user_type_filter:
-            queryset = queryset.filter(user_type=user_type_filter)
-        
-        # カテゴリでフィルタ
-        if category_filter:
-            queryset = queryset.filter(category=category_filter)
-        
-        # 検索クエリでフィルタ（タイトルと内容を検索）
-        if search_query:
-            queryset = queryset.filter(
-                Q(title__icontains=search_query) | 
-                Q(content__icontains=search_query)
-            )
-        
-        queryset = queryset.order_by('category', 'order', 'id')
-        
-        return queryset
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'マニュアル'
         context['show_title_card'] = False
-        
-        # デフォルトのユーザータイプを判定
-        from ..models import UserCompany
-        user = self.request.user
-        default_user_type = None
-        if user.is_company_user:
-            # 現在の会社のUserCompanyからis_managerを取得
-            user_company = UserCompany.objects.filter(
-                user=user,
-                company=self.this_company,
-                active=True
-            ).first()
-            if user_company and user_company.is_manager:
-                default_user_type = 'company_admin'
-            else:
-                default_user_type = 'company_user'
-        elif hasattr(user, 'userfirm') and user.userfirm.exists():
-            # Firm関連は後で対応（UserFirmにis_managerフィールドを追加する必要がある）
-            if user.is_manager:
-                default_user_type = 'firm_admin'
-            else:
-                default_user_type = 'firm_user'
-        else:
-            default_user_type = 'company_user'
-        
-        # 現在のフィルタ値を取得（初回アクセス時はデフォルト値を使用）
-        current_user_type = self.request.GET.get('user_type', '')
-        if not current_user_type:
-            current_user_type = default_user_type
-        current_category = self.request.GET.get('category', '')
-        current_search = self.request.GET.get('search', '')
-        
-        # ユーザータイプの選択肢
-        context['user_type_choices'] = Manual.USER_TYPE_CHOICES
-        context['current_user_type'] = current_user_type
-        
-        # カテゴリの選択肢
-        context['category_choices'] = Manual.CATEGORY_CHOICES
-        context['current_category'] = current_category
-        
-        # 検索クエリ
-        context['current_search'] = current_search
-        
-        # ユーザータイプを表示用に取得
-        user = self.request.user
-        if user.is_company_user:
-            # 現在の会社のUserCompanyからis_managerを取得
-            user_company = UserCompany.objects.filter(
-                user=user,
-                company=self.this_company,
-                active=True
-            ).first()
-            if user_company and user_company.is_manager:
-                user_type_display = '会社ユーザー（管理者）'
-            else:
-                user_type_display = '会社ユーザー（一般）'
-        elif hasattr(user, 'userfirm') and user.userfirm.exists():
-            # Firm関連は後で対応
-            if user.is_manager:
-                user_type_display = 'Firmユーザー（管理者）'
-            else:
-                user_type_display = 'Firmユーザー（一般）'
-        else:
-            user_type_display = '会社ユーザー（一般）'
-        
-        context['user_type_display'] = user_type_display
-        
         return context
 
 

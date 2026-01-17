@@ -28,16 +28,41 @@
 <div class="row mb-4">
   <div class="col-12">
     <ul class="nav nav-tabs" role="tablist">
+      {% get_user_firm_owner user as user_firm_owner %}
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_settings' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-settings me-1"></i>Firm設定
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-users me-1"></i>スタッフ管理
+        </a>
+      </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link active" href="{% url 'firm_clientslist' %}" role="tab">
           <i class="ti ti-building me-1"></i>クライアント一覧
         </a>
       </li>
-      {% get_user_firm_owner user as user_firm_owner %}
-      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'subscription_manage' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'usage_report' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-chart-line me-1"></i>利用状況レポート
+        </a>
+      </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" role="tab">
           <i class="ti ti-file-invoice me-1"></i>請求管理
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" role="tab">
+          <i class="ti ti-bell me-1"></i>通知
         </a>
       </li>
       {% endif %}
@@ -248,10 +273,20 @@
                       <i class="ti ti-settings me-1"></i>設定
                     </a>
                     {% endif %}
-                    <form method="post" action="{% url 'add_client' client_id=client.company.id %}" style="display: inline;">
-                      {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-success" {% if not can_add_company %}disabled title="プランの制限により追加できません"{% endif %}>追加</button>
-                    </form>
+                    {% if is_firm_owner %}
+                      {% if client.company.id not in assigned_company_ids %}
+                      <form method="post" action="{% url 'add_client' client_id=client.company.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-success">
+                          <i class="ti ti-user-plus me-1"></i>自分にアサイン
+                        </button>
+                      </form>
+                      {% else %}
+                      <span class="badge bg-success">
+                        <i class="ti ti-check me-1"></i>アサイン済み
+                      </span>
+                      {% endif %}
+                    {% endif %}
                   </div>
                 </td>
               </tr> 
@@ -375,11 +410,19 @@
                     {% else %}
                     <span class="badge bg-primary">選択中</span>
                     {% endif %}
-                    {% get_user_firm_owner user as user_firm_owner %}
-                    {% if user_firm_owner %}
+                    {% if client.is_owner %}
+                    <span class="badge bg-warning text-dark">
+                      <i class="ti ti-crown me-1"></i>Owner
+                    </span>
+                    {% endif %}
+                    {# FirmのOwnerは自分自身のアサイン解除はできない（強制的に全Companyにアサインされている） #}
+                    {# ただし、他のFirmユーザーのアサイン解除は可能（現時点ではclients_assignedは自分がアサインされているクライアントのみ） #}
+                    {% if is_firm_owner and not client.is_owner %}
                     <form method="post" action="{% url 'remove_client' client_id=client.company.id %}" style="display: inline;">
                       {% csrf_token %}
-                      <button type="submit" class="btn btn-sm btn-danger">アサイン解除</button>
+                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('アサインを解除しますか？');">
+                        <i class="ti ti-user-minus me-1"></i>アサイン解除
+                      </button>
                     </form>
                     {% endif %}
                   </div>

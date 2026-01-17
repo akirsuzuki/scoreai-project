@@ -380,61 +380,41 @@
         </li>
         {% endif %}
         
-        <!-- セクション8: コンサルタント機能（Firm Userのみ） -->
-        {% if user.is_financial_consultant %}
-        <li class="nav-small-cap">
-          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-          <span class="hide-menu">コンサルタント機能</span>
-        </li>
-        
-        <!-- アサイン一覧（全Firm User） -->
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="{% url 'assigned_clients_list' %}" aria-expanded="false">
-            <span class="hide-menu"><i class="ti ti-list me-2"></i>アサイン一覧</span>
-          </a>
-        </li>
-        
-        <!-- クライアント管理（Firm Ownerのみ） -->
+        <!-- Firm管理（Firm Ownerのみ） -->
         {% get_user_firm_owner user as user_firm_owner %}
         {% if user_firm_owner %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">Firm管理</span>
+        </li>
+        
         <li class="sidebar-item">
-          <a class="sidebar-link" href="#collapseClientManagement" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">クライアント管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
+          <a class="sidebar-link" href="#collapseFirmManagement" data-bs-toggle="collapse" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-building-community me-2"></i>Firm管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
           </a>
-          <ul id="collapseClientManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
+          <ul id="collapseFirmManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
+            <li class="sidebar-item">
+              <a href="{% url 'firm_settings' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">Firm設定</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+                <div class="round-16 d-flex align-items-center justify-content-center">
+                  &emsp;<i class="fa-solid fa-arrow-right"></i>
+                </div>
+                <span class="hide-menu">スタッフ管理</span>
+              </a>
+            </li>
             <li class="sidebar-item">
               <a href="{% url 'firm_clientslist' %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
                 <span class="hide-menu">クライアント一覧</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">請求管理</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        {% endif %}
-        
-        <!-- Firm管理（Firm Ownerのみ） -->
-        {% if user_firm_owner %}
-        <li class="sidebar-item">
-          <a class="sidebar-link" href="#collapseFirmManagement" data-bs-toggle="collapse" aria-expanded="false">
-            <span class="hide-menu">Firm管理</span><i class="fa-solid fa-angles-right ms-auto"></i>
-          </a>
-          <ul id="collapseFirmManagement" class="collapse first-level" data-bs-parent="#sidebarnav">
-            <li class="sidebar-item">
-              <a href="{% url 'plan_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">プラン・サブスクリプション</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -454,11 +434,11 @@
               </a>
             </li>
             <li class="sidebar-item">
-              <a href="{% url 'firm_settings' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
+              <a href="{% url 'billing_history' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
                 <div class="round-16 d-flex align-items-center justify-content-center">
                   &emsp;<i class="fa-solid fa-arrow-right"></i>
                 </div>
-                <span class="hide-menu">Firm設定</span>
+                <span class="hide-menu">請求管理</span>
               </a>
             </li>
             <li class="sidebar-item">
@@ -469,17 +449,23 @@
                 <span class="hide-menu">通知</span>
               </a>
             </li>
-            <li class="sidebar-item">
-              <a href="{% url 'firm_member_list' firm_id=user_firm_owner.firm.id %}" class="sidebar-link">
-                <div class="round-16 d-flex align-items-center justify-content-center">
-                  &emsp;<i class="fa-solid fa-arrow-right"></i>
-                </div>
-                <span class="hide-menu">スタッフ管理</span>
-              </a>
-            </li>
           </ul>
         </li>
         {% endif %}
+        
+        <!-- セクション8: コンサルタント機能（Firm Userのみ） -->
+        {% if user.is_financial_consultant %}
+        <li class="nav-small-cap">
+          <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+          <span class="hide-menu">コンサルタント機能</span>
+        </li>
+        
+        <!-- アサイン一覧（全Firm User） -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'assigned_clients_list' %}" aria-expanded="false">
+            <span class="hide-menu"><i class="ti ti-list me-2"></i>アサイン一覧</span>
+          </a>
+        </li>
         {% endif %}
         
         <!-- セクション9: 管理者機能（Superuserのみ） -->

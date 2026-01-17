@@ -1,0 +1,351 @@
+{% load django_bootstrap5 %}
+{% load static %}
+
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Score_AI | Firm登録</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
+  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    .form-section {
+      min-height: 100vh;
+      background: #f5f7fa;
+      padding: 2rem 0;
+    }
+    .registration-card {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .step {
+      display: flex;
+      align-items: center;
+    }
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+    .step-circle.completed {
+      background: #4ecdc4;
+      color: #fff;
+    }
+    .step-circle.current {
+      background: #5D87FF;
+      color: #fff;
+    }
+    .step-circle.pending {
+      background: #e0e0e0;
+      color: #666;
+    }
+    .step-line {
+      width: 60px;
+      height: 3px;
+      background: #e0e0e0;
+      margin: 0 0.5rem;
+    }
+    .step-line.completed {
+      background: #4ecdc4;
+    }
+    .step-label {
+      font-size: 0.75rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .section-title {
+      font-size: 0.9rem;
+      color: #5D87FF;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid #5D87FF;
+    }
+    .entity-type-option {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .entity-type-option:hover {
+      border-color: #5D87FF;
+    }
+    .entity-type-option.selected {
+      border-color: #5D87FF;
+      background: #f0f5ff;
+    }
+    .entity-type-option input {
+      margin-right: 0.75rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-section">
+    <div class="container">
+      <div class="registration-card">
+        <!-- ヘッダー -->
+        <div class="text-center mb-4">
+          <a href="{% url 'index' %}">
+            <img src="{% static 'scoreai/img/LogoSCore_Ai.png' %}" width="180" alt="SCore_Ai">
+          </a>
+          <h3 class="mt-3">Firm情報の登録</h3>
+          <p class="text-muted">コンサルティングファーム・事務所の情報を登録してください</p>
+        </div>
+        
+        <!-- ステップインジケーター -->
+        <div class="step-indicator">
+          <div class="step flex-column">
+            <div class="step-circle completed">
+              <i class="ti ti-check"></i>
+            </div>
+            <div class="step-label">アカウント作成</div>
+          </div>
+          <div class="step-line completed"></div>
+          <div class="step flex-column">
+            <div class="step-circle current">2</div>
+            <div class="step-label">Firm登録</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step flex-column">
+            <div class="step-circle pending">3</div>
+            <div class="step-label">クライアント登録</div>
+          </div>
+          <div class="step-line"></div>
+          <div class="step flex-column">
+            <div class="step-circle pending">4</div>
+            <div class="step-label">分析開始</div>
+          </div>
+        </div>
+        
+        <div class="card shadow-sm">
+          <div class="card-body p-4">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <form method="post" id="firmRegistrationForm">
+              {% csrf_token %}
+              
+              <!-- 個人/法人区分 -->
+              <div class="mb-4">
+                <div class="section-title">
+                  <i class="ti ti-user-check me-1"></i>事業形態
+                </div>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <label class="entity-type-option w-100" id="option-individual">
+                      <input type="radio" name="entity_type" value="individual" 
+                             {% if form.entity_type.value == 'individual' %}checked{% endif %}>
+                      <div>
+                        <strong>個人</strong>
+                        <div class="text-muted small">個人事業主として活動</div>
+                      </div>
+                    </label>
+                  </div>
+                  <div class="col-6">
+                    <label class="entity-type-option w-100" id="option-corporation">
+                      <input type="radio" name="entity_type" value="corporation"
+                             {% if form.entity_type.value == 'corporation' or not form.entity_type.value %}checked{% endif %}>
+                      <div>
+                        <strong>法人</strong>
+                        <div class="text-muted small">法人として活動</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+                {% if form.entity_type.errors %}
+                <div class="text-danger small mt-1">{{ form.entity_type.errors }}</div>
+                {% endif %}
+              </div>
+              
+              <!-- 基本情報 -->
+              <div class="mb-4">
+                <div class="section-title">
+                  <i class="ti ti-building me-1"></i>基本情報
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">事務所名 <span class="text-danger">*</span></label>
+                  {{ form.name }}
+                  {% if form.name.errors %}
+                  <div class="text-danger small">{{ form.name.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">代表者名 <span class="text-danger">*</span></label>
+                  {{ form.representative_name }}
+                  {% if form.representative_name.errors %}
+                  <div class="text-danger small">{{ form.representative_name.errors }}</div>
+                  {% endif %}
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">Webサイト</label>
+                  {{ form.website_url }}
+                  {% if form.website_url.errors %}
+                  <div class="text-danger small">{{ form.website_url.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <!-- 住所情報 -->
+              <div class="mb-4">
+                <div class="section-title">
+                  <i class="ti ti-map-pin me-1"></i>住所
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col-md-4">
+                    <label class="form-label">郵便番号</label>
+                    <div class="input-group">
+                      {{ form.postal_code }}
+                      <button type="button" class="btn btn-outline-secondary" id="searchAddress">
+                        <i class="ti ti-search"></i>
+                      </button>
+                    </div>
+                    <small class="text-muted">{{ form.postal_code.help_text }}</small>
+                    {% if form.postal_code.errors %}
+                    <div class="text-danger small">{{ form.postal_code.errors }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="row mb-3">
+                  <div class="col-md-4">
+                    <label class="form-label">都道府県</label>
+                    {{ form.prefecture }}
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label">市区町村</label>
+                    {{ form.city }}
+                  </div>
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">町名・番地</label>
+                  {{ form.address }}
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">ビル名・階数</label>
+                  {{ form.building }}
+                </div>
+              </div>
+              
+              <!-- インボイス情報 -->
+              <div class="mb-4">
+                <div class="section-title">
+                  <i class="ti ti-receipt me-1"></i>インボイス制度
+                </div>
+                
+                <div class="mb-3">
+                  <label class="form-label">インボイス登録番号</label>
+                  {{ form.invoice_number }}
+                  <small class="text-muted">{{ form.invoice_number.help_text }}</small>
+                  {% if form.invoice_number.errors %}
+                  <div class="text-danger small">{{ form.invoice_number.errors }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              
+              <!-- 送信ボタン -->
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="ti ti-check me-2"></i>Firmを登録する
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <div class="text-center mt-3">
+          <small class="text-muted">
+            登録後、クライアント企業の登録に進みます
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
+  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  
+  <script>
+    // 個人/法人選択のUI
+    document.querySelectorAll('.entity-type-option input').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        document.querySelectorAll('.entity-type-option').forEach(function(opt) {
+          opt.classList.remove('selected');
+        });
+        this.closest('.entity-type-option').classList.add('selected');
+      });
+      
+      // 初期状態
+      if (radio.checked) {
+        radio.closest('.entity-type-option').classList.add('selected');
+      }
+    });
+    
+    // 郵便番号から住所を検索
+    document.getElementById('searchAddress').addEventListener('click', function() {
+      const postalCode = document.getElementById('postal_code').value.replace(/[^0-9]/g, '');
+      
+      if (postalCode.length !== 7) {
+        alert('郵便番号は7桁で入力してください');
+        return;
+      }
+      
+      // 郵便番号API（zipcloud）を使用
+      fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 200 && data.results) {
+            const result = data.results[0];
+            document.getElementById('prefecture').value = result.address1;
+            document.getElementById('city').value = result.address2 + result.address3;
+            // readonly属性を一時的に解除して値を設定後、再設定
+            document.getElementById('prefecture').removeAttribute('readonly');
+            document.getElementById('city').removeAttribute('readonly');
+          } else {
+            alert('該当する住所が見つかりませんでした');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('住所の検索中にエラーが発生しました');
+        });
+    });
+    
+    // 郵便番号入力時に自動検索
+    document.getElementById('postal_code').addEventListener('input', function() {
+      const postalCode = this.value.replace(/[^0-9]/g, '');
+      if (postalCode.length === 7) {
+        document.getElementById('searchAddress').click();
+      }
+    });
+  </script>
+</body>
+
+</html>

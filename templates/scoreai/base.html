@@ -30,11 +30,11 @@
     <!-- Sidebar -->
     {% include 'scoreai/base-sidebar.html' %}
     <!--  Main wrapper -->
-    <div class="body-wrapper">
+    <div class="body-wrapper body-wrapper-flex">
       <!--  Body Header -->
       {% include 'scoreai/base-header.html' %}
 
-      <div class="container-fluid">
+      <div class="container-fluid main-content-wrapper">
         {% if show_title_card|default_if_none:False %}
         <div class="card bg-info-subtle shadow-none position-relative mb-4">
           <div class="card-body px-4 py-4">
@@ -75,13 +75,6 @@
       {% block content %}
 
       {% endblock %}
-      
-      <!-- コピーライトのみ表示 -->
-      <div class="text-center py-3 mt-4">
-        <p class="mb-0" style="font-size: 12px; color: #5A6A85;">
-          © 2024 <a href="https://vancreworth.com/" target="_blank" style="color: #5D87FF; text-decoration: none;">VanCrewworth CO.,LTD.</a>
-        </p>
-      </div>
       </div>
 
     </div>

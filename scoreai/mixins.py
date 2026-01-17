@@ -49,6 +49,24 @@ class ErrorHandlingMixin:
 class SelectedCompanyMixin(LoginRequiredMixin, ErrorHandlingMixin):
     """Mixin to ensure views only operate on data related to the user's currently selected company."""
     
+    def dispatch(self, request, *args, **kwargs):
+        """会社が選択されていない場合はウェルカムページへリダイレクト"""
+        if request.user.is_authenticated:
+            from .models import UserCompany
+            from django.shortcuts import redirect
+            
+            user_company = UserCompany.objects.filter(
+                user=request.user,
+                is_selected=True,
+                active=True
+            ).first()
+            
+            if not user_company:
+                # Company未選択の場合はウェルカムページへ
+                return redirect('welcome')
+        
+        return super().dispatch(request, *args, **kwargs)
+    
     @property
     def this_company(self):
         """Get the currently selected company for the user"""

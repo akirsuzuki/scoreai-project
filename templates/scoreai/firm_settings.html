@@ -18,10 +18,24 @@
   <div class="col-12">
     <ul class="nav nav-tabs" role="tablist">
       <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'plan_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-package me-1"></i>プラン・サブスクリプション
+        <a class="nav-link active" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-settings me-1"></i>Firm設定
         </a>
       </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-users me-1"></i>スタッフ管理
+        </a>
+      </li>
+      {% load custom_tags %}
+      {% get_user_firm_owner user as user_firm_owner %}
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_clientslist' %}" role="tab">
+          <i class="ti ti-building me-1"></i>クライアント一覧
+        </a>
+      </li>
+      {% endif %}
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
           <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
@@ -32,19 +46,16 @@
           <i class="ti ti-chart-line me-1"></i>利用状況レポート
         </a>
       </li>
+      {% if user_firm_owner %}
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-settings me-1"></i>Firm設定
+        <a class="nav-link" href="{% url 'billing_history' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-file-invoice me-1"></i>請求管理
         </a>
       </li>
+      {% endif %}
       <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'notification_list' firm_id=firm.id %}" role="tab">
           <i class="ti ti-bell me-1"></i>通知
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-users me-1"></i>スタッフ管理
         </a>
       </li>
     </ul>
@@ -56,25 +67,174 @@
   <!-- Firm設定 -->
   <div class="tab-pane fade show active" id="firm-settings" role="tabpanel">
 
+<style>
+  .entity-type-option {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .entity-type-option:hover {
+    border-color: #5D87FF;
+  }
+  .entity-type-option.selected {
+    border-color: #5D87FF;
+    background: #f0f5ff;
+  }
+  .entity-type-option input {
+    margin-right: 0.75rem;
+  }
+  .section-title {
+    font-size: 0.9rem;
+    color: #5D87FF;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #5D87FF;
+  }
+</style>
+
 <div class="row">
   <div class="col-lg-8">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">基本設定</h5>
+        <h5 class="card-title mb-0 fw-semibold">事務所情報の編集</h5>
       </div>
       <div class="card-body">
-        <form method="post">
+        <form method="post" id="firmSettingsForm">
           {% csrf_token %}
           
-          <div class="mb-3">
-            <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
-            {{ form.name }}
-            {% if form.name.help_text %}
-            <div class="form-text">{{ form.name.help_text }}</div>
+          <!-- 個人/法人区分 -->
+          <div class="mb-4">
+            <div class="section-title">
+              <i class="ti ti-user-check me-1"></i>事業形態
+            </div>
+            <div class="row g-3">
+              <div class="col-6">
+                <label class="entity-type-option w-100" id="option-individual">
+                  <input type="radio" name="entity_type" value="individual" 
+                         {% if form.entity_type.value == 'individual' %}checked{% endif %}>
+                  <div>
+                    <strong>個人</strong>
+                    <div class="text-muted small">個人事業主として活動</div>
+                  </div>
+                </label>
+              </div>
+              <div class="col-6">
+                <label class="entity-type-option w-100" id="option-corporation">
+                  <input type="radio" name="entity_type" value="corporation"
+                         {% if form.entity_type.value == 'corporation' or not form.entity_type.value %}checked{% endif %}>
+                  <div>
+                    <strong>法人</strong>
+                    <div class="text-muted small">法人として活動</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+            {% if form.entity_type.errors %}
+            <div class="text-danger small mt-1">{{ form.entity_type.errors }}</div>
             {% endif %}
-            {% for error in form.name.errors %}
-            <div class="text-danger">{{ error }}</div>
-            {% endfor %}
+          </div>
+          
+          <!-- 基本情報 -->
+          <div class="mb-4">
+            <div class="section-title">
+              <i class="ti ti-building me-1"></i>基本情報
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }} <span class="text-danger">*</span></label>
+              {{ form.name }}
+              {% if form.name.help_text %}
+              <div class="form-text">{{ form.name.help_text }}</div>
+              {% endif %}
+              {% for error in form.name.errors %}
+              <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.representative_name.id_for_label }}" class="form-label">{{ form.representative_name.label }} <span class="text-danger">*</span></label>
+              {{ form.representative_name }}
+              {% if form.representative_name.errors %}
+              <div class="text-danger small">{{ form.representative_name.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.website_url.id_for_label }}" class="form-label">{{ form.website_url.label }}</label>
+              {{ form.website_url }}
+              {% if form.website_url.errors %}
+              <div class="text-danger small">{{ form.website_url.errors }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- 住所情報 -->
+          <div class="mb-4">
+            <div class="section-title">
+              <i class="ti ti-map-pin me-1"></i>住所
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="{{ form.postal_code.id_for_label }}" class="form-label">{{ form.postal_code.label }}</label>
+                <div class="input-group">
+                  {{ form.postal_code }}
+                  <button type="button" class="btn btn-outline-secondary" id="searchAddress">
+                    <i class="ti ti-search"></i>
+                  </button>
+                </div>
+                {% if form.postal_code.help_text %}
+                <small class="text-muted">{{ form.postal_code.help_text }}</small>
+                {% endif %}
+                {% if form.postal_code.errors %}
+                <div class="text-danger small">{{ form.postal_code.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            
+            <div class="row mb-3">
+              <div class="col-md-4">
+                <label for="{{ form.prefecture.id_for_label }}" class="form-label">{{ form.prefecture.label }}</label>
+                {{ form.prefecture }}
+              </div>
+              <div class="col-md-8">
+                <label for="{{ form.city.id_for_label }}" class="form-label">{{ form.city.label }}</label>
+                {{ form.city }}
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.address.id_for_label }}" class="form-label">{{ form.address.label }}</label>
+              {{ form.address }}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.building.id_for_label }}" class="form-label">{{ form.building.label }}</label>
+              {{ form.building }}
+            </div>
+          </div>
+          
+          <!-- インボイス情報 -->
+          <div class="mb-4">
+            <div class="section-title">
+              <i class="ti ti-receipt me-1"></i>インボイス制度
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.invoice_number.id_for_label }}" class="form-label">{{ form.invoice_number.label }}</label>
+              {{ form.invoice_number }}
+              {% if form.invoice_number.help_text %}
+              <small class="text-muted">{{ form.invoice_number.help_text }}</small>
+              {% endif %}
+              {% if form.invoice_number.errors %}
+              <div class="text-danger small">{{ form.invoice_number.errors }}</div>
+              {% endif %}
+            </div>
           </div>
           
           {% if form.non_field_errors %}
@@ -109,13 +269,90 @@
           <p class="mb-0 fw-semibold">{{ firm.id }}</p>
         </div>
         <div class="mb-3">
-          <label class="form-label text-muted">Firm名</label>
-          <p class="mb-0 fw-semibold">{{ firm.name }}</p>
+          <label class="form-label text-muted">登録日</label>
+          <p class="mb-0 fw-semibold">
+            {% if firm.created_at %}
+              {{ firm.created_at|date:"Y年m月d日" }}
+            {% else %}
+              -
+            {% endif %}
+          </p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label text-muted">最終更新日</label>
+          <p class="mb-0 fw-semibold">
+            {% if firm.updated_at %}
+              {{ firm.updated_at|date:"Y年m月d日" }}
+            {% else %}
+              -
+            {% endif %}
+          </p>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  // 個人/法人選択のUI
+  document.querySelectorAll('.entity-type-option input').forEach(function(radio) {
+    radio.addEventListener('change', function() {
+      document.querySelectorAll('.entity-type-option').forEach(function(opt) {
+        opt.classList.remove('selected');
+      });
+      this.closest('.entity-type-option').classList.add('selected');
+    });
+    
+    // 初期状態
+    if (radio.checked) {
+      radio.closest('.entity-type-option').classList.add('selected');
+    }
+  });
+  
+  // 郵便番号から住所を検索
+  const searchAddressBtn = document.getElementById('searchAddress');
+  if (searchAddressBtn) {
+    searchAddressBtn.addEventListener('click', function() {
+      const postalCode = document.getElementById('postal_code').value.replace(/[^0-9]/g, '');
+      
+      if (postalCode.length !== 7) {
+        alert('郵便番号は7桁で入力してください');
+        return;
+      }
+      
+      // 郵便番号API（zipcloud）を使用
+      fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${postalCode}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status === 200 && data.results) {
+            const result = data.results[0];
+            document.getElementById('prefecture').value = result.address1;
+            document.getElementById('city').value = result.address2 + result.address3;
+            // readonly属性を一時的に解除して値を設定後、再設定
+            document.getElementById('prefecture').removeAttribute('readonly');
+            document.getElementById('city').removeAttribute('readonly');
+          } else {
+            alert('該当する住所が見つかりませんでした');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('住所の検索中にエラーが発生しました');
+        });
+    });
+    
+    // 郵便番号入力時に自動検索
+    const postalCodeInput = document.getElementById('postal_code');
+    if (postalCodeInput) {
+      postalCodeInput.addEventListener('input', function() {
+        const postalCode = this.value.replace(/[^0-9]/g, '');
+        if (postalCode.length === 7) {
+          searchAddressBtn.click();
+        }
+      });
+    }
+  }
+</script>
   </div>
   <!-- End of tab-pane -->
 </div>

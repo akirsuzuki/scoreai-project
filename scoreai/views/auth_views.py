@@ -11,14 +11,16 @@ from django.contrib.auth.views import (
 )
 from django.contrib.auth import login
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import CreateView, UpdateView, TemplateView, View
 from django.views import generic
 from django.conf import settings
+from django.core.mail import send_mail
+from django.shortcuts import redirect, get_object_or_404
 import logging
 
 from ..mixins import SelectedCompanyMixin
-from ..models import UserCompany, CompanyInvitation, FirmInvitation
+from ..models import UserCompany, CompanyInvitation, FirmInvitation, EmailVerificationToken, UserFirm
 from ..forms import CustomUserCreationForm, LoginForm, UserProfileUpdateForm
 from ..utils.security import (
     get_client_ip,
@@ -48,24 +50,23 @@ class UserCreateView(CreateView):
     
     新規ユーザーアカウントを作成します。
     セキュリティ対策として、レート制限とreCAPTCHA検証を実装しています。
+    メール認証機能を使用してユーザーを有効化します。
     """
     form_class = CustomUserCreationForm
     template_name = 'scoreai/user_create_form.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('email_verification_sent')
 
     def dispatch(self, request, *args, **kwargs):
         """リクエスト処理前のレート制限チェック"""
-        # GETリクエストの場合は通常通り処理
         if request.method == 'GET':
             return super().dispatch(request, *args, **kwargs)
         
-        # POSTリクエストの場合のみレート制限チェック
         is_allowed, error_message = check_rate_limit(
             request,
             key_prefix='user_registration',
-            max_attempts=3,  # 5分間に3回まで
-            time_window=300,  # 5分
-            block_duration=3600  # 1時間ブロック
+            max_attempts=3,
+            time_window=300,
+            block_duration=3600
         )
         
         if not is_allowed:
@@ -75,7 +76,6 @@ class UserCreateView(CreateView):
                 {'ip': get_client_ip(request)}
             )
             messages.error(request, error_message)
-            # フォームを取得してエラーを表示
             form = self.get_form()
             form.add_error(None, error_message)
             return self.form_invalid(form)
@@ -83,15 +83,8 @@ class UserCreateView(CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        """フォームバリデーション成功時の処理
-        
-        Args:
-            form: バリデーション済みフォーム
-            
-        Returns:
-            レスポンスオブジェクト
-        """
-        # reCAPTCHA検証（設定されている場合）
+        """フォームバリデーション成功時の処理"""
+        # reCAPTCHA検証
         recaptcha_secret = getattr(settings, 'RECAPTCHA_SECRET_KEY', None)
         if recaptcha_secret:
             recaptcha_token = self.request.POST.get('g-recaptcha-response')
@@ -110,16 +103,19 @@ class UserCreateView(CreateView):
                 messages.error(self.request, error_message or 'reCAPTCHA検証に失敗しました。')
                 return self.form_invalid(form)
         
-        response = super().form_valid(form)
-        user = form.save()
+        # ユーザーを作成（まだ有効化しない）
+        user = form.save(commit=False)
+        user.is_active = False
+        # 新規ユーザーはデフォルトでfinancial consultantとmanagerに設定
+        user.is_financial_consultant = True
+        user.is_manager = True
+        user.save()
         
-        # セキュリティ強化: 新規ユーザーはメール認証まで無効化
-        # 招待メールがある場合は有効化（既存の動作を維持）
         email = form.cleaned_data.get('email')
         has_invitation = False
         
         if email:
-            # CompanyInvitationを検索（未承認のもの）
+            # CompanyInvitationを検索
             company_invitations = CompanyInvitation.objects.filter(
                 email=email,
                 is_accepted=False
@@ -128,12 +124,11 @@ class UserCreateView(CreateView):
             if company_invitations.exists():
                 has_invitation = True
                 for invitation in company_invitations:
-                    # is_acceptedをTrueに更新（save()メソッドでUserCompanyが作成される）
                     invitation.is_accepted = True
                     invitation.accepted_at = timezone.now()
                     invitation.save()
             
-            # FirmInvitationも同様に処理
+            # FirmInvitationを検索
             firm_invitations = FirmInvitation.objects.filter(
                 email=email,
                 is_accepted=False
@@ -142,62 +137,155 @@ class UserCreateView(CreateView):
             if firm_invitations.exists():
                 has_invitation = True
                 for invitation in firm_invitations:
-                    # is_acceptedをTrueに更新（save()メソッドでUserFirmが作成される）
                     invitation.is_accepted = True
                     invitation.accepted_at = timezone.now()
                     invitation.save()
         
-        # 招待がない場合は、メール認証まで無効化
-        if not has_invitation:
-            user.is_active = False
-            user.save()
-            # TODO: メール認証機能を実装する場合はここでメール送信
+        # メール認証トークンを生成
+        verification_token = EmailVerificationToken.create_token(user)
         
-        # レート制限をリセット（成功時）
+        # 認証メールを送信
+        self._send_verification_email(user, verification_token)
+        
         reset_rate_limit(self.request, 'user_registration')
         
-        # ログイン（is_active=Trueの場合のみ）
-        if user.is_active:
-            login(self.request, user)
-            messages.success(self.request, 'アカウントが正常に作成されました。')
-        else:
-            messages.success(
-                self.request,
-                'アカウントが作成されました。メール認証を完了してください。'
-            )
-        
-        # 登録ログを記録
         logger.info(
-            f"User registration successful: username={user.username}, "
+            f"User registration: username={user.username}, "
             f"email={user.email}, ip={get_client_ip(self.request)}, "
-            f"has_invitation={has_invitation}, is_active={user.is_active}"
+            f"has_invitation={has_invitation}, verification_sent=True"
         )
         
-        return response
+        return redirect(self.success_url)
+    
+    def _send_verification_email(self, user, token):
+        """認証メールを送信"""
+        try:
+            verification_url = self.request.build_absolute_uri(
+                reverse('email_verify', kwargs={'token': token.token})
+            )
+            
+            subject = 'SCore_Ai - メールアドレスの確認'
+            message = f"""
+{user.username} 様
+
+SCore_Aiへのご登録ありがとうございます。
+
+以下のリンクをクリックして、メールアドレスを確認してください：
+{verification_url}
+
+このリンクは24時間有効です。
+
+※このメールに心当たりがない場合は、このメールを無視してください。
+
+---
+SCore_Ai
+"""
+            
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                [user.email],
+                fail_silently=False,
+            )
+            logger.info(f"Verification email sent to {user.email}")
+        except Exception as e:
+            logger.error(f"Error sending verification email: {e}", exc_info=True)
 
     def form_invalid(self, form):
-        """フォームバリデーション失敗時の処理
-        
-        Args:
-            form: バリデーション失敗したフォーム
-            
-        Returns:
-            レスポンスオブジェクト
-        """
+        """フォームバリデーション失敗時の処理"""
         messages.error(self.request, 'アカウントの作成に失敗しました。入力内容を確認してください。')
         return super().form_invalid(form)
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
-        """コンテキストデータの取得
-        
-        Args:
-            **kwargs: 追加のキーワード引数
-            
-        Returns:
-            コンテキストデータの辞書
-        """
+        """コンテキストデータの取得"""
         context = super().get_context_data(**kwargs)
         context['title'] = 'ユーザー登録'
+        return context
+
+
+class EmailVerificationSentView(TemplateView):
+    """メール認証送信完了ビュー"""
+    template_name = 'scoreai/email_verification_sent.html'
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'メール認証'
+        return context
+
+
+class EmailVerifyView(View):
+    """メール認証ビュー"""
+    
+    def get(self, request, token):
+        """トークンを検証してユーザーを有効化"""
+        verification_token = get_object_or_404(EmailVerificationToken, token=token)
+        
+        if not verification_token.is_valid():
+            messages.error(request, 'このリンクは無効または期限切れです。再度登録してください。')
+            return redirect('user_create')
+        
+        user = verification_token.user
+        user.is_active = True
+        user.save()
+        
+        verification_token.mark_as_used()
+        
+        login(request, user)
+        
+        logger.info(f"Email verified for user: {user.email}")
+        
+        messages.success(request, 'メールアドレスが確認されました。ようこそSCore_Aiへ！')
+        return redirect('welcome')
+
+
+class WelcomeView(LoginRequiredMixin, TemplateView):
+    """ウェルカムビュー
+    
+    新規ユーザーがログイン後、Companyが未選択の場合に表示されます。
+    Firm登録やCompany登録への導線を提供します。
+    """
+    template_name = 'scoreai/welcome.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        """既にCompanyが選択されている場合はダッシュボードへリダイレクト"""
+        if request.user.is_authenticated:
+            user_company = UserCompany.objects.filter(
+                user=request.user,
+                is_selected=True,
+                active=True
+            ).first()
+            
+            if user_company:
+                return redirect('index')
+        
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ようこそ SCore_Ai へ'
+        context['show_title_card'] = False
+        
+        user = self.request.user
+        
+        # ユーザーがFirmに所属しているか確認
+        user_firm = UserFirm.objects.filter(
+            user=user,
+            active=True
+        ).select_related('firm').first()
+        
+        context['has_firm'] = user_firm is not None
+        context['user_firm'] = user_firm
+        
+        # ユーザーがCompanyに所属しているか確認（未選択含む）
+        user_companies = UserCompany.objects.filter(
+            user=user,
+            active=True
+        ).select_related('company')
+        
+        context['has_companies'] = user_companies.exists()
+        context['user_companies'] = user_companies
+        
         return context
 
 
