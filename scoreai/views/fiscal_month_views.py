@@ -507,10 +507,16 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
                     
                     comparison_years_data.append(year_summary)
             
+            # テーブル用：新しい年度から古い年度へ降順にソート（2025年、2024年、2023年の順）
+            comparison_years_data.sort(key=lambda x: x['year'], reverse=True)
+            
             # チャート用データを準備（各年度の月次データ）
-            if comparison_years_data:
+            # グラフは古い年度から新しい年度へ昇順にソート（2023年、2024年、2025年の順）
+            chart_years_data = sorted(comparison_years_data, key=lambda x: x['year'])
+            
+            if chart_years_data:
                 # 月のラベル（最初の年度のデータから取得）
-                first_year_data = comparison_years_data[0]
+                first_year_data = chart_years_data[0]
                 chart_data = {
                     'labels': [f"{m['display_month']}月" for m in first_year_data['data']],
                     'years': [],
@@ -520,7 +526,7 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
                     'ordinary_profit': {},
                 }
                 
-                for year_data in comparison_years_data:
+                for year_data in chart_years_data:
                     year = year_data['year']
                     chart_data['years'].append(year)
                     chart_data['sales'][str(year)] = [m['sales'] for m in year_data['data']]
@@ -530,7 +536,7 @@ class FiscalSummary_MonthListView(SelectedCompanyMixin, ListView):
         
         context['chart_data_json'] = json.dumps(chart_data) if chart_data else None
         
-        # 比較年度のデータをテーブル用に準備
+        # 比較年度のデータをテーブル用に準備（降順ソート済み：新しい年度が先頭）
         monthly_summaries_with_summary = {
             'monthly_data': comparison_years_data,
             'summary_data': []
