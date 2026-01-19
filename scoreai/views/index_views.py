@@ -10,7 +10,7 @@ import logging
 import json
 
 from ..mixins import SelectedCompanyMixin
-from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month, Company
+from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month, Company, MeetingMinutes, Blog, FirmNotification, UserFirm
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,
@@ -220,6 +220,7 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             'title': 'ダッシュボード',
             'show_title_card': False,  # ダッシュボードではタイトルカードを非表示
             'today': timezone.now().date(),
+            'this_company': self.this_company,  # テンプレートで使用するため追加
             'months_label': months_label,
             'monthly_summaries': monthly_summaries,
             'monthly_summaries_total': monthly_summaries_total,
@@ -243,5 +244,32 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
             'latest_year': latest_year,  # チャートで予算の年度を表示するために追加
             'budget_achievement': budget_achievement,  # 予算達成状況
         })
+        
+        # 最近のノート（選択中のCompanyの最近5件）
+        recent_notes = MeetingMinutes.objects.filter(
+            company=self.this_company
+        ).select_related('created_by').order_by('-meeting_date', '-created_at')[:5]
+        context['recent_notes'] = recent_notes
+        
+        # 最近のお知らせ（公開済みのブログ記事、最近5件）
+        recent_announcements = Blog.objects.filter(
+            is_draft=False
+        ).select_related('written_by').prefetch_related('categories').order_by('-post_date', '-created_at')[:5]
+        context['recent_announcements'] = recent_announcements
+        
+        # 最近の通知（ユーザーが所属するFirmの通知、最近5件）
+        recent_notifications = []
+        if self.request.user.is_authenticated:
+            user_firm = UserFirm.objects.filter(
+                user=self.request.user,
+                is_selected=True,
+                active=True
+            ).first()
+            if user_firm:
+                recent_notifications = FirmNotification.objects.filter(
+                    firm=user_firm.firm
+                ).order_by('-created_at')[:5]
+        context['recent_notifications'] = recent_notifications
+        
         return context
 
