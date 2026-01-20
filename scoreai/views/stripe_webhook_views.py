@@ -63,7 +63,10 @@ class StripeWebhookView(View):
         logger.info(f"Webhook event received: {event_type} (ID: {event.get('id', 'unknown')})")
         
         try:
-            if event_type == 'customer.subscription.created':
+            if event_type == 'checkout.session.completed':
+                logger.info(f"Processing checkout.session.completed event")
+                self._handle_checkout_session_completed(event_data)
+            elif event_type == 'customer.subscription.created':
                 logger.info(f"Processing subscription.created event")
                 self._handle_subscription_created(event_data)
             elif event_type == 'customer.subscription.updated':
@@ -92,27 +95,79 @@ class StripeWebhookView(View):
         return HttpResponse(status=200)
     
     @transaction.atomic
+    def _handle_checkout_session_completed(self, session_data):
+        """Checkout Session完了時の処理"""
+        logger.info(f"Handling checkout.session.completed: {session_data.get('id')}")
+        logger.info(f"Session data: {json.dumps(session_data, indent=2, default=str)}")
+        
+        # metadataから取得
+        metadata = session_data.get('metadata', {})
+        firm_id = metadata.get('firm_id')
+        plan_id = metadata.get('plan_id')
+        
+        logger.info(f"Metadata - firm_id: {firm_id}, plan_id: {plan_id}")
+        
+        # subscription_idを取得
+        stripe_subscription_id = session_data.get('subscription')
+        if not stripe_subscription_id:
+            logger.warning("No subscription ID in checkout session")
+            return
+        
+        logger.info(f"Stripe subscription ID: {stripe_subscription_id}")
+        
+        # Stripeからサブスクリプション情報を取得
+        try:
+            stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+            logger.info(f"Retrieved subscription from Stripe: {stripe_subscription_id}")
+            logger.info(f"Subscription status: {stripe_subscription.get('status')}")
+            logger.info(f"Subscription items: {stripe_subscription.get('items', {}).get('data', [])}")
+            
+            # metadataにplan_idとfirm_idを追加（サブスクリプション作成処理で使用）
+            if not stripe_subscription.get('metadata'):
+                stripe_subscription['metadata'] = {}
+            if plan_id and 'plan_id' not in stripe_subscription['metadata']:
+                stripe_subscription['metadata']['plan_id'] = plan_id
+                logger.info(f"Added plan_id to subscription metadata: {plan_id}")
+            if firm_id and 'firm_id' not in stripe_subscription['metadata']:
+                stripe_subscription['metadata']['firm_id'] = firm_id
+                logger.info(f"Added firm_id to subscription metadata: {firm_id}")
+        except Exception as e:
+            logger.error(f"Error retrieving subscription from Stripe: {e}", exc_info=True)
+            return
+        
+        # サブスクリプション作成処理を呼び出す（プラン情報を含む）
+        self._handle_subscription_created(stripe_subscription)
+        logger.info(f"Checkout session completed and subscription created/updated")
+    
+    @transaction.atomic
     def _handle_subscription_created(self, subscription_data):
         """サブスクリプション作成時の処理"""
         stripe_subscription_id = subscription_data['id']
         stripe_customer_id = subscription_data['customer']
+        
+        logger.info(f"Handling subscription.created: {stripe_subscription_id}")
+        logger.info(f"Subscription metadata: {subscription_data.get('metadata', {})}")
         
         # metadataから取得を試みる
         metadata = subscription_data.get('metadata', {})
         firm_id = metadata.get('firm_id')
         plan_id = metadata.get('plan_id')
         
+        logger.info(f"Initial metadata - firm_id: {firm_id}, plan_id: {plan_id}")
+        
         # metadataにない場合は、Customerのmetadataから取得
         if not firm_id:
             try:
                 customer = stripe.Customer.retrieve(stripe_customer_id)
                 firm_id = customer.metadata.get('firm_id')
+                logger.info(f"Retrieved firm_id from customer metadata: {firm_id}")
             except Exception as e:
-                logger.error(f"Error retrieving customer: {e}")
+                logger.error(f"Error retrieving customer: {e}", exc_info=True)
         
         # plan_idがmetadataにない場合は、price_idからプランを特定
         if not plan_id:
             price_id = subscription_data.get('items', {}).get('data', [{}])[0].get('price', {}).get('id', '')
+            logger.info(f"Price ID from subscription: {price_id}")
             if price_id:
                 try:
                     plan = FirmPlan.objects.filter(
@@ -122,8 +177,11 @@ class StripeWebhookView(View):
                     ).first()
                     if plan:
                         plan_id = plan.id
+                        logger.info(f"Found plan by price_id: {plan.name} (ID: {plan_id})")
+                    else:
+                        logger.warning(f"Plan not found for price_id: {price_id}")
                 except Exception as e:
-                    logger.error(f"Error finding plan by price_id: {e}")
+                    logger.error(f"Error finding plan by price_id: {e}", exc_info=True)
         
         if not firm_id:
             logger.warning(f"Missing firm_id in subscription {stripe_subscription_id}")
@@ -136,49 +194,86 @@ class StripeWebhookView(View):
         try:
             firm = Firm.objects.get(id=firm_id)
             plan = FirmPlan.objects.get(id=plan_id)
+            logger.info(f"Found firm: {firm.name}, plan: {plan.name}")
         except (Firm.DoesNotExist, FirmPlan.DoesNotExist) as e:
-            logger.error(f"Firm or Plan not found: {e}")
+            logger.error(f"Firm or Plan not found: {e}", exc_info=True)
             return
         
         # サブスクリプションを作成または更新
-        subscription, created = FirmSubscription.objects.get_or_create(
-            firm=firm,
-            defaults={
-                'plan': plan,
-                'status': 'active',
-                'stripe_customer_id': stripe_customer_id,
-                'stripe_subscription_id': stripe_subscription_id,
-                'stripe_price_id': subscription_data.get('items', {}).get('data', [{}])[0].get('price', {}).get('id', ''),
-                'started_at': timezone.now(),
-                'current_period_start': timezone.datetime.fromtimestamp(
-                    subscription_data.get('current_period_start', 0),
-                    tz=timezone.utc
-                ) if subscription_data.get('current_period_start') else None,
-                'current_period_end': timezone.datetime.fromtimestamp(
-                    subscription_data.get('current_period_end', 0),
-                    tz=timezone.utc
-                ) if subscription_data.get('current_period_end') else None,
-            }
-        )
+        # 既存のサブスクリプションを取得（stripe_subscription_idで検索）
+        existing_subscription = FirmSubscription.objects.filter(
+            stripe_subscription_id=stripe_subscription_id
+        ).first()
         
-        if not created:
+        # stripe_subscription_idで見つからない場合は、firmで検索
+        if not existing_subscription:
+            existing_subscription = FirmSubscription.objects.filter(
+                firm=firm
+            ).first()
+            logger.info(f"Found existing subscription by firm: {existing_subscription.id if existing_subscription else None}")
+        
+        if existing_subscription:
             # 既存のサブスクリプションを更新
-            subscription.plan = plan
-            subscription.status = 'active'
-            subscription.stripe_customer_id = stripe_customer_id
-            subscription.stripe_subscription_id = stripe_subscription_id
-            subscription.stripe_price_id = subscription_data.get('items', {}).get('data', [{}])[0].get('price', {}).get('id', '')
-            subscription.current_period_start = timezone.datetime.fromtimestamp(
+            logger.info(f"Updating existing subscription: {existing_subscription.id}")
+            old_plan = existing_subscription.plan
+            plan_changed = old_plan != plan
+            
+            logger.info(f"Old plan: {old_plan.name} (ID: {old_plan.id}), New plan: {plan.name} (ID: {plan.id})")
+            
+            existing_subscription.plan = plan
+            existing_subscription.status = 'active'
+            existing_subscription.stripe_customer_id = stripe_customer_id
+            existing_subscription.stripe_subscription_id = stripe_subscription_id
+            existing_subscription.stripe_price_id = subscription_data.get('items', {}).get('data', [{}])[0].get('price', {}).get('id', '')
+            existing_subscription.current_period_start = timezone.datetime.fromtimestamp(
                 subscription_data.get('current_period_start', 0),
                 tz=timezone.utc
             ) if subscription_data.get('current_period_start') else None
-            subscription.current_period_end = timezone.datetime.fromtimestamp(
+            existing_subscription.current_period_end = timezone.datetime.fromtimestamp(
                 subscription_data.get('current_period_end', 0),
                 tz=timezone.utc
             ) if subscription_data.get('current_period_end') else None
-            subscription.save()
+            existing_subscription.save()
+            
+            logger.info(f"Subscription updated successfully: {existing_subscription.id}")
+            
+            # プラン変更履歴を記録
+            if plan_changed:
+                from ..models import SubscriptionHistory
+                SubscriptionHistory.objects.create(
+                    firm=firm,
+                    subscription=existing_subscription,
+                    old_plan=old_plan,
+                    new_plan=plan,
+                    reason='Stripe Checkout経由でのプラン変更',
+                    changed_by=None,  # Webhook経由のためユーザー情報なし
+                )
+                logger.info(f"Plan changed from {old_plan.name} to {plan.name} for subscription {existing_subscription.id}")
+            
+            subscription = existing_subscription
+        else:
+            # 新しいサブスクリプションを作成
+            logger.info(f"Creating new subscription for firm {firm_id}")
+            subscription = FirmSubscription.objects.create(
+                firm=firm,
+                plan=plan,
+                status='active',
+                stripe_customer_id=stripe_customer_id,
+                stripe_subscription_id=stripe_subscription_id,
+                stripe_price_id=subscription_data.get('items', {}).get('data', [{}])[0].get('price', {}).get('id', ''),
+                started_at=timezone.now(),
+                current_period_start=timezone.datetime.fromtimestamp(
+                    subscription_data.get('current_period_start', 0),
+                    tz=timezone.utc
+                ) if subscription_data.get('current_period_start') else None,
+                current_period_end=timezone.datetime.fromtimestamp(
+                    subscription_data.get('current_period_end', 0),
+                    tz=timezone.utc
+                ) if subscription_data.get('current_period_end') else None,
+            )
+            logger.info(f"Subscription created successfully: {subscription.id}")
         
-        logger.info(f"Subscription created/updated: {subscription.id} for firm {firm_id}")
+        logger.info(f"Final subscription state - ID: {subscription.id}, Plan: {subscription.plan.name} (ID: {subscription.plan.id}), Status: {subscription.status}")
     
     @transaction.atomic
     def _handle_subscription_updated(self, subscription_data):

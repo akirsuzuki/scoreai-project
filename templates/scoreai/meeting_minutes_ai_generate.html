@@ -1,6 +1,8 @@
 {% extends "scoreai/base.html" %}
 {% load static %}
 {% load widget_tweaks %}
+{% load custom_tags %}
+{% load plan_features_tags %}
 
 {% block title %}
 {{ title }}
@@ -88,8 +90,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <i class="ti ti-notes me-1"></i>ノート一覧
         </a>
       </li>
-      {% load custom_tags %}
-      {% load plan_features_tags %}
       {% get_user_selected_company user as selected_company %}
       {% if selected_company %}
         {% get_company_firm_for_plan_check selected_company as company_firm %}

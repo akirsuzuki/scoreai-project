@@ -33,12 +33,7 @@
       </li>
       {% endif %}
       <li class="nav-item" role="presentation">
-        <a class="nav-link active" href="{% url 'plan_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-package me-1"></i>プラン・サブスクリプション
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
+        <a class="nav-link active" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
           <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
         </a>
       </li>
@@ -153,6 +148,27 @@
                 <div class="card-footer">
                     {% if current_subscription and current_subscription.plan == plan %}
                     <button class="btn btn-secondary w-100" disabled>現在のプラン</button>
+                    {% else %}
+                    {% if plan.plan_type == 'free' %}
+                    <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary w-100">無料で登録</button>
+                    </form>
+                    {% else %}
+                    <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
+                        {% csrf_token %}
+                        <div class="mb-2">
+                            <label class="form-label small">請求サイクル</label>
+                            <select name="billing_cycle" class="form-select form-select-sm">
+                                <option value="monthly">月払い</option>
+                                {% if plan.yearly_price %}
+                                <option value="yearly">年払い（{{ plan.yearly_discount_months }}ヶ月分無料）</option>
+                                {% endif %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">このプランに登録</button>
+                    </form>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>

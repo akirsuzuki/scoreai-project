@@ -246,6 +246,8 @@ class SubscriptionCreateView(FirmOwnerMixin, View):
             customer_id = self._get_or_create_stripe_customer(firm, request.user)
             
             # Stripe Checkout Sessionを作成
+            success_url = request.build_absolute_uri(f'/plans/{firm_id}/subscription/success/')
+            # session_idをクエリパラメータとして追加（後で同期処理で使用）
             checkout_session = stripe.checkout.Session.create(
                 customer=customer_id,
                 payment_method_types=['card'],
@@ -254,7 +256,7 @@ class SubscriptionCreateView(FirmOwnerMixin, View):
                     'quantity': 1,
                 }],
                 mode='subscription',
-                success_url=request.build_absolute_uri(f'/plans/{firm_id}/subscription/success/'),
+                success_url=f'{success_url}?session_id={{CHECKOUT_SESSION_ID}}',
                 cancel_url=request.build_absolute_uri(f'/plans/{firm_id}/subscription/cancel/'),
                 metadata={
                     'firm_id': firm.id,
@@ -327,6 +329,61 @@ class SubscriptionCreateView(FirmOwnerMixin, View):
 class SubscriptionSuccessView(FirmOwnerMixin, TemplateView):
     """サブスクリプション作成成功ビュー"""
     template_name = 'scoreai/subscription_success.html'
+    
+    def get(self, request, *args, **kwargs):
+        """GETリクエスト時にStripeからサブスクリプション情報を同期"""
+        # URLパラメータからsession_idを取得
+        session_id = request.GET.get('session_id')
+        
+        if session_id:
+            try:
+                # Checkout Sessionを取得
+                checkout_session = stripe.checkout.Session.retrieve(session_id)
+                
+                # metadataから取得
+                metadata = checkout_session.get('metadata', {})
+                firm_id = metadata.get('firm_id')
+                plan_id = metadata.get('plan_id')
+                
+                # subscription_idを取得
+                stripe_subscription_id = checkout_session.get('subscription')
+                
+                if stripe_subscription_id and firm_id and plan_id:
+                    # Stripeからサブスクリプション情報を取得
+                    stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+                    
+                    # Webhookハンドラーと同じ処理を実行
+                    from .stripe_webhook_views import StripeWebhookView
+                    webhook_handler = StripeWebhookView()
+                    
+                    # metadataを追加
+                    if not stripe_subscription.get('metadata'):
+                        stripe_subscription['metadata'] = {}
+                    stripe_subscription['metadata']['plan_id'] = plan_id
+                    stripe_subscription['metadata']['firm_id'] = firm_id
+                    
+                    # サブスクリプション作成処理を呼び出す
+                    webhook_handler._handle_subscription_created(stripe_subscription)
+                    
+                    messages.success(request, 'サブスクリプション情報を同期しました。')
+                elif stripe_subscription_id:
+                    # subscription_idだけがある場合、Stripeから直接取得して同期
+                    try:
+                        stripe_subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+                        from .stripe_webhook_views import StripeWebhookView
+                        webhook_handler = StripeWebhookView()
+                        webhook_handler._handle_subscription_created(stripe_subscription)
+                        messages.success(request, 'サブスクリプション情報を同期しました。')
+                    except Exception as e:
+                        logger.error(f"Error syncing subscription: {e}", exc_info=True)
+                        messages.warning(request, 'サブスクリプション情報の同期に失敗しました。しばらく待ってからページをリロードしてください。')
+            except stripe.error.StripeError as e:
+                logger.error(f"Stripe error in SubscriptionSuccessView: {e}", exc_info=True)
+                messages.warning(request, 'サブスクリプション情報の取得に失敗しました。しばらく待ってからページをリロードしてください。')
+            except Exception as e:
+                logger.error(f"Error in SubscriptionSuccessView: {e}", exc_info=True)
+        
+        return super().get(request, *args, **kwargs)
     
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         """コンテキストデータの取得"""

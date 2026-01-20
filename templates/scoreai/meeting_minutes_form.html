@@ -1,6 +1,8 @@
 {% extends "scoreai/base.html" %}
 {% load crispy_forms_tags %}
 {% load custom_filters %}
+{% load custom_tags %}
+{% load plan_features_tags %}
 
 {% block title %}
 {% if form.instance.pk %}ミーティングノート編集{% else %}新規ミーティングノート作成{% endif %}
@@ -147,8 +149,6 @@ document.addEventListener('DOMContentLoaded', function() {
           <i class="ti ti-notes me-1"></i>ノート一覧
         </a>
       </li>
-      {% load custom_tags %}
-      {% load plan_features_tags %}
       {% get_user_selected_company user as selected_company %}
       {% if selected_company %}
         {% get_company_firm_for_plan_check selected_company as company_firm %}
@@ -205,6 +205,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="card-body">
                     <div class="card-body">
                         {% csrf_token %}
+                        {# Form-level errors #}
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {# Hidden fields for company and created_by #}
+                        {{ form.company }}
+                        {{ form.created_by }}
+                        {% if form.company.errors %}
+                            <div class="text-danger">{{ form.company.errors }}</div>
+                        {% endif %}
+                        {% if form.created_by.errors %}
+                            <div class="text-danger">{{ form.created_by.errors }}</div>
+                        {% endif %}
                         <div class="mb-3">
                             <label for="{{ form.meeting_date.id_for_label }}" class="form-label">{{ form.meeting_date.label }}</label>
                             {{ form.meeting_date }}

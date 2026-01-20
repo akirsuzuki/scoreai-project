@@ -27997,3 +27997,241 @@ INFO 2026-01-19 21:32:12,550 basehttp "GET /budget/analysis/ HTTP/1.1" 200 34508
 INFO 2026-01-19 21:32:15,777 basehttp "GET /debts_byBank/ HTTP/1.1" 200 53072
 INFO 2026-01-19 21:32:22,484 basehttp "GET / HTTP/1.1" 200 80676
 INFO 2026-01-19 21:32:25,660 basehttp "GET /ai-consultation/ HTTP/1.1" 200 62994
+INFO 2026-01-20 19:48:16,414 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 19:48:49,717 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38077
+INFO 2026-01-20 19:48:49,736 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:48:49,737 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:48:49,738 basehttp "GET /static/scoreai/css/loading.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:48:50,598 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38077
+INFO 2026-01-20 19:48:58,406 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 39011
+INFO 2026-01-20 19:49:02,785 basehttp "POST /meeting_minutes/create/ HTTP/1.1" 200 39015
+INFO 2026-01-20 19:49:05,656 basehttp "POST /meeting_minutes/create/ HTTP/1.1" 200 39015
+INFO 2026-01-20 19:50:38,152 basehttp "POST /meeting_minutes/create/ HTTP/1.1" 200 39602
+INFO 2026-01-20 19:50:43,368 basehttp "POST /meeting_minutes/create/ HTTP/1.1" 200 39602
+INFO 2026-01-20 19:50:46,679 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38077
+INFO 2026-01-20 19:50:47,566 basehttp "GET /meeting_minutes/create/ HTTP/1.1" 200 39341
+INFO 2026-01-20 19:50:51,597 basehttp "GET /meeting_minutes/import/ HTTP/1.1" 200 36636
+INFO 2026-01-20 19:51:00,379 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38077
+INFO 2026-01-20 19:54:29,607 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38063
+INFO 2026-01-20 19:54:32,024 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38063
+INFO 2026-01-20 19:58:19,099 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38063
+INFO 2026-01-20 19:58:30,050 basehttp "GET /admin/ HTTP/1.1" 200 37242
+INFO 2026-01-20 19:58:30,112 basehttp "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,112 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,113 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,115 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,115 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,117 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,156 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,159 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,159 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:30,160 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+WARNING 2026-01-20 19:58:30,295 basehttp "GET /favicon.ico HTTP/1.1" 404 56573
+INFO 2026-01-20 19:58:38,399 basehttp "GET /user_profile/ HTTP/1.1" 200 45930
+INFO 2026-01-20 19:58:48,826 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 19:58:48,846 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,848 basehttp "GET /static/admin/js/core.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,851 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,853 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,852 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,858 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,858 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,862 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,865 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2026-01-20 19:58:48,865 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2026-01-20 19:58:48,870 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,871 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 19:58:48,883 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,884 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:58:48,884 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:59:08,093 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 19:59:10,064 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 42004
+INFO 2026-01-20 19:59:14,486 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 19:59:27,724 basehttp "GET /admin/scoreai/user/ HTTP/1.1" 200 36264
+INFO 2026-01-20 19:59:27,738 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:59:27,738 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 304 0
+INFO 2026-01-20 19:59:27,743 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:08:01,287 basehttp "GET /admin/scoreai/userfirm/ HTTP/1.1" 200 33475
+INFO 2026-01-20 20:08:01,326 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:08:26,387 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:08:29,188 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 42004
+INFO 2026-01-20 20:26:45,849 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41765
+INFO 2026-01-20 20:26:50,789 basehttp "GET /meeting_minutes_list/ HTTP/1.1" 200 38063
+INFO 2026-01-20 20:26:58,658 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:27:02,067 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 41765
+INFO 2026-01-20 20:33:17,292 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:33:39,663 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:33:55,191 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/ HTTP/1.1" 200 31525
+INFO 2026-01-20 20:33:57,158 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:34:01,536 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:34:03,798 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:34:06,326 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWG1QW8B72ST1CVMVCK1/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:34:12,857 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:34:17,393 basehttp "GET /firm/01HYFP566T1EEE38RT7FZPV9TQ/usage/report/ HTTP/1.1" 200 49807
+INFO 2026-01-20 20:34:18,199 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:34:43,175 basehttp "GET /admin/scoreai/firmplan/ HTTP/1.1" 200 36444
+INFO 2026-01-20 20:34:43,202 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:34:46,544 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 20:34:46,564 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:34:52,147 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 20:34:52,165 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:35:17,389 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:35:18,862 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:35:21,645 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:35:22,253 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:35:30,500 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:35:31,103 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:35:36,669 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:35:37,184 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:36:21,460 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:36:23,970 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWG1QW8B72ST1CVMVCK1/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:36:34,626 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/ HTTP/1.1" 200 31525
+INFO 2026-01-20 20:36:35,896 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:36:38,223 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:36:40,296 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:36:48,074 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:36:50,556 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:36:52,234 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:36:54,563 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 20:36:54,585 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:39:42,548 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:39:42,996 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:42:03,031 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:42:13,105 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/ HTTP/1.1" 200 31525
+INFO 2026-01-20 20:42:14,972 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:42:19,522 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:42:21,463 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:42:23,164 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:42:24,956 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:42:27,413 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 20:42:27,428 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:43:09,369 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:43:09,955 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:43:13,842 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:43:14,245 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:43:20,116 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-20 20:43:20,654 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:49:27,086 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:50:14,225 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:50:17,212 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWG1QW8B72ST1CVMVCK1/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:50:25,404 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:50:29,658 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWG1QW8B72ST1CVMVCK1/ HTTP/1.1" 302 0
+INFO 2026-01-20 20:50:39,260 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/ HTTP/1.1" 200 31525
+INFO 2026-01-20 20:50:43,326 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-20 20:50:45,874 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:50:47,620 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-20 20:50:52,403 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-20 20:50:52,432 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-20 20:51:24,445 autoreload /app/scoreai/views/plan_views.py changed, reloading.
+INFO 2026-01-20 20:51:24,899 autoreload Watching for file changes with StatReloader
+INFO 2026-01-20 20:51:29,189 autoreload /app/scoreai/views/plan_views.py changed, reloading.
+INFO 2026-01-20 20:51:29,628 autoreload Watching for file changes with StatReloader
+INFO 2026-01-21 06:25:31,016 autoreload Watching for file changes with StatReloader
+INFO 2026-01-21 06:25:34,960 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-21 06:25:34,999 basehttp "GET /static/scoreai/css/variables.css HTTP/1.1" 304 0
+INFO 2026-01-21 06:25:34,999 basehttp "GET /static/scoreai/css/custom.css HTTP/1.1" 304 0
+INFO 2026-01-21 06:25:36,215 basehttp "GET /firm_clientslist/ HTTP/1.1" 200 50304
+INFO 2026-01-21 06:25:39,493 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/ HTTP/1.1" 200 44789
+INFO 2026-01-21 06:25:42,353 basehttp "POST /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/create/01KDHGHWERQESDC9XVX57T7WN4/ HTTP/1.1" 302 0
+INFO 2026-01-21 06:25:51,114 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:25:51,195 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+WARNING 2026-01-21 06:25:51,352 basehttp "GET /favicon.ico HTTP/1.1" 404 56573
+INFO 2026-01-21 06:25:52,629 stripe_webhook_views Handling subscription.created: sub_1SrmQrAsDtpInVoyTW3y5fGk
+INFO 2026-01-21 06:25:52,629 stripe_webhook_views Subscription metadata: {'plan_id': '01KDHGHWERQESDC9XVX57T7WN4', 'firm_id': '01HYFP566T1EEE38RT7FZPV9TQ'}
+INFO 2026-01-21 06:25:52,629 stripe_webhook_views Initial metadata - firm_id: 01HYFP566T1EEE38RT7FZPV9TQ, plan_id: 01KDHGHWERQESDC9XVX57T7WN4
+INFO 2026-01-21 06:25:52,632 stripe_webhook_views Found firm: VanConsulting, plan: Starterプラン
+INFO 2026-01-21 06:25:52,633 stripe_webhook_views Creating new subscription for firm 01HYFP566T1EEE38RT7FZPV9TQ
+ERROR 2026-01-21 06:25:52,634 plan_views Error in SubscriptionSuccessView: UNIQUE constraint failed: scoreai_firmsubscription.firm_id
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: UNIQUE constraint failed: scoreai_firmsubscription.firm_id
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/app/scoreai/views/plan_views.py", line 366, in get
+    webhook_handler._handle_subscription_created(stripe_subscription)
+  File "/usr/local/lib/python3.12/contextlib.py", line 81, in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+  File "/app/scoreai/views/stripe_webhook_views.py", line 250, in _handle_subscription_created
+    subscription = FirmSubscription.objects.create(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 679, in create
+    obj.save(force_insert=True, using=self.db)
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 891, in save
+    self.save_base(
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 997, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 1160, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/base.py", line 1201, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/query.py", line 1847, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1836, in execute_sql
+    cursor.execute(sql, params)
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 354, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: UNIQUE constraint failed: scoreai_firmsubscription.firm_id
+INFO 2026-01-21 06:25:52,648 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/success/?session_id=cs_test_a1sfK5mzt5HNpuMpD7agf2l3mi64D3tA8FlykonQe0Ixrh1aT6fq17sLE5 HTTP/1.1" 200 31525
+INFO 2026-01-21 06:25:52,774 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:25:52,784 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:25:53,147 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:25:53,158 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:25:53,262 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:25:53,272 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:25:57,126 basehttp "GET /admin/scoreai/firmusagetracking/ HTTP/1.1" 200 35812
+INFO 2026-01-21 06:25:57,149 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:01,930 basehttp "GET /admin/scoreai/firminvitation/ HTTP/1.1" 200 32927
+INFO 2026-01-21 06:26:01,952 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:04,187 basehttp "GET /admin/scoreai/firminvitation/ HTTP/1.1" 200 32927
+INFO 2026-01-21 06:26:04,201 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:06,941 basehttp "GET /admin/scoreai/firmusagetracking/ HTTP/1.1" 200 35812
+INFO 2026-01-21 06:26:06,957 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:09,235 basehttp "GET /admin/scoreai/firminvitation/ HTTP/1.1" 200 32927
+INFO 2026-01-21 06:26:09,259 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:11,200 basehttp "GET /admin/scoreai/firmusagetracking/ HTTP/1.1" 200 35812
+INFO 2026-01-21 06:26:11,226 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:15,659 basehttp "GET /admin/scoreai/firmplan/ HTTP/1.1" 200 36444
+INFO 2026-01-21 06:26:15,676 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:18,647 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:26:18,669 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:26:28,902 basehttp "GET /plans/01HYFP566T1EEE38RT7FZPV9TQ/subscription/ HTTP/1.1" 200 38720
+INFO 2026-01-21 06:26:33,466 basehttp "GET /admin/scoreai/firmsubscription/ HTTP/1.1" 200 35144
+INFO 2026-01-21 06:26:33,483 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 10322
+INFO 2026-01-21 06:27:28,339 autoreload /app/scoreai/views/stripe_webhook_views.py changed, reloading.
+INFO 2026-01-21 06:27:28,960 autoreload Watching for file changes with StatReloader
