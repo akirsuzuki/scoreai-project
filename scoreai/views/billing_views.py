@@ -50,11 +50,38 @@ class BillingHistoryView(FirmOwnerMixin, TemplateView):
                 )
                 
                 for invoice in stripe_invoices.data:
+                    # Stripeの請求書データを取得
+                    invoice_total = invoice.total if invoice.total is not None else 0
+                    invoice_amount_paid = invoice.amount_paid if invoice.amount_paid is not None else 0
+                    
+                    # 表示用の金額を決定
+                    # 支払済みの場合はamount_paidを優先、それ以外はtotalを使用
+                    if invoice.status == 'paid' and invoice_amount_paid > 0:
+                        # 支払済みの場合は実際に支払われた金額を使用
+                        display_amount = invoice_amount_paid
+                    elif invoice_total > 0:
+                        # それ以外の場合はtotalを使用
+                        display_amount = invoice_total
+                    else:
+                        # どちらも0の場合はamount_paidを使用（フォールバック）
+                        display_amount = invoice_amount_paid
+                    
+                    # デバッグログ（金額が異常に小さい場合）
+                    if display_amount < 1000 and invoice_amount_paid > 0:  # 10円未満の場合
+                        logger.warning(
+                            f"Invoice {invoice.number}: "
+                            f"total={invoice_total} ({invoice_total/100}円), "
+                            f"amount_paid={invoice_amount_paid} ({invoice_amount_paid/100}円), "
+                            f"status={invoice.status}, "
+                            f"using display_amount={display_amount} ({display_amount/100}円)"
+                        )
+                    
                     invoices.append({
                         'id': invoice.id,
                         'number': invoice.number,
-                        'amount_due': invoice.amount_due / 100,  # セントから円に変換
-                        'amount_paid': invoice.amount_paid / 100,
+                        'amount_due': invoice.amount_due / 100 if invoice.amount_due else 0,  # セントから円に変換
+                        'amount_paid': invoice_amount_paid / 100,
+                        'total': display_amount / 100,  # 請求書の合計金額（セントから円に変換）
                         'status': invoice.status,
                         'created': invoice.created,
                         'period_start': invoice.period_start,

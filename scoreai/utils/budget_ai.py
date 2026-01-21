@@ -24,14 +24,16 @@ logger = logging.getLogger(__name__)
 
 def calculate_debt_balance_at_year_end(
     company: Company,
-    target_year: int
+    target_year: int,
+    previous_year: Optional[int] = None
 ) -> Dict[str, Any]:
     """
-    予算対象年度末の借入金残高を計算
+    予算対象年度末の借入金残高を計算（Debtモデルのbalance_fy1プロパティを使用）
     
     Args:
         company: 会社オブジェクト
         target_year: 予算対象年度
+        previous_year: 前期年度（指定がない場合は自動計算）
         
     Returns:
         借入金情報の辞書（短期借入金、長期借入金、合計など）
@@ -39,25 +41,30 @@ def calculate_debt_balance_at_year_end(
     # 会社の決算月を取得
     fiscal_month = company.fiscal_month
     
-    # 予算対象年度末の日付を計算
-    # 例：決算月が5月、target_yearが2025の場合、2025年5月31日が年度末
-    year_end_date = datetime(target_year, fiscal_month, 1)
-    
-    # 現在の日付から年度末までの月数を計算
+    # 現在の日付を取得
     current_date = datetime.now()
-    if current_date.year < target_year:
-        # 未来の年度の場合
-        months_to_year_end = (target_year - current_date.year) * 12 + (fiscal_month - current_date.month)
-    elif current_date.year == target_year:
-        # 同じ年度の場合
-        if current_date.month <= fiscal_month:
-            months_to_year_end = fiscal_month - current_date.month
+    current_year = current_date.year
+    current_month = current_date.month
+    
+    # 前期年度を計算（指定がない場合）
+    if previous_year is None:
+        # 最新の実績年度を取得
+        latest_actual = FiscalSummary_Year.objects.filter(
+            company=company,
+            is_budget=False,
+            is_draft=False
+        ).order_by('-year').first()
+        if latest_actual:
+            previous_year = latest_actual.year
         else:
-            # 既に決算月を過ぎている場合（次の年度末まで）
-            months_to_year_end = (12 - current_date.month) + fiscal_month
-    else:
-        # 過去の年度の場合（通常は発生しないが、念のため）
-        months_to_year_end = 0
+            # 実績がない場合は現在年度を前期とする
+            if current_month <= fiscal_month:
+                previous_year = current_year - 1
+            else:
+                previous_year = current_year
+    
+    # target_yearが前期から何期後かを計算
+    years_ahead = target_year - previous_year
     
     # 借入情報を取得
     debts = Debt.objects.filter(
@@ -65,46 +72,74 @@ def calculate_debt_balance_at_year_end(
         is_nodisplay=False
     ).select_related('financial_institution', 'secured_type')
     
+    total_short_term_balance = 0
     total_long_term_balance = 0
     total_interest_expense = 0
     debt_list = []
     
     for debt in debts:
-        # 返済開始日からの経過月数を計算
-        start_date = debt.start_date
-        elapsed_months = (current_date.year - start_date.year) * 12 + (current_date.month - start_date.month)
-        
-        # 年度末までの経過月数
-        months_from_start = elapsed_months + months_to_year_end
-        
-        # 年度末時点の残高を計算
-        if months_from_start <= 0:
-            # 返済開始前の場合
-            balance = debt.principal
+        # 年度末時点の残高を計算（Debtモデルのプロパティを使用）
+        if years_ahead == 1:
+            # 次の決算期（FY1）
+            balance = debt.balance_fy1
+        elif years_ahead == 2:
+            # 2期後（FY2）
+            balance = debt.balance_fy2
+        elif years_ahead == 3:
+            # 3期後（FY3）
+            balance = debt.balance_fy3
+        elif years_ahead == 4:
+            # 4期後（FY4）
+            balance = debt.balance_fy4
+        elif years_ahead == 5:
+            # 5期後（FY5）
+            balance = debt.balance_fy5
         else:
-            # 返済開始後の場合
-            balance, interest = debt.balance_after_months(months_from_start)
-            total_interest_expense += interest * 12  # 年間利息（簡易計算）
+            # それ以外の場合は手動計算
+            if years_ahead <= 0:
+                # 過去または現在の年度の場合
+                balance = debt.balances_monthly[0] if hasattr(debt, 'balances_monthly') and len(debt.balances_monthly) > 0 else debt.principal
+            else:
+                # 5期以降の場合はbalance_fy5を使用
+                balance = debt.balance_fy5
         
-        # 全ての借入金を長期借入金として扱う（1年未満の返済も含む）
-        total_long_term_balance += balance
+        # 残高が負の値になる場合は0に補正
+        balance = max(0, balance)
         
-        remaining_months = debt.remaining_months - months_to_year_end
+        # 短期/長期の分類（1年以内に返済予定の場合は短期）
+        remaining_months = debt.remaining_months
+        # years_ahead年後の残高を考慮して残存期間を調整
+        adjusted_remaining_months = remaining_months - (years_ahead * 12)
+        
+        if adjusted_remaining_months <= 12 and adjusted_remaining_months > 0:
+            # 1年以内に返済予定の場合は短期借入金
+            total_short_term_balance += balance
+        else:
+            # それ以外は長期借入金
+            total_long_term_balance += balance
+        
+        # 年間利息の概算計算（月次利息 × 12）
+        monthly_interest = debt.interest_amount_monthly[0] if hasattr(debt, 'interest_amount_monthly') and len(debt.interest_amount_monthly) > 0 else 0
+        total_interest_expense += monthly_interest * 12
+        
         debt_list.append({
             'financial_institution': debt.financial_institution.name,
             'principal': debt.principal,
             'interest_rate': float(debt.interest_rate),
             'monthly_repayment': debt.monthly_repayment,
-            'balance_at_year_end': balance,
-            'remaining_months': max(0, remaining_months),
+            'balance_at_year_end': int(balance),
+            'remaining_months': max(0, int(adjusted_remaining_months)),
         })
     
     return {
-        'total_short_term_loans': 0,  # 短期借入金は使用しない
-        'total_long_term_loans': int(total_long_term_balance),  # 全て長期借入金として扱う
-        'total_loans': int(total_long_term_balance),
+        'total_short_term_loans': int(total_short_term_balance),
+        'total_long_term_loans': int(total_long_term_balance),
+        'total_loans': int(total_short_term_balance + total_long_term_balance),
         'total_interest_expense': int(total_interest_expense),
         'debt_list': debt_list,
+        'target_year': target_year,
+        'previous_year': previous_year,
+        'years_ahead': years_ahead,
     }
 
 
@@ -127,7 +162,7 @@ def get_budget_data(
     # 会社情報
     company_info = get_company_info(company)
     
-    # 前期実績データ
+    # 前期実績データ（より詳細な財務諸表データを含める）
     previous_fiscal_summary = make_json_serializable_for_prompt({
         'year': previous_actual.year,
         'sales': previous_actual.sales,
@@ -147,10 +182,12 @@ def get_budget_data(
         'cash_and_deposits': previous_actual.cash_and_deposits,
         'accounts_receivable': previous_actual.accounts_receivable,
         'inventory': previous_actual.inventory,
+        'accounts_payable': previous_actual.accounts_payable,
+        'total_current_liabilities': previous_actual.total_current_liabilities,
     })
     
-    # 借入金情報（予算対象年度末の残高）
-    debt_info = calculate_debt_balance_at_year_end(company, target_year)
+    # 借入金情報（予算対象年度末の残高）- Debtモデルのbalance_fy1プロパティを使用
+    debt_info = calculate_debt_balance_at_year_end(company, target_year, previous_actual.year)
     
     return {
         'company_info': company_info,
@@ -190,8 +227,16 @@ def build_budget_prompt(
     consultation_type = AIConsultationType.objects.filter(name='予算策定').first()
     if not consultation_type:
         # 予算策定タイプが存在しない場合はデフォルトのプロンプトを使用
-        system_instruction = """あなたは財務分析の専門家です。前期実績と指定された条件を基に、適切な予算を作成してください。
-予算は現実的で実現可能な数値である必要があります。借入金残高の計算も正確に行ってください。
+        system_instruction = """あなたは財務会計の専門家です。前期実績データ、入力された条件、および借入金の翌期末残高数値を基に、財務会計的に適切な財務諸表の数値を生成してください。
+
+重要な原則：
+1. 貸借対照表の整合性を必ず確保してください（資産合計 = 負債合計 + 純資産合計）
+2. 借入金情報のtotal_short_term_loansとtotal_long_term_loansを正確に反映してください
+3. 前期実績の財務比率やトレンドを考慮して、現実的で実現可能な数値を設定してください
+4. 投資予定額は固定資産に反映し、借入予定額は借入金に反映してください
+5. 資本金増加予定額は資本金と現金に反映してください
+6. 損益計算書と貸借対照表の整合性を保ってください（当期純利益は利益剰余金に反映）
+
 返答は必ずJSON形式で返してください。説明文は不要です。"""
         template = """【会社情報】
 会社名: {company_name}
@@ -203,34 +248,45 @@ def build_budget_prompt(
 {previous_fiscal_summary}
 
 【借入金情報（{target_year}年度末予測残高）】
+以下の情報は、各借入金の返済スケジュールに基づいて計算された{target_year}年度末時点の残高です。
 {debt_info}
 
 【予算策定条件】
 - 対象年度: {target_year}年
 - 売上高成長率: {sales_growth_rate}%
-- 投資予定額: {investment_amount}千円
-- 借入予定額: {borrowing_amount}千円
-- 資本金増加予定額: {capital_increase}千円
+- 投資予定額: {investment_amount}千円（固定資産に加算）
+- 借入予定額: {borrowing_amount}千円（借入金に加算、現金にも反映）
+- 資本金増加予定額: {capital_increase}千円（資本金と現金に加算）
 
-上記の情報を基に、{target_year}年度の予算を作成してください。
-予算はJSON形式で返してください。以下のフィールドを含めてください（単位：千円）：
+【予算作成の指示】
+上記の情報を基に、{target_year}年度の財務諸表（損益計算書・貸借対照表）の予算を作成してください。
+
+重要な注意事項：
+1. 借入金情報のtotal_short_term_loansとtotal_long_term_loansを正確に使用してください
+2. 貸借対照表の整合性を確保してください（資産合計 = 負債合計 + 純資産合計）
+3. 前期実績の財務比率（売上高営業利益率、ROA、ROEなど）を参考にしてください
+4. 投資予定額は固定資産に加算し、借入予定額は借入金と現金に反映してください
+5. 資本金増加予定額は資本金と現金に反映してください
+6. 当期純利益は利益剰余金に加算してください（前期利益剰余金 + 当期純利益）
+
+以下のフィールドを含むJSON形式で返してください（単位：千円）：
 - sales: 売上高
 - gross_profit: 粗利益
 - operating_profit: 営業利益
 - ordinary_profit: 経常利益
 - net_profit: 当期純利益
-- total_assets: 資産の部合計
+- total_assets: 資産の部合計（流動資産合計 + 固定資産合計）
 - total_liabilities: 負債の部合計
-- total_net_assets: 純資産の部合計
-- capital_stock: 資本金
-- retained_earnings: 利益剰余金
-- short_term_loans_payable: 短期借入金（借入金情報のtotal_short_term_loansを反映）
-- long_term_loans_payable: 長期借入金（借入金情報のtotal_long_term_loansを反映）
+- total_net_assets: 純資産の部合計（資本金 + 利益剰余金など）
+- capital_stock: 資本金（前期 + 資本金増加予定額）
+- retained_earnings: 利益剰余金（前期 + 当期純利益）
+- short_term_loans_payable: 短期借入金（借入金情報のtotal_short_term_loans + 新規借入の短期分）
+- long_term_loans_payable: 長期借入金（借入金情報のtotal_long_term_loans + 新規借入の長期分）
 - total_current_assets: 流動資産合計
-- total_fixed_assets: 固定資産合計（投資予定額を加算）
-- cash_and_deposits: 現金及び預金
-- accounts_receivable: 売上債権
-- inventory: 棚卸資産
+- total_fixed_assets: 固定資産合計（前期 + 投資予定額）
+- cash_and_deposits: 現金及び預金（前期 + 借入予定額 + 資本金増加予定額 - 投資予定額 + 営業キャッシュフロー）
+- accounts_receivable: 売上債権（売上高に応じた適切な金額）
+- inventory: 棚卸資産（売上高に応じた適切な金額）
 
 JSONのみを返してください。説明文は不要です。"""
     else:
@@ -249,8 +305,16 @@ JSONのみを返してください。説明文は不要です。"""
                 template = script.default_prompt_template
             else:
                 # デフォルトのプロンプト
-                system_instruction = """あなたは財務分析の専門家です。前期実績と指定された条件を基に、適切な予算を作成してください。
-予算は現実的で実現可能な数値である必要があります。借入金残高の計算も正確に行ってください。
+                system_instruction = """あなたは財務会計の専門家です。前期実績データ、入力された条件、および借入金の翌期末残高数値を基に、財務会計的に適切な財務諸表の数値を生成してください。
+
+重要な原則：
+1. 貸借対照表の整合性を必ず確保してください（資産合計 = 負債合計 + 純資産合計）
+2. 借入金情報のtotal_short_term_loansとtotal_long_term_loansを正確に反映してください
+3. 前期実績の財務比率やトレンドを考慮して、現実的で実現可能な数値を設定してください
+4. 投資予定額は固定資産に反映し、借入予定額は借入金に反映してください
+5. 資本金増加予定額は資本金と現金に反映してください
+6. 損益計算書と貸借対照表の整合性を保ってください（当期純利益は利益剰余金に反映）
+
 返答は必ずJSON形式で返してください。説明文は不要です。"""
                 template = """【会社情報】
 会社名: {company_name}
@@ -262,17 +326,47 @@ JSONのみを返してください。説明文は不要です。"""
 {previous_fiscal_summary}
 
 【借入金情報（{target_year}年度末予測残高）】
+以下の情報は、各借入金の返済スケジュールに基づいて計算された{target_year}年度末時点の残高です。
 {debt_info}
 
 【予算策定条件】
 - 対象年度: {target_year}年
 - 売上高成長率: {sales_growth_rate}%
-- 投資予定額: {investment_amount}千円
-- 借入予定額: {borrowing_amount}千円
-- 資本金増加予定額: {capital_increase}千円
+- 投資予定額: {investment_amount}千円（固定資産に加算）
+- 借入予定額: {borrowing_amount}千円（借入金に加算、現金にも反映）
+- 資本金増加予定額: {capital_increase}千円（資本金と現金に加算）
 
-上記の情報を基に、{target_year}年度の予算を作成してください。
-予算はJSON形式で返してください。"""
+【予算作成の指示】
+上記の情報を基に、{target_year}年度の財務諸表（損益計算書・貸借対照表）の予算を作成してください。
+
+重要な注意事項：
+1. 借入金情報のtotal_short_term_loansとtotal_long_term_loansを正確に使用してください
+2. 貸借対照表の整合性を確保してください（資産合計 = 負債合計 + 純資産合計）
+3. 前期実績の財務比率（売上高営業利益率、ROA、ROEなど）を参考にしてください
+4. 投資予定額は固定資産に加算し、借入予定額は借入金と現金に反映してください
+5. 資本金増加予定額は資本金と現金に反映してください
+6. 当期純利益は利益剰余金に加算してください（前期利益剰余金 + 当期純利益）
+
+以下のフィールドを含むJSON形式で返してください（単位：千円）：
+- sales: 売上高
+- gross_profit: 粗利益
+- operating_profit: 営業利益
+- ordinary_profit: 経常利益
+- net_profit: 当期純利益
+- total_assets: 資産の部合計（流動資産合計 + 固定資産合計）
+- total_liabilities: 負債の部合計
+- total_net_assets: 純資産の部合計（資本金 + 利益剰余金など）
+- capital_stock: 資本金（前期 + 資本金増加予定額）
+- retained_earnings: 利益剰余金（前期 + 当期純利益）
+- short_term_loans_payable: 短期借入金（借入金情報のtotal_short_term_loans + 新規借入の短期分）
+- long_term_loans_payable: 長期借入金（借入金情報のtotal_long_term_loans + 新規借入の長期分）
+- total_current_assets: 流動資産合計
+- total_fixed_assets: 固定資産合計（前期 + 投資予定額）
+- cash_and_deposits: 現金及び預金（前期 + 借入予定額 + 資本金増加予定額 - 投資予定額 + 営業キャッシュフロー）
+- accounts_receivable: 売上債権（売上高に応じた適切な金額）
+- inventory: 棚卸資産（売上高に応じた適切な金額）
+
+JSONのみを返してください。説明文は不要です。"""
     
     # データを取得
     budget_data = get_budget_data(company, target_year, previous_actual)

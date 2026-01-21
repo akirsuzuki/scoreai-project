@@ -159,7 +159,7 @@
                   </p>
                 </td>
                 <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">¥{{ invoice.amount_due|floatformat:0|intcomma }}</p>
+                  <p class="mb-0 fw-normal">¥{{ invoice.total|floatformat:0|intcomma }}</p>
                 </td>
                 <td class="border-bottom-0">
                   {% if invoice.status == 'paid' %}
