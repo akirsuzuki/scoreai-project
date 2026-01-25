@@ -19,6 +19,8 @@ from .models import (
     Firm,
     FirmCompany,
     FirmSubscription,
+    Todo,
+    TodoCategory,
 )
 from django.db import models
 from django_select2.forms import Select2Widget
@@ -1146,5 +1148,204 @@ class FirmCompanyLimitForm(forms.ModelForm):
                     })
             except FirmSubscription.DoesNotExist:
                 pass  # サブスクリプションがない場合はチェックしない
-        
+
         return cleaned_data
+
+
+class TodoForm(forms.ModelForm):
+    """To Doフォーム"""
+
+    class Meta:
+        model = Todo
+        fields = ['title', 'content', 'categories', 'due_date', 'status', 'priority', 'assigned_to']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'タイトルを入力'}),
+            'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': '内容を入力'}),
+            'categories': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+            'due_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'status': forms.Select(attrs={'class': 'form-select'}),
+            'priority': forms.Select(attrs={'class': 'form-select'}),
+            'assigned_to': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+    def __init__(self, *args, company=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        # アクティブなカテゴリのみ表示
+        self.fields['categories'].queryset = TodoCategory.objects.filter(is_active=True)
+
+        # 担当者は会社に所属するユーザーのみ表示
+        if company:
+            from .models import UserCompany
+            user_ids = UserCompany.objects.filter(
+                company=company,
+                active=True
+            ).values_list('user_id', flat=True)
+            self.fields['assigned_to'].queryset = User.objects.filter(id__in=user_ids)
+        else:
+            self.fields['assigned_to'].queryset = User.objects.none()
+
+        self.fields['assigned_to'].required = False
+        self.fields['assigned_to'].empty_label = '未割り当て'
+
+
+class FinancialReportForm(forms.Form):
+    """財務会議資料生成フォーム"""
+    
+    # CSVファイル（5種類）
+    pl_bumon_file = forms.FileField(
+        label='部門別PL（当期）',
+        required=True,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.csv'
+        }),
+        help_text='部門別損益計算書のCSVファイル'
+    )
+    pl_bumon_zenki_file = forms.FileField(
+        label='部門別PL（前期）',
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.csv'
+        }),
+        help_text='前期比較用（オプション）'
+    )
+    pl_suii_file = forms.FileField(
+        label='PL月次推移（当期）',
+        required=True,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.csv'
+        }),
+        help_text='月次推移損益計算書のCSVファイル'
+    )
+    pl_suii_zenki_file = forms.FileField(
+        label='PL月次推移（前期）',
+        required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.csv'
+        }),
+        help_text='前期比較用（オプション）'
+    )
+    bs_file = forms.FileField(
+        label='貸借対照表',
+        required=True,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control',
+            'accept': '.csv'
+        }),
+        help_text='貸借対照表のCSVファイル'
+    )
+    
+    # 対象期間
+    fiscal_year = forms.IntegerField(
+        label='会計年度（期）',
+        min_value=1,
+        max_value=999,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': '例: 10'
+        }),
+        help_text='第○期'
+    )
+    target_year = forms.IntegerField(
+        label='対象年',
+        min_value=2000,
+        max_value=2100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': '例: 2025'
+        })
+    )
+    target_month = forms.IntegerField(
+        label='対象月',
+        min_value=1,
+        max_value=12,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': '例: 12'
+        })
+    )
+    
+    # 目標値設定
+    target_f_rate = forms.DecimalField(
+        label='原価率目標（%）',
+        initial=30,
+        required=False,
+        min_value=0,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'step': '0.1'
+        }),
+        help_text='F率（食材原価率）の目標値'
+    )
+    target_l_rate = forms.DecimalField(
+        label='人件費率目標（%）',
+        initial=30,
+        required=False,
+        min_value=0,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'step': '0.1'
+        }),
+        help_text='L率（人件費率）の目標値'
+    )
+    target_fl_rate = forms.DecimalField(
+        label='FL率目標（%）',
+        initial=60,
+        required=False,
+        min_value=0,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'step': '0.1'
+        }),
+        help_text='FL率の目標値'
+    )
+    target_current_ratio = forms.DecimalField(
+        label='流動比率目標（%）',
+        initial=200,
+        required=False,
+        min_value=0,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'step': '0.1'
+        }),
+        help_text='流動比率の目標値'
+    )
+    target_equity_ratio = forms.DecimalField(
+        label='自己資本比率目標（%）',
+        initial=30,
+        required=False,
+        min_value=0,
+        max_value=100,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'step': '0.1'
+        }),
+        help_text='自己資本比率の目標値'
+    )
+    
+    def clean_pl_bumon_file(self):
+        file = self.cleaned_data.get('pl_bumon_file')
+        if file:
+            if not file.name.endswith('.csv'):
+                raise forms.ValidationError('CSVファイルをアップロードしてください。')
+        return file
+    
+    def clean_pl_suii_file(self):
+        file = self.cleaned_data.get('pl_suii_file')
+        if file:
+            if not file.name.endswith('.csv'):
+                raise forms.ValidationError('CSVファイルをアップロードしてください。')
+        return file
+    
+    def clean_bs_file(self):
+        file = self.cleaned_data.get('bs_file')
+        if file:
+            if not file.name.endswith('.csv'):
+                raise forms.ValidationError('CSVファイルをアップロードしてください。')
+        return file

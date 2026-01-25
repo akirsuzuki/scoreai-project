@@ -91,6 +91,13 @@
             <span class="hide-menu">ノート（議事録）</span>
           </a>
         </li>
+        <!-- To Do -->
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'todo_list' %}" aria-expanded="false" title="To Do">
+            <i class="ti ti-checkbox"></i>
+            <span class="hide-menu">To Do</span>
+          </a>
+        </li>
         <!-- ローカルベンチマーク -->
         <li class="sidebar-item">
           <a class="sidebar-link" href="{% url 'industry_benchmark_list' %}" aria-expanded="false" title="ローカルベンチマーク">
@@ -115,6 +122,12 @@
           <a class="sidebar-link" href="{% url 'import_fiscal_summary_ocr' %}" aria-expanded="false" title="OCR読み込み">
             <i class="ti ti-scan"></i>
             <span class="hide-menu">OCR読み込み</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'financial_report' %}" aria-expanded="false" title="財務会議資料生成">
+            <i class="ti ti-file-spreadsheet"></i>
+            <span class="hide-menu">財務会議資料生成</span>
           </a>
         </li>
 

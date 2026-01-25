@@ -1,0 +1,337 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">財務会議資料生成</h4>
+    <p class="text-muted mb-0">CSVファイルからExcel形式の財務会議資料を自動生成します。</p>
+  </div>
+</div>
+
+<!-- メッセージ表示 -->
+{% if messages %}
+<div class="row mb-3">
+  <div class="col-12">
+    {% for message in messages %}
+    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}" role="alert">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+<!-- クラウドストレージ連携状況 -->
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="alert {% if storage_connected %}alert-success{% else %}alert-light border{% endif %}">
+      <i class="ti ti-cloud {% if storage_connected %}text-success{% else %}text-muted{% endif %} me-2"></i>
+      {% if storage_connected %}
+        <strong>{{ storage_type }}</strong> に連携中 - 生成したファイルは自動保存されます
+      {% else %}
+        クラウドストレージ未連携 - ダウンロードのみ
+        <a href="{% url 'storage_setting' %}" class="ms-2">連携設定</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  
+  <div class="row">
+    <!-- 左カラム: CSVファイルアップロード -->
+    <div class="col-lg-7">
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="ti ti-file-upload me-2"></i>CSVファイルアップロード</h5>
+        </div>
+        <div class="card-body">
+          <!-- 必須ファイル -->
+          <div class="mb-4">
+            <h6 class="text-muted mb-3">必須ファイル</h6>
+            
+            <div class="mb-3">
+              <label for="{{ form.pl_bumon_file.id_for_label }}" class="form-label">
+                {{ form.pl_bumon_file.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.pl_bumon_file }}
+              {% if form.pl_bumon_file.help_text %}
+              <div class="form-text">{{ form.pl_bumon_file.help_text }}</div>
+              {% endif %}
+              {% if form.pl_bumon_file.errors %}
+              <div class="text-danger">{{ form.pl_bumon_file.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.pl_suii_file.id_for_label }}" class="form-label">
+                {{ form.pl_suii_file.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.pl_suii_file }}
+              {% if form.pl_suii_file.help_text %}
+              <div class="form-text">{{ form.pl_suii_file.help_text }}</div>
+              {% endif %}
+              {% if form.pl_suii_file.errors %}
+              <div class="text-danger">{{ form.pl_suii_file.errors }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.bs_file.id_for_label }}" class="form-label">
+                {{ form.bs_file.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.bs_file }}
+              {% if form.bs_file.help_text %}
+              <div class="form-text">{{ form.bs_file.help_text }}</div>
+              {% endif %}
+              {% if form.bs_file.errors %}
+              <div class="text-danger">{{ form.bs_file.errors }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <!-- オプションファイル -->
+          <div class="mb-3">
+            <h6 class="text-muted mb-3">オプションファイル（前期比較用）</h6>
+            
+            <div class="mb-3">
+              <label for="{{ form.pl_bumon_zenki_file.id_for_label }}" class="form-label">
+                {{ form.pl_bumon_zenki_file.label }}
+              </label>
+              {{ form.pl_bumon_zenki_file }}
+              {% if form.pl_bumon_zenki_file.help_text %}
+              <div class="form-text">{{ form.pl_bumon_zenki_file.help_text }}</div>
+              {% endif %}
+            </div>
+            
+            <div class="mb-3">
+              <label for="{{ form.pl_suii_zenki_file.id_for_label }}" class="form-label">
+                {{ form.pl_suii_zenki_file.label }}
+              </label>
+              {{ form.pl_suii_zenki_file }}
+              {% if form.pl_suii_zenki_file.help_text %}
+              <div class="form-text">{{ form.pl_suii_zenki_file.help_text }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- CSVフォーマット説明 -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="ti ti-info-circle me-2"></i>CSVファイル形式</h5>
+        </div>
+        <div class="card-body">
+          <div class="accordion" id="csvFormatAccordion">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingBumon">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBumon">
+                  部門別損益計算書 (pl_bumon.csv)
+                </button>
+              </h2>
+              <div id="collapseBumon" class="accordion-collapse collapse" data-bs-parent="#csvFormatAccordion">
+                <div class="accordion-body">
+                  <pre class="bg-light p-3 rounded"><code>,勘定科目,部門A,部門B,部門C,...
+,売上高,1000000,2000000,3000000,...
+,売上値引・返品,10000,20000,30000,...
+...</code></pre>
+                  <p class="small text-muted mt-2 mb-0">1行目がヘッダー（部門名）、2行目以降が勘定科目と各部門の金額</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingSuii">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSuii">
+                  月次推移損益計算書 (pl_suii.csv)
+                </button>
+              </h2>
+              <div id="collapseSuii" class="accordion-collapse collapse" data-bs-parent="#csvFormatAccordion">
+                <div class="accordion-body">
+                  <pre class="bg-light p-3 rounded"><code>,勘定科目,3月,4月,5月,...,合計
+,売上高,1000000,1100000,1200000,...,xxxxx
+...</code></pre>
+                  <p class="small text-muted mt-2 mb-0">月別の推移と合計を含む</p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingBs">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBs">
+                  貸借対照表 (bs.csv)
+                </button>
+              </h2>
+              <div id="collapseBs" class="accordion-collapse collapse" data-bs-parent="#csvFormatAccordion">
+                <div class="accordion-body">
+                  <pre class="bg-light p-3 rounded"><code>区分,勘定科目,期首残高,借方金額,貸方金額,期末残高,構成比
+資産の部,,,,,,
+流動資産,,,,,,
+,現金,1000000,500000,300000,1200000,xx%
+...</code></pre>
+                  <p class="small text-muted mt-2 mb-0">資産・負債・純資産の各項目</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 右カラム: 設定 -->
+    <div class="col-lg-5">
+      <!-- 対象期間 -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="ti ti-calendar me-2"></i>対象期間</h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label for="{{ form.fiscal_year.id_for_label }}" class="form-label">
+                {{ form.fiscal_year.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.fiscal_year }}
+              {% if form.fiscal_year.help_text %}
+              <div class="form-text">{{ form.fiscal_year.help_text }}</div>
+              {% endif %}
+              {% if form.fiscal_year.errors %}
+              <div class="text-danger">{{ form.fiscal_year.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="{{ form.target_year.id_for_label }}" class="form-label">
+                {{ form.target_year.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.target_year }}
+              {% if form.target_year.errors %}
+              <div class="text-danger">{{ form.target_year.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-4 mb-3">
+              <label for="{{ form.target_month.id_for_label }}" class="form-label">
+                {{ form.target_month.label }} <span class="text-danger">*</span>
+              </label>
+              {{ form.target_month }}
+              {% if form.target_month.errors %}
+              <div class="text-danger">{{ form.target_month.errors }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 目標値設定 -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="ti ti-target me-2"></i>目標値設定</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted small mb-3">エグゼクティブサマリーで目標との比較に使用します。</p>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.target_f_rate.id_for_label }}" class="form-label">
+                {{ form.target_f_rate.label }}
+              </label>
+              {{ form.target_f_rate }}
+              {% if form.target_f_rate.help_text %}
+              <div class="form-text">{{ form.target_f_rate.help_text }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.target_l_rate.id_for_label }}" class="form-label">
+                {{ form.target_l_rate.label }}
+              </label>
+              {{ form.target_l_rate }}
+              {% if form.target_l_rate.help_text %}
+              <div class="form-text">{{ form.target_l_rate.help_text }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.target_fl_rate.id_for_label }}" class="form-label">
+                {{ form.target_fl_rate.label }}
+              </label>
+              {{ form.target_fl_rate }}
+              {% if form.target_fl_rate.help_text %}
+              <div class="form-text">{{ form.target_fl_rate.help_text }}</div>
+              {% endif %}
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.target_current_ratio.id_for_label }}" class="form-label">
+                {{ form.target_current_ratio.label }}
+              </label>
+              {{ form.target_current_ratio }}
+              {% if form.target_current_ratio.help_text %}
+              <div class="form-text">{{ form.target_current_ratio.help_text }}</div>
+              {% endif %}
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="{{ form.target_equity_ratio.id_for_label }}" class="form-label">
+                {{ form.target_equity_ratio.label }}
+              </label>
+              {{ form.target_equity_ratio }}
+              {% if form.target_equity_ratio.help_text %}
+              <div class="form-text">{{ form.target_equity_ratio.help_text }}</div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 生成ボタン -->
+      <div class="card">
+        <div class="card-body">
+          <button type="submit" class="btn btn-primary btn-lg w-100">
+            <i class="ti ti-file-spreadsheet me-2"></i>レポート生成・ダウンロード
+          </button>
+          <p class="text-muted small mt-2 mb-0 text-center">
+            Excelファイル（.xlsx）がダウンロードされます
+          </p>
+        </div>
+      </div>
+      
+      <!-- 出力内容の説明 -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h5 class="card-title mb-0"><i class="ti ti-file-description me-2"></i>出力内容</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              <i class="ti ti-file text-primary me-2"></i>
+              <strong>エグゼクティブサマリー</strong> - 経営指標ダッシュボード（A4縦）
+            </li>
+            <li class="mb-2">
+              <i class="ti ti-file text-primary me-2"></i>
+              <strong>部門別PL</strong> - 各部門の当月実績・比率・前期比較（A3横）
+            </li>
+            <li class="mb-2">
+              <i class="ti ti-file text-primary me-2"></i>
+              <strong>PL月次推移</strong> - 月別の推移と前期比較（A3横）
+            </li>
+            <li class="mb-0">
+              <i class="ti ti-file text-primary me-2"></i>
+              <strong>貸借対照表</strong> - 資産・負債・純資産の状況（A4縦）
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+{% endblock %}

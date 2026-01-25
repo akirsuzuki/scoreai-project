@@ -83,6 +83,7 @@ from .views.storage_file_views import (
     StorageFileListView,
     StorageFileProcessView,
 )
+from .views.financial_report_views import FinancialReportView
 from .views.blog_views import (
     AnnouncementListView,
     AnnouncementDetailView,
@@ -139,6 +140,14 @@ from .views.firm_member_views import (
 )
 from .views.assigned_clients_views import (
     AssignedClientsListView,
+)
+from .views.todo_views import (
+    TodoListView,
+    TodoCreateView,
+    TodoUpdateView,
+    TodoDeleteView,
+    TodoDetailView,
+    TodoStatusUpdateView,
 )
 from .views.firm_company_limit_views import (
     FirmCompanyLimitUpdateView,
@@ -355,6 +364,13 @@ urlpatterns = [
     path('meeting_minutes/ai/save/', MeetingMinutesAISaveView.as_view(), name='meeting_minutes_ai_save'),
     path('meeting_minutes_list/', MeetingMinutesListView.as_view(), name='meeting_minutes_list'),
     path('meeting_minutes/<str:company_id>/<str:pk>/', MeetingMinutesDetailView.as_view(), name='meeting_minutes_detail'),
+    # To Do
+    path('todos/', TodoListView.as_view(), name='todo_list'),
+    path('todos/create/', TodoCreateView.as_view(), name='todo_create'),
+    path('todos/<str:pk>/', TodoDetailView.as_view(), name='todo_detail'),
+    path('todos/<str:pk>/update/', TodoUpdateView.as_view(), name='todo_update'),
+    path('todos/<str:pk>/delete/', TodoDeleteView.as_view(), name='todo_delete'),
+    path('todos/<str:pk>/status/', TodoStatusUpdateView.as_view(), name='todo_status_update'),
     path('about/', AboutView.as_view(), name='about'),
     path('about-links/', AboutLinksView.as_view(), name='about_links'),
     path('news_list/', NewsListView.as_view(), name='news_list'),
@@ -428,6 +444,9 @@ urlpatterns = [
     # ストレージファイル管理
     path('storage/files/', StorageFileListView.as_view(), name='storage_file_list'),
     path('storage/files/process/', StorageFileProcessView.as_view(), name='storage_file_process'),
+    
+    # 財務会議資料生成
+    path('financial_report/', FinancialReportView.as_view(), name='financial_report'),
     
     # お知らせ（ブログ記事を表示）
     path('announcement/', AnnouncementListView.as_view(), name='announcement_list'),
