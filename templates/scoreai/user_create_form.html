@@ -1,4 +1,3 @@
-{% load django_bootstrap5 %}
 {% load static %}
 
 <!doctype html>
@@ -9,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Score_AI | Firmユーザー登録</title>
   <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
-  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <!-- Pencil Design System -->
+  <link rel="stylesheet" href="{% static 'scoreai/css/pencil-design-system.css' %}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
     .info-section {
@@ -163,7 +163,7 @@
             </a>
             
             <h2 class="mb-3">コンサルタント・士業の方向け<br>財務分析プラットフォーム</h2>
-            <p class="mb-4 opacity-90" style="font-size: 1.1rem;">
+            <p class="mb-4 opacity-90 pencil-text-lg">
               SCore_Aiは、顧客企業の財務データを一元管理し、<br>
               AIを活用した分析・提案を支援するプラットフォームです。
             </p>
@@ -374,8 +374,8 @@
     </div>
   </div>
   
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

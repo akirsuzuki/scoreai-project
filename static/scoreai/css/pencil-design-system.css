@@ -1,0 +1,2657 @@
+/* ============================================
+   ScoreAI Design System
+   ============================================
+
+   このファイルはpencil-score.penを参照して作成しました。
+   デザインシステムの全てのスタイルはPencilデザインファイルの
+   コンポーネントとデザイントークンに基づいています。
+
+   Created: 2024
+   Updated: 2026-01-25 (Full sync with pencil-score.pen)
+   Reference: static/scoreai/pencil-score.pen
+   ============================================ */
+
+/* Design Tokens Import */
+@import url('./pencil-design-tokens.css');
+
+/* Pencil Components Import */
+@import url('./pencil-components.css');
+
+/* ============================================
+   Global Reset & Base Styles
+   ============================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--foreground);
+  line-height: 1.6;
+  background-color: var(--background);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Reset list styles globally - prevent unwanted bullets */
+ul, ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Restore list styles where explicitly needed */
+.list-styled,
+.accordion-body ul,
+.accordion-body ol,
+.card-body ul:not(.nav):not(.pagination):not(.dropdown-menu):not(.list-unstyled):not(.list-group),
+.card-body ol:not(.list-unstyled),
+.alert ul:not(.list-unstyled),
+.alert ol:not(.list-unstyled) {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.list-styled ol,
+.card-body ol:not(.list-unstyled),
+.alert ol:not(.list-unstyled) {
+  list-style: decimal;
+}
+
+/* ============================================
+   Typography (from pencil-score.pen)
+   font-family: Noto Sans JP
+   ============================================ */
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.3;
+  margin: 0 0 var(--space-lg) 0;
+}
+
+h1, .h1 { font-size: 32px; }
+h2, .h2 { font-size: 24px; }
+h3, .h3 { font-size: 20px; }
+h4, .h4 { font-size: 18px; }
+h5, .h5 { font-size: 16px; }
+h6, .h6 { font-size: 14px; }
+
+p {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  line-height: 1.6;
+  margin: 0 0 var(--space-md) 0;
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color var(--transition-base);
+}
+
+a:hover {
+  color: var(--primary);
+  opacity: 0.8;
+}
+
+/* ============================================
+   Layout Components
+   ============================================ */
+
+.page-wrapper {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+.body-wrapper {
+  flex: 1;
+  margin-left: 260px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content-wrapper {
+  flex: 1;
+  padding: var(--space-2xl);
+}
+
+/* ============================================
+   Bootstrap Grid System (Required for layouts)
+   ============================================ */
+.container,
+.container-fluid {
+  width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-right: auto;
+  margin-left: auto;
+  --bs-gutter-x: 1.5rem;
+}
+
+.row {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+
+.row > * {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+
+.row.g-0 { --bs-gutter-x: 0; --bs-gutter-y: 0; }
+.row.g-1 { --bs-gutter-x: 0.25rem; --bs-gutter-y: 0.25rem; }
+.row.g-2 { --bs-gutter-x: 0.5rem; --bs-gutter-y: 0.5rem; }
+.row.g-3 { --bs-gutter-x: 1rem; --bs-gutter-y: 1rem; }
+.row.g-4 { --bs-gutter-x: 1.5rem; --bs-gutter-y: 1.5rem; }
+.row.g-5 { --bs-gutter-x: 3rem; --bs-gutter-y: 3rem; }
+
+/* Reset Bootstrap gutters for custom flex layouts that use CSS gap */
+.row.pencil-metric-row,
+.row.pencil-news-row,
+.row.dashboard-news-row,
+.row.dashboard-charts-row,
+.row.dashboard-section {
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.row.pencil-metric-row > *,
+.row.pencil-news-row > *,
+.row.dashboard-news-row > *,
+.row.dashboard-charts-row > *,
+.row.dashboard-section > * {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* KPI Metric Row: 4カードを1行に配置（gapを考慮した幅計算） */
+/* gap: 16px × 3 = 48px → 各カード: (100% - 48px) / 4 */
+.row.pencil-metric-row > .col-lg-3 {
+  flex: 0 0 calc(25% - 12px) !important;
+  width: calc(25% - 12px) !important;
+  max-width: calc(25% - 12px) !important;
+}
+
+@media (max-width: 991px) {
+  .row.pencil-metric-row > .col-md-6 {
+    flex: 0 0 calc(50% - 8px) !important;
+    width: calc(50% - 8px) !important;
+    max-width: calc(50% - 8px) !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .row.pencil-metric-row > .col-12 {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* News Row: 2カードを1行に配置（gapを考慮した幅計算） */
+/* gap: 16px × 1 = 16px → 各カード: (100% - 16px) / 2 */
+.row.pencil-news-row > .col-md-6 {
+  flex: 0 0 calc(50% - 8px) !important;
+  width: calc(50% - 8px) !important;
+  max-width: calc(50% - 8px) !important;
+}
+
+@media (max-width: 767px) {
+  .row.pencil-news-row > .col-12 {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Ensure proper box-sizing for all elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Column Classes - Default (all sizes) */
+.col { flex: 1 0 0%; }
+.col-auto { flex: 0 0 auto; width: auto; }
+.col-1 { flex: 0 0 auto; width: 8.33333333%; }
+.col-2 { flex: 0 0 auto; width: 16.66666667%; }
+.col-3 { flex: 0 0 auto; width: 25%; }
+.col-4 { flex: 0 0 auto; width: 33.33333333%; }
+.col-5 { flex: 0 0 auto; width: 41.66666667%; }
+.col-6 { flex: 0 0 auto; width: 50%; }
+.col-7 { flex: 0 0 auto; width: 58.33333333%; }
+.col-8 { flex: 0 0 auto; width: 66.66666667%; }
+.col-9 { flex: 0 0 auto; width: 75%; }
+.col-10 { flex: 0 0 auto; width: 83.33333333%; }
+.col-11 { flex: 0 0 auto; width: 91.66666667%; }
+.col-12 { flex: 0 0 auto; width: 100%; }
+
+/* Medium Breakpoint (768px+) */
+@media (min-width: 768px) {
+  .col-md { flex: 1 0 0%; }
+  .col-md-auto { flex: 0 0 auto; width: auto; }
+  .col-md-1 { flex: 0 0 auto; width: 8.33333333%; }
+  .col-md-2 { flex: 0 0 auto; width: 16.66666667%; }
+  .col-md-3 { flex: 0 0 auto; width: 25%; }
+  .col-md-4 { flex: 0 0 auto; width: 33.33333333%; }
+  .col-md-5 { flex: 0 0 auto; width: 41.66666667%; }
+  .col-md-6 { flex: 0 0 auto; width: 50%; }
+  .col-md-7 { flex: 0 0 auto; width: 58.33333333%; }
+  .col-md-8 { flex: 0 0 auto; width: 66.66666667%; }
+  .col-md-9 { flex: 0 0 auto; width: 75%; }
+  .col-md-10 { flex: 0 0 auto; width: 83.33333333%; }
+  .col-md-11 { flex: 0 0 auto; width: 91.66666667%; }
+  .col-md-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* Large Breakpoint (992px+) */
+@media (min-width: 992px) {
+  .col-lg { flex: 1 0 0%; }
+  .col-lg-auto { flex: 0 0 auto; width: auto; }
+  .col-lg-1 { flex: 0 0 auto; width: 8.33333333%; }
+  .col-lg-2 { flex: 0 0 auto; width: 16.66666667%; }
+  .col-lg-3 { flex: 0 0 auto; width: 25%; }
+  .col-lg-4 { flex: 0 0 auto; width: 33.33333333%; }
+  .col-lg-5 { flex: 0 0 auto; width: 41.66666667%; }
+  .col-lg-6 { flex: 0 0 auto; width: 50%; }
+  .col-lg-7 { flex: 0 0 auto; width: 58.33333333%; }
+  .col-lg-8 { flex: 0 0 auto; width: 66.66666667%; }
+  .col-lg-9 { flex: 0 0 auto; width: 75%; }
+  .col-lg-10 { flex: 0 0 auto; width: 83.33333333%; }
+  .col-lg-11 { flex: 0 0 auto; width: 91.66666667%; }
+  .col-lg-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* XL Breakpoint (1200px+) */
+@media (min-width: 1200px) {
+  .col-xl { flex: 1 0 0%; }
+  .col-xl-auto { flex: 0 0 auto; width: auto; }
+  .col-xl-1 { flex: 0 0 auto; width: 8.33333333%; }
+  .col-xl-2 { flex: 0 0 auto; width: 16.66666667%; }
+  .col-xl-3 { flex: 0 0 auto; width: 25%; }
+  .col-xl-4 { flex: 0 0 auto; width: 33.33333333%; }
+  .col-xl-5 { flex: 0 0 auto; width: 41.66666667%; }
+  .col-xl-6 { flex: 0 0 auto; width: 50%; }
+  .col-xl-7 { flex: 0 0 auto; width: 58.33333333%; }
+  .col-xl-8 { flex: 0 0 auto; width: 66.66666667%; }
+  .col-xl-9 { flex: 0 0 auto; width: 75%; }
+  .col-xl-10 { flex: 0 0 auto; width: 83.33333333%; }
+  .col-xl-11 { flex: 0 0 auto; width: 91.66666667%; }
+  .col-xl-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* ============================================
+   Sidebar (from pencil-score.pen - 8ihX1)
+   width: 260, fill: #1E293B
+   ============================================ */
+
+.left-sidebar {
+  width: 260px;
+  background-color: var(--sidebar);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--sidebar-border);
+  z-index: 1000;
+  overflow: hidden;
+}
+
+/* Sidebar Inner Container - flex layout for sticky footer */
+.left-sidebar .sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Sidebar Header (qChln) - padding: [24, 20] */
+.left-sidebar .brand-logo {
+  height: 70px;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+  flex-shrink: 0;
+}
+
+.left-sidebar .brand-logo a,
+.left-sidebar .brand-logo .logo-img {
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sidebar-accent-foreground);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.left-sidebar .brand-logo img {
+  max-width: 180px;
+  height: auto;
+}
+
+/* Sidebar Navigation (9zNKb) */
+.left-sidebar .sidebar-nav {
+  flex: 1;
+  padding: var(--space-lg) var(--space-md);
+  overflow-y: auto;
+}
+
+.left-sidebar #sidebarnav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Section Title (ZBjy7) - padding: [12, 12, 8, 12] */
+.left-sidebar .nav-small-cap {
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-sm);
+  padding: var(--space-md) var(--space-md) var(--space-sm) var(--space-md);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sidebar-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.left-sidebar .nav-small-cap .hide-menu {
+  color: var(--sidebar-foreground);
+}
+
+.left-sidebar .nav-small-cap-icon,
+.left-sidebar .nav-small-cap .ti {
+  width: 16px;
+  height: 16px;
+  margin-right: var(--space-sm);
+  color: var(--sidebar-foreground);
+}
+
+/* Sidebar Item (5CfQ6) */
+.left-sidebar .sidebar-item {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Sidebar Link (5CfQ6) - cornerRadius: 8, padding: [8, 12], gap: 12 */
+.left-sidebar .sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-m);
+  text-decoration: none;
+  color: var(--sidebar-foreground);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  transition: all var(--transition-base);
+  width: 100%;
+}
+
+.left-sidebar .sidebar-link i,
+.left-sidebar .sidebar-link .ti {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.left-sidebar .sidebar-link:hover {
+  background-color: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+}
+
+/* Active Sidebar Link (YchxO) - fill: #334155 */
+.left-sidebar .sidebar-item.selected .sidebar-link,
+.left-sidebar .sidebar-link.active {
+  background-color: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+  font-weight: 500;
+}
+
+.left-sidebar .sidebar-link .hide-menu {
+  flex: 1;
+}
+
+/* Sidebar Footer (chRNO) - padding: [16, 20], gap: 12 */
+.left-sidebar .sidebar-footer {
+  padding: var(--space-lg) var(--space-xl);
+  border-top: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.left-sidebar .sidebar-footer-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.left-sidebar .sidebar-footer-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.left-sidebar .sidebar-footer-username {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--sidebar-accent-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.left-sidebar .sidebar-footer-email {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--sidebar-foreground);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sidebar Footer About Link */
+.left-sidebar .sidebar-footer-about {
+  width: 100%;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.left-sidebar .sidebar-footer-about-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--sidebar-foreground);
+  text-decoration: none;
+  padding: var(--space-sm) 0;
+  transition: color var(--transition-base);
+}
+
+.left-sidebar .sidebar-footer-about-link:hover {
+  color: var(--sidebar-accent-foreground);
+}
+
+.left-sidebar .sidebar-footer-about-link i {
+  font-size: 14px;
+}
+
+/* ============================================
+   Header
+   ============================================ */
+
+.app-header {
+  height: 70px;
+  background-color: var(--card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-2xl);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.app-header .navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ============================================
+   Card (from pencil-score.pen - oEJ5W)
+   fill: #FFFFFF, stroke: 1px #E2E8F0
+   ============================================ */
+
+.card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--space-2xl);
+}
+
+/* Card Header (34yLw) - padding: 20, gap: 4 */
+.card-header {
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin: 0;
+}
+
+.card-subtitle {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin-top: var(--space-xs);
+}
+
+/* Card Body (pxSzn) - padding: [0, 20, 20, 20] */
+.card-body {
+  padding: var(--space-xl);
+  flex: 1;
+}
+
+.card-footer {
+  padding: var(--space-xl);
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================
+   Button (from pencil-score.pen)
+   Button Primary (UJIRR) - fill: #2563EB, height: 40, padding: [10, 16]
+   Button Outline (jcpwA) - stroke: 1px, height: 40
+   ============================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 10px 16px;
+  height: 40px;
+  border-radius: var(--radius-m);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Primary */
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary);
+  opacity: 0.9;
+  color: var(--primary-foreground);
+}
+
+/* Button Secondary */
+.btn-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary);
+  opacity: 0.8;
+  color: var(--secondary-foreground);
+}
+
+/* Button Outline */
+.btn-outline,
+.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+
+.btn-outline:hover,
+.btn-outline-primary:hover {
+  background-color: var(--secondary);
+  color: var(--foreground);
+}
+
+/* Button Danger/Destructive */
+.btn-danger {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+.btn-danger:hover {
+  background-color: var(--destructive);
+  opacity: 0.9;
+  color: var(--destructive-foreground);
+}
+
+/* Button Success */
+.btn-success {
+  background-color: var(--color-success);
+  color: #FFFFFF;
+}
+
+.btn-success:hover {
+  background-color: var(--color-success);
+  opacity: 0.9;
+}
+
+/* Button Warning */
+.btn-warning {
+  background-color: var(--color-warning);
+  color: #FFFFFF;
+}
+
+.btn-warning:hover {
+  background-color: var(--color-warning);
+  opacity: 0.9;
+}
+
+/* Button Sizes */
+.btn-sm {
+  font-size: 12px;
+  padding: 6px 12px;
+  height: 32px;
+}
+
+.btn-lg {
+  font-size: 16px;
+  padding: 12px 24px;
+  height: 48px;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+
+.form-group {
+  margin-bottom: var(--space-lg);
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-bottom: var(--space-sm);
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--foreground);
+  background-color: var(--card);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-select {
+  width: 100%;
+  padding: 10px 12px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  background-color: var(--card);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.form-control-plaintext {
+  display: block;
+  width: 100%;
+  padding: 10px 0;
+  margin-bottom: 0;
+  line-height: 1.6;
+  color: var(--foreground);
+  background-color: transparent;
+  border: solid transparent;
+  border-width: 1px 0;
+}
+
+/* ============================================
+   Input Groups (Bootstrap-compatible)
+   ============================================ */
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+}
+
+.input-group > .form-control {
+  position: relative;
+  flex: 1 1 auto;
+  width: 1%;
+  min-width: 0;
+}
+
+.input-group > .form-control:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--foreground);
+  text-align: center;
+  white-space: nowrap;
+  background-color: var(--secondary);
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+}
+
+.input-group > .input-group-text:last-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: 0;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-primary);
+  font-size: 14px;
+}
+
+.table th {
+  padding: var(--space-md);
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background-color: var(--secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.table td {
+  padding: var(--space-md);
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+}
+
+.table tbody tr:hover {
+  background-color: var(--muted);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+/* ============================================
+   Badges
+   ============================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+}
+
+.badge-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.badge-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.badge-success {
+  background-color: var(--color-success);
+  color: #FFFFFF;
+}
+
+.badge-warning {
+  background-color: var(--color-warning);
+  color: #FFFFFF;
+}
+
+.badge-danger {
+  background-color: var(--color-error);
+  color: #FFFFFF;
+}
+
+/* ============================================
+   Alerts
+   ============================================ */
+
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-lg);
+  border-radius: var(--radius-m);
+  margin-bottom: var(--space-lg);
+}
+
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--color-success);
+  color: var(--color-success);
+}
+
+.alert-warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  border: 1px solid var(--color-warning);
+  color: var(--color-warning);
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+}
+
+.alert-dismissible .btn-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.alert-dismissible .btn-close:hover {
+  opacity: 1;
+}
+
+/* ============================================
+   Modal
+   ============================================ */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-dialog {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.modal-body {
+  padding: var(--space-2xl);
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+  padding: var(--space-2xl);
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================
+   Navigation Tabs
+   ============================================ */
+
+.nav-tabs {
+  display: flex;
+  gap: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-tabs .nav-item {
+  margin: 0;
+}
+
+.nav-tabs .nav-link {
+  display: block;
+  padding: var(--space-md) var(--space-lg);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all var(--transition-base);
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--foreground);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Tab Content */
+.tab-content {
+  width: 100%;
+}
+
+.tab-content > .tab-pane {
+  display: none;
+}
+
+.tab-content > .tab-pane.active {
+  display: block;
+}
+
+.tab-content > .tab-pane.show {
+  display: block;
+}
+
+/* ============================================
+   Dropdown
+   ============================================ */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  padding: var(--space-xs);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-md);
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-base);
+}
+
+.dropdown-item:hover {
+  background-color: var(--secondary);
+}
+
+.dropdown-divider {
+  height: 1px;
+  margin: var(--space-xs) 0;
+  background-color: var(--border);
+}
+
+/* ============================================
+   Progress
+   ============================================ */
+
+.progress {
+  width: 100%;
+  height: 8px;
+  background-color: var(--secondary);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-slow);
+}
+
+.progress-bar-success {
+  background-color: var(--color-success);
+}
+
+.progress-bar-warning {
+  background-color: var(--color-warning);
+}
+
+.progress-bar-danger {
+  background-color: var(--color-error);
+}
+
+/* ============================================
+   Pagination
+   ============================================ */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.page-item {
+  margin: 0;
+}
+
+.page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--space-md);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.page-link:hover {
+  background-color: var(--secondary);
+}
+
+.page-item.active .page-link {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+.page-item.disabled .page-link {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============================================
+   Breadcrumb
+   ============================================ */
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--space-lg) 0;
+}
+
+.breadcrumb-item {
+  color: var(--muted-foreground);
+}
+
+.breadcrumb-item a {
+  color: var(--muted-foreground);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  color: var(--primary);
+}
+
+.breadcrumb-item.active {
+  color: var(--foreground);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '/';
+  margin-right: var(--space-sm);
+  color: var(--muted-foreground);
+}
+
+/* ============================================
+   Pencil Page Title (Custom Component)
+   ============================================ */
+
+.pencil-page-title {
+  margin-bottom: var(--space-2xl);
+}
+
+.pencil-page-title .card-body {
+  padding: var(--space-2xl);
+}
+
+.pencil-page-title-category {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-xs);
+}
+
+.pencil-page-title-text {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.pencil-page-title-subtitle {
+  font-size: 14px;
+  color: var(--muted-foreground);
+  margin-top: var(--space-sm);
+}
+
+/* ============================================
+   Chart Container
+   ============================================ */
+
+.pencil-chart-container {
+  width: 100%;
+  height: 300px;
+  position: relative;
+}
+
+.pencil-chart-wrapper {
+  width: 100%;
+  min-height: 300px;
+  position: relative;
+}
+
+.pencil-chart-wrapper canvas {
+  width: 100% !important;
+  height: auto !important;
+  min-height: 250px;
+}
+
+.chart-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* ============================================
+   DataTable Override
+   ============================================ */
+
+.dataTables_wrapper {
+  font-family: var(--font-primary);
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  font-family: var(--font-primary);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--card);
+}
+
+.dataTables_wrapper .dataTables_length select:focus,
+.dataTables_wrapper .dataTables_filter input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.dataTables_wrapper .dataTables_info {
+  color: var(--muted-foreground);
+  font-size: 14px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  font-family: var(--font-primary);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--card);
+  color: var(--foreground);
+  margin: 0 2px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+  background-color: var(--secondary);
+  border-color: var(--border);
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+}
+
+/* ============================================
+   Page Footer Divider
+   ============================================ */
+
+.page-footer-divider {
+  margin-top: var(--space-3xl);
+  padding-top: var(--space-lg);
+}
+
+.page-footer-divider hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--secondary-foreground); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-danger { color: var(--color-error); }
+.text-muted { color: var(--muted-foreground); }
+
+/* Text alignment */
+.text-start { text-align: left !important; }
+.text-center { text-align: center !important; }
+.text-end { text-align: right !important; }
+
+.bg-primary { background-color: var(--primary); }
+.bg-secondary { background-color: var(--secondary); }
+.bg-success { background-color: var(--color-success); }
+.bg-warning { background-color: var(--color-warning); }
+.bg-danger { background-color: var(--color-error); }
+
+.border { border: 1px solid var(--border); }
+.border-top { border-top: 1px solid var(--border); }
+.border-bottom { border-bottom: 1px solid var(--border); }
+
+.rounded { border-radius: var(--radius-m); }
+.rounded-sm { border-radius: var(--radius-sm); }
+.rounded-lg { border-radius: var(--radius-lg); }
+.rounded-pill { border-radius: var(--radius-pill); }
+
+.shadow-sm { box-shadow: var(--shadow-sm); }
+.shadow { box-shadow: var(--shadow-md); }
+.shadow-lg { box-shadow: var(--shadow-lg); }
+
+/* Spacing utilities */
+.mt-1 { margin-top: var(--space-xs); }
+.mt-2 { margin-top: var(--space-sm); }
+.mt-3 { margin-top: var(--space-md); }
+.mt-4 { margin-top: var(--space-lg); }
+.mt-5 { margin-top: var(--space-2xl); }
+
+.mb-1 { margin-bottom: var(--space-xs); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-3 { margin-bottom: var(--space-md); }
+.mb-4 { margin-bottom: var(--space-lg); }
+.mb-5 { margin-bottom: var(--space-2xl); }
+
+.p-1 { padding: var(--space-xs); }
+.p-2 { padding: var(--space-sm); }
+.p-3 { padding: var(--space-md); }
+.p-4 { padding: var(--space-lg); }
+.p-5 { padding: var(--space-2xl); }
+
+/* Flex utilities */
+.d-flex { display: flex; }
+.d-inline-flex { display: inline-flex; }
+.flex-column { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.align-items-center { align-items: center; }
+.align-items-start { align-items: flex-start; }
+.align-items-end { align-items: flex-end; }
+.justify-content-center { justify-content: center; }
+.justify-content-between { justify-content: space-between; }
+.justify-content-end { justify-content: flex-end; }
+.gap-1 { gap: var(--space-xs); }
+.gap-2 { gap: var(--space-sm); }
+.gap-3 { gap: var(--space-md); }
+.gap-4 { gap: var(--space-lg); }
+
+/* ============================================
+   Pencil Card Body Utility
+   (replaces inline styles from HTML)
+   ============================================ */
+
+.pencil-card-body {
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.pencil-chart-flex {
+  flex: 1;
+  margin: 0;
+}
+
+.pencil-scrollable-table {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.pencil-fw-normal {
+  font-weight: 400;
+}
+
+.pencil-border-top-success {
+  border-top: 4px solid var(--color-success);
+}
+
+/* ============================================
+   Scrollable Table Container
+   (Extracted from embedded styles)
+   ============================================ */
+.fiscal-summary-table-container {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  width: 100%;
+}
+
+.fiscal-summary-table-container::-webkit-scrollbar {
+  height: 12px;
+}
+
+.fiscal-summary-table-container::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: 6px;
+}
+
+.fiscal-summary-table-container::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 6px;
+}
+
+.fiscal-summary-table-container::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground);
+}
+
+.fiscal-summary-table-container table {
+  min-width: max-content;
+}
+
+.fiscal-summary-table-container th,
+.fiscal-summary-table-container td {
+  white-space: nowrap;
+}
+
+/* ============================================
+   Drag and Drop Zone
+   (Extracted from embedded styles)
+   ============================================ */
+#drop-zone.drag-over,
+.drop-zone.drag-over {
+  background-color: rgba(37, 99, 235, 0.1) !important;
+  border-color: var(--primary) !important;
+}
+
+/* ============================================
+   Table Column Widths
+   ============================================ */
+.equal-width {
+  width: 100px;
+}
+
+/* ============================================
+   Section Navigation (Form内セクションナビ)
+   ============================================ */
+.section-nav-btn {
+  transition: all 0.2s ease;
+  border-radius: 8px !important;
+}
+
+.section-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-nav-btn:focus {
+  box-shadow: 0 0 0 3px rgba(93, 135, 255, 0.25);
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Section targets offset for sticky header */
+[id^="bs-info"],
+[id^="pl-info"],
+[id^="tax-info"],
+[id^="notes-info"] {
+  scroll-margin-top: 100px;
+}
+
+/* ============================================
+   Fiscal Summary Year Form - Number Input Alignment
+   ============================================ */
+#fiscal-summary-year-form div.col-sm-6 {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+#fiscal-summary-year-form .input-group {
+  max-width: 180px;
+  flex-shrink: 0;
+}
+
+#fiscal-summary-year-form .input-group > .form-control {
+  text-align: center !important;
+  border-right: 1px solid #dee2e6 !important;
+  border-radius: 6px 0 0 6px !important;
+  background-color: #fff !important;
+}
+
+#fiscal-summary-year-form .input-group > .form-control:focus {
+  border-color: #dee2e6 !important;
+  box-shadow: none !important;
+}
+
+#fiscal-summary-year-form .input-group > .input-group-text {
+  min-width: 50px;
+  justify-content: center;
+  background-color: #e8eaed !important;
+  border-left: none !important;
+  border-radius: 0 6px 6px 0 !important;
+  color: #5a6a85 !important;
+  font-size: 13px;
+}
+
+#fiscal-summary-year-form .col-form-label {
+  text-align: left;
+}
+
+/* ============================================
+   Image Size Utilities
+   ============================================ */
+.pencil-img-20 {
+  max-width: 20%;
+  height: auto;
+}
+
+.pencil-img-40 {
+  max-width: 40%;
+  height: auto;
+}
+
+.pencil-img-60 {
+  max-width: 60%;
+  height: auto;
+}
+
+.pencil-img-80 {
+  max-width: 80%;
+  height: auto;
+}
+
+.pencil-img-max-200 {
+  max-width: 200px;
+  height: auto;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 991px) {
+  .body-wrapper {
+    margin-left: 0;
+  }
+
+  .left-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition-base);
+  }
+
+  .left-sidebar.show {
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .main-content-wrapper {
+    padding: var(--space-lg);
+  }
+
+  .card-body {
+    padding: var(--space-lg);
+  }
+
+  .pencil-page-title .card-body {
+    padding: var(--space-lg);
+  }
+
+  .pencil-page-title-text {
+    font-size: 20px;
+  }
+}
+
+/* ============================================
+   AI Consultation Page (pencil-score.pen YnK3l)
+   AI相談センター - Pencil Design System
+   ============================================ */
+
+/* Page Container - Main Content (UsoZH) */
+.ai-consultation-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Page Header (RpPP2) - gap: 8px, vertical layout */
+.ai-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Title Area (VY5NZ) - gap: 8px, vertical layout */
+.ai-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Title Row (dzdgV) - gap: 12px, horizontal layout, alignItems: center */
+.ai-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Page Title - 24px, 600 weight, #0F172A */
+.ai-page-title {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* Beta Badge - #FEF3C7 background, 12px */
+.ai-beta-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: #FEF3C7;
+  color: #92400E;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+}
+
+/* Subtitle (CigtZ) - 14px, normal, #64748B */
+.ai-subtitle {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Tab Navigation (Eq7E9) - bottom border #E2E8F0 */
+.ai-tab-navigation {
+  display: flex;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+/* Tab Item - padding: [12, 16], gap: 8px */
+.ai-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748B;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.ai-tab-item i {
+  font-size: 20px;
+}
+
+.ai-tab-item:hover {
+  color: #0F172A;
+}
+
+/* Active Tab - color: #2563EB, bottom border: #2563EB 2px */
+.ai-tab-item.active {
+  color: #2563EB;
+  border-bottom-color: #2563EB;
+}
+
+.ai-tab-item.active i {
+  color: #2563EB;
+}
+
+/* Tab Pane Content - vertical layout with gap */
+.ai-consultation-page .tab-pane {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ai-consultation-page .tab-pane.active,
+.ai-consultation-page .tab-pane.show {
+  display: flex;
+}
+
+/* Info Alert (NGq7i) - #F8FAFC bg, #E2E8F0 border, 8px radius, 16px padding, gap: 12px */
+.ai-info-alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+}
+
+/* Alert Icon - 20px, #2563EB */
+.ai-alert-icon {
+  font-size: 20px;
+  color: #2563EB;
+  flex-shrink: 0;
+}
+
+/* Alert Text - 14px, #334155 */
+.ai-alert-text {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: #334155;
+}
+
+/* Info Alert Success Variant */
+.ai-info-alert-success .ai-alert-icon {
+  color: #10B981;
+}
+
+/* Card Grid (PL9MA) - gap: 16px, equal width columns */
+.ai-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Consultation Card (pgSB3) - #FFFFFF, 8px radius, 24px padding, 16px gap */
+.ai-consultation-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  border-top: 4px solid var(--card-accent-color, #2563EB);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ai-consultation-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Card with Success border */
+.ai-consultation-card-success {
+  border-top-color: #10B981;
+}
+
+/* Card Header Row - for industry cards */
+.ai-card-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+/* Card Icon - for industry cards */
+.ai-card-icon {
+  font-size: 24px;
+  color: #10B981;
+  flex-shrink: 0;
+}
+
+/* Card Title - 18px, 600 weight, #0F172A */
+.ai-card-title {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+  text-align: center;
+}
+
+.ai-card-header-row .ai-card-title {
+  text-align: left;
+}
+
+/* Card Description - 14px, #64748B, center aligned */
+.ai-card-description {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748B;
+  text-align: center;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.ai-card-header-row + .ai-card-description {
+  text-align: left;
+}
+
+/* Card Button (Zi6uw) - #2563EB, 8px radius, padding: [10, 16], full width */
+.ai-card-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: #2563EB;
+  color: #FFFFFF;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background-color var(--transition-base);
+}
+
+.ai-card-button:hover {
+  background-color: #1D4ED8;
+  color: #FFFFFF;
+}
+
+/* Success Button Variant */
+.ai-card-button-success {
+  background-color: #10B981;
+}
+
+.ai-card-button-success:hover {
+  background-color: #059669;
+}
+
+/* Empty State */
+.ai-empty-state {
+  grid-column: span 3;
+  text-align: center;
+  padding: 32px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  color: #64748B;
+}
+
+.ai-empty-state p {
+  margin: 0;
+}
+
+/* Detailed Empty State */
+.ai-empty-state-detailed {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 24px;
+  background-color: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 8px;
+}
+
+.ai-empty-state-detailed > i {
+  font-size: 24px;
+  color: #2563EB;
+  flex-shrink: 0;
+}
+
+.ai-empty-content h5 {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0 0 8px 0;
+}
+
+.ai-empty-content p {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: #334155;
+  margin: 0 0 8px 0;
+}
+
+.ai-empty-note {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: #64748B;
+}
+
+.ai-empty-note i {
+  font-size: 14px;
+}
+
+/* Responsive Grid */
+@media (max-width: 991px) {
+  .ai-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ai-empty-state {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 767px) {
+  .ai-card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-empty-state {
+    grid-column: span 1;
+  }
+
+  .ai-page-title {
+    font-size: 20px;
+  }
+
+  .ai-tab-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .ai-tab-item i {
+    font-size: 18px;
+  }
+}
+
+/* ============================================
+   Fiscal Summary Monthly Page (pencil-score.pen 6bZcx)
+   月次PL - Tables and Charts
+   ============================================ */
+
+/* Page Header */
+.fiscal-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+.fiscal-page-title {
+  font-family: var(--font-primary);
+  font-size: 28px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.fiscal-page-subtitle {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: #64748B;
+  margin: 0;
+}
+
+/* Info Alert - Pencil Style */
+.fiscal-info-alert {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.fiscal-info-alert i {
+  font-size: 20px;
+  color: #2563EB;
+  flex-shrink: 0;
+}
+
+.fiscal-info-alert span {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: #334155;
+}
+
+/* Filter Row (Vj2JA) - year range selector */
+.fiscal-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.fiscal-filter-row .form-select {
+  padding: 8px 12px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 6px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: #0F172A;
+  min-width: 120px;
+}
+
+.fiscal-filter-row .range-separator {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: #64748B;
+}
+
+/* Table Card (737xB) - main container */
+.fiscal-table-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table Card Header (dk2ai) */
+.fiscal-table-card-header {
+  padding: 16px;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.fiscal-table-card-header h5,
+.fiscal-table-card-header .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* Table Card Body (lUZRy) */
+.fiscal-table-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Year Section (zsmi3) */
+.fiscal-year-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.fiscal-year-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* Data Table (O5czp) - monthly PL table */
+.fiscal-data-table {
+  width: 100%;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+.fiscal-data-table thead tr {
+  background-color: #F8FAFC;
+}
+
+.fiscal-data-table th {
+  padding: 12px 8px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: #64748B;
+  text-align: center;
+  border-bottom: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.fiscal-data-table th:first-child {
+  width: 80px;
+  text-align: left;
+}
+
+.fiscal-data-table th:last-child {
+  width: 80px;
+}
+
+.fiscal-data-table td {
+  padding: 12px 8px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 400;
+  color: #0F172A;
+  text-align: right;
+  border-top: 1px solid #E2E8F0;
+  white-space: nowrap;
+}
+
+.fiscal-data-table td:first-child {
+  text-align: left;
+  font-weight: 500;
+  color: #334155;
+}
+
+.fiscal-data-table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+/* Scrollable Table Container */
+.fiscal-table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.fiscal-table-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+
+.fiscal-table-scroll::-webkit-scrollbar-track {
+  background: #F1F5F9;
+  border-radius: 4px;
+}
+
+.fiscal-table-scroll::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+  border-radius: 4px;
+}
+
+.fiscal-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
+}
+
+/* Chart Card (UmQbH) */
+.fiscal-chart-card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.fiscal-chart-card-header {
+  padding: 16px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fiscal-chart-card-header h5,
+.fiscal-chart-card-header .chart-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: #0F172A;
+  margin: 0;
+}
+
+.fiscal-chart-card-body {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+/* Chart Placeholder */
+.fiscal-chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px;
+  background-color: #F1F5F9;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+}
+
+.fiscal-chart-placeholder i {
+  font-size: 48px;
+  color: #94A3B8;
+}
+
+.fiscal-chart-placeholder span {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: #94A3B8;
+}
+
+/* Chart.js Canvas Container */
+.fiscal-chart-container {
+  width: 100%;
+  height: 100%;
+  min-height: 250px;
+  position: relative;
+}
+
+/* KPI Cards (決算情報 Right Column) */
+.fiscal-kpi-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fiscal-kpi-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+}
+
+.fiscal-kpi-label {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 400;
+  color: #64748B;
+  margin: 0;
+}
+
+.fiscal-kpi-value {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.fiscal-kpi-change {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.fiscal-kpi-change.positive {
+  color: #10B981;
+}
+
+.fiscal-kpi-change.negative {
+  color: #EF4444;
+}
+
+/* Two Column Layout (決算情報) */
+.fiscal-content-area {
+  display: flex;
+  gap: 24px;
+}
+
+.fiscal-left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fiscal-right-column {
+  width: 360px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Chart Colors - Pencil Design System */
+:root {
+  --chart-color-1: #2563EB;
+  --chart-color-2: #10B981;
+  --chart-color-3: #F59E0B;
+  --chart-color-4: #EF4444;
+  --chart-color-5: #8B5CF6;
+}
+
+/* Period Select Badge */
+.fiscal-period-select {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background-color: #F1F5F9;
+  border-radius: 6px;
+  font-family: var(--font-primary);
+  font-size: 13px;
+  color: #64748B;
+  cursor: pointer;
+}
+
+/* Tab Navigation for Monthly PL */
+.fiscal-tab-navigation {
+  display: flex;
+  border-bottom: 1px solid #E2E8F0;
+  margin-bottom: 24px;
+}
+
+.fiscal-tab-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: #64748B;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-base);
+}
+
+.fiscal-tab-item:hover {
+  color: #0F172A;
+}
+
+.fiscal-tab-item.active {
+  color: #2563EB;
+  border-bottom-color: #2563EB;
+}
+
+.fiscal-tab-item i {
+  font-size: 18px;
+}
+
+/* Responsive */
+@media (max-width: 1199px) {
+  .fiscal-content-area {
+    flex-direction: column;
+  }
+
+  .fiscal-right-column {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .fiscal-kpi-card {
+    flex: 1;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 767px) {
+  .fiscal-page-title {
+    font-size: 20px;
+  }
+
+  .fiscal-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .fiscal-filter-row .form-select {
+    width: 100%;
+  }
+
+  .fiscal-right-column {
+    flex-direction: column;
+  }
+
+  .fiscal-kpi-card {
+    min-width: auto;
+  }
+
+  .fiscal-kpi-value {
+    font-size: 20px;
+  }
+}
+
+/* ============================================
+   Global Tab Content - Bootstrap Override
+   Ensures tabs display correctly across all pages
+   ============================================ */
+.tab-content {
+  width: 100%;
+}
+
+.tab-content > .tab-pane {
+  display: none;
+  width: 100%;
+}
+
+.tab-content > .tab-pane.active {
+  display: block;
+  width: 100%;
+}
+
+.tab-content > .tab-pane.show.active {
+  display: block;
+  width: 100%;
+}
+
+/* ============================================
+   Fiscal Summary Year Page (年次財務諸表)
+   Ensure full width display for cards and tables
+   Only targets the fiscal year tabs content
+   ============================================ */
+
+/* Full Width Container */
+#fiscalYearTabsContent {
+  width: 100%;
+}
+
+#fiscalYearTabsContent .tab-pane {
+  width: 100%;
+}
+
+/* Direct child rows of tab-pane get full width with no gutter */
+#fiscalYearTabsContent > .tab-pane > .row {
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* Only force full width on col-12 within fiscal year tab content */
+#fiscalYearTabsContent > .tab-pane > .row > .col-12 {
+  width: 100%;
+  max-width: 100%;
+  flex: 0 0 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Fiscal Year Table Card */
+#fiscalYearTabsContent .card .card-header {
+  padding: 16px 20px;
+}
+
+#fiscalYearTabsContent .card .card-body {
+  padding: 20px;
+}
+
+#fiscalYearTabsContent .card .card-footer {
+  padding: 16px 20px;
+}
+
+/* Fiscal Summary Table - Force Full Width */
+#fiscal_summary_table {
+  width: 100%;
+}
+
+/* ============================================
+   Bootstrap Grid System
+   Since Bootstrap CSS is not loaded (only JS),
+   we need to provide the grid classes here
+   ============================================ */
+
+.row {
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-0.5 * var(--bs-gutter-x));
+  margin-left: calc(-0.5 * var(--bs-gutter-x));
+}
+
+.row > * {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  max-width: 100%;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+  margin-top: var(--bs-gutter-y);
+}
+
+/* Column classes */
+.col { flex: 1 0 0%; }
+.col-auto { flex: 0 0 auto; width: auto; }
+.col-1 { flex: 0 0 auto; width: 8.333333%; }
+.col-2 { flex: 0 0 auto; width: 16.666667%; }
+.col-3 { flex: 0 0 auto; width: 25%; }
+.col-4 { flex: 0 0 auto; width: 33.333333%; }
+.col-5 { flex: 0 0 auto; width: 41.666667%; }
+.col-6 { flex: 0 0 auto; width: 50%; }
+.col-7 { flex: 0 0 auto; width: 58.333333%; }
+.col-8 { flex: 0 0 auto; width: 66.666667%; }
+.col-9 { flex: 0 0 auto; width: 75%; }
+.col-10 { flex: 0 0 auto; width: 83.333333%; }
+.col-11 { flex: 0 0 auto; width: 91.666667%; }
+.col-12 { flex: 0 0 auto; width: 100%; }
+
+/* Medium breakpoint (768px+) */
+@media (min-width: 768px) {
+  .col-md { flex: 1 0 0%; }
+  .col-md-auto { flex: 0 0 auto; width: auto; }
+  .col-md-1 { flex: 0 0 auto; width: 8.333333%; }
+  .col-md-2 { flex: 0 0 auto; width: 16.666667%; }
+  .col-md-3 { flex: 0 0 auto; width: 25%; }
+  .col-md-4 { flex: 0 0 auto; width: 33.333333%; }
+  .col-md-5 { flex: 0 0 auto; width: 41.666667%; }
+  .col-md-6 { flex: 0 0 auto; width: 50%; }
+  .col-md-7 { flex: 0 0 auto; width: 58.333333%; }
+  .col-md-8 { flex: 0 0 auto; width: 66.666667%; }
+  .col-md-9 { flex: 0 0 auto; width: 75%; }
+  .col-md-10 { flex: 0 0 auto; width: 83.333333%; }
+  .col-md-11 { flex: 0 0 auto; width: 91.666667%; }
+  .col-md-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* Large breakpoint (992px+) */
+@media (min-width: 992px) {
+  .col-lg { flex: 1 0 0%; }
+  .col-lg-auto { flex: 0 0 auto; width: auto; }
+  .col-lg-1 { flex: 0 0 auto; width: 8.333333%; }
+  .col-lg-2 { flex: 0 0 auto; width: 16.666667%; }
+  .col-lg-3 { flex: 0 0 auto; width: 25%; }
+  .col-lg-4 { flex: 0 0 auto; width: 33.333333%; }
+  .col-lg-5 { flex: 0 0 auto; width: 41.666667%; }
+  .col-lg-6 { flex: 0 0 auto; width: 50%; }
+  .col-lg-7 { flex: 0 0 auto; width: 58.333333%; }
+  .col-lg-8 { flex: 0 0 auto; width: 66.666667%; }
+  .col-lg-9 { flex: 0 0 auto; width: 75%; }
+  .col-lg-10 { flex: 0 0 auto; width: 83.333333%; }
+  .col-lg-11 { flex: 0 0 auto; width: 91.666667%; }
+  .col-lg-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* Extra large breakpoint (1200px+) */
+@media (min-width: 1200px) {
+  .col-xl { flex: 1 0 0%; }
+  .col-xl-auto { flex: 0 0 auto; width: auto; }
+  .col-xl-1 { flex: 0 0 auto; width: 8.333333%; }
+  .col-xl-2 { flex: 0 0 auto; width: 16.666667%; }
+  .col-xl-3 { flex: 0 0 auto; width: 25%; }
+  .col-xl-4 { flex: 0 0 auto; width: 33.333333%; }
+  .col-xl-5 { flex: 0 0 auto; width: 41.666667%; }
+  .col-xl-6 { flex: 0 0 auto; width: 50%; }
+  .col-xl-7 { flex: 0 0 auto; width: 58.333333%; }
+  .col-xl-8 { flex: 0 0 auto; width: 66.666667%; }
+  .col-xl-9 { flex: 0 0 auto; width: 75%; }
+  .col-xl-10 { flex: 0 0 auto; width: 83.333333%; }
+  .col-xl-11 { flex: 0 0 auto; width: 91.666667%; }
+  .col-xl-12 { flex: 0 0 auto; width: 100%; }
+}
+
+/* Gutter classes */
+.g-0, .gx-0 { --bs-gutter-x: 0; }
+.g-0, .gy-0 { --bs-gutter-y: 0; }
+.g-1, .gx-1 { --bs-gutter-x: 0.25rem; }
+.g-1, .gy-1 { --bs-gutter-y: 0.25rem; }
+.g-2, .gx-2 { --bs-gutter-x: 0.5rem; }
+.g-2, .gy-2 { --bs-gutter-y: 0.5rem; }
+.g-3, .gx-3 { --bs-gutter-x: 1rem; }
+.g-3, .gy-3 { --bs-gutter-y: 1rem; }
+.g-4, .gx-4 { --bs-gutter-x: 1.5rem; }
+.g-4, .gy-4 { --bs-gutter-y: 1.5rem; }
+.g-5, .gx-5 { --bs-gutter-x: 3rem; }
+.g-5, .gy-5 { --bs-gutter-y: 3rem; }
+
+/* ============================================
+   Reset Bootstrap gutters for custom flex layouts
+   Dashboard uses CSS gap instead of Bootstrap gutters
+   ============================================ */
+
+.row.pencil-metric-row,
+.row.pencil-news-row,
+.row.dashboard-news-row,
+.row.dashboard-charts-row,
+.row.dashboard-section {
+  --bs-gutter-x: 0;
+  --bs-gutter-y: 0;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.row.pencil-metric-row > *,
+.row.pencil-news-row > *,
+.row.dashboard-news-row > *,
+.row.dashboard-charts-row > *,
+.row.dashboard-section > * {
+  padding-left: 0;
+  padding-right: 0;
+}

@@ -2,9 +2,9 @@
 {% load custom_filters %}
 
 {% if budget_year or actual_year %}
-<div class="row dashboard-section">
-  <div class="col-lg-12">
-    <div class="card card-hover">
+<div class="row g-4 dashboard-section mb-4">
+  <div class="col-12">
+    <div class="card pencil-card">
       <div class="card-body">
         <h5 class="card-title mb-9 fw-semibold">
           予算実績比較{% if budget_year %}{{ budget_year.year }}年{% elif actual_year %}{{ actual_year.year }}年{% endif %}
@@ -75,7 +75,7 @@
           <a href="{% url 'budget_vs_actual_comparison' %}?year={% if budget_year %}{{ budget_year.year }}{% else %}{{ actual_year.year }}{% endif %}" class="btn btn-sm btn-outline-primary">
             <i class="ti ti-chart-line me-1"></i>詳細比較を見る
           </a>
-          <a href="{% url 'budget_analysis' %}?year={% if budget_year %}{{ budget_year.year }}{% else %}{{ actual_year.year }}{% endif %}" class="btn btn-sm btn-outline-info ms-2">
+          <a href="{% url 'budget_analysis' %}?year={% if budget_year %}{{ budget_year.year }}{% else %}{{ actual_year.year }}{% endif %}" class="btn btn-sm btn-outline-info">
             <i class="ti ti-brain me-1"></i>AI分析
           </a>
           {% endif %}

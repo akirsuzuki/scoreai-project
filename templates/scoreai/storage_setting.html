@@ -7,12 +7,39 @@
 {% endblock %}
 
 {% block content %}
-<div class="row mt-4">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-      </div>
-      <div class="card-body">
+<div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">ストレージ設定</h4>
+    <p class="text-muted mb-0">クラウドストレージとの連携設定を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'storage_setting' %}" role="tab">
+          <i class="ti ti-cloud me-1"></i>ストレージ設定
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'storage_file_list' %}" role="tab">
+          <i class="ti ti-files me-1"></i>ファイル一覧
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="storageTabsContent">
+  <!-- ストレージ設定 -->
+  <div class="tab-pane fade show active" id="storage-setting" role="tabpanel">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
         {% if messages %}
         <div class="messages">
           {% for message in messages %}
@@ -47,7 +74,7 @@
             <table class="table table-sm">
               <tbody>
                 <tr>
-                  <th style="width: 40%;">Googleアカウント</th>
+                  <th class="pencil-th-40">Googleアカウント</th>
                   <td>{{ connection_status.user_email }}</td>
                 </tr>
                 {% if connection_status.user_name %}
@@ -98,7 +125,7 @@
             <table class="table table-sm">
               <tbody>
                 <tr>
-                  <th style="width: 40%;">アクセストークン</th>
+                  <th class="pencil-th-40">アクセストークン</th>
                   <td>
                     {% if token_status.has_access_token %}
                       <span class="badge bg-success">設定済み</span>
@@ -214,9 +241,11 @@
           </div>
         </div>
         {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}
 

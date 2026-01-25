@@ -7,326 +7,377 @@
 
 {% block content %}
 <div class="row">
-  <!-- 左サイドバー - プロフィール情報 -->
-  <div class="col-lg-4">
-    <div class="card">
-      <div class="card-body text-center">
-        <!-- プロフィール画像 -->
-        <div class="mb-4">
-          <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
-            <i class="ti ti-user-circle" style="font-size: 100px; color: #5D87FF;"></i>
-          </div>
-        </div>
-        
-        <!-- ユーザー名 -->
-        <h4 class="fw-semibold mb-4">{{ user.username }}</h4>
-        
-        <!-- メールアドレス -->
-        <p class="text-muted mb-4">
-          <i class="ti ti-mail me-2"></i>{{ user.email }}
-        </p>
-        
-        <!-- ユーザー属性 -->
-        <div class="d-flex flex-column gap-2 mb-4">
-          {% for role in user_roles %}
-          <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-            <span class="text-muted">役割</span>
-            <span class="fw-semibold">
-              <span class="badge bg-primary">{{ role }}</span>
-            </span>
-          </div>
-          {% endfor %}
-          
-          <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-            <span class="text-muted">ユーザータイプ</span>
-            <span class="fw-semibold">
-              {% if is_company_user %}
-                <span class="badge bg-info">会社ユーザー</span>
-              {% elif is_financial_consultant %}
-                <span class="badge bg-success">財務コンサルタント</span>
-              {% else %}
-                <span class="badge bg-secondary">一般ユーザー</span>
-              {% endif %}
-            </span>
-          </div>
-          
-          <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-            <span class="text-muted">登録日</span>
-            <span class="fw-semibold">{{ user.created_at|date:"Y年m月d日" }}</span>
-          </div>
-          
-          <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-            <span class="text-muted">所属Company数</span>
-            <span class="fw-semibold">{{ total_companies }}社</span>
-          </div>
-          
-          <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-            <span class="text-muted">所属Firm数</span>
-            <span class="fw-semibold">{{ total_firms }}社</span>
-          </div>
-        </div>
-        
-        <!-- 編集ボタン -->
-        <div class="d-flex flex-column gap-2">
-          <a href="{% url 'user_profile_update' %}" class="btn btn-primary w-100">
-            <i class="ti ti-edit"></i>
-            <span>プロフィールを編集</span>
-          </a>
-          <a href="{% url 'password_change' %}" class="btn btn-outline-primary w-100">
-            <i class="ti ti-key"></i>
-            <span>パスワードを変更</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 選択中のCompany/Firm情報 -->
-    {% if selected_company or selected_firm %}
-    <div class="card mt-4">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">現在の選択</h5>
-      </div>
-      <div class="card-body p-0">
-        <div class="table-responsive">
-          <table class="table text-nowrap mb-0 align-middle">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">タイプ</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">名称</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">役割</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">詳細</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if selected_company %}
-              <tr>
-                <td class="border-bottom-0">
-                  <div class="d-flex align-items-center">
-                    <i class="ti ti-building me-2 text-primary"></i>
-                    <span class="fw-semibold">Company</span>
-                  </div>
-                </td>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">{{ selected_company.name }}</h6>
-                </td>
-                <td class="border-bottom-0">
-                  <div class="d-flex gap-1">
-                    {% if selected_user_company.is_owner %}
-                    <span class="badge bg-success">オーナー</span>
-                    {% endif %}
-                    {% if selected_user_company.as_consultant %}
-                    <span class="badge bg-info">コンサルタント</span>
-                    {% endif %}
-                    {% if not selected_user_company.is_owner and not selected_user_company.as_consultant %}
-                    <span class="badge bg-secondary">メンバー</span>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="border-bottom-0">
-                  <span class="text-muted small">
-                    <i class="ti ti-calendar me-1"></i>決算月: {{ selected_company.fiscal_month }}月
-                  </span>
-                </td>
-              </tr>
-              {% endif %}
-              
-              {% if selected_firm %}
-              <tr>
-                <td class="border-bottom-0">
-                  <div class="d-flex align-items-center">
-                    <i class="ti ti-building-bank me-2 text-primary"></i>
-                    <span class="fw-semibold">Firm</span>
-                  </div>
-                </td>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">{{ selected_firm.name }}</h6>
-                </td>
-                <td class="border-bottom-0">
-                  {% if selected_user_firm.is_owner %}
-                  <span class="badge bg-success">オーナー</span>
-                  {% else %}
-                  <span class="badge bg-secondary">メンバー</span>
-                  {% endif %}
-                </td>
-                <td class="border-bottom-0">
-                  <span class="text-muted">-</span>
-                </td>
-              </tr>
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-  </div>
-  
-  <!-- 右側メインコンテンツ -->
-  <div class="col-lg-8">
-    <!-- 所属Company一覧 -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5 class="card-title mb-0">
-          <i class="ti ti-building me-2"></i>所属Company一覧
-        </h5>
-      </div>
-      <div class="card-body">
-        {% if user_companies %}
-        <div class="table-responsive">
-          <table class="table text-nowrap mb-0 align-middle">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">会社名</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">役割</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">決算月</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">ステータス</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">操作</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user_company in user_companies %}
-              <tr>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">{{ user_company.company.name }}</h6>
-                </td>
-                <td class="border-bottom-0">
-                  <div class="d-flex gap-1">
-                    {% if user_company.is_owner %}
-                    <span class="badge bg-success">オーナー</span>
-                    {% endif %}
-                    {% if user_company.as_consultant %}
-                    <span class="badge bg-info">コンサルタント</span>
-                    {% endif %}
-                    {% if not user_company.is_owner and not user_company.as_consultant %}
-                    <span class="badge bg-secondary">メンバー</span>
-                    {% endif %}
-                  </div>
-                </td>
-                <td class="border-bottom-0">
-                  <p class="mb-0 fw-normal">{{ user_company.company.fiscal_month }}月</p>
-                </td>
-                <td class="border-bottom-0">
-                  {% if user_company.is_selected %}
-                  <span class="badge bg-primary">選択中</span>
-                  {% else %}
-                  <span class="badge bg-light text-dark">未選択</span>
-                  {% endif %}
-                </td>
-                <td class="border-bottom-0">
-                  <div class="d-flex align-items-center gap-3">
-                    {% if not user_company.is_selected %}
-                    <a href="{% url 'select_company' user_company.company.id %}" 
-                       class="text-primary text-decoration-none d-flex align-items-center gap-1" 
-                       title="選択"
-                       style="transition: all 0.2s ease-in;">
-                      <i class="ti ti-check" style="font-size: 18px;"></i>
-                      <span class="small fw-semibold">選択</span>
-                    </a>
-                    {% endif %}
-                    <a href="{% url 'company_detail' user_company.company.id %}" 
-                       class="text-primary text-decoration-none d-flex align-items-center gap-1" 
-                       title="詳細"
-                       style="transition: all 0.2s ease-in;">
-                      <i class="ti ti-eye" style="font-size: 18px;"></i>
-                      <span class="small fw-semibold">詳細</span>
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <div class="text-center py-4">
-          <i class="ti ti-building-off" style="font-size: 48px; color: #ccc;"></i>
-          <p class="text-muted mt-3">所属しているCompanyがありません</p>
-        </div>
-        {% endif %}
-      </div>
-    </div>
-    
-    <!-- 所属Firm一覧 -->
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0">
-          <i class="ti ti-building-bank me-2"></i>所属Firm一覧
-        </h5>
-      </div>
-      <div class="card-body">
-        {% if user_firms %}
-        <div class="table-responsive">
-          <table class="table text-nowrap mb-0 align-middle">
-            <thead class="text-dark fs-4">
-              <tr>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">Firm名</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">役割</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">ステータス</h6>
-                </th>
-                <th class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">操作</h6>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for user_firm in user_firms %}
-              <tr>
-                <td class="border-bottom-0">
-                  <h6 class="fw-semibold mb-0">{{ user_firm.firm.name }}</h6>
-                </td>
-                <td class="border-bottom-0">
-                  {% if user_firm.is_owner %}
-                  <span class="badge bg-success">オーナー</span>
-                  {% else %}
-                  <span class="badge bg-secondary">メンバー</span>
-                  {% endif %}
-                </td>
-                <td class="border-bottom-0">
-                  {% if user_firm.is_selected %}
-                  <span class="badge bg-primary">選択中</span>
-                  {% else %}
-                  <span class="badge bg-light text-dark">未選択</span>
-                  {% endif %}
-                </td>
-                <td class="border-bottom-0">
-                  <span class="text-muted">-</span>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% else %}
-        <div class="text-center py-4">
-          <i class="ti ti-building-bank-off" style="font-size: 48px; color: #ccc;"></i>
-          <p class="text-muted mt-3">所属しているFirmがありません</p>
-        </div>
-        {% endif %}
-      </div>
-    </div>
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">プロフィール</h4>
+    <p class="text-muted mb-0">ユーザー情報と所属組織の管理を行います。</p>
   </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'user_profile' %}" role="tab">
+          <i class="ti ti-user me-1"></i>プロフィール
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'user_profile_update' %}" role="tab">
+          <i class="ti ti-edit me-1"></i>プロフィール編集
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'password_change' %}" role="tab">
+          <i class="ti ti-key me-1"></i>パスワード変更
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="profileTabsContent">
+  <!-- プロフィール -->
+  <div class="tab-pane fade show active" id="profile" role="tabpanel">
+    <!-- 親Row: 左にプロフィール、右に3つのカード（縦並び） -->
+    <div class="row">
+      <!-- 左側 - プロフィール情報 (col-3) -->
+      <div class="col-12 col-lg-3 mb-4 mb-lg-0">
+        <div class="card h-100">
+          <div class="card-body text-center">
+            <!-- プロフィール画像 -->
+            <div class="mb-4">
+              <div class="rounded-circle bg-light d-inline-flex align-items-center justify-content-center pencil-avatar-lg">
+                <i class="ti ti-user-circle pencil-avatar-icon"></i>
+              </div>
+            </div>
+
+            <!-- ユーザー名 -->
+            <h4 class="fw-semibold mb-4">{{ user.username }}</h4>
+
+            <!-- メールアドレス -->
+            <p class="text-muted mb-4">
+              <i class="ti ti-mail me-2"></i>{{ user.email }}
+            </p>
+
+            <!-- ユーザー属性 -->
+            <div class="d-flex flex-column gap-2 mb-4">
+              {% for role in user_roles %}
+              <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                <span class="text-muted">役割</span>
+                <span class="fw-semibold">
+                  <span class="badge bg-primary">{{ role }}</span>
+                </span>
+              </div>
+              {% endfor %}
+
+              <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                <span class="text-muted">ユーザータイプ</span>
+                <span class="fw-semibold">
+                  {% if is_company_user %}
+                    <span class="badge bg-info">会社ユーザー</span>
+                  {% elif is_financial_consultant %}
+                    <span class="badge bg-success">財務コンサルタント</span>
+                  {% else %}
+                    <span class="badge bg-secondary">一般ユーザー</span>
+                  {% endif %}
+                </span>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                <span class="text-muted">登録日</span>
+                <span class="fw-semibold">{{ user.created_at|date:"Y年m月d日" }}</span>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                <span class="text-muted">所属Company数</span>
+                <span class="fw-semibold">{{ total_companies }}社</span>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                <span class="text-muted">所属Firm数</span>
+                <span class="fw-semibold">{{ total_firms }}社</span>
+              </div>
+            </div>
+
+            <!-- 編集ボタン -->
+            <div class="d-flex flex-column gap-2">
+              <a href="{% url 'user_profile_update' %}" class="btn btn-primary w-100">
+                <i class="ti ti-edit"></i>
+                <span>プロフィールを編集</span>
+              </a>
+              <a href="{% url 'password_change' %}" class="btn btn-outline-primary w-100">
+                <i class="ti ti-key"></i>
+                <span>パスワードを変更</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側 - 現在の選択、所属Company、所属Firm（縦並び3行） (col-9) -->
+      <div class="col-12 col-lg-9">
+        <!-- Row 1: 現在の選択 -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0 fw-semibold">
+                  <i class="ti ti-check-circle me-2 text-primary"></i>現在の選択
+                </h5>
+              </div>
+              <div class="card-body p-0">
+                {% if selected_company or selected_firm %}
+                <div class="table-responsive">
+                  <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">タイプ</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">名称</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">役割</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">詳細</h6>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if selected_company %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <div class="d-flex align-items-center">
+                            <i class="ti ti-building me-2 text-primary"></i>
+                            <span class="fw-semibold">Company</span>
+                          </div>
+                        </td>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{ selected_company.name }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          <div class="d-flex gap-1">
+                            {% if selected_user_company.is_owner %}
+                            <span class="badge bg-success">オーナー</span>
+                            {% endif %}
+                            {% if selected_user_company.as_consultant %}
+                            <span class="badge bg-info">コンサルタント</span>
+                            {% endif %}
+                            {% if not selected_user_company.is_owner and not selected_user_company.as_consultant %}
+                            <span class="badge bg-secondary">メンバー</span>
+                            {% endif %}
+                          </div>
+                        </td>
+                        <td class="border-bottom-0">
+                          <span class="text-muted small">
+                            <i class="ti ti-calendar me-1"></i>決算月: {{ selected_company.fiscal_month }}月
+                          </span>
+                        </td>
+                      </tr>
+                      {% endif %}
+                      {% if selected_firm %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <div class="d-flex align-items-center">
+                            <i class="ti ti-building-bank me-2 text-primary"></i>
+                            <span class="fw-semibold">Firm</span>
+                          </div>
+                        </td>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{ selected_firm.name }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          {% if selected_user_firm.is_owner %}
+                          <span class="badge bg-success">オーナー</span>
+                          {% else %}
+                          <span class="badge bg-secondary">メンバー</span>
+                          {% endif %}
+                        </td>
+                        <td class="border-bottom-0">
+                          <span class="text-muted">-</span>
+                        </td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                  <i class="ti ti-select text-muted" style="font-size: 48px;"></i>
+                  <p class="text-muted mt-3 mb-0">選択されていません</p>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: 所属Company一覧 -->
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0 fw-semibold">
+                  <i class="ti ti-building me-2 text-primary"></i>所属Company一覧
+                </h5>
+              </div>
+              <div class="card-body p-0">
+                {% if user_companies %}
+                <div class="table-responsive">
+                  <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">会社名</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">役割</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">決算月</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">ステータス</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">操作</h6>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for user_company in user_companies %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{ user_company.company.name }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          <div class="d-flex gap-1">
+                            {% if user_company.is_owner %}
+                            <span class="badge bg-success">オーナー</span>
+                            {% endif %}
+                            {% if user_company.as_consultant %}
+                            <span class="badge bg-info">コンサルタント</span>
+                            {% endif %}
+                            {% if not user_company.is_owner and not user_company.as_consultant %}
+                            <span class="badge bg-secondary">メンバー</span>
+                            {% endif %}
+                          </div>
+                        </td>
+                        <td class="border-bottom-0">
+                          <p class="mb-0 fw-normal">{{ user_company.company.fiscal_month }}月</p>
+                        </td>
+                        <td class="border-bottom-0">
+                          {% if user_company.is_selected %}
+                          <span class="badge bg-primary">選択中</span>
+                          {% else %}
+                          <span class="badge bg-light text-dark">未選択</span>
+                          {% endif %}
+                        </td>
+                        <td class="border-bottom-0">
+                          <div class="d-flex align-items-center gap-2">
+                            {% if not user_company.is_selected %}
+                            <a href="{% url 'select_company' user_company.company.id %}"
+                               class="btn btn-sm btn-outline-primary"
+                               title="選択">
+                              <i class="ti ti-check me-1"></i>選択
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'company_detail' user_company.company.id %}"
+                               class="btn btn-sm btn-primary"
+                               title="詳細">
+                              <i class="ti ti-eye me-1"></i>詳細
+                            </a>
+                          </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                  <i class="ti ti-building-off text-muted" style="font-size: 48px;"></i>
+                  <p class="text-muted mt-3 mb-0">所属しているCompanyがありません</p>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: 所属Firm一覧 -->
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                <h5 class="card-title mb-0 fw-semibold">
+                  <i class="ti ti-building-bank me-2 text-primary"></i>所属Firm一覧
+                </h5>
+              </div>
+              <div class="card-body p-0">
+                {% if user_firms %}
+                <div class="table-responsive">
+                  <table class="table text-nowrap mb-0 align-middle">
+                    <thead class="text-dark fs-4">
+                      <tr>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">Firm名</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">役割</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">ステータス</h6>
+                        </th>
+                        <th class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">操作</h6>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for user_firm in user_firms %}
+                      <tr>
+                        <td class="border-bottom-0">
+                          <h6 class="fw-semibold mb-0">{{ user_firm.firm.name }}</h6>
+                        </td>
+                        <td class="border-bottom-0">
+                          {% if user_firm.is_owner %}
+                          <span class="badge bg-success">オーナー</span>
+                          {% else %}
+                          <span class="badge bg-secondary">メンバー</span>
+                          {% endif %}
+                        </td>
+                        <td class="border-bottom-0">
+                          {% if user_firm.is_selected %}
+                          <span class="badge bg-primary">選択中</span>
+                          {% else %}
+                          <span class="badge bg-light text-dark">未選択</span>
+                          {% endif %}
+                        </td>
+                        <td class="border-bottom-0">
+                          <span class="text-muted">-</span>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                  <i class="ti ti-building-bank-off text-muted" style="font-size: 48px;"></i>
+                  <p class="text-muted mt-3 mb-0">所属しているFirmがありません</p>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}

@@ -18,16 +18,16 @@
                     <p class="mb-2"><strong>ミーティング日:</strong> {{ object.meeting_date|date:"Y年m月d日" }}</p>
                     <p class="mb-0"><strong>内容:</strong></p>
                     <div class="mt-2 p-3 bg-light rounded">
-                        <pre style="white-space: pre-wrap; word-wrap: break-word;">{{ object.notes|truncatewords:50 }}</pre>
+                        <pre class="pencil-preview-text">{{ object.notes|truncatewords:50 }}</pre>
                     </div>
                 </div>
                 <p class="text-danger"><strong>この操作は取り消せません。</strong></p>
             </div>
-            <div class="card-footer text-end">
-                <form method="post" style="display: inline;">
+            <div class="card-footer">
+                <form method="post" class="d-inline">
                     {% csrf_token %}
                     <a href="{% url 'meeting_minutes_detail' company_id object.pk %}" class="btn btn-outline-secondary">キャンセル</a>
-                    <button type="submit" class="btn btn-danger ms-2">削除する</button>
+                    <button type="submit" class="btn btn-danger">削除する</button>
                 </form>
             </div>
         </div>

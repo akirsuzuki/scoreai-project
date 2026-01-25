@@ -16,186 +16,159 @@
 <script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
-<!-- ApexCharts -->
-<script src="{% static 'Modernize-1.0.0/src/assets/libs/apexcharts/dist/apexcharts.min.js' %}"></script>
-<!-- ダッシュボードスタイル -->
-<link rel="stylesheet" href="{% static 'scoreai/css/dashboard.css' %}">
+<!-- ApexCharts (CDNから読み込み) -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.44.0/dist/apexcharts.min.js"></script>
+<!-- ダッシュボードスタイル（Pencil Design System） -->
+<link rel="stylesheet" href="{% static 'scoreai/css/dashboard-pencil.css' %}">
+<!-- Chart.js Pencil Design System -->
+<link rel="stylesheet" href="{% static 'scoreai/css/chart-pencil.css' %}">
+<!-- ApexCharts Pencil Design System -->
+<link rel="stylesheet" href="{% static 'scoreai/css/apexcharts-pencil.css' %}">
 <script src="{% static 'scoreai/js/dashboard.js' %}"></script>
 
 {% endblock %}
 
 {% block content %}
-<!-- KPIカードセクション（最上部） -->
-{% include 'scoreai/index-row_kpi_cards.html' %}
+  <!-- Page Header（Pencil Design System W7t1x準拠） -->
+  <div class="dashboard-page-header mb-4">
+    <div class="dashboard-title-area">
+      <h1 class="dashboard-title">{{ title }}</h1>
+      <p class="dashboard-subtitle">財務状況の概要を確認できます</p>
+    </div>
+  </div>
 
-<!-- 月次売上推移とサイドバー -->
-{% include 'scoreai/index-row_salesoverview.html' %}
+  <!-- KPIカードセクション（最上部） -->
+  {% include 'scoreai/index-row_kpi_cards.html' %}
 
-<!-- 予算実績比較 -->
-{% include 'scoreai/budget_vs_actual_dashboard.html' %}
+  <!-- 月次売上推移とサイドバー -->
+  {% include 'scoreai/index-row_salesoverview.html' %}
 
-<!-- 借入分析 -->
-{% include 'scoreai/index-row_debts.html' %}
+  <!-- 予算実績比較 -->
+  {% include 'scoreai/budget_vs_actual_dashboard.html' %}
 
-<!-- 最近のノート・お知らせ・通知セクション -->
-<!-- 1Row目：最近のノート -->
-<div class="row mt-4">
-  <div class="col-12 mb-4">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">
-          <i class="ti ti-notes me-2"></i>最近のノート
-        </h5>
-      </div>
-      <div class="card-body">
-        {% if recent_notes %}
-        <ul class="list-group list-group-flush">
+  <!-- 借入分析 -->
+  {% include 'scoreai/index-row_debts.html' %}
+
+  <!-- 最近のノート・お知らせ・通知セクション（Pencil Design System準拠） -->
+  <!-- 1Row目：最近のノート -->
+  <div class="row g-4 dashboard-section mt-4">
+    <div class="col-12">
+      <div class="card pencil-news-card">
+        <div class="card-header">
+          <h5 class="card-title">最近のノート</h5>
+          <p class="card-subtitle">議事録・メモ</p>
+        </div>
+        <div class="card-body">
+          {% if recent_notes %}
           {% for note in recent_notes %}
-          <li class="list-group-item px-0">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="flex-grow-1">
-                <a href="{% url 'meeting_minutes_detail' this_company.id note.pk %}" class="text-decoration-none">
-                  <h6 class="mb-1 fw-semibold">{{ note.meeting_date|date:"Y年m月d日" }}</h6>
-                  <p class="mb-1 text-muted small">{{ note.notes|truncatewords:15 }}</p>
-                </a>
-                <small class="text-muted">
-                  <i class="ti ti-tag me-1"></i>{{ note.get_category_display }}
-                  <span class="ms-2">
-                    <i class="ti ti-user me-1"></i>{{ note.created_by.username }}
-                  </span>
-                </small>
+          <div class="pencil-article-item">
+            <div class="pencil-article-image feature"></div>
+            <div class="pencil-article-content">
+              <a href="{% url 'meeting_minutes_detail' this_company.id note.pk %}" class="text-decoration-none">
+                <p class="pencil-article-title">{{ note.meeting_date|date:"Y年m月d日" }} - {{ note.notes|truncatewords:8 }}</p>
+              </a>
+              <div class="pencil-article-meta">
+                <span class="pencil-article-tag feature">{{ note.get_category_display }}</span>
+                <span class="pencil-article-date">{{ note.created_by.username }}</span>
               </div>
             </div>
-          </li>
+          </div>
           {% endfor %}
-        </ul>
-        <div class="mt-3 text-center">
-          <a href="{% url 'meeting_minutes_list' %}" class="btn btn-sm btn-outline-primary">
-            <i class="ti ti-arrow-right me-1"></i>すべてのノートを見る
-          </a>
+          <div class="mt-3 text-center">
+            <a href="{% url 'meeting_minutes_list' %}" class="btn btn-sm btn-outline-secondary">
+              <i class="ti ti-arrow-right me-1"></i>すべてのノートを見る
+            </a>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0 text-center py-3">ノートがありません。</p>
+          <div class="text-center mt-3">
+            <a href="{% url 'meeting_minutes_create' %}" class="btn btn-sm btn-primary">
+              <i class="ti ti-plus me-1"></i>ノートを作成
+            </a>
+          </div>
+          {% endif %}
         </div>
-        {% else %}
-        <p class="text-muted mb-0 text-center py-3">ノートがありません。</p>
-        <div class="text-center mt-3">
-          <a href="{% url 'meeting_minutes_create' %}" class="btn btn-sm btn-primary">
-            <i class="ti ti-plus me-1"></i>ノートを作成
-          </a>
-        </div>
-        {% endif %}
       </div>
     </div>
   </div>
-</div>
 
-<!-- 2Row目：お知らせと通知（2列） -->
-<div class="row">
-  <!-- お知らせ -->
-  <div class="col-lg-6 col-md-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">
-          <i class="ti ti-news me-2"></i>最近のお知らせ
-        </h5>
-      </div>
-      <div class="card-body">
-        {% if recent_announcements %}
-        <ul class="list-group list-group-flush">
+  <!-- 2Row目：お知らせと通知（2列）- Pencil Design System準拠 -->
+  <div class="row g-4 dashboard-section mt-4 pencil-news-row">
+    <!-- お知らせ (articlesCard from pencil) -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100 pencil-news-card">
+        <div class="card-header">
+          <h5 class="card-title">最近のお知らせ</h5>
+          <p class="card-subtitle">重要なお知らせ</p>
+        </div>
+        <div class="card-body">
+          {% if recent_announcements %}
           {% for announcement in recent_announcements %}
-          <li class="list-group-item px-0">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="flex-grow-1">
-                <a href="{% url 'announcement_detail' announcement.pk %}" class="text-decoration-none">
-                  <h6 class="mb-1 fw-semibold">{{ announcement.title|truncatewords:10 }}</h6>
-                  <p class="mb-1 text-muted small">{{ announcement.article|truncatewords:15|striptags }}</p>
-                </a>
-                <small class="text-muted">
-                  <i class="ti ti-calendar me-1"></i>{{ announcement.post_date|date:"Y年m月d日" }}
-                  {% if announcement.categories.all %}
-                  <span class="ms-2">
-                    {% for category in announcement.categories.all %}
-                    <span class="badge bg-info">{{ category.name }}</span>
-                    {% endfor %}
-                  </span>
-                  {% endif %}
-                </small>
+          <div class="pencil-article-item">
+            <div class="pencil-article-image {% if announcement.categories.first.name == '税務' %}tax{% elif announcement.categories.first.name == 'お知らせ' %}notice{% else %}feature{% endif %}"></div>
+            <div class="pencil-article-content">
+              <a href="{% url 'announcement_detail' announcement.pk %}" class="text-decoration-none">
+                <p class="pencil-article-title">{{ announcement.title|truncatewords:10 }}</p>
+              </a>
+              <div class="pencil-article-meta">
+                {% if announcement.categories.first %}
+                <span class="pencil-article-tag {% if announcement.categories.first.name == '税務' %}tax{% elif announcement.categories.first.name == 'お知らせ' %}notice{% else %}feature{% endif %}">{{ announcement.categories.first.name }}</span>
+                {% endif %}
+                <span class="pencil-article-date">{{ announcement.post_date|date:"Y/m/d" }}</span>
               </div>
             </div>
-          </li>
+          </div>
           {% endfor %}
-        </ul>
-        <div class="mt-3 text-center">
-          <a href="{% url 'announcement_list' %}" class="btn btn-sm btn-outline-primary">
-            <i class="ti ti-arrow-right me-1"></i>すべてのお知らせを見る
-          </a>
+          <div class="mt-3 text-center">
+            <a href="{% url 'announcement_list' %}" class="btn btn-sm btn-outline-secondary">
+              <i class="ti ti-arrow-right me-1"></i>すべてのお知らせを見る
+            </a>
+          </div>
+          {% else %}
+          <p class="text-muted mb-0 text-center py-3">お知らせがありません。</p>
+          {% endif %}
         </div>
-        {% else %}
-        <p class="text-muted mb-0 text-center py-3">お知らせがありません。</p>
-        {% endif %}
       </div>
     </div>
-  </div>
-  
-  <!-- 通知 -->
-  <div class="col-lg-6 col-md-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0 fw-semibold">
-          <i class="ti ti-bell me-2"></i>最近の通知
-        </h5>
-      </div>
-      <div class="card-body">
-        {% if recent_notifications %}
-        <ul class="list-group list-group-flush">
+
+    <!-- 通知 (newsCard from pencil) -->
+    <div class="col-12 col-md-6">
+      <div class="card h-100 pencil-news-card">
+        <div class="card-header">
+          <h5 class="card-title">最近の通知</h5>
+          <p class="card-subtitle">システム通知</p>
+        </div>
+        <div class="card-body">
+          {% if recent_notifications %}
           {% for notification in recent_notifications %}
-          <li class="list-group-item px-0">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="flex-grow-1">
-                {% if not notification.is_read %}
-                <span class="badge bg-danger me-2">未読</span>
-                {% endif %}
-                <a href="{% url 'notification_detail' firm_id=notification.firm.id notification_id=notification.id %}" class="text-decoration-none">
-                  <h6 class="mb-1 fw-semibold d-inline">{{ notification.title }}</h6>
-                </a>
-                <p class="mb-1 text-muted small mt-1">{{ notification.message|truncatewords:15 }}</p>
-                <small class="text-muted">
-                  <i class="ti ti-clock me-1"></i>{{ notification.created_at|date:"Y年m月d日 H:i" }}
-                </small>
-              </div>
-              <div>
-                {% if notification.notification_type == 'plan_limit_warning' %}
-                <span class="badge bg-warning">警告</span>
-                {% elif notification.notification_type == 'payment_failed' %}
-                <span class="badge bg-danger">支払い</span>
-                {% elif notification.notification_type == 'subscription_updated' %}
-                <span class="badge bg-info">更新</span>
-                {% elif notification.notification_type == 'member_invited' %}
-                <span class="badge bg-primary">メンバー</span>
-                {% elif notification.notification_type == 'plan_downgrade' %}
-                <span class="badge bg-secondary">プラン</span>
-                {% elif notification.notification_type == 'grace_period_ending' %}
-                <span class="badge bg-warning">グレース期間</span>
-                {% endif %}
-              </div>
+          <div class="pencil-notification-item">
+            <div class="pencil-notification-icon {% if notification.notification_type == 'plan_limit_warning' or notification.notification_type == 'grace_period_ending' %}warning{% elif notification.notification_type == 'payment_failed' %}error{% elif notification.notification_type == 'subscription_updated' %}info{% else %}success{% endif %}">
+              <i class="ti {% if notification.notification_type == 'plan_limit_warning' or notification.notification_type == 'grace_period_ending' %}ti-alert-triangle{% elif notification.notification_type == 'payment_failed' %}ti-alert-circle{% elif notification.notification_type == 'subscription_updated' %}ti-info-circle{% else %}ti-check{% endif %}"></i>
             </div>
-          </li>
+            <div class="pencil-notification-content">
+              <a href="{% url 'notification_detail' firm_id=notification.firm.id notification_id=notification.id %}" class="text-decoration-none">
+                <p class="pencil-notification-title">{% if not notification.is_read %}<span class="badge bg-danger me-1" style="font-size: 9px;">未読</span>{% endif %}{{ notification.title }}</p>
+              </a>
+              <span class="pencil-notification-date">{{ notification.created_at|date:"Y年m月d日" }}</span>
+            </div>
+          </div>
           {% endfor %}
-        </ul>
-        {% load custom_tags %}
-        {% get_user_firm_owner user as user_firm_owner %}
-        {% if user_firm_owner %}
-        <div class="mt-3 text-center">
-          <a href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" class="btn btn-sm btn-outline-primary">
-            <i class="ti ti-arrow-right me-1"></i>すべての通知を見る
-          </a>
+          {% load custom_tags %}
+          {% get_user_firm_owner user as user_firm_owner %}
+          {% if user_firm_owner %}
+          <div class="mt-3 text-center">
+            <a href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" class="btn btn-sm btn-outline-secondary">
+              <i class="ti ti-arrow-right me-1"></i>すべての通知を見る
+            </a>
+          </div>
+          {% endif %}
+          {% else %}
+          <p class="text-muted mb-0 text-center py-3">通知がありません。</p>
+          {% endif %}
         </div>
-        {% endif %}
-        {% else %}
-        <p class="text-muted mb-0 text-center py-3">通知がありません。</p>
-        {% endif %}
       </div>
     </div>
   </div>
-</div>
 
 {% endblock %}
 

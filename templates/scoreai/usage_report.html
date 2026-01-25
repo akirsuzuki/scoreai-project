@@ -108,7 +108,7 @@
           <h5 class="card-title mb-0 fw-semibold">利用状況グラフ</h5>
           <div class="d-flex align-items-center gap-2">
             <label for="months" class="form-label mb-0">表示期間:</label>
-            <select id="months" class="form-select form-select-sm" style="width: 100px;" onchange="updateMonths(this.value)">
+            <select id="months" class="form-select form-select-sm" class="pencil-select-sm" onchange="updateMonths(this.value)">
               <option value="3" {% if months == 3 %}selected{% endif %}>3ヶ月</option>
               <option value="6" {% if months == 6 %}selected{% endif %}>6ヶ月</option>
               <option value="12" {% if months == 12 %}selected{% endif %}>12ヶ月</option>
@@ -266,7 +266,7 @@
             <span class="visually-hidden">読み込み中...</span>
           </div>
         </div>
-        <div id="companyUsageContent" style="display: none;">
+        <div id="companyUsageContent" class="d-none">
           <h6 class="mb-3" id="companyUsageMonthLabel"></h6>
           <div class="table-responsive">
             <table class="table table-hover">
@@ -280,7 +280,7 @@
               </tbody>
             </table>
           </div>
-          <div id="companyUsageEmpty" class="alert alert-info" style="display: none;">
+          <div id="companyUsageEmpty" class="alert alert-info" class="d-none">
             <i class="ti ti-info-circle me-2"></i>この月のクライアント別データはありません。
           </div>
         </div>

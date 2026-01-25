@@ -1,0 +1,613 @@
+/* ============================================
+   Pencil Components CSS
+   ============================================
+
+   このファイルはpencil-score.penの再利用コンポーネントを
+   CSSクラスとして定義したものです。
+
+   Created: 2024
+   Updated: 2026-01-25 (Added notification/article components from Dashboard)
+   Reference: static/scoreai/pencil-score.pen
+   Components: Card, Button, Sidebar, Nav Item, Section Title,
+              Notification Item, Article Item
+   ============================================ */
+
+@import url('./pencil-design-tokens.css');
+
+/* ============================================
+   Card Component (oEJ5W)
+   Pencil: fill: #FFFFFF, stroke: 1px #E2E8F0, width: 300
+   ============================================ */
+
+.pencil-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pencil-card-header {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid var(--border);
+}
+
+.pencil-card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin: 0;
+}
+
+.pencil-card-desc {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.pencil-card-content {
+  padding: 0 var(--space-xl) var(--space-xl) var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  flex: 1;
+}
+
+.pencil-card-body {
+  padding: var(--space-xl);
+  flex: 1;
+}
+
+.pencil-card-footer {
+  padding: var(--space-xl);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* ============================================
+   Button Components (UJIRR, jcpwA)
+   ============================================ */
+
+.pencil-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 10px 16px;
+  height: 40px;
+  border-radius: var(--radius-m);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+}
+
+.pencil-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.pencil-btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+.pencil-btn-primary:hover { opacity: 0.9; }
+
+.pencil-btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--border);
+  color: var(--foreground);
+}
+.pencil-btn-outline:hover { background-color: var(--secondary); }
+
+.pencil-btn-secondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.pencil-btn-danger {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+}
+
+.pencil-btn-success {
+  background-color: var(--color-success);
+  color: #FFFFFF;
+}
+
+.pencil-btn-warning {
+  background-color: var(--color-warning);
+  color: #FFFFFF;
+}
+
+.pencil-btn-sm { font-size: 12px; padding: 6px 12px; height: 32px; }
+.pencil-btn-lg { font-size: 16px; padding: 12px 24px; height: 48px; }
+
+/* ============================================
+   Sidebar Component (8ihX1)
+   ============================================ */
+
+.pencil-sidebar {
+  width: 260px;
+  background-color: var(--sidebar);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-right: 1px solid var(--sidebar-border);
+  z-index: 1000;
+}
+
+.pencil-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.pencil-sidebar-logo {
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--sidebar-accent-foreground);
+  text-decoration: none;
+}
+
+.pencil-sidebar-content {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  overflow-y: auto;
+}
+
+.pencil-sidebar-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 16px 20px;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+/* ============================================
+   Nav Item Components (5CfQ6, YchxO)
+   ============================================ */
+
+.pencil-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 8px 12px;
+  height: 40px;
+  border-radius: var(--radius-m);
+  text-decoration: none;
+  transition: all var(--transition-base);
+}
+
+.pencil-nav-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--sidebar-foreground);
+}
+
+.pencil-nav-label {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--sidebar-foreground);
+}
+
+.pencil-nav-item:hover {
+  background-color: var(--sidebar-accent);
+}
+.pencil-nav-item:hover .pencil-nav-icon,
+.pencil-nav-item:hover .pencil-nav-label {
+  color: var(--sidebar-accent-foreground);
+}
+
+.pencil-nav-item.active {
+  background-color: var(--sidebar-accent);
+}
+.pencil-nav-item.active .pencil-nav-icon,
+.pencil-nav-item.active .pencil-nav-label {
+  color: var(--sidebar-accent-foreground);
+  font-weight: 500;
+}
+
+/* ============================================
+   Section Title (ZBjy7)
+   ============================================ */
+
+.pencil-section-title {
+  padding: 12px 12px 8px 12px;
+}
+
+.pencil-section-text {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sidebar-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   Metrics Card (Dashboard KPI)
+   ============================================ */
+
+.pencil-metrics-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.pencil-metrics-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.pencil-metrics-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--card-foreground);
+}
+
+.pencil-metrics-unit {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+
+.pencil-metrics-change { font-size: 12px; font-weight: 500; }
+.pencil-metrics-change-positive { color: var(--color-success); }
+.pencil-metrics-change-negative { color: var(--color-error); }
+
+/* ============================================
+   Chart Card
+   ============================================ */
+
+.pencil-chart-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  display: flex;
+  flex-direction: column;
+}
+
+.pencil-chart-header {
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+}
+
+.pencil-chart-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin: 0;
+}
+
+.pencil-chart-body {
+  padding: var(--space-xl);
+  flex: 1;
+  min-height: 300px;
+}
+
+/* ============================================
+   News/Notification Card
+   ============================================ */
+
+.pencil-news-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+}
+
+.pencil-news-header {
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pencil-news-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--card-foreground);
+  margin: 0;
+}
+
+.pencil-news-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-lg) var(--space-xl);
+  border-bottom: 1px solid var(--border);
+}
+.pencil-news-item:last-child { border-bottom: none; }
+.pencil-news-item:hover { background-color: var(--muted); }
+
+.pencil-news-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-m);
+  background-color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pencil-news-content { flex: 1; }
+
+.pencil-news-text {
+  font-size: 14px;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.pencil-news-meta {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-top: var(--space-xs);
+}
+
+/* ============================================
+   Layout Utilities
+   ============================================ */
+
+.pencil-row {
+  display: flex;
+  gap: var(--space-xl);
+  flex-wrap: wrap;
+}
+
+.pencil-col { flex: 1; min-width: 280px; }
+
+.pencil-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-xl); }
+.pencil-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
+.pencil-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-xl); }
+
+@media (max-width: 991px) {
+  .pencil-grid-4, .pencil-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 767px) {
+  .pencil-row { flex-direction: column; }
+  .pencil-col { min-width: 100%; }
+  .pencil-grid-2, .pencil-grid-3, .pencil-grid-4 { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   Badge, Progress, Table, Form, Empty State
+   ============================================ */
+
+.pencil-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-pill);
+}
+.pencil-badge-primary { background-color: var(--primary); color: var(--primary-foreground); }
+.pencil-badge-success { background-color: var(--color-success); color: #FFFFFF; }
+.pencil-badge-warning { background-color: var(--color-warning); color: #FFFFFF; }
+.pencil-badge-danger { background-color: var(--color-error); color: #FFFFFF; }
+
+.pencil-progress {
+  width: 100%;
+  height: 8px;
+  background-color: var(--secondary);
+  border-radius: var(--radius-pill);
+}
+.pencil-progress-bar {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: var(--radius-pill);
+}
+
+.pencil-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.pencil-table th { padding: var(--space-md); text-align: left; background-color: var(--secondary); color: var(--muted-foreground); }
+.pencil-table td { padding: var(--space-md); border-bottom: 1px solid var(--border); }
+.pencil-table tbody tr:hover { background-color: var(--muted); }
+
+.pencil-form-group { margin-bottom: var(--space-lg); }
+.pencil-form-label { display: block; font-size: 14px; font-weight: 500; margin-bottom: var(--space-sm); }
+.pencil-form-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-sm);
+}
+.pencil-form-input:focus { outline: none; border-color: var(--primary); }
+
+.pencil-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-4xl);
+  text-align: center;
+}
+.pencil-empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background-color: var(--secondary);
+  margin-bottom: var(--space-lg);
+}
+.pencil-empty-title { font-size: 18px; font-weight: 600; margin: 0 0 var(--space-sm); }
+.pencil-empty-desc { font-size: 14px; color: var(--muted-foreground); max-width: 400px; }
+
+/* ============================================
+   Notification/News Components (from pencil-score.pen Dashboard)
+   News Item: gap 12, padding [12, 0]
+   Icon Background: 32x32, cornerRadius 16
+   Icon: 16x16
+   Title: 13px/500
+   Date: 11px/normal, #94A3B8
+   ============================================ */
+
+.pencil-notification-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--secondary);
+}
+
+.pencil-notification-item:last-child {
+  border-bottom: none;
+}
+
+.pencil-notification-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pencil-notification-icon i {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.pencil-notification-icon.warning {
+  background-color: var(--notification-bg-warning);
+  color: var(--color-warning);
+}
+
+.pencil-notification-icon.info {
+  background-color: var(--notification-bg-info);
+  color: var(--color-info);
+}
+
+.pencil-notification-icon.success {
+  background-color: var(--notification-bg-success);
+  color: var(--color-success);
+}
+
+.pencil-notification-icon.error {
+  background-color: var(--notification-bg-error);
+  color: var(--color-error);
+}
+
+.pencil-notification-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pencil-notification-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pencil-notification-date {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 400;
+  color: #94A3B8;
+  margin: 0;
+}
+
+/* ============================================
+   Article Item (from pencil-score.pen Dashboard)
+   Image: 48x48, cornerRadius 6
+   Title: 13px/500
+   Tag: 10px/500
+   Date: 10px/normal, #94A3B8
+   Meta gap: 8
+   ============================================ */
+
+.pencil-article-image {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 6px;
+}
+
+.pencil-article-image.tax {
+  background-color: var(--notification-bg-tax);
+}
+
+.pencil-article-image.notice {
+  background-color: var(--notification-bg-warning);
+}
+
+.pencil-article-image.feature {
+  background-color: var(--notification-bg-success);
+}
+
+.pencil-article-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pencil-article-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pencil-article-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pencil-article-tag {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.pencil-article-tag.tax {
+  color: var(--color-info);
+}
+
+.pencil-article-tag.notice {
+  color: var(--color-warning);
+}
+
+.pencil-article-tag.feature {
+  color: var(--color-success);
+}
+
+.pencil-article-date {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 400;
+  color: #94A3B8;
+}

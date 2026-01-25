@@ -50,21 +50,22 @@
         </div>
       </div>
     </div>
-<div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card">
       <div class="card-body">
-        <a href="{% url 'import_fiscal_summary_year_MF' %}" style="font-weight: bold; font-size: 1.2em;">
+        <a href="{% url 'import_fiscal_summary_year_MF' %}" class="pencil-btn-link-auto">
           <i class="fa-solid fa-angles-right"></i><i class="fa-solid fa-angles-right"></i>
           マネーフォワードから残高試算表（貸借対照表・損益計算書）をダウンロードしてそのままインポートする場合はこちら
         </a>
       </div>
     </div>
   </div>
-  <p></p>
+</div>
 
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">サンプルフォーマット</h5>
       </div>
@@ -82,9 +83,9 @@
   </div>
 </div>
 
-<div class="row mt-4">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+<div class="row">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">CSVインポート</h5>
       </div>
@@ -112,9 +113,9 @@
 
             <div class="alert alert-info" role="alert">
               <p>【注意点】<br>
-                <p style="font-weight: bold;">1. 複数の会社で利用している場合</p>
+                <p class="fw-bold">1. 複数の会社で利用している場合</p>
                 <p>CSVファイルで会社コードを指定することはできません。現在選択中の会社のデータがインポートされます。</p>
-                <p style="font-weight: bold;">2. 年度（year）について</p>
+                <p class="fw-bold">2. 年度（year）について</p>
                 <p>CSVファイルの1列目にある年度（year）は、各期首時点の年度を表します。</p>
                 <p>例えば、2024年3月決算の場合は2023（2023年4月が期首であるため2023年度と考えます）を入力します。</p>
             </div>
@@ -134,4 +135,6 @@
     </div>
   </div>
 </div>
+  </div>  <!-- .tab-pane -->
+</div>  <!-- .tab-content -->
 {% endblock %}

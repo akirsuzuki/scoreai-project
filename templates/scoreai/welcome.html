@@ -1,4 +1,3 @@
-{% load django_bootstrap5 %}
 {% load static %}
 
 <!doctype html>
@@ -9,7 +8,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Score_AI | ようこそ</title>
   <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
-  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+  <!-- Pencil Design System -->
+  <link rel="stylesheet" href="{% static 'scoreai/css/pencil-design-system.css' %}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
     .welcome-hero {
@@ -117,14 +117,14 @@
                      height="auto"
                      alt="SCore_Ai" 
                      class="mb-4"
-                     style="filter: brightness(0) invert(1); max-width: 100%; height: auto;"
+                     class="pencil-logo-invert"
                      onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                <div style="display: none; font-size: 2rem; font-weight: 700; letter-spacing: 2px;">
+                <div class="d-none pencil-logo-text-fallback">
                   SCore_Ai
                 </div>
               </div>
               <h1 class="mb-3">ようこそ SCore_Ai へ</h1>
-              <p class="mb-0 opacity-90" style="font-size: 1.1rem;">
+              <p class="mb-0 opacity-90 pencil-text-lg">
                 {{ request.user.username }} さん、ご登録ありがとうございます。<br>
                 まずはFirmを登録して、財務分析を始めましょう。
               </p>
@@ -182,9 +182,9 @@
               </div>
               
               <div class="col-md-6">
-                <div class="card step-card" style="opacity: 0.6;">
+                <div class="card step-card pencil-step-card-disabled">
                   <div class="card-body p-4 text-center">
-                    <div class="step-number mx-auto" style="background: #ccc;">2</div>
+                    <div class="step-number mx-auto pencil-step-number-disabled">2</div>
                     <div class="step-icon mx-auto">
                       <i class="ti ti-building"></i>
                     </div>
@@ -207,7 +207,7 @@
                     <div class="row align-items-center">
                       <div class="col-md-8">
                         <div class="d-flex align-items-center mb-3">
-                          <div class="step-icon me-3" style="margin-bottom: 0;">
+                          <div class="step-icon me-3 mb-0">
                             <i class="ti ti-building"></i>
                           </div>
                           <div>
@@ -267,7 +267,7 @@
                   <div class="col-md-4">
                     <div class="d-flex">
                       <div class="flex-shrink-0">
-                        <i class="ti ti-chart-line text-primary" style="font-size: 1.5rem;"></i>
+                        <i class="ti ti-chart-line text-primary pencil-icon-lg"></i>
                       </div>
                       <div class="ms-3">
                         <h6>財務分析</h6>
@@ -278,7 +278,7 @@
                   <div class="col-md-4">
                     <div class="d-flex">
                       <div class="flex-shrink-0">
-                        <i class="ti ti-building-bank text-primary" style="font-size: 1.5rem;"></i>
+                        <i class="ti ti-building-bank text-primary pencil-icon-lg"></i>
                       </div>
                       <div class="ms-3">
                         <h6>借入管理</h6>
@@ -289,7 +289,7 @@
                   <div class="col-md-4">
                     <div class="d-flex">
                       <div class="flex-shrink-0">
-                        <i class="ti ti-brain text-primary" style="font-size: 1.5rem;"></i>
+                        <i class="ti ti-brain text-primary pencil-icon-lg"></i>
                       </div>
                       <div class="ms-3">
                         <h6>AI分析</h6>
@@ -306,8 +306,8 @@
       </div>
     </div>
   </div>
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script>
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

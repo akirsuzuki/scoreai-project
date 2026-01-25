@@ -65,12 +65,12 @@
         <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
           {% if available_years and selected_year %}
           <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
-            <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
+            <select name="year" id="year-select" class="form-select form-select-sm pencil-select-md" onchange="document.getElementById('year-budget-form').submit();">
               {% for year in available_years %}
               <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
               {% endfor %}
             </select>
-            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
+            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm pencil-select-sm" onchange="document.getElementById('year-budget-form').submit();">
               <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
               <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
             </select>
@@ -707,16 +707,16 @@
         </div>
         {% endif %}
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         {% if fiscal_summary_year %}
         {% if previous_year_data %}
-        <a href="{% url 'fiscal_summary_year_detail' previous_year_data.id %}" class="btn btn-outline-secondary me-2"><i class="fa-solid fa-angles-left"></i> 前の年度</a>
+        <a href="{% url 'fiscal_summary_year_detail' previous_year_data.id %}" class="btn btn-outline-secondary"><i class="fa-solid fa-angles-left"></i> 前の年度</a>
         {% endif %}
         {% if next_year_data %}
-        <a href="{% url 'fiscal_summary_year_detail' next_year_data.id %}" class="btn btn-outline-secondary me-2">次の年度 <i class="fa-solid fa-angles-right"></i></a>
+        <a href="{% url 'fiscal_summary_year_detail' next_year_data.id %}" class="btn btn-outline-secondary">次の年度 <i class="fa-solid fa-angles-right"></i></a>
         {% endif %}
         <a href="{% url 'fiscal_summary_year_update' fiscal_summary_year.id %}" class="btn btn-primary">編集</a>
-        <a href="{% url 'fiscal_summary_year_delete' fiscal_summary_year.id %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+        <a href="{% url 'fiscal_summary_year_delete' fiscal_summary_year.id %}" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</a>
         {% endif %}
       </div>
     </div>

@@ -1,6 +1,152 @@
 {% extends 'scoreai/base.html' %}
 {% load humanize %}
 
+{% block head %}
+<style>
+  /* プランカードのヘッダー色 */
+  .plan-header-enterprise {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+    color: #fff;
+  }
+  .plan-header-professional {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: #fff;
+  }
+  .plan-header-starter {
+    background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+    color: #fff;
+  }
+  .plan-header-free {
+    background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%);
+    color: #fff;
+  }
+
+  /* プランバッジ */
+  .plan-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .plan-badge-enterprise {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+  .plan-badge-professional {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+  .plan-badge-starter {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+  .plan-badge-free {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+
+  /* 料金表示 */
+  .price-display {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.2;
+  }
+  .price-display .currency {
+    font-size: 1.5rem;
+    font-weight: 500;
+  }
+  .price-display .period {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #64748b;
+  }
+
+  /* 機能テーブル */
+  .feature-table th {
+    background-color: #f8fafc;
+    font-weight: 500;
+    color: #475569;
+    border: none;
+    padding: 12px 16px;
+  }
+  .feature-table td {
+    border: none;
+    padding: 12px 16px;
+    color: #0f172a;
+  }
+  .feature-table tr {
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .feature-table tr:last-child {
+    border-bottom: none;
+  }
+
+  /* 機能リスト */
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .feature-item i {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #dcfce7;
+    color: #16a34a;
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .feature-item span {
+    color: #334155;
+  }
+
+  /* サイドカード */
+  .signup-card {
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .signup-card .card-header {
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .signup-card .btn-signup {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border: none;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+  .signup-card .btn-signup:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  /* 現在のプランバッジ */
+  .current-plan-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #dbeafe;
+    color: #1d4ed8;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
@@ -10,48 +156,55 @@
 </div>
 
 <div class="container-fluid">
-    <div class="row g-3">
+    <div class="row g-4">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header {% if plan.plan_type == 'enterprise' %}bg-primary text-white{% elif plan.plan_type == 'professional' %}bg-info text-white{% elif plan.plan_type == 'starter' %}bg-success text-white{% else %}bg-secondary text-white{% endif %} p-3">
-                    <h3 class="card-title mb-0 fw-semibold">{{ plan.name }}</h3>
+            <div class="card border-0 shadow-sm" style="border-radius: 12px; overflow: hidden;">
+                <div class="card-header plan-header-{% if plan.plan_type == 'enterprise' %}enterprise{% elif plan.plan_type == 'professional' %}professional{% elif plan.plan_type == 'starter' %}starter{% else %}free{% endif %} p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0 fw-bold">{{ plan.name }}</h3>
+                        <span class="plan-badge plan-badge-{% if plan.plan_type == 'enterprise' %}enterprise{% elif plan.plan_type == 'professional' %}professional{% elif plan.plan_type == 'starter' %}starter{% else %}free{% endif %}">
+                            {% if plan.plan_type == 'enterprise' %}Enterprise{% elif plan.plan_type == 'professional' %}Professional{% elif plan.plan_type == 'starter' %}Starter{% else %}Free{% endif %}
+                        </span>
+                    </div>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     {% if plan.description %}
-                    <p class="lead mb-4">{{ plan.description }}</p>
+                    <p class="lead text-muted mb-4">{{ plan.description }}</p>
                     {% endif %}
-                    
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">料金</h4>
-                        <div class="row g-3">
+
+                    <div class="mb-4 pb-4" style="border-bottom: 1px solid #e2e8f0;">
+                        <h5 class="fw-semibold mb-3 text-muted" style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">料金</h5>
+                        <div class="row g-4">
                             <div class="col-md-6">
-                                <h3 class="mb-0">
+                                <div class="price-display">
                                     {% if plan.monthly_price == 0 %}
                                         無料
                                     {% else %}
-                                        ¥{{ plan.monthly_price|floatformat:0|intcomma }}/月
+                                        <span class="currency">¥</span>{{ plan.monthly_price|floatformat:0|intcomma }}<span class="period">/月</span>
                                     {% endif %}
-                                </h3>
+                                </div>
                             </div>
                             {% if plan.yearly_price %}
                             <div class="col-md-6">
-                                <h3 class="mb-0">¥{{ plan.yearly_price|floatformat:0|intcomma }}/年</h3>
-                                <small class="text-muted">（{{ plan.yearly_discount_months }}ヶ月分無料）</small>
+                                <div class="price-display">
+                                    <span class="currency">¥</span>{{ plan.yearly_price|floatformat:0|intcomma }}<span class="period">/年</span>
+                                </div>
+                                <span class="badge" style="background-color: #fef3c7; color: #b45309; font-weight: 500;">{{ plan.yearly_discount_months }}ヶ月分お得</span>
                             </div>
                             {% endif %}
                         </div>
                     </div>
-                    
-                    <div class="mb-3">
-                        <h4 class="fw-semibold mb-3">機能制限</h4>
-                        <table class="table mb-0">
+
+                    <div class="mb-4 pb-4" style="border-bottom: 1px solid #e2e8f0;">
+                        <h5 class="fw-semibold mb-3 text-muted" style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">機能制限</h5>
+                        <table class="table feature-table mb-0">
                             <tr>
-                                <th>管理できるCompany数</th>
+                                <th style="width: 50%;">管理できるCompany数</th>
                                 <td>
                                     {% if plan.is_unlimited_companies %}
-                                        無制限
+                                        <span class="fw-semibold" style="color: #16a34a;">無制限</span>
                                     {% else %}
-                                        {{ plan.max_companies }}社まで
+                                        <span class="fw-semibold">{{ plan.max_companies }}社</span>まで
                                     {% endif %}
                                 </td>
                             </tr>
@@ -59,9 +212,9 @@
                                 <th>AI相談回数（月次）</th>
                                 <td>
                                     {% if plan.is_unlimited_ai_consultations %}
-                                        無制限
+                                        <span class="fw-semibold" style="color: #16a34a;">無制限</span>
                                     {% else %}
-                                        月{{ plan.max_ai_consultations_per_month }}回まで
+                                        月<span class="fw-semibold">{{ plan.max_ai_consultations_per_month }}回</span>まで
                                     {% endif %}
                                 </td>
                             </tr>
@@ -69,102 +222,150 @@
                                 <th>OCR読み込み回数（月次）</th>
                                 <td>
                                     {% if plan.is_unlimited_ocr %}
-                                        無制限
+                                        <span class="fw-semibold" style="color: #16a34a;">無制限</span>
                                     {% else %}
-                                        月{{ plan.max_ocr_per_month }}回まで
+                                        月<span class="fw-semibold">{{ plan.max_ocr_per_month }}回</span>まで
                                     {% endif %}
                                 </td>
                             </tr>
                         </table>
                     </div>
-                    
+
                     <div class="mb-0">
-                        <h4 class="fw-semibold mb-3">利用可能な機能</h4>
-                        <ul class="list-unstyled mb-0">
-                            {% if plan.cloud_storage_google_drive or plan.cloud_storage_box or plan.cloud_storage_dropbox or plan.cloud_storage_onedrive %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> クラウドストレージ連携:
-                                {% if plan.cloud_storage_google_drive %}Google Drive{% endif %}
-                                {% if plan.cloud_storage_box %}Box{% endif %}
-                                {% if plan.cloud_storage_dropbox %}Dropbox{% endif %}
-                                {% if plan.cloud_storage_onedrive %}OneDrive{% endif %}
-                            </li>
-                            {% endif %}
-                            {% if plan.report_basic %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> 基本レポート</li>
-                            {% endif %}
-                            {% if plan.report_advanced %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> 高度なレポート（PDF/Excel出力）</li>
-                            {% endif %}
-                            {% if plan.report_custom %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> カスタムレポート</li>
-                            {% endif %}
-                            {% if plan.marketing_support %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> マーケティング支援
-                                {% if plan.marketing_support_seminar > 0 %}
-                                （セミナー共催: 年{{ plan.marketing_support_seminar }}回まで）
+                        <h5 class="fw-semibold mb-3 text-muted" style="font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px;">利用可能な機能</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {% if plan.cloud_storage_google_drive or plan.cloud_storage_box or plan.cloud_storage_dropbox or plan.cloud_storage_onedrive %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>クラウドストレージ連携:
+                                        {% if plan.cloud_storage_google_drive %}Google Drive{% endif %}
+                                        {% if plan.cloud_storage_box %}Box{% endif %}
+                                        {% if plan.cloud_storage_dropbox %}Dropbox{% endif %}
+                                        {% if plan.cloud_storage_onedrive %}OneDrive{% endif %}
+                                    </span>
+                                </div>
                                 {% endif %}
-                                {% if plan.marketing_support_offline > 0 %}
-                                （オフ会実施支援: 年{{ plan.marketing_support_offline }}回まで）
+                                {% if plan.report_basic %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>基本レポート</span>
+                                </div>
                                 {% endif %}
-                                {% if plan.marketing_support_newsletter %}
-                                （メルマガ配信支援）
+                                {% if plan.report_advanced %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>高度なレポート（PDF/Excel出力）</span>
+                                </div>
                                 {% endif %}
-                            </li>
-                            {% endif %}
-                            {% if plan.api_integration %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> API連携</li>
-                            {% endif %}
-                            {% if plan.priority_support %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> 優先サポート</li>
-                            {% endif %}
-                            {% if plan.profile_page_enhanced %}
-                            <li class="mb-2"><i class="ti ti-check text-success"></i> プロフィールページ強化</li>
-                            {% endif %}
-                        </ul>
+                                {% if plan.report_custom %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>カスタムレポート</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                {% if plan.marketing_support %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>マーケティング支援
+                                        {% if plan.marketing_support_seminar > 0 %}
+                                        <br><small class="text-muted">セミナー共催: 年{{ plan.marketing_support_seminar }}回まで</small>
+                                        {% endif %}
+                                        {% if plan.marketing_support_offline > 0 %}
+                                        <br><small class="text-muted">オフ会実施支援: 年{{ plan.marketing_support_offline }}回まで</small>
+                                        {% endif %}
+                                        {% if plan.marketing_support_newsletter %}
+                                        <br><small class="text-muted">メルマガ配信支援</small>
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                {% endif %}
+                                {% if plan.api_integration %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>API連携</span>
+                                </div>
+                                {% endif %}
+                                {% if plan.priority_support %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>優先サポート</span>
+                                </div>
+                                {% endif %}
+                                {% if plan.profile_page_enhanced %}
+                                <div class="feature-item">
+                                    <i class="ti ti-check"></i>
+                                    <span>プロフィールページ強化</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
+
         <div class="col-md-4">
-            <div class="card">
+            <div class="card signup-card">
                 <div class="card-header p-3">
                     <h5 class="card-title mb-0 fw-semibold">プラン登録</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     {% if is_current_plan %}
-                    <p class="text-muted mb-3">現在このプランに登録されています。</p>
-                    <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-primary w-100">サブスクリプション管理</a>
+                    <div class="current-plan-badge mb-3">
+                        <i class="ti ti-check"></i>
+                        現在のプラン
+                    </div>
+                    <p class="text-muted mb-4">このプランに登録されています。</p>
+                    <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-outline-primary w-100">
+                        <i class="ti ti-settings me-2"></i>サブスクリプション管理
+                    </a>
                     {% else %}
                     {% if plan.plan_type == 'free' %}
                     <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-primary w-100">無料で登録</button>
+                        <button type="submit" class="btn btn-signup btn-primary w-100">
+                            <i class="ti ti-rocket me-2"></i>無料で始める
+                        </button>
                     </form>
                     {% else %}
                     <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label">請求サイクル</label>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">請求サイクル</label>
                             <select name="billing_cycle" class="form-select">
                                 <option value="monthly">月払い</option>
                                 {% if plan.yearly_price %}
-                                <option value="yearly">年払い（{{ plan.yearly_discount_months }}ヶ月分無料）</option>
+                                <option value="yearly">年払い（{{ plan.yearly_discount_months }}ヶ月分お得）</option>
                                 {% endif %}
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">このプランに登録</button>
+                        <button type="submit" class="btn btn-signup btn-primary w-100">
+                            <i class="ti ti-credit-card me-2"></i>このプランに登録
+                        </button>
                     </form>
                     {% endif %}
                     {% endif %}
                 </div>
             </div>
+
+            <div class="card mt-4 border-0" style="background-color: #f8fafc; border-radius: 12px;">
+                <div class="card-body p-4">
+                    <h6 class="fw-semibold mb-3">
+                        <i class="ti ti-help-circle me-2 text-primary"></i>サポートが必要ですか？
+                    </h6>
+                    <p class="text-muted small mb-0">プランについてご不明な点がございましたら、お気軽にお問い合わせください。</p>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="mt-3">
-        <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-secondary">プラン一覧に戻る</a>
+
+    <div class="mt-4">
+        <a href="{% url 'plan_list' firm_id=firm.id %}" class="btn btn-outline-secondary">
+            <i class="ti ti-arrow-left me-2"></i>プラン一覧に戻る
+        </a>
     </div>
 </div>
 {% endblock %}
-

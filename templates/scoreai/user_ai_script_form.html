@@ -42,41 +42,44 @@
                         </div>
                         
                         <!-- ガイダンスセクション -->
-                        <div class="alert alert-info mb-4">
-                            <h6 class="alert-heading mb-3">
-                                <i class="ti ti-info-circle me-2"></i>システムプロンプトとプロンプトテンプレートの違い
-                            </h6>
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <strong class="text-primary">システムプロンプト（System Instruction）</strong>
-                                    <p class="mb-2 small">
-                                        AIの<strong>役割や振る舞い</strong>を定義します。AIに「あなたは何者か」「どのように回答すべきか」を指示する設定です。
-                                    </p>
-                                    <ul class="small mb-0">
-                                        <li>AIの人格や専門性を定義</li>
-                                        <li>回答のスタイルやトーンを指定</li>
-                                        <li>常にAIに送信される（会話の文脈に依存しない）</li>
-                                        <li>例：「あなたは経験豊富な財務アドバイザーです。実践的で具体的なアドバイスを提供してください。」</li>
-                                    </ul>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <strong class="text-success">プロンプトテンプレート（Prompt Template）</strong>
-                                    <p class="mb-2 small">
-                                        実際の<strong>質問とデータを組み合わせたメッセージ</strong>の構造を定義します。変数を含むテンプレートで、実際のデータが埋め込まれてからAIに送信されます。
-                                    </p>
-                                    <ul class="small mb-0">
-                                        <li>ユーザーの質問と会社データを含む</li>
-                                        <li>変数（{user_message}, {company_name}など）を使用</li>
-                                        <li>各質問ごとに動的に生成される</li>
-                                        <li>例：「【会社情報】会社名: {company_name}【ユーザーの質問】{user_message}」</li>
-                                    </ul>
+                        <div class="border rounded mb-4" style="background-color: #e8f4fc;">
+                            <div class="p-3 border-bottom" style="background-color: #e8f4fc;">
+                                <i class="ti ti-info-circle me-2 text-primary"></i>
+                                <span class="fw-semibold">システムプロンプトとプロンプトテンプレートの違い</span>
+                            </div>
+                            <div class="p-3">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3 mb-md-0">
+                                        <h6 class="text-primary fw-bold mb-2">システムプロンプト（System Instruction）</h6>
+                                        <p class="small mb-2">
+                                            AIの<strong>役割や振る舞い</strong>を定義します。AIに「あなたは何者か」「どのように回答すべきか」を指示する設定です。
+                                        </p>
+                                        <ul class="small mb-0 ps-3">
+                                            <li>AIの人格や専門性を定義</li>
+                                            <li>回答のスタイルやトーンを指定</li>
+                                            <li>常にAIに送信される（会話の文脈に依存しない）</li>
+                                            <li>例：「あなたは経験豊富な財務アドバイザーです。実践的で具体的なアドバイスを提供してください。」</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-info fw-bold mb-2">プロンプトテンプレート（Prompt Template）</h6>
+                                        <p class="small mb-2">
+                                            実際の<strong>質問とデータを組み合わせたメッセージ</strong>の構造を定義します。変数を含むテンプレートで、実際のデータが埋め込まれてからAIに送信されます。
+                                        </p>
+                                        <ul class="small mb-0 ps-3">
+                                            <li>ユーザーの質問と会社データを含む</li>
+                                            <li>変数（{user_message}, {company_name}など）を使用</li>
+                                            <li>各質問ごとに動的に生成される</li>
+                                            <li>例：「【会社情報】会社名: {company_name}【ユーザーの質問】{user_message}」</li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mt-3 p-3 bg-light rounded">
-                                <strong class="d-block mb-2">💡 使い分けのポイント</strong>
-                                <ul class="small mb-0">
-                                    <li><strong>システムプロンプト</strong>：「AIは誰か」「どう振る舞うか」を定義（例：「財務の専門家として」「簡潔に回答する」）</li>
-                                    <li><strong>プロンプトテンプレート</strong>：「何を聞くか」「どんなデータを使うか」を定義（例：「決算書データ{fiscal_summary}を使って分析してください」）</li>
+                            <div class="p-3 border-top" style="background-color: #e8f4fc;">
+                                <span class="fw-semibold">💡 使い分けのポイント</span>
+                                <ul class="small mb-0 mt-2 ps-3">
+                                    <li><strong class="text-primary">システムプロンプト</strong>：「AIは誰か」「どう振る舞うか」を定義（例：「財務の専門家として」「簡潔に回答する」）</li>
+                                    <li><strong class="text-info">プロンプトテンプレート</strong>：「何を聞くか」「どんなデータを使うか」を定義（例：「決算書データ{fiscal_summary}を使って分析してください」）</li>
                                 </ul>
                             </div>
                         </div>
@@ -123,7 +126,7 @@
                                 </small>
                                 <div class="mt-3">
                                     <details>
-                                        <summary class="text-primary" style="cursor: pointer;"><strong>使用例を見る</strong></summary>
+                                        <summary class="text-primary cursor-pointer"><strong>使用例を見る</strong></summary>
                                         <div class="mt-2 p-3 bg-light border rounded">
                                             <strong>基本的な例:</strong><br>
                                             <pre class="bg-white p-2 border rounded small">【会社情報】

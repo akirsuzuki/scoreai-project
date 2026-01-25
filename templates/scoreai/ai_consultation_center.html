@@ -6,157 +6,143 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12 mb-4">
-        <div class="d-flex align-items-center gap-2 mb-2">
-            <h4 class="fw-semibold mb-0">AI相談センター</h4>
-            <span class="badge bg-warning text-dark">ベータ版</span>
-        </div>
-        <p class="text-muted mb-0">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
-    </div>
-</div>
-
-<!-- タブナビゲーション -->
-<div class="row mb-4">
-    <div class="col-12">
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
-                    <i class="ti ti-message-circle me-1"></i>汎用相談室
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="industry-tab" data-bs-toggle="tab" data-bs-target="#industry" type="button" role="tab" aria-controls="industry" aria-selected="false">
-                    <i class="ti ti-building me-1"></i>業界別相談室
-                </button>
-            </li>
-        </ul>
-    </div>
-</div>
-
-<!-- タブコンテンツ -->
-<div class="tab-content" id="consultationTabsContent">
-    <!-- 汎用相談室 -->
-    <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
-        <div class="row">
-            <div class="col-12 mb-3">
-                <div class="alert alert-light border">
-                    <i class="ti ti-info-circle me-2 text-primary"></i>
-                    <strong>汎用相談室</strong>では、財務、税務、法律、DX、人事など、幅広い分野の相談に対応します。
-                </div>
+<!-- AI相談センター - Pencil Design System (YnK3l) -->
+<div class="ai-consultation-page">
+    <!-- Page Header (RpPP2) - gap: 8px, vertical layout -->
+    <div class="ai-page-header">
+        <div class="ai-title-area">
+            <div class="ai-title-row">
+                <h1 class="ai-page-title">AI相談センター</h1>
+                <span class="ai-beta-badge">ベータ版</span>
             </div>
-            <div class="col-12">
-                <div class="row">
-                    {% for consultation_type in consultation_types %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card consultation-card h-100" style="border-top: 4px solid {{ consultation_type.color }};">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title consultation-card-title text-center">
-                                    {{ consultation_type.name }}
-                                </h5>
-                                <p class="card-text consultation-card-description text-center flex-grow-1">
-                                    {{ consultation_type.description }}
-                                </p>
-                                <div class="text-center mt-auto">
-                                    <a href="{% url 'ai_consultation' consultation_type.id %}" class="btn btn-primary consultation-card-button">
-                                        相談開始 →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="col-12">
-                        <div class="alert alert-info">
-                            <p class="text-center mb-0">相談タイプが登録されていません。</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
+            <p class="ai-subtitle">あなたの会社データを活用して、最適なアドバイスを提供します。</p>
         </div>
     </div>
 
-    <!-- 業界別相談室 -->
-    <div class="tab-pane fade" id="industry" role="tabpanel" aria-labelledby="industry-tab">
-        <div class="row">
-            <div class="col-12 mb-3">
-                <div class="alert alert-light border">
-                    <i class="ti ti-info-circle me-2 text-success"></i>
-                    <strong>業界別相談室</strong>では、業界特有の課題に対応した専門的な相談や、銀行提出用の書類作成が可能です。
+    <!-- Tab Navigation (Eq7E9) - bottom border #E2E8F0 -->
+    <div class="ai-tab-navigation" role="tablist">
+        <button class="ai-tab-item active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab" aria-controls="general" aria-selected="true">
+            <i class="ti ti-message-circle"></i>
+            <span>汎用相談室</span>
+        </button>
+        <button class="ai-tab-item" id="industry-tab" data-bs-toggle="tab" data-bs-target="#industry" type="button" role="tab" aria-controls="industry" aria-selected="false">
+            <i class="ti ti-building"></i>
+            <span>業界別相談室</span>
+        </button>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="tab-content" id="consultationTabsContent">
+        <!-- 汎用相談室 -->
+        <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <!-- Info Alert (NGq7i) - #F8FAFC bg, #E2E8F0 border, 8px radius, 16px padding -->
+            <div class="ai-info-alert">
+                <i class="ti ti-info-circle ai-alert-icon"></i>
+                <span class="ai-alert-text">汎用相談室では、財務、税務、法律、DX、人事など、幅広い分野の相談に対応します。</span>
+            </div>
+
+            <!-- Card Grid (PL9MA) - gap: 16px, 3 columns equal width -->
+            <div class="ai-card-grid">
+                {% for consultation_type in consultation_types %}
+                <div class="ai-consultation-card" style="--card-accent-color: {{ consultation_type.color }};">
+                    <h3 class="ai-card-title">{{ consultation_type.name }}</h3>
+                    <p class="ai-card-description">{{ consultation_type.description }}</p>
+                    <a href="{% url 'ai_consultation' consultation_type.id %}" class="ai-card-button">
+                        <span>相談開始</span>
+                        <i class="ti ti-arrow-right"></i>
+                    </a>
+                </div>
+                {% empty %}
+                <div class="ai-empty-state">
+                    <p>相談タイプが登録されていません。</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 業界別相談室 -->
+        <div class="tab-pane fade" id="industry" role="tabpanel" aria-labelledby="industry-tab">
+            <!-- Info Alert -->
+            <div class="ai-info-alert ai-info-alert-success">
+                <i class="ti ti-info-circle ai-alert-icon"></i>
+                <span class="ai-alert-text">業界別相談室では、業界特有の課題に対応した専門的な相談や、銀行提出用の書類作成が可能です。</span>
+            </div>
+
+            <!-- Card Grid -->
+            {% if industry_classifications %}
+            <div class="ai-card-grid">
+                {% for classification in industry_classifications %}
+                <div class="ai-consultation-card ai-consultation-card-success">
+                    <div class="ai-card-header-row">
+                        {% if classification.icon %}
+                        <i class="{{ classification.icon }} ai-card-icon"></i>
+                        {% else %}
+                        <i class="ti ti-building ai-card-icon"></i>
+                        {% endif %}
+                        <h3 class="ai-card-title">{{ classification.name }}</h3>
+                    </div>
+                    {% if classification.memo %}
+                    <p class="ai-card-description">{{ classification.memo|truncatewords:30 }}</p>
+                    {% else %}
+                    <p class="ai-card-description">{{ classification.name }}に関する専門的な相談や書類作成に対応します。</p>
+                    {% endif %}
+                    <a href="{% url 'industry_classification_detail' classification_id=classification.id %}" class="ai-card-button ai-card-button-success">
+                        <span>詳細を見る</span>
+                        <i class="ti ti-arrow-right"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="ai-empty-state-detailed">
+                <i class="ti ti-info-circle"></i>
+                <div class="ai-empty-content">
+                    <h5>業界別相談室を利用するには</h5>
+                    <p>業界別相談室を利用するには、業界分類の登録が必要です。</p>
+                    <span class="ai-empty-note">
+                        <i class="ti ti-lock"></i>
+                        業界分類の設定は管理者が行います。管理者にお問い合わせください。
+                    </span>
                 </div>
             </div>
-            <div class="col-12">
-                {% if industry_classifications %}
-                <div class="row">
-                    {% for classification in industry_classifications %}
-                    <div class="col-md-6 col-lg-4 mb-4">
-                        <div class="card consultation-card h-100" style="border-top: 4px solid #10b981;">
-                            <div class="card-body d-flex flex-column">
-                                <div class="d-flex align-items-center mb-3">
-                                    {% if classification.icon %}
-                                    <i class="{{ classification.icon }} fs-2 text-success me-3"></i>
-                                    {% else %}
-                                    <i class="ti ti-building fs-2 text-success me-3"></i>
-                                    {% endif %}
-                                    <h5 class="card-title consultation-card-title mb-0">
-                                        {{ classification.name }}
-                                    </h5>
-                                </div>
-                                {% if classification.memo %}
-                                <p class="card-text consultation-card-description flex-grow-1">
-                                    {{ classification.memo|truncatewords:30 }}
-                                </p>
-                                {% else %}
-                                <p class="card-text consultation-card-description flex-grow-1 text-muted">
-                                    {{ classification.name }}に関する専門的な相談や書類作成に対応します。
-                                </p>
-                                {% endif %}
-                                <div class="text-center mt-auto">
-                                    <a href="{% url 'industry_classification_detail' classification_id=classification.id %}" class="btn btn-success consultation-card-button">
-                                        詳細を見る →
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                {% else %}
-                <div class="col-12">
-                    <div class="alert alert-info">
-                        <div class="d-flex align-items-start">
-                            <i class="ti ti-info-circle me-3 fs-4"></i>
-                            <div class="flex-grow-1">
-                                <h5 class="alert-heading mb-3">業界別相談室を利用するには</h5>
-                                <p class="mb-2">業界別相談室を利用するには、業界分類の登録が必要です。</p>
-                                <p class="mb-0 text-muted small">
-                                    <i class="ti ti-lock me-1"></i>業界分類の設定は管理者が行います。管理者にお問い合わせください。
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-            </div>
+            {% endif %}
         </div>
     </div>
 </div>
 
-<style>
-.consultation-card {
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // タブボタンのクリックイベントを処理
+    const tabButtons = document.querySelectorAll('.ai-tab-item');
+    const tabPanes = document.querySelectorAll('.tab-pane');
 
-.consultation-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-}
+    tabButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-bs-target');
 
-.consultation-card-button {
-    width: 100%;
-}
-</style>
+            // すべてのタブボタンからactiveを削除
+            tabButtons.forEach(function(btn) {
+                btn.classList.remove('active');
+                btn.setAttribute('aria-selected', 'false');
+            });
+
+            // クリックされたボタンにactiveを追加
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+
+            // すべてのタブペインを非表示
+            tabPanes.forEach(function(pane) {
+                pane.classList.remove('show', 'active');
+            });
+
+            // 対象のタブペインを表示
+            const targetPane = document.querySelector(targetId);
+            if (targetPane) {
+                targetPane.classList.add('show', 'active');
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
 

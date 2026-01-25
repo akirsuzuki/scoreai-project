@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             {% if form.category.errors %}
                                 <div class="text-danger">{{ form.category.errors }}</div>
                             {% endif %}
-                            <div id="ai-suggestion-message" class="alert alert-info mt-2" style="display: none;">
+                            <div id="ai-suggestion-message" class="alert alert-info mt-2" class="d-none">
                                 <i class="ti ti-sparkles me-2"></i>
                                 <strong>AI議事録生成をご利用ください</strong><br>
                                 このカテゴリの議事録は、AIによる自動生成が可能です。
@@ -256,11 +256,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             {% if form.notes.errors %}
                                 <div class="text-danger">{{ form.notes.errors }}</div>
                             {% endif %}
-                            <div class="markdown-preview" id="markdown-preview" style="display: none;"></div>
+                            <div class="markdown-preview" id="markdown-preview" class="d-none"></div>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer text-end">
+                <div class="card-footer">
                     <button type="submit" class="btn btn-primary">
                         {% if form.instance.pk %}
                         更新
@@ -269,9 +269,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         {% endif %}
                     </button>
                     {% if form.instance.pk %}
-                    <a href="{% url 'meeting_minutes_delete' this_company form.instance.pk %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+                    <a href="{% url 'meeting_minutes_delete' this_company form.instance.pk %}" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</a>
                     {% endif %}
-    
                     <button type="button" class="btn btn-outline-secondary" onclick="history.back()">キャンセル</button>
                 </div>
             </div>

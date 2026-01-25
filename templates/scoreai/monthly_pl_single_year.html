@@ -64,12 +64,12 @@
         <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
           {% if available_years %}
           <form method="get" class="d-flex gap-2 align-items-center" id="year-budget-form">
-            <select name="year" id="year-select" class="form-select form-select-sm" style="width: 150px;" onchange="document.getElementById('year-budget-form').submit();">
+            <select name="year" id="year-select" class="form-select form-select-sm pencil-select-md" onchange="document.getElementById('year-budget-form').submit();">
               {% for year in available_years %}
               <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}年</option>
               {% endfor %}
             </select>
-            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm" style="width: 100px;" onchange="document.getElementById('year-budget-form').submit();">
+            <select name="is_budget" id="is-budget-select" class="form-select form-select-sm pencil-select-sm" onchange="document.getElementById('year-budget-form').submit();">
               <option value="false" {% if not is_budget %}selected{% endif %}>実績</option>
               <option value="true" {% if is_budget %}selected{% endif %}>予算</option>
             </select>
@@ -157,7 +157,7 @@
                 <th class="text-center">
                   {{ month.display_month }}月
                   {% if fiscal_summary_year and fiscal_summary_year.is_budget %}
-                  <i class="ti ti-alert-circle text-warning ms-1" title="予算データ" style="font-size: 0.9em;"></i>
+                  <i class="ti ti-alert-circle text-warning ms-1 pencil-alert-icon" title="予算データ"></i>
                   {% endif %}
                 </th>
                 {% endfor %}
@@ -166,14 +166,14 @@
             </thead>
             <tbody class="table-group-divider">
               <tr>
-                <td style="writing-mode: vertical-rl; text-orientation: center;">売上高</td>
+                <td class="pencil-text-vertical">売上高</td>
                 {% for month in monthly_data %}
                 <td class="text-end equal-width">{% if month.id %}{{ month.sales|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ total_sales|floatformat:0|intcomma }}</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
+                <td rowspan="2" class="pencil-text-vertical">粗利益</td>
                 {% for month in monthly_data %}
                 <td class="text-end">{% if month.id %}{{ month.gross_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                 {% endfor %}
@@ -186,7 +186,7 @@
                 <td class="text-end">{{ total_gross_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
+                <td rowspan="2" class="pencil-text-vertical">営業利益</td>
                 {% for month in monthly_data %}
                 <td class="text-end">{% if month.id %}{{ month.operating_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                 {% endfor %}
@@ -199,7 +199,7 @@
                 <td class="text-end">{{ total_operating_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
+                <td rowspan="2" class="pencil-text-vertical">経常利益</td>
                 {% for month in monthly_data %}
                 <td class="text-end">{% if month.id %}{{ month.ordinary_profit|floatformat:0|intcomma }}{% else %}-{% endif %}</td>
                 {% endfor %}
@@ -235,38 +235,7 @@
   </div>
 </div>
 
-<style>
-  .fiscal-summary-table-container {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar {
-    height: 12px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 6px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 6px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-  #monthly-pl-table {
-    min-width: max-content;
-  }
-  #monthly-pl-table th,
-  #monthly-pl-table td {
-    white-space: nowrap;
-  }
-  .equal-width {
-    width: 100px;
-  }
-</style>
+<!-- Styles moved to pencil-design-system.css -->
 
 
 {% if monthly_data %}

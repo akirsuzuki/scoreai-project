@@ -1,4 +1,3 @@
-{% load django_bootstrap5 %}
 {% load static %}
 
 <!doctype html>
@@ -15,36 +14,45 @@
   {% endblock %}
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="shortcut icon" type="image/png" href="{% static 'scoreai/img/FaviconSCore_Ai.png' %}" />
-  <link rel="stylesheet" href="{% static 'Modernize-1.0.0/src/assets/css/styles.min.css' %}" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+
+  <!-- Pencil Design System (Bootstrap上書き用) -->
+  <link rel="stylesheet" href="{% static 'scoreai/css/pencil-design-system.css' %}" />
+  
+  <!-- Bootstrap JS (CDNから読み込み、スタイルはPencil Design Systemで上書き) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.5/dist/simplebar.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.5/dist/simplebar.min.css">
+  
+  <!-- その他のスクリプト -->
   <script src="https://kit.fontawesome.com/c0e97851db.js" crossorigin="anonymous"></script>
-  <script src="{% static 'scoreai/js/sidebars.js' %}"></script>
-  <link rel="stylesheet" href="{% static 'scoreai/css/variables.css' %}" />
-  <link rel="stylesheet" href="{% static 'scoreai/css/custom.css' %}" />
-  <link rel="stylesheet" href="{% static 'scoreai/css/sidebars.css' %}" />
-  <link rel="stylesheet" href="{% static 'scoreai/css/loading.css' %}" />
 </head>
 
 <body>
-  <!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full" data-sidebar-position="fixed" data-header-position="fixed">
+  <!--  Body Wrapper (Pencil Design System) -->
+  <div class="page-wrapper" id="main-wrapper">
     <!-- Sidebar -->
     {% include 'scoreai/base-sidebar.html' %}
     <!--  Main wrapper -->
-    <div class="body-wrapper body-wrapper-flex">
+    <div class="body-wrapper">
       <!--  Body Header -->
       {% include 'scoreai/base-header.html' %}
 
-      <div class="container-fluid main-content-wrapper">
+      <div class="main-content-wrapper">
         {% if show_title_card|default_if_none:False %}
-        <div class="card bg-info-subtle shadow-none position-relative mb-4">
-          <div class="card-body px-4 py-4">
-            <div class="row align-items-center">
-              <div class="col-12">
-                <h4 class="fw-semibold mb-0">{% if title and title|length > 0 %}{{ title }}{% else %}ページタイトル{% endif %}</h4>
-                {% block breadcrumb %}
-                {% endblock %}
-              </div>
-            </div>
+        <div class="card pencil-page-title">
+          <div class="card-body">
+            {% if title_category %}
+            <div class="pencil-page-title-category">{{ title_category }}</div>
+            {% endif %}
+            <h4 class="pencil-page-title-text">{% if title and title|length > 0 %}{{ title }}{% else %}ページタイトル{% endif %}</h4>
+            {% if subtitle %}
+            <div class="pencil-page-title-subtitle">{{ subtitle }}</div>
+            {% endif %}
+            {% block breadcrumb %}
+            {% endblock %}
           </div>
         </div>
         {% endif %}
@@ -77,26 +85,18 @@
       {% endblock %}
       
       <!-- ページ下部の区切り -->
-      <div class="row mt-5 mb-4">
-        <div class="col-12">
-          <hr class="border-top border-2 opacity-50">
-        </div>
+      <div class="page-footer-divider">
+        <hr>
       </div>
       </div>
 
     </div>
   </div>
 
-  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/jquery/dist/jquery.min.js' %}"></script> -->
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-  <script src="{% static 'Modernize-1.0.0/src/assets/js/sidebarmenu.js' %}"></script>
-  <script src="{% static 'Modernize-1.0.0/src/assets/js/app.min.js' %}"></script>
-  <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/dist/simplebar.js' %}"></script>
-  <script src="{% static 'scoreai/js/loading.js' %}"></script>
+  <!-- Pencil Design System -->
   <script>
     // ページ読み込み後にアクティブなメニュー項目までスクロール
     document.addEventListener('DOMContentLoaded', function() {
-      // sidebarmenu.jsが実行された後に実行されるように少し待つ
       setTimeout(function() {
         // アクティブなメニュー項目を検索
         const activeMenuItem = document.querySelector('#sidebarnav .sidebar-link.active, #sidebarnav .sidebar-item.selected .sidebar-link');
@@ -162,11 +162,9 @@
             }
           }, 350); // collapseのアニメーション時間を考慮
         }
-      }, 100); // sidebarmenu.jsの実行を待つ
+      }, 100);
     });
   </script>
-  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/js/dashboard.js' %}"></script> -->
-  <!-- <script src="{% static 'Modernize-1.0.0/src/assets/libs/simplebar/src/simplebar.js' %}"></script> -->
 
 </body>
 {% block foot %}

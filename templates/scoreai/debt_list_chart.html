@@ -1,75 +1,163 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<!-- JavaScriptの内容が長いため、このファイルだけ他のHTMLに記述する。 -->
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- 借入残高12ヶ月推移チャート - Pencil Design System準拠 -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const ctx = document.getElementById('chart_debtAll').getContext('2d');
+    const canvas = document.getElementById('chart_debtAll');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
     const labels = Array.from({ length: 12 }, (_, i) => {
       const date = new Date();
       date.setMonth(date.getMonth() + i + 1);
       return `${date.getMonth() + 1}月`;
     });
+
     const datasets = [
       {% for debt in debt_list %}
         {
-        label: '{{ debt.financial_institution }} - {{ debt.principal|to_thousands|intcomma }} ({{ debt.issue_date|date:"Y年n月" }})',
-        data: [
-          {{ debt.balances_monthly.0| to_thousands }},
-          {{ debt.balances_monthly.1| to_thousands }},
-          {{ debt.balances_monthly.2| to_thousands }},
-          {{ debt.balances_monthly.3| to_thousands }},
-          {{ debt.balances_monthly.4| to_thousands }},
-          {{ debt.balances_monthly.5| to_thousands }},
-          {{ debt.balances_monthly.6| to_thousands }},
-          {{ debt.balances_monthly.7| to_thousands }},
-          {{ debt.balances_monthly.8| to_thousands }},
-          {{ debt.balances_monthly.9| to_thousands }},
-          {{ debt.balances_monthly.10| to_thousands }},
-          {{ debt.balances_monthly.11| to_thousands }}
+          label: '{{ debt.financial_institution }} - {{ debt.principal|to_thousands|intcomma }} ({{ debt.issue_date|date:"Y年n月" }})',
+          data: [
+            {{ debt.balances_monthly.0|to_thousands }},
+            {{ debt.balances_monthly.1|to_thousands }},
+            {{ debt.balances_monthly.2|to_thousands }},
+            {{ debt.balances_monthly.3|to_thousands }},
+            {{ debt.balances_monthly.4|to_thousands }},
+            {{ debt.balances_monthly.5|to_thousands }},
+            {{ debt.balances_monthly.6|to_thousands }},
+            {{ debt.balances_monthly.7|to_thousands }},
+            {{ debt.balances_monthly.8|to_thousands }},
+            {{ debt.balances_monthly.9|to_thousands }},
+            {{ debt.balances_monthly.10|to_thousands }},
+            {{ debt.balances_monthly.11|to_thousands }}
           ],
-        borderColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
-        backgroundColor: chartColors[{{ forloop.counter0 }} % chartColors.length],
-        borderWidth: 1,
-        fill: false
+          borderColor: chartColors.borderColor[{{ forloop.counter0 }} % chartColors.borderColor.length],
+          backgroundColor: chartColors.backgroundColor[{{ forloop.counter0 }} % chartColors.backgroundColor.length],
+          borderWidth: 2,
+          pointRadius: 4,
+          tension: 0,
+          fill: false
         },
       {% endfor %}
     ];
 
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: datasets
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: datasets
       },
-      plugins: {
-        tooltip: {
-          callbacks: {
-            label: function (context) {
-              const debt = debtListByBank[context.datasetIndex];
-              const balance = debt.balances_monthly[context.dataIndex];
-              const totalBalance = debtListTotals.total_balances_monthly[context.dataIndex];
-              const percentage = ((balance / totalBalance) * 100).toFixed(2);
-              return `${context.dataset.label}: ${context.raw}千円 (${percentage}%)`;
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: true,
+            position: 'top',
+            labels: {
+              font: {
+                family: "'Noto Sans JP', 'Inter', sans-serif",
+                size: 11,
+                weight: '500'
+              },
+              padding: 16,
+              usePointStyle: true,
+              pointStyle: 'rect',
+              color: '#0F0F0F',
+              boxWidth: 12,
+              boxHeight: 12
+            }
+          },
+          tooltip: {
+            backgroundColor: '#FFFFFF',
+            titleColor: '#0F0F0F',
+            bodyColor: '#0F0F0F',
+            borderColor: '#E0E0E0',
+            borderWidth: 1,
+            padding: 12,
+            titleFont: {
+              family: "'Noto Serif JP', 'Cormorant Garamond', serif",
+              size: 13,
+              weight: '600'
+            },
+            bodyFont: {
+              family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+              size: 12,
+              weight: '500'
+            },
+            displayColors: true,
+            boxPadding: 4,
+            cornerRadius: 0,
+            callbacks: {
+              label: function (context) {
+                let label = context.dataset.label || '';
+                if (label) {
+                  label = label.split(' - ')[0] + ': ';
+                }
+                if (context.parsed.y !== null) {
+                  label += context.parsed.y.toLocaleString('ja-JP') + ' 千円';
+                }
+                return label;
+              }
             }
           }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              color: '#E0E0E0',
+              lineWidth: 1,
+              drawBorder: false
+            },
+            ticks: {
+              font: {
+                family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+                size: 11,
+                weight: '500'
+              },
+              color: '#666666',
+              padding: 8,
+              callback: function(value) {
+                return value.toLocaleString('ja-JP');
+              }
+            }
+          },
+          x: {
+            grid: {
+              display: false,
+              drawBorder: false
+            },
+            ticks: {
+              font: {
+                family: "'Noto Sans JP', 'Inter', sans-serif",
+                size: 11,
+                weight: '500'
+              },
+              color: '#666666',
+              padding: 8
+            }
+          }
+        },
+        elements: {
+          line: {
+            borderWidth: 2,
+            tension: 0,
+            fill: false
+          },
+          point: {
+            radius: 4,
+            hoverRadius: 6,
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }
+        },
+        animation: {
+          duration: 600,
+          easing: 'easeOutQuart'
         }
-      },
-      hover: {
-        mode: 'nearest',
-        intersect: true
       }
-    }
-  });
+    });
   });
 </script>
-
-<br>

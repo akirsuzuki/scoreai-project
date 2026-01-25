@@ -1,91 +1,121 @@
 {% extends "scoreai/base.html" %}
 
 {% block title %}
-{{title}}
+{{ title }}
 {% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">株主情報</h4>
-      <div class="d-flex gap-2 flex-wrap">
-        <a href="{% url 'stakeholder_name_list' %}" class="btn btn-outline-primary btn-sm">株主名一覧</a>
-        <a href="{% url 'stock_event_list' %}" class="btn btn-outline-primary btn-sm">株式発行一覧</a>
-      </div>
-    </div>
+    <h4 class="fw-semibold mb-0">株主情報</h4>
+    <p class="text-muted mb-0">株主情報と株式発行履歴の管理を行います。</p>
   </div>
 </div>
-<div class="row">
-    <div class="col-lg-4 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">{{ stock_event.fiscal_summary_year.year }}年度の詳細</h5>
-            </div>
-            <div class="card-body">
-                <p><strong></strong>{{ stock_event.name }}</strong></p>
-                <table class="table table-bordered">
-                    <tr>
-                        <th>発行日</th>
-                        <td>{{ stock_event.event_date }}</td>
-                    </tr>
-                    <tr>
-                        <th>発行種別</th>
-                        <td>{{ stock_event.event_type }}</td>
-                    </tr>
-                    <tr>
-                        <th>備考</th>
-                        <td>{{ stock_event.memo }}</td>
-                    </tr>
-                </table>
 
-            </div>
-            <div class="card-footer text-end">
-                <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
-                <a href="{% url 'stock_event_update' stock_event.pk %}" class="btn btn-warning">編集</a>
-                <a href="{% url 'stock_event_delete' stock_event.pk %}" class="btn btn-danger">削除</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-8 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">明細</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>出資者</th>
-                            <th>株式数</th>
-                            <th>株式種別</th>
-                            <th>取得価額</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for line in stock_event_line %}
-                        <tr>
-                            <td>{{ line.stakeholder }}</td>
-                            <td>{{ line.share_quantity }}</td>
-                            <td>{{ line.share_type }}</td>
-                            <td>{{ line.acquisition_price }}</td>
-                            <td>
-                                <a href="{% url 'stockeventline_update' line.pk %}" class="btn btn-warning">編集</a>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="4" class="text-center">明細がありません。</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="card-footer text-end">
-                <a href="{% url 'stockeventline_create' stock_event.pk %}" class="btn btn-primary">発行明細の追加</a>
-            </div>
-        </div>
-    </div>
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stakeholder_name_list' %}" role="tab">
+          <i class="ti ti-users me-1"></i>株主名一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stock_event_list' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>株式発行一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stakeholder_name_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規株主登録
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'stock_event_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規株式発行登録
+        </a>
+      </li>
+    </ul>
+  </div>
 </div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="stakeholderTabsContent">
+  <!-- 株式発行詳細 -->
+  <div class="tab-pane fade show active" id="stock-event-detail" role="tabpanel">
+    <div class="row">
+      <div class="col-12 col-md-4 mb-4 mb-md-0">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">{{ stock_event.fiscal_summary_year.year }}年度の詳細</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-bordered">
+              <tr>
+                <th>発行日</th>
+                <td>{{ stock_event.event_date }}</td>
+              </tr>
+              <tr>
+                <th>発行種別</th>
+                <td>{{ stock_event.event_type }}</td>
+              </tr>
+              <tr>
+                <th>備考</th>
+                <td>{{ stock_event.memo }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-outline-secondary" onclick="history.back()">戻る</button>
+            <a href="{% url 'stock_event_update' stock_event.pk %}" class="btn btn-warning">編集</a>
+            <a href="{% url 'stock_event_delete' stock_event.pk %}" class="btn btn-danger">削除</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-8">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0">明細</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>出資者</th>
+                    <th>株式数</th>
+                    <th>株式種別</th>
+                    <th>取得価額</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for line in stock_event_line %}
+                  <tr>
+                    <td>{{ line.stakeholder }}</td>
+                    <td>{{ line.share_quantity }}</td>
+                    <td>{{ line.share_type }}</td>
+                    <td>{{ line.acquisition_price }}</td>
+                    <td>
+                      <a href="{% url 'stockeventline_update' line.pk %}" class="btn btn-sm btn-warning">編集</a>
+                    </td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="5" class="text-center text-muted">明細がありません。</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'stockeventline_create' stock_event.pk %}" class="btn btn-primary">発行明細の追加</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}

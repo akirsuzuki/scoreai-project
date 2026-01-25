@@ -58,7 +58,7 @@
       <div class="col-12 mb-3">
         <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
           <form method="get" class="d-flex gap-2" id="yearForm">
-            <select name="year" id="yearSelect" class="form-select" style="min-width: 120px;" onchange="this.form.submit()">
+            <select name="year" id="yearSelect" class="form-select pencil-select-md" onchange="this.form.submit()">
               {% for y in available_years %}
                 <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
               {% endfor %}

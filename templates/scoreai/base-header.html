@@ -19,14 +19,12 @@
         {% if user_firm_owner %}
         {% get_unread_notification_count user_firm_owner.firm as unread_count %}
         <li class="nav-item me-2">
-          <a class="nav-link nav-icon-hover position-relative d-flex align-items-center justify-content-center" 
+          <a class="nav-link nav-icon-hover position-relative d-flex align-items-center justify-content-center pencil-notification-link" 
              href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" 
-             id="notificationLink"
-             style="width: 40px; height: 40px; padding: 0;">
-            <i class="ti ti-bell fs-5" style="color: #5A6A85;"></i>
+             id="notificationLink">
+            <i class="ti ti-bell"></i>
             {% if unread_count > 0 %}
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" 
-                  style="font-size: 0.65rem; padding: 0.25em 0.5em; min-width: 18px; line-height: 1.2;">
+            <span class="position-absolute top-0 start-100 translate-middle badge bg-danger pencil-notification-badge">
               {{ unread_count }}
             </span>
             {% endif %}
@@ -37,13 +35,13 @@
         <li class="nav-item dropdown">
           <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
             aria-expanded="false">
-            <i class="ti ti-user-circle fs-6"></i>
+            <i class="ti ti-user-circle"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
             <div class="message-body">
               <div class="card-body p-4">
                 <p class="mb-0 fw-semibold">{{ user.username }}</p>
-                <p class="text-muted mb-0" style="font-size: 0.85rem;">{{ user.email|default:"" }}</p>
+                <p class="text-muted mb-0 small">{{ user.email|default:"" }}</p>
               </div>
               <div class="dropdown-divider"></div>
               <div class="px-4 py-2">
@@ -56,14 +54,14 @@
               </div>
               <div class="dropdown-divider"></div>
               <a href="{% url 'user_profile' %}" class="d-flex align-items-center gap-2 dropdown-item">
-                <i class="ti ti-user fs-6"></i>
+                <i class="ti ti-user"></i>
                 <p class="mb-0">プロフィール</p>
               </a>
               <a href="{% url 'logout' %}" class="d-flex align-items-center gap-2 dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="ti ti-logout fs-6"></i>
+                <i class="ti ti-logout"></i>
                 <p class="mb-0">ログアウト</p>
               </a>
-              <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+              <form id="logout-form" method="post" action="{% url 'logout' %}" class="d-none">
                 {% csrf_token %}
               </form>
             </div>

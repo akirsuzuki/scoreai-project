@@ -91,10 +91,116 @@
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            font: {
+              family: "'Noto Sans JP', 'Inter', sans-serif",
+              size: 11,
+              weight: '500'
+            },
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: 'rect',
+            color: '#0F0F0F',
+            boxWidth: 12,
+            boxHeight: 12
+          }
+        },
+        tooltip: {
+          backgroundColor: '#FFFFFF',
+          titleColor: '#0F0F0F',
+          bodyColor: '#0F0F0F',
+          borderColor: '#E0E0E0',
+          borderWidth: 1,
+          padding: 12,
+          titleFont: {
+            family: "'Noto Serif JP', 'Cormorant Garamond', serif",
+            size: 13,
+            weight: '600'
+          },
+          bodyFont: {
+            family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+            size: 12,
+            weight: '500'
+          },
+          displayColors: true,
+          boxPadding: 4,
+          cornerRadius: 0,
+          callbacks: {
+            label: function(context) {
+              let label = context.dataset.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed.y !== null) {
+                label += context.parsed.y.toLocaleString('ja-JP') + ' 千円';
+              }
+              return label;
+            }
+          }
+        }
+      },
       scales: {
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          grid: {
+            color: '#E0E0E0',
+            lineWidth: 1,
+            drawBorder: false
+          },
+          ticks: {
+            font: {
+              family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+              size: 11,
+              weight: '500'
+            },
+            color: '#666666',
+            padding: 8,
+            callback: function(value) {
+              return value.toLocaleString('ja-JP');
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            font: {
+              family: "'Noto Sans JP', 'Inter', sans-serif",
+              size: 11,
+              weight: '500'
+            },
+            color: '#666666',
+            padding: 8
+          }
         }
+      },
+      elements: {
+        bar: {
+          borderRadius: 0,
+          borderSkipped: false
+        },
+        line: {
+          borderWidth: 2,
+          tension: 0,
+          fill: false
+        },
+        point: {
+          radius: 4,
+          hoverRadius: 6,
+          borderWidth: 2,
+          borderColor: '#FFFFFF'
+        }
+      },
+      animation: {
+        duration: 600,
+        easing: 'easeOutQuart'
       }
     }
   });

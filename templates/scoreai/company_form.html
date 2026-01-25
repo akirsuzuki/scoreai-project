@@ -24,10 +24,17 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">会社情報編集</h4>
+    <p class="text-muted mb-0">{{ object.name }}の情報を編集します。</p>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title mb-0">会社情報編集</h5>
+        <h5 class="card-title mb-0">編集フォーム</h5>
       </div>
       <div class="card-body">
         <form method="post">

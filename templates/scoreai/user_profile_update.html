@@ -5,40 +5,73 @@
 {{ title }}
 {% endblock %}
 
-{% block head %}
-<!-- 必要に応じて追加のCSSやJSを読み込む -->
-{% endblock %}
-
 {% block content %}
 <div class="row">
-    <div class="col-lg-12 d-flex align-items-stretch">
-        <div class="card w-100">
-            <div class="card-header">
-                <h5 class="card-title mb-0">{{ title }}</h5>
-            </div>
-            <div class="card-body">
-                <form method="post" class="mt-4">
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <div class="mb-3">
-                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                            {{ field }}
-                            {% if field.errors %}
-                                {% for error in field.errors %}
-                                    <div class="invalid-feedback d-block">
-                                        {{ error }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                            {% if field.help_text %}
-                                <small class="form-text text-muted">{{ field.help_text }}</small>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                    <button type="submit" class="btn btn-primary">更新</button>
-                </form>
-            </div>
-        </div>
-    </div>
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">プロフィール</h4>
+    <p class="text-muted mb-0">ユーザー情報と所属組織の管理を行います。</p>
+  </div>
 </div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'user_profile' %}" role="tab">
+          <i class="ti ti-user me-1"></i>プロフィール
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'user_profile_update' %}" role="tab">
+          <i class="ti ti-edit me-1"></i>プロフィール編集
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'password_change' %}" role="tab">
+          <i class="ti ti-key me-1"></i>パスワード変更
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="profileTabsContent">
+  <!-- プロフィール編集 -->
+  <div class="tab-pane fade show active" id="profile-update" role="tabpanel">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">{{ title }}</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" class="mt-4">
+              {% csrf_token %}
+              {% for field in form %}
+              <div class="mb-3">
+                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <div class="invalid-feedback d-block">
+                  {{ error }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+              </div>
+              {% endfor %}
+              <button type="submit" class="btn btn-primary">更新</button>
+              <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}

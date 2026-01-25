@@ -174,15 +174,54 @@
 {% endblock %}
 
 {% block content %}
+<!-- ヘッダー -->
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <form method="post" id="fiscal-summary-year-form" class="no-auto-loading">
-        {% csrf_token %}
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">年次財務諸表</h4>
+    <p class="text-muted mb-0">年次財務諸表の管理と分析を行います。</p>
+  </div>
+</div>
 
-      <div class="card-header">
-        <h5 class="card-title mb-0">決算情報編集</h5>
-      </div>
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'fiscal_summary_year_list' %}?is_draft=false" role="tab">
+          <i class="ti ti-chart-line me-1"></i>決算年次推移
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'latest_fiscal_summary_year_detail' %}" role="tab">
+          <i class="ti ti-file-text me-1"></i>直近決算詳細
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'budget_vs_actual_yearly' %}" role="tab">
+          <i class="ti ti-chart-bar me-1"></i>年次予算vs実績比較
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link {% if not form.instance.pk %}active{% endif %}" href="{% url 'fiscal_summary_year_create' %}" role="tab">
+          <i class="ti ti-plus me-1"></i>新規登録
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="fiscalYearTabsContent">
+  <div class="tab-pane fade show active" id="fiscal-form" role="tabpanel">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <form method="post" id="fiscal-summary-year-form" class="no-auto-loading">
+            {% csrf_token %}
+
+          <div class="card-header">
+            <h5 class="card-title mb-0">{% if form.instance.pk %}決算情報編集{% else %}決算情報 新規登録{% endif %}</h5>
+          </div>
       <div class="card-body">
         {% if form.errors %}
         <div class="alert alert-danger" role="alert">
@@ -203,64 +242,89 @@
         {% endif %}
 
         <!-- データ取り込み方法の選択 -->
-        <div class="alert alert-info border-0 mb-4" role="alert">
-          <div class="d-flex align-items-center mb-3">
-            <i class="ti ti-info-circle fs-4 me-2"></i>
-            <h6 class="mb-0 fw-semibold">決算情報の取り込み方法</h6>
+        <div class="border rounded mb-4" style="background-color: #e8f4fc;">
+          <div class="p-3 border-bottom" style="background-color: #e8f4fc;">
+            <i class="ti ti-info-circle me-2 text-primary"></i>
+            <span class="fw-semibold">決算情報の取り込み方法</span>
           </div>
-          <p class="mb-3">手動入力の代わりに、以下の方法で決算情報を一括取り込みできます：</p>
-          <div class="row g-3">
-            <div class="col-md-6">
-              <div class="card border-primary h-100">
-                <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                    <i class="ti ti-file-upload text-primary fs-4 me-2"></i>
-                    <h6 class="card-title mb-0 fw-semibold">OCRで決算情報をアップロード</h6>
+          <div class="p-3">
+            <p class="mb-3">手動入力の代わりに、以下の方法で決算情報を一括取り込みできます：</p>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="ti ti-file-upload text-primary fs-4 me-2"></i>
+                      <h6 class="card-title mb-0 fw-bold">OCRで決算情報をアップロード</h6>
+                    </div>
+                    <p class="text-muted small mb-3">決算書のPDFや画像ファイルをアップロードすると、自動的にデータを抽出して取り込みます。</p>
+                    <a href="{% url 'import_fiscal_summary_ocr' %}" class="btn btn-primary w-100">
+                      <i class="ti ti-upload me-1"></i>OCRアップロードへ
+                    </a>
                   </div>
-                  <p class="text-muted small mb-3">決算書のPDFや画像ファイルをアップロードすると、自動的にデータを抽出して取り込みます。</p>
-                  <a href="{% url 'import_fiscal_summary_ocr' %}" class="btn btn-primary btn-sm w-100">
-                    <i class="ti ti-upload me-1"></i>OCRアップロードへ
-                  </a>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                  <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="ti ti-file-spreadsheet fs-4 me-2" style="color: #13DEB9;"></i>
+                      <h6 class="card-title mb-0 fw-bold">CSVで決算情報をアップロード</h6>
+                    </div>
+                    <p class="text-muted small mb-3">CSVファイルを準備してアップロードすると、一括で決算情報を取り込みます。</p>
+                    <a href="{% url 'import_fiscal_summary_year' %}" class="btn w-100" style="background-color: #13DEB9; color: #fff;">
+                      <i class="ti ti-upload me-1"></i>CSVアップロードへ
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="card border-success h-100">
-                <div class="card-body">
-                  <div class="d-flex align-items-center mb-2">
-                    <i class="ti ti-file-spreadsheet text-success fs-4 me-2"></i>
-                    <h6 class="card-title mb-0 fw-semibold">CSVで決算情報をアップロード</h6>
-                  </div>
-                  <p class="text-muted small mb-3">CSVファイルを準備してアップロードすると、一括で決算情報を取り込みます。</p>
-                  <a href="{% url 'import_fiscal_summary_year' %}" class="btn btn-success btn-sm w-100">
-                    <i class="ti ti-upload me-1"></i>CSVアップロードへ
-                  </a>
-                </div>
-              </div>
-            </div>
           </div>
-          <hr class="my-3">
-          <p class="mb-0 text-muted small">
-            <i class="ti ti-arrow-down me-1"></i>手動で入力する場合は、下記のフォームに直接入力してください。
-          </p>
+          <div class="p-3 border-top" style="background-color: #e8f4fc;">
+            <i class="ti ti-arrow-down me-1 text-muted"></i>
+            <span class="text-muted small">手動で入力する場合は、下記のフォームに直接入力してください。</span>
+          </div>
         </div>
 
-        <!-- ナビゲーションリンク -->
-        <nav class="mb-4">
-          <ul class="nav nav-pills">
-            <li class="nav-item">
-              <a class="nav-link" href="#bs-info">貸借対照表情報</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#pl-info">損益計算書情報</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#tax-info">税務申告情報</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#notes-info">決算留意事項</a>
-          </ul>
-        </nav>
+        <!-- セクションナビゲーション -->
+        <div class="card bg-light border-0 mb-4">
+          <div class="card-body py-3">
+            <div class="d-flex align-items-center mb-2">
+              <i class="ti ti-list-check text-primary me-2"></i>
+              <span class="fw-semibold small text-muted">セクションに移動</span>
+            </div>
+            <div class="row g-2">
+              <div class="col-6 col-md-3">
+                <a href="#bs-info" class="btn btn-outline-primary w-100 d-flex flex-column align-items-center py-3 section-nav-btn">
+                  <i class="ti ti-file-spreadsheet fs-4 mb-1"></i>
+                  <span class="small fw-semibold">貸借対照表</span>
+                  <span class="badge bg-primary bg-opacity-10 text-primary mt-1" style="font-size: 10px;">BS</span>
+                </a>
+              </div>
+              <div class="col-6 col-md-3">
+                <a href="#pl-info" class="btn btn-outline-success w-100 d-flex flex-column align-items-center py-3 section-nav-btn">
+                  <i class="ti ti-chart-line fs-4 mb-1"></i>
+                  <span class="small fw-semibold">損益計算書</span>
+                  <span class="badge bg-success bg-opacity-10 text-success mt-1" style="font-size: 10px;">PL</span>
+                </a>
+              </div>
+              <div class="col-6 col-md-3">
+                <a href="#tax-info" class="btn btn-outline-warning w-100 d-flex flex-column align-items-center py-3 section-nav-btn">
+                  <i class="ti ti-receipt-tax fs-4 mb-1"></i>
+                  <span class="small fw-semibold">税務申告</span>
+                  <span class="badge bg-warning bg-opacity-10 text-warning mt-1" style="font-size: 10px;">TAX</span>
+                </a>
+              </div>
+              <div class="col-6 col-md-3">
+                <a href="#notes-info" class="btn btn-outline-info w-100 d-flex flex-column align-items-center py-3 section-nav-btn">
+                  <i class="ti ti-notes fs-4 mb-1"></i>
+                  <span class="small fw-semibold">留意事項</span>
+                  <span class="badge bg-info bg-opacity-10 text-info mt-1" style="font-size: 10px;">NOTE</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
 
@@ -289,7 +353,12 @@
           </div>
           <hr>
           <!-- BS information -->
-          <h3 id="bs-info">貸借対照表情報</h3>
+          <h3 id="bs-info" class="d-flex align-items-center justify-content-between">
+            貸借対照表情報
+            <a href="#" class="btn btn-sm btn-outline-secondary back-to-nav-btn" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">
+              <i class="ti ti-arrow-up me-1"></i>トップへ
+            </a>
+          </h3>
           <div class="card mb-4">
             <div class="card-body">
               <div class="row g-3">
@@ -352,7 +421,7 @@
                             class="col-sm-6 col-form-label">
                             その他流動資産
                             <button type="button" id="auto-calc-other-current-assets"
-                              class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                              class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                               <i class="fas fa-calculator text-primary"></i>
                             </button>
                           </label>
@@ -452,7 +521,7 @@
                                 class="col-sm-6 col-form-label">
                                 その他有形固定資産
                                 <button type="button" id="auto-calc-other-tangible-fixed-assets"
-                                  class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                                  class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                                   <i class="fas fa-calculator text-primary"></i>
                                 </button>
                               </label>
@@ -502,7 +571,7 @@
                                 class="col-sm-6 col-form-label">
                                 その他無形固定資産
                                 <button type="button" id="auto-calc-other-intangible-assets"
-                                  class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                                  class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                                   <i class="fas fa-calculator text-primary"></i>
                                 </button>
                               </label>
@@ -566,7 +635,7 @@
                                class="col-sm-6 col-form-label fw-bold">
                           固定資産合計
                           <button type="button" id="auto-calc-total-fixed-assets"
-                            class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                            class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                             <i class="fas fa-calculator text-primary"></i>
                           </button>
                         </label>
@@ -604,7 +673,7 @@
                     <label for="{{ form.total_assets.id_for_label }}" class="col-sm-6 col-form-label fw-bold">
                       資産の部合計
                       <button type="button" id="auto-calc-total-assets"
-                        class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                        class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                         <i class="fas fa-calculator text-primary"></i>
                       </button>
                     </label>
@@ -655,7 +724,7 @@
                               <label for="{{ form.other_current_liabilities.id_for_label }}" class="col-sm-6 col-form-label">
                                 その他流動負債
                                 <button type="button" id="auto-calc-other-current-liabilities"
-                                  class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                                  class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                                   <i class="fas fa-calculator text-primary"></i>
                                 </button>
                               </label>
@@ -701,7 +770,7 @@
                               <label for="{{ form.other_long_term_liabilities.id_for_label }}" class="col-sm-6 col-form-label">
                                 その他の固定負債
                                 <button type="button" id="auto-calc-other-long-term-liabilities"
-                                  class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                                  class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                                   <i class="fas fa-calculator text-primary"></i>
                                 </button>
                               </label>
@@ -731,7 +800,7 @@
                         <label for="{{ form.total_liabilities.id_for_label }}" class="col-sm-6 col-form-label fw-bold">
                           負債の部合計
                           <button type="button" id="auto-calc-total-liabilities"
-                            class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                            class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                             <i class="fas fa-calculator text-primary"></i>
                           </button>
                         </label>
@@ -792,7 +861,7 @@
                             <label for="{{ form.total_stakeholder_equity.id_for_label }}" class="col-sm-6 col-form-label fw-bold">
                               株主資本合計
                               <button type="button" id="auto-calc-total-stakeholder-equity"
-                                class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                                class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                                 <i class="fas fa-calculator text-primary"></i>
                               </button>
                             </label>
@@ -843,7 +912,7 @@
                         <label for="{{ form.total_net_assets.id_for_label }}" class="col-sm-6 col-form-label fw-bold">
                           純資産の部合計
                           <button type="button" id="auto-calc-total-net-assets"
-                            class="btn btn-link btn-sm p-0 ms-1" style="font-size: 0.85em;" title="自動計算">
+                            class="btn btn-link btn-sm p-0 ms-1 pencil-btn-link-sm" title="自動計算">
                             <i class="fas fa-calculator text-primary"></i>
                           </button>
                         </label>
@@ -862,7 +931,12 @@
           </div>
 
           <!-- PL information -->
-          <h3 id="pl-info">損益計算書情報</h3>
+          <h3 id="pl-info" class="d-flex align-items-center justify-content-between">
+            損益計算書情報
+            <a href="#" class="btn btn-sm btn-outline-secondary back-to-nav-btn" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">
+              <i class="ti ti-arrow-up me-1"></i>トップへ
+            </a>
+          </h3>
           <div class="alert alert-info" role="alert">
             <h5 class="alert-heading">損益計算書情報の入力についての注意事項</h5>
             <p>月次の売上高、売上総利益などを入力している場合でも、こちらでは別途年度の合計値を入力してください。</p>
@@ -1097,7 +1171,12 @@
           </div>
 
           <!-- 税務申告情報 -->
-          <h3 id="tax-info" class="mt-4">税務申告情報</h3>
+          <h3 id="tax-info" class="mt-4 d-flex align-items-center justify-content-between">
+            税務申告情報
+            <a href="#" class="btn btn-sm btn-outline-secondary back-to-nav-btn" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">
+              <i class="ti ti-arrow-up me-1"></i>トップへ
+            </a>
+          </h3>
           <div class="card mb-4">
             <div class="card-body">
               <div class="row">
@@ -1144,7 +1223,12 @@
           </div>
 
           <!-- 決算留意事項 -->
-          <h3 id="notes-info" class="mt-4">決算留意事項</h3>
+          <h3 id="notes-info" class="mt-4 d-flex align-items-center justify-content-between">
+            決算留意事項
+            <a href="#" class="btn btn-sm btn-outline-secondary back-to-nav-btn" onclick="event.preventDefault(); window.scrollTo({top: 0, behavior: 'smooth'});">
+              <i class="ti ti-arrow-up me-1"></i>トップへ
+            </a>
+          </h3>
           <div class="card mb-4">
             <div class="card-body">
               <div class="mb-3">
@@ -1183,17 +1267,154 @@
             </div>
           </div>          
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
         <button type="submit" class="btn btn-primary">保存</button>        
         {% if form.instance.pk %}
-        <a href="{% url 'fiscal_summary_year_delete' form.instance.pk %}" class="btn btn-danger ms-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+        <a href="{% url 'fiscal_summary_year_delete' form.instance.pk %}" class="btn btn-danger" onclick="return confirm('本当に削除しますか？');">削除</a>
         {% endif %}
       </div>
-    </form>
+          </form>
+        </div>  <!-- .card -->
+      </div>  <!-- .col-12 -->
+    </div>  <!-- .row -->
+  </div>  <!-- .tab-pane -->
+</div>  <!-- .tab-content -->
 
-    </div>
-  </div>
-</div>
+<!-- トップに戻るボタン -->
+<a href="#" id="back-to-top" class="back-to-top-btn" title="トップに戻る">
+  <i class="ti ti-arrow-up"></i>
+</a>
 
+<style>
+  /* Input Group 基本スタイル（Bootstrap互換） */
+  .input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+  }
+  .input-group > .form-control {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+  .input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+  }
+
+  /* 決算フォーム用の数値入力フィールドスタイル - 右寄せ */
+  #fiscal-summary-year-form div.col-sm-6 {
+    display: flex !important;
+    justify-content: flex-end !important;
+  }
+  #fiscal-summary-year-form .input-group {
+    max-width: 180px;
+    flex-shrink: 0;
+  }
+  #fiscal-summary-year-form .input-group > .form-control {
+    text-align: center;
+    border-radius: 6px 0 0 6px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+  }
+  #fiscal-summary-year-form .input-group > .form-control:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
+    outline: none;
+  }
+  #fiscal-summary-year-form .input-group > .input-group-text {
+    min-width: 50px;
+    justify-content: center;
+    background-color: #e8eaed;
+    border-radius: 0 6px 6px 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    color: #5a6a85;
+    font-size: 13px;
+    border: 1px solid #dee2e6;
+    border-left: none;
+  }
+
+  /* 戻るボタンのスタイル */
+  .back-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #5D87FF 0%, #49BEFF 100%);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(93, 135, 255, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  .back-to-top-btn:hover {
+    background: linear-gradient(135deg, #4a75e6 0%, #3aa8e6 100%);
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(93, 135, 255, 0.5);
+  }
+  .back-to-top-btn.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .back-to-nav-btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    white-space: nowrap;
+  }
+  .back-to-nav-btn:hover {
+    background-color: #5D87FF;
+    border-color: #5D87FF;
+    color: #fff;
+  }
+</style>
+
+<script>
+  // トップに戻るボタンの表示/非表示
+  document.addEventListener('DOMContentLoaded', function() {
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 300) {
+        backToTopBtn.classList.add('show');
+      } else {
+        backToTopBtn.classList.remove('show');
+      }
+    });
+
+    backToTopBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  });
+</script>
 {% endblock %}

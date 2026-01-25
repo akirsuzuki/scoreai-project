@@ -64,14 +64,14 @@
           {% if available_years %}
           <form method="get" id="year-range-form" class="d-flex gap-2 align-items-center">
             <input type="hidden" name="years" value="{{ request.GET.years|default:3 }}">
-            <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <select name="start_year" id="start-year-select" class="form-select form-select-sm pencil-select-md" onchange="updateYearRange()">
               <option value="">開始年度</option>
               {% for year in available_years %}
               <option value="{{ year }}" {% if start_year == year %}selected{% endif %}>{{ year }}年</option>
               {% endfor %}
             </select>
             <span class="text-muted">～</span>
-            <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <select name="end_year" id="end-year-select" class="form-select form-select-sm pencil-select-md" onchange="updateYearRange()">
               <option value="">終了年度</option>
               {% for year in available_years %}
               <option value="{{ year }}" {% if end_year == year %}selected{% endif %}>{{ year }}年</option>
@@ -82,12 +82,13 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-12 d-flex align-items-stretch">
-      <div class="card w-100">
-        <div class="card-header">
-          <h5 class="card-title mb-0 fw-semibold">{% if request.GET.years == '1' %}月次PL一覧（直近年度）{% else %}年度別月次PL{% endif %}</h5>
-        </div>
-      <div class="card-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="card w-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0 fw-semibold">{% if request.GET.years == '1' %}月次PL一覧（直近年度）{% else %}年度別月次PL{% endif %}</h5>
+          </div>
+          <div class="card-body">
         {% if monthly_summaries_with_summary.monthly_data %}
         {% for summary in monthly_summaries_with_summary.monthly_data %}
         <div class="table-responsive">
@@ -108,7 +109,7 @@
                     {% endwith %}
                   {% endif %}
                   {% if amount.is_budget %}
-                  <i class="ti ti-alert-circle text-warning ms-1" title="予算データ" style="font-size: 0.9em;"></i>
+                  <i class="ti ti-alert-circle text-warning ms-1 pencil-alert-icon" title="予算データ"></i>
                   {% endif %}
                 </th>
                 {% endfor %}
@@ -117,14 +118,14 @@
             </thead>
             <tbody class="table-group-divider">
               <tr>
-                <td style="writing-mode: vertical-rl; text-orientation: center;">売上高</td>
+                <td class="pencil-text-vertical">売上高</td>
                 {% for amount in summary.data %}
                 <td class="text-end equal-width">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.sales|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
                 <td class="text-end">{{ summary.total_sales|floatformat:0|intcomma }}</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">粗利益</td>
+                <td rowspan="2" class="pencil-text-vertical">粗利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.gross_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
@@ -137,7 +138,7 @@
                 <td class="text-end">{{ summary.total_gross_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">営業利益</td>
+                <td rowspan="2" class="pencil-text-vertical">営業利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.operating_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
@@ -150,7 +151,7 @@
                 <td class="text-end">{{ summary.total_operating_profit_rate|floatformat:1 }}%</td>
               </tr>
               <tr>
-                <td rowspan="2" style="writing-mode: vertical-rl; text-orientation: center;">経常利益</td>
+                <td rowspan="2" class="pencil-text-vertical">経常利益</td>
                 {% for amount in summary.data %}
                 <td class="text-end">{% if amount.id|stringformat:"s"|slice:":5" == "temp_" %}-{% else %}{{ amount.ordinary_profit|floatformat:0|intcomma }}{% endif %}</td>
                 {% endfor %}
@@ -232,20 +233,21 @@
             </div>
           </div>
         </div>
-        {% endif %}
+          {% endif %}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
     {% if chart_data_json %}
     <div class="row mt-4">
-      <div class="col-lg-12 d-flex align-items-stretch">
+      <div class="col-12">
         <div class="card w-100">
           <div class="card-header">
             <h5 class="card-title mb-0">月次推移PLチャート（複数年度比較）</h5>
           </div>
           <div class="card-body">
-            <div style="position: relative; height: 400px; width: 100%;">
+            <div class="pencil-chart-wrapper">
               <canvas id="combinedChart"></canvas>
             </div>
           </div>

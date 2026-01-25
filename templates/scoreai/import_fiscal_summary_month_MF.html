@@ -9,16 +9,8 @@
 
 {% block head %}
 {{ block.super }}
-<!-- DataTables CSS -->
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<style>
-  #drop-zone.drag-over {
-    background-color: #e7f3ff !important;
-    border-color: #0d6efd !important;
-  }
-</style>
 {% endblock %}
 
 {% block content %}
@@ -54,7 +46,6 @@
 
 <!-- タブコンテンツ -->
 <div class="tab-content" id="importTabsContent">
-  <!-- 月次データインポート（マネーフォワード） -->
   <div class="tab-pane fade show active" id="import-monthly-mf" role="tabpanel">
     <div class="row mb-3">
       <div class="col-12">
@@ -64,181 +55,165 @@
         </div>
       </div>
     </div>
-    <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0">マネーフォワード 月次推移表CSVアップロード</h5>
-      </div>
-      <div class="card-body">
-          <!-- メッセージ表示（フォームの上に表示） -->
-          {% if messages %}
-          <div class="messages mb-4">
+
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">マネーフォワード 月次推移表CSVアップロード</h5>
+          </div>
+          <div class="card-body">
+            {% if messages %}
+            <div class="messages mb-4">
               {% for message in messages %}
-              <div class="alert alert-dismissible fade show
-                         {% if message.tags == 'error' %}alert-danger
-                         {% elif message.tags == 'success' %}alert-success
-                         {% else %}alert-warning
-                         {% endif %}" 
-                   role="alert">
-                  {% if 'safe' in message.tags %}
-                      {{ message|safe }}
-                  {% else %}
-                      {{ message|linebreaks }}
-                  {% endif %}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              <div class="alert alert-dismissible fade show {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+                {% if 'safe' in message.tags %}
+                  {{ message|safe }}
+                {% else %}
+                  {{ message|linebreaks }}
+                {% endif %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
               {% endfor %}
-          </div>
-          {% endif %}
-          
-          <form method="post" enctype="multipart/form-data" id="csv-upload-form">
+            </div>
+            {% endif %}
+
+            <form method="post" enctype="multipart/form-data" id="csv-upload-form">
               {% csrf_token %}
               {{ form.non_field_errors }}
-              <div class="form-row mb-3">
-                <div class="form-group col-md-5 d-inline-block">
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-md-5">
                     {{ form.fiscal_year.label_tag }}
                     {{ form.fiscal_year|add_class:"form-control" }}
+                  </div>
                 </div>
               </div>
-              
-              <!-- ドラッグ&ドロップエリア -->
-              <div class="form-group mb-3">
+
+              <div class="mb-3">
                 <label for="{{ form.file.id_for_label }}" class="form-label">{{ form.file.label }}</label>
-                <div id="drop-zone" class="border border-2 border-dashed rounded p-5 text-center" style="background-color: #f8f9fa; min-height: 200px; cursor: pointer;">
-                  <i class="ti ti-upload" style="font-size: 3rem; color: #6c757d;"></i>
+                <div id="drop-zone" class="border border-2 border-dashed rounded p-5 text-center bg-light">
+                  <i class="ti ti-upload fs-1 text-muted"></i>
                   <p class="mt-3 mb-0">
                     <strong>CSVファイルをドラッグ&ドロップ</strong><br>
                     または<span class="text-primary">クリックしてファイルを選択</span>
                   </p>
                   <p class="text-muted small mt-2 mb-0">対応形式: CSV</p>
                 </div>
-                <input type="file" name="{{ form.file.name }}" id="{{ form.file.id_for_label }}" 
-                       class="form-control d-none" accept=".csv" required>
-                <div id="file-name" class="mt-2 text-muted" style="display: none;"></div>
+                <input type="file" name="{{ form.file.name }}" id="{{ form.file.id_for_label }}" class="form-control d-none" accept=".csv" required>
+                <div id="file-name" class="mt-2 text-muted d-none"></div>
                 {% if form.file.errors %}
-                  <div class="text-danger mt-1">
-                    {{ form.file.errors }}
-                  </div>
+                <div class="text-danger mt-1">{{ form.file.errors }}</div>
                 {% endif %}
               </div>
-              
-              <div class="form-group mb-3">
-                  <div class="form-check">
-                    {{ form.override_flag|add_class:"form-check-input" }}
-                    <label class="form-check-label" for="{{ form.override_flag.id_for_label }}">
-                      {{ form.override_flag.label }}
-                    </label>
-                  </div>
+
+              <div class="mb-3">
+                <div class="form-check">
+                  {{ form.override_flag|add_class:"form-check-input" }}
+                  <label class="form-check-label" for="{{ form.override_flag.id_for_label }}">
+                    {{ form.override_flag.label }}
+                  </label>
+                </div>
               </div>
-              
+
               <div class="alert alert-info mb-3">
                 <strong>エンコーディング:</strong> UTF-8、Shift-JIS、EUC-JPを自動検出します。
               </div>
-              
-              <button type="submit" class="btn btn-primary">アップロード</button>
-          </form>
-      </div>
-      <div class="card-footer text-end">
-          <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-outline-secondary me-2">通常のCSVインポートに戻る</a>
-          <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="row mt-4">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
-      <div class="card-header">
-        <h5 class="card-title mb-0">マネーフォワードからの月次推移表のダウンロード方法</h5>
-      </div>
-      <div class="card-body">
-        <ol>
-          <li>会計帳簿＝＞推移表 に進みます。</li>
-          <br>
-          <li>以下の図のような形で推移表を表示します。</li>
-          <br>
-          <ol>
-            <li>「損益計算書」を選択してください。</li>
-            <li>「補助科目を表示」のチェックを外してください。</li>
-            <li>「選択期間」は任意の範囲を指定してください。</li>
-            <li>「消費税」は普段お使いの方を選択してください。 SCoreにはここで表示されている値がそのまま取り込まれます。</li>
-            <li>右の「検索」をクリックして画面をリフレッシュしてください。</li>
-          </ol>
-          <br>
-          <img src="{% static 'scoreai/img/MFimport_month.png' %}" class="img-fluid" alt="マネーフォワードの月次推移表" style="width: 80%;">
-          <br>
-          <br>
-          <li>右上にあるエクスポートから、損益計算書（CSV）をクリックします。</li>
-          <br>
-          <img src="{% static 'scoreai/img/MFimport_month2.png' %}" class="img-fluid" alt="マネーフォワードの月次推移表のエクスポート" style="width: 20%;">
-          <br>
-          <br>
-          <li>ダウンロードされたファイルを、CSVファイルとしてアップロードします。</li>
-        </ol>
-      </div>
-      <div class="card-footer text-end">
-          <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-outline-secondary me-2">通常のCSVインポートに戻る</a>
-          <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
+              <button type="submit" class="btn btn-primary">アップロード</button>
+            </form>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-outline-secondary">通常のCSVインポートに戻る</a>
+            <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-  </div>
-  <!-- End of tab-pane -->
-</div>
-<!-- End of tab-content -->
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h5 class="card-title mb-0">マネーフォワードからの月次推移表のダウンロード方法</h5>
+          </div>
+          <div class="card-body">
+            <ol>
+              <li>会計帳簿 → 推移表 に進みます。</li>
+              <li class="mt-3">以下の図のような形で推移表を表示します。
+                <ol class="mt-2">
+                  <li>「損益計算書」を選択してください。</li>
+                  <li>「補助科目を表示」のチェックを外してください。</li>
+                  <li>「選択期間」は任意の範囲を指定してください。</li>
+                  <li>「消費税」は普段お使いの方を選択してください。SCoreにはここで表示されている値がそのまま取り込まれます。</li>
+                  <li>右の「検索」をクリックして画面をリフレッシュしてください。</li>
+                </ol>
+              </li>
+              <li class="mt-3">
+                <img src="{% static 'scoreai/img/MFimport_month.png' %}" class="img-fluid" style="max-width: 80%;" alt="マネーフォワードの月次推移表">
+              </li>
+              <li class="mt-3">右上にあるエクスポートから、損益計算書（CSV）をクリックします。</li>
+              <li class="mt-3">
+                <img src="{% static 'scoreai/img/MFimport_month2.png' %}" class="img-fluid" style="max-width: 300px;" alt="マネーフォワードの月次推移表のエクスポート">
+              </li>
+              <li class="mt-3">ダウンロードされたファイルを、CSVファイルとしてアップロードします。</li>
+            </ol>
+          </div>
+          <div class="card-footer">
+            <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-outline-secondary">通常のCSVインポートに戻る</a>
+            <button type="button" onclick="history.back()" class="btn btn-outline-secondary">戻る</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- .tab-pane -->
+</div>  <!-- .tab-content -->
 
 <script>
 $(document).ready(function() {
   const dropZone = $('#drop-zone');
   const fileInput = $('#{{ form.file.id_for_label }}');
   const fileName = $('#file-name');
-  
-  // クリックでファイル選択
+
   dropZone.on('click', function() {
     fileInput.click();
   });
-  
-  // ファイル選択時の処理
+
   fileInput.on('change', function(e) {
     const file = e.target.files[0];
     if (file) {
-      fileName.text('選択されたファイル: ' + file.name).show();
+      fileName.text('選択されたファイル: ' + file.name).removeClass('d-none');
       dropZone.find('p strong').text('ファイルが選択されました');
       dropZone.css('background-color', '#d4edda');
     }
   });
-  
-  // ドラッグ&ドロップの処理
+
   dropZone.on('dragover', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    $(this).addClass('drag-over');
+    $(this).addClass('border-primary');
   });
-  
+
   dropZone.on('dragleave', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    $(this).removeClass('drag-over');
+    $(this).removeClass('border-primary');
   });
-  
+
   dropZone.on('drop', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    $(this).removeClass('drag-over');
-    
+    $(this).removeClass('border-primary');
+
     const files = e.originalEvent.dataTransfer.files;
     if (files.length > 0) {
       const file = files[0];
       if (file.name.toLowerCase().endsWith('.csv')) {
-        // FileListをDataTransferで作成してinputに設定
         const dataTransfer = new DataTransfer();
         dataTransfer.items.add(file);
         fileInput[0].files = dataTransfer.files;
-        
-        fileName.text('選択されたファイル: ' + file.name).show();
+
+        fileName.text('選択されたファイル: ' + file.name).removeClass('d-none');
         dropZone.find('p strong').text('ファイルが選択されました');
         dropZone.css('background-color', '#d4edda');
       } else {
@@ -246,8 +221,7 @@ $(document).ready(function() {
       }
     }
   });
-  
-  // フォーム送信前のバリデーション
+
   $('#csv-upload-form').on('submit', function(e) {
     if (!fileInput[0].files || fileInput[0].files.length === 0) {
       e.preventDefault();
@@ -257,5 +231,4 @@ $(document).ready(function() {
   });
 });
 </script>
-  
 {% endblock %}

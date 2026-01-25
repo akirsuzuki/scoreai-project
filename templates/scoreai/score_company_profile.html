@@ -46,7 +46,29 @@
 {% endblock %}
 
 {% block content %}
-{% include 'scoreai/part_about_header.html' with title="会社概要" subtitle="株式会社VanCreworthについて" %}
+{% include 'scoreai/part_about_header.html' with title="企業情報" subtitle="SCore_AIと運営会社について" %}
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'about' %}" role="tab">
+          <i class="ti ti-info-circle me-1"></i>SCore_AIについて
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'company_profile' %}" role="tab">
+          <i class="ti ti-building me-1"></i>会社概要
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="companyTabsContent">
+  <div class="tab-pane fade show active" id="company-profile" role="tabpanel">
 
 <!-- 会社概要カード -->
 <div class="row mb-4">
@@ -125,11 +147,11 @@
 <div class="mission-card">
   <div class="row align-items-center">
     <div class="col-md-2 text-center mb-3 mb-md-0">
-      <i class="ti ti-target" style="font-size: 3rem;"></i>
+      <i class="ti ti-target pencil-icon-3xl"></i>
     </div>
     <div class="col-md-10">
       <h4 class="fw-semibold mb-3">私たちのミッション</h4>
-      <p class="mb-2" style="font-size: 1.1rem; line-height: 1.8;">
+      <p class="mb-2 pencil-text-lg pencil-line-height-lg">
         コンサルタント・士業の専門家と中小企業を繋ぎ、<br>
         データドリブンな経営意思決定を支援することで、<br>
         日本の中小企業の持続的な成長と財務健全化を実現します。
@@ -236,7 +258,7 @@
           <div class="col-md-4">
             <div class="text-center">
               <div class="bg-light-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                   style="width: 80px; height: 80px;">
+                   class="pencil-avatar-md">
                 <i class="ti ti-shield-check text-primary fs-2"></i>
               </div>
               <h6 class="fw-semibold mb-2">信頼</h6>
@@ -249,7 +271,7 @@
           <div class="col-md-4">
             <div class="text-center">
               <div class="bg-light-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                   style="width: 80px; height: 80px;">
+                   class="pencil-avatar-md">
                 <i class="ti ti-sparkles text-primary fs-2"></i>
               </div>
               <h6 class="fw-semibold mb-2">革新</h6>
@@ -262,7 +284,7 @@
           <div class="col-md-4">
             <div class="text-center">
               <div class="bg-light-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                   style="width: 80px; height: 80px;">
+                   class="pencil-avatar-md">
                 <i class="ti ti-handshake text-primary fs-2"></i>
               </div>
               <h6 class="fw-semibold mb-2">協創</h6>
@@ -300,4 +322,6 @@
   </div>
 </div>
 
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}

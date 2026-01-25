@@ -224,7 +224,7 @@
             </div>
           </div>
       
-          <div class="row" id="repayment-months-group" style="display: none;">
+          <div class="row d-none" id="repayment-months-group">
             <div class="col-md-6">
               <div class="form-group mb-3">
                 <label for="{{ form.repayment_months.id_for_label }}" class="form-label">{{ form.repayment_months.label }}</label>
@@ -436,9 +436,9 @@
           </div>
         </div>
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
-        <button type="submit" class="btn btn-primary me-2">保存</button>
+        <button type="submit" class="btn btn-primary">保存</button>
       </div>
     </form>
     </div>

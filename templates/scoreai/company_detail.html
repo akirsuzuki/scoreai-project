@@ -35,6 +35,13 @@
 
 {% block content %}
 <div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">会社詳細</h4>
+    <p class="text-muted mb-0">{{ company.name }}の詳細情報を表示しています。</p>
+  </div>
+</div>
+
+<div class="row">
   <div class="col-lg-12 d-flex align-items-stretch">
     <div class="card w-100">
       <div class="card-header">
@@ -78,10 +85,10 @@
           </div>
         </div>
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         <a href="{% url 'company_update' company.id %}" class="btn btn-primary">編集</a>
         {% if is_company_owner %}
-          <a href="{% url 'company_member_list' company_id=company.id %}" class="btn btn-outline-primary ms-2">
+          <a href="{% url 'company_member_list' company_id=company.id %}" class="btn btn-outline-primary">
             <i class="ti ti-users me-1"></i>メンバー管理
           </a>
         {% endif %}

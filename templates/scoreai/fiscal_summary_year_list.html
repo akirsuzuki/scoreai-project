@@ -70,28 +70,28 @@
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-12 mb-3">
-        <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
+    <div class="row mb-3">
+      <div class="col-12">
+        <div class="d-flex align-items-center justify-content-end gap-3 flex-wrap">
           {% if min_year and max_year %}
-          <form method="get" class="d-flex gap-2 align-items-center" id="year-range-form">
+          <form method="get" class="d-flex gap-2 align-items-center flex-shrink-0" id="year-range-form">
             {% if request.GET.is_draft %}<input type="hidden" name="is_draft" value="{{ request.GET.is_draft }}">{% endif %}
-            <label for="yearsInPage" class="form-label mb-0">表示する年数:</label>
-            <select id="yearsInPage" name="years_in_page" class="form-select form-select-sm" style="width: 100px;" onchange="updateYearsInPage(this.value)">
+            <span class="text-muted small text-nowrap">表示する年数:</span>
+            <select id="yearsInPage" name="years_in_page" class="form-select form-select-sm" style="width: auto;" onchange="updateYearsInPage(this.value)">
               <option value="5" {% if years_in_page == 5 and not show_all %}selected{% endif %}>5</option>
               <option value="7" {% if years_in_page == 7 and not show_all %}selected{% endif %}>7</option>
               <option value="10" {% if years_in_page == 10 and not show_all %}selected{% endif %}>10</option>
               <option value="all" {% if show_all %}selected{% endif %}>全期間</option>
             </select>
-            <span class="text-muted">|</span>
-            <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <span class="text-muted mx-1">|</span>
+            <select name="start_year" id="start-year-select" class="form-select form-select-sm" style="width: auto;" onchange="updateYearRange()">
               <option value="">開始年度</option>
               {% for year in min_year|to:max_year %}
                 <option value="{{ year }}" {% if start_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
               {% endfor %}
             </select>
             <span class="text-muted">～</span>
-            <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: 150px;" onchange="updateYearRange()">
+            <select name="end_year" id="end-year-select" class="form-select form-select-sm" style="width: auto;" onchange="updateYearRange()">
               <option value="">終了年度</option>
               {% for year in min_year|to:max_year %}
                 <option value="{{ year }}" {% if end_year|add:"0" == year %}selected{% endif %}>{{ year }}年</option>
@@ -99,11 +99,11 @@
             </select>
           </form>
           {% endif %}
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="btn-group flex-shrink-0" role="group">
+            <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" id="exportDropdown">
               <i class="ti ti-download me-1"></i>エクスポート
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="exportDropdown">
               <li><a class="dropdown-item" href="{% url 'export_fiscal_summary_year' 'csv' %}">
                 <i class="ti ti-file-text me-2"></i>CSV形式
               </a></li>
@@ -118,9 +118,6 @@
         </div>
       </div>
     </div>
-<div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
 
 {% include 'scoreai/fiscal_summary_year_list_table.html' %}
 
@@ -128,8 +125,9 @@
 
 {% include 'scoreai/budget_vs_actual_dashboard.html' %}
 
+  </div>
+</div>
 
-<!-- カード本体の終了タグの直前に JavaScript を追加 -->
 <script>
   function toggleDrafts(checkbox) {
       const url = new URL(window.location.href);

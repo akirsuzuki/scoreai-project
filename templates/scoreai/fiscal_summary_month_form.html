@@ -182,8 +182,8 @@
           </div> <!-- End of row g-3 -->
         </div> <!-- End of card-body -->
 
-        <div class="card-footer text-end">
-          <button type="submit" class="btn btn-primary me-2">保存</button>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-primary">保存</button>
           <button type="button" onclick="history.back()" class="btn btn-outline-secondary">キャンセル</button>
           {% if object %}
           <a href="{% url 'fiscal_summary_month_delete' object.id %}" class="btn btn-danger">削除</a>

@@ -64,7 +64,7 @@
         <div class="d-flex align-items-center justify-content-end gap-2 flex-wrap">
           {% if year %}
           <form method="get" class="d-flex gap-2">
-            <select name="year" class="form-select form-select-sm" style="width: 150px;" onchange="this.form.submit()">
+            <select name="year" class="form-select form-select-sm pencil-select-md" onchange="this.form.submit()">
               {% for y in available_years %}
                 <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}年</option>
               {% endfor %}

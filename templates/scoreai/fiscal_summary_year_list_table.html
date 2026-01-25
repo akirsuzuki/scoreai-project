@@ -1,38 +1,10 @@
 {% load humanize %}
 {% load custom_filters %}
-<style>
-  .fiscal-summary-table-container {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    width: 100%;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar {
-    height: 12px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 6px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 6px;
-  }
-  .fiscal-summary-table-container::-webkit-scrollbar-thumb:hover {
-    background: #555;
-  }
-  #fiscal_summary_table {
-    min-width: max-content;
-  }
-  #fiscal_summary_table th,
-  #fiscal_summary_table td {
-    white-space: nowrap;
-  }
-</style>
+<!-- Styles moved to pencil-design-system.css -->
 
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">年次推移表</h5>
       </div>
@@ -92,7 +64,7 @@
                 {% endfor %}
               </tr>
               <tr>
-                <td colspan="{{ fiscal_summary_years|length|add:1 }}" style="border-bottom: 2px solid black;"></td>
+                <td colspan="{{ fiscal_summary_years|length|add:1 }}" class="pencil-table-divider"></td>
               </tr>              
               <tr>
                 <td>売上高合計</td>
@@ -142,7 +114,7 @@
             <tfoot>
               <tr>
                 <td colspan="{{ fiscal_summary_years|length|add:1 }}">
-                  <p>単位は千円です。</p>
+                  <p class="text-muted small mb-0">単位は千円です。</p>
                 </td>
               </tr>
             </tfoot>
@@ -175,13 +147,13 @@
         </nav>
         {% endif %}
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         <div class="btn-group" role="group">
           <a href="{% url 'fiscal_summary_year_create' %}" class="btn btn-primary">新規決算データ作成</a>
-          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false" id="newDataDropdown">
             <span class="visually-hidden">Toggle Dropdown</span>
           </button>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="newDataDropdown">
             <li><a class="dropdown-item" href="{% url 'fiscal_summary_year_budget_create' %}">
               <i class="ti ti-calendar-dollar me-2"></i>予算データ作成
             </a></li>

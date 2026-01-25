@@ -1,0 +1,179 @@
+/* ============================================
+   ApexCharts ScoreAI Design System
+   ============================================
+
+   このファイルはpencil-score.penを参照して作成しました。
+   ApexChartsのスタイルはPencilデザインファイルの
+   カラーパレットとデザイントークンに基づいています。
+
+   Created: 2024
+   Reference: static/scoreai/pencil-score.pen
+   ============================================ */
+
+/* ApexCharts Base Font */
+.apexcharts-canvas {
+  font-family: var(--font-primary);
+}
+
+/* ApexCharts Legend */
+.apexcharts-legend {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.apexcharts-legend-series {
+  font-family: var(--font-primary);
+}
+
+.apexcharts-legend-text {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.apexcharts-legend-marker {
+  border-radius: var(--radius-sm);
+  width: 12px;
+  height: 12px;
+}
+
+/* ApexCharts Tooltip */
+.apexcharts-tooltip {
+  font-family: var(--font-primary);
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-sm) var(--space-md);
+}
+
+.apexcharts-tooltip-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--foreground);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: var(--space-xs);
+  margin-bottom: var(--space-xs);
+  background: transparent;
+}
+
+.apexcharts-tooltip-series-group {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+.apexcharts-tooltip-marker {
+  border-radius: var(--radius-sm);
+  width: 10px;
+  height: 10px;
+}
+
+.apexcharts-tooltip-text {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* ApexCharts Grid */
+.apexcharts-gridline {
+  stroke: var(--border);
+  stroke-width: 1px;
+}
+
+.apexcharts-grid-borders {
+  stroke: var(--border);
+  stroke-width: 1px;
+}
+
+/* ApexCharts Axis Labels */
+.apexcharts-xaxis-label,
+.apexcharts-yaxis-label {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--muted-foreground);
+  color: var(--muted-foreground);
+}
+
+.apexcharts-xaxis-texts-g,
+.apexcharts-yaxis-texts-g {
+  font-family: var(--font-primary);
+}
+
+.apexcharts-xaxis-text,
+.apexcharts-yaxis-text {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 500;
+  fill: var(--muted-foreground);
+  color: var(--muted-foreground);
+}
+
+/* ApexCharts Data Labels */
+.apexcharts-datalabel {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--foreground);
+  color: var(--foreground);
+}
+
+/* ApexCharts RadialBar */
+.apexcharts-radialbar-track {
+  stroke: var(--border);
+  stroke-width: 97%;
+}
+
+.apexcharts-radialbar-area {
+  stroke-linecap: round;
+}
+
+/* ApexCharts Animation */
+.apexcharts-canvas {
+  animation-duration: 0.6s;
+  animation-timing-function: ease-out;
+}
+
+/* ApexCharts Color Palette (from pencil-score.pen) */
+.apexcharts-series-0 {
+  fill: var(--chart-1);
+}
+
+.apexcharts-series-1 {
+  fill: var(--chart-2);
+}
+
+.apexcharts-series-2 {
+  fill: var(--chart-3);
+}
+
+.apexcharts-series-3 {
+  fill: var(--chart-4);
+}
+
+.apexcharts-series-4 {
+  fill: var(--chart-5);
+}
+
+/* ApexCharts Responsive */
+@media (max-width: 767px) {
+  .apexcharts-canvas {
+    font-size: 10px;
+  }
+
+  .apexcharts-legend-text {
+    font-size: 10px;
+  }
+
+  .apexcharts-tooltip {
+    font-size: 11px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}

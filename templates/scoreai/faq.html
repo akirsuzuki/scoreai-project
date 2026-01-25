@@ -9,17 +9,37 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <h4 class="fw-semibold mb-0">{{ title }}</h4>
-    </div>
+{% include 'scoreai/part_about_header.html' with title="サポート" subtitle="ヘルプ・マニュアル・よくある質問" %}
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'help' %}" role="tab">
+          <i class="ti ti-help-circle me-1"></i>ヘルプ
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'manual_list' %}" role="tab">
+          <i class="ti ti-book me-1"></i>マニュアル
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'faq' %}" role="tab">
+          <i class="ti ti-question-mark me-1"></i>よくある質問
+        </a>
+      </li>
+    </ul>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card">
+<!-- タブコンテンツ -->
+<div class="tab-content" id="supportTabsContent">
+  <div class="tab-pane fade show active" id="faq" role="tabpanel">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0 fw-semibold">{{ title }}</h5>
       </div>
@@ -197,16 +217,10 @@
           </div>
         </div>
       </div>
-      <div class="card-footer text-end">
-        <a href="{% url 'manual_list' %}" class="btn btn-primary me-2">
-          <i class="ti ti-book me-1"></i>マニュアルを見る
-        </a>
-        <a href="{% url 'help' %}" class="btn btn-outline-secondary">
-          <i class="ti ti-help me-1"></i>ヘルプを見る
-        </a>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 {% endblock %}
 

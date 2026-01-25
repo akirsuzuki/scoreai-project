@@ -3,8 +3,8 @@
     <h5 class="card-title fw-semibold"> 金融機関別残高</h5>
   </div>
   <div class="card-body p-4">
-    <div class="d-flex justify-content-center">
-      <canvas id="chart_share" style="width: 100%; height: auto;"></canvas>
+    <div class="d-flex justify-content-center pencil-chart-container">
+      <canvas id="chart_share" class="pencil-chart"></canvas>
     </div>
   </div>
 </div>
@@ -40,10 +40,64 @@
       data: data,
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: 'bottom',
+            labels: {
+              font: {
+                family: "'Noto Sans JP', 'Inter', sans-serif",
+                size: 11,
+                weight: '500'
+              },
+              padding: 12,
+              usePointStyle: true,
+              pointStyle: 'rect',
+              color: '#0F0F0F',
+              boxWidth: 12,
+              boxHeight: 12
+            }
           },
+          tooltip: {
+            backgroundColor: '#FFFFFF',
+            titleColor: '#0F0F0F',
+            bodyColor: '#0F0F0F',
+            borderColor: '#E0E0E0',
+            borderWidth: 1,
+            padding: 12,
+            titleFont: {
+              family: "'Noto Serif JP', 'Cormorant Garamond', serif",
+              size: 13,
+              weight: '600'
+            },
+            bodyFont: {
+              family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+              size: 12,
+              weight: '500'
+            },
+            displayColors: true,
+            boxPadding: 4,
+            cornerRadius: 0,
+            callbacks: {
+              label: function(context) {
+                let label = context.label || '';
+                const value = context.parsed || 0;
+                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                const percentage = ((value / total) * 100).toFixed(1);
+                return label + ': ' + value.toLocaleString('ja-JP') + ' 千円 (' + percentage + '%)';
+              }
+            }
+          }
+        },
+        elements: {
+          arc: {
+            borderWidth: 2,
+            borderColor: '#FFFFFF'
+          }
+        },
+        animation: {
+          duration: 600,
+          easing: 'easeOutQuart'
         }
       },
     };

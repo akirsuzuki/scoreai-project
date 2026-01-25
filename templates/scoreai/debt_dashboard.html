@@ -1,29 +1,108 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<div class="row align-items-stretch g-3">
-    <div class="col-12 col-md-6 col-lg-4">
-        {% include 'scoreai/part_debt_summary.html' %}
+<!-- KPIカード行（4列Grid） -->
+<div class="row g-3 mb-3">
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">現在残高</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }}</h4>
+                <div class="text-muted small mt-1">千円</div>
+            </div>
+        </div>
     </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">決算時残高</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list_totals.total_balance_fy1|to_thousands|intcomma }}</h4>
+                <div class="text-muted small mt-1">千円</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">月返済額</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list_totals.total_monthly_repayment|to_thousands|intcomma }}</h4>
+                <div class="text-muted small mt-1">千円</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">加重平均金利</div>
+                <h4 class="mb-0 fw-semibold">{{ weighted_average_interest.0|floatformat:2 }}%</h4>
+                <div class="text-muted small mt-1">年利</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 統計情報行（4列Grid） -->
+<div class="row g-3 mb-3">
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">借入件数</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list|length }}</h4>
+                <div class="text-muted small mt-1">件</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">アクティブ借入</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list|length }}</h4>
+                <div class="text-muted small mt-1">件</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">金融機関数</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list_byBank|length }}</h4>
+                <div class="text-muted small mt-1">社</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <div class="text-muted small mb-1">月間利息</div>
+                <h4 class="mb-0 fw-semibold">{{ debt_list_totals.total_interest_amount_monthly.0|to_thousands|intcomma }}</h4>
+                <div class="text-muted small mt-1">千円</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- チャート行（3列Grid） -->
+<div class="row align-items-stretch g-3">
     <div class="col-12 col-md-6 col-lg-4">
         {% include 'scoreai/part_debt_byBank.html' %}
     </div>
     <div class="col-12 col-md-6 col-lg-4">
         {% include 'scoreai/part_debt_bySecuredType.html' %}
     </div>
-</div>
-<div class="row align-items-stretch g-3 mt-0">
-    <div class="col-12 col-md-6 col-lg-6">
-        <div class="row g-3">
-            <div class="col-12">
-                {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
-            </div>
-            <div class="col-12">
-                {% include 'scoreai/part_debt_byCollateraled.html' %}
-            </div>
-        </div>
+    <div class="col-12 col-md-6 col-lg-4">
+        {% include 'scoreai/part_debt_summary.html' %}
     </div>
-    <div class="col-12 col-lg-6">
+</div>
+
+<!-- 詳細チャート行（2列Grid） -->
+<div class="row align-items-stretch g-3 mt-0">
+    <div class="col-12 col-md-6 col-lg-3">
+        {% include 'scoreai/part_debt_bySecuredByManagement.html' %}
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+        {% include 'scoreai/part_debt_byCollateraled.html' %}
+    </div>
+    <div class="col-12 col-md-12 col-lg-6">
         {% include 'scoreai/part_debt_byBankAndSecuredType.html' %}
     </div>
 </div>

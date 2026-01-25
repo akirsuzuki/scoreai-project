@@ -41,7 +41,7 @@
           <h5 class="card-title mb-0 fw-semibold">{{ company.name }} - 利用状況グラフ</h5>
           <div class="d-flex align-items-center gap-2">
             <label for="months" class="form-label mb-0">表示期間:</label>
-            <select id="months" class="form-select form-select-sm" style="width: 100px;" onchange="updateMonths(this.value)">
+            <select id="months" class="form-select form-select-sm pencil-select-sm" onchange="updateMonths(this.value)">
               <option value="3" {% if months == 3 %}selected{% endif %}>3ヶ月</option>
               <option value="6" {% if months == 6 %}selected{% endif %}>6ヶ月</option>
               <option value="12" {% if months == 12 %}selected{% endif %}>12ヶ月</option>

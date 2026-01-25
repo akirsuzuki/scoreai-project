@@ -2,53 +2,33 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<!-- KPIカードセクション -->
-<div class="row g-3 mb-4 dashboard-section">
+<!-- KPIカードセクション（Pencil Design System準拠）-->
+<!-- 4つのKPIカード: 売上高、営業利益、借入残高、加重平均金利 -->
+<div class="row g-4 mb-4 dashboard-section pencil-metric-row">
   <!-- 売上高（今期） -->
-  <div class="col-lg-3 col-md-6">
+  <div class="col-12 col-md-6 col-lg-3">
     <div class="card kpi-card kpi-sales">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">売上高（今期）</span>
-          <div class="kpi-icon">
-            <i class="ti ti-trending-up"></i>
-          </div>
-        </div>
+      <div class="card-body">
+        <span class="kpi-label">売上高（今期）</span>
         <h2 class="kpi-value" data-target="{{ monthly_summaries_total.sum_sales|default:0 }}" data-suffix=" 千円">
           0 千円
         </h2>
-        {% if monthly_summaries.0.actual_months_count %}
-        <div class="text-muted small mb-2">{{ monthly_summaries.0.actual_months_count }}ヶ月累計</div>
-        {% endif %}
-        <div class="kpi-trend">
+        <div class="kpi-change {% if monthly_summaries_total_last_year.sum_sales|default:0 > 0 %}{% with current=monthly_summaries_total.sum_sales|default:0 previous=monthly_summaries_total_last_year.sum_sales|default:1 %}{% with change=current|divide:previous|multiply:100|subtract:100 %}{% if change > 0 %}positive{% elif change < 0 %}negative{% else %}neutral{% endif %}{% endwith %}{% endwith %}{% else %}neutral{% endif %}">
           {% if monthly_summaries_total_last_year.year and monthly_summaries_total_last_year.sum_sales|default:0 > 0 %}
           {% with current=monthly_summaries_total.sum_sales|default:0 previous=monthly_summaries_total_last_year.sum_sales|default:1 %}
           {% if previous > 0 %}
           {% with change=current|divide:previous|multiply:100|subtract:100 %}
-          <div class="d-flex align-items-center">
-            <span
-              class="me-1 rounded-circle {% if change > 0 %}bg-light-success{% elif change < 0 %}bg-light-danger{% else %}bg-light-warning{% endif %} round-20 d-flex align-items-center justify-content-center">
-              {% if change > 0 %}
-              <i
-                class="ti ti-arrow-up-left {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}"></i>
-              {% elif change < 0 %} <i
-                class="ti ti-arrow-down-left {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}">
-                </i>
-                {% else %}
-                <i
-                  class="ti ti-minus {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}"></i>
-                {% endif %}
-            </span>
-            <p class="text-dark me-1 fs-3 mb-0">{% if change > 0 %}+{% endif %}{{ change|floatformat:1 }}%</p>
-            <p class="fs-3 mb-0">前年比</p>
-          </div>
+          <i class="ti {% if change > 0 %}ti-trending-up{% elif change < 0 %}ti-trending-down{% else %}ti-minus{% endif %}"></i>
+          <span>{% if change > 0 %}+{% endif %}{{ change|floatformat:1 }}% 前年比</span>
           {% endwith %}
           {% else %}
-          <span class="text-muted small">前年データなし</span>
+          <i class="ti ti-minus"></i>
+          <span>前年データなし</span>
           {% endif %}
           {% endwith %}
           {% else %}
-          <span class="text-muted small">前年データなし</span>
+          <i class="ti ti-minus"></i>
+          <span>前年データなし</span>
           {% endif %}
         </div>
       </div>
@@ -56,402 +36,68 @@
   </div>
 
   <!-- 営業利益（今期） -->
-  <div class="col-lg-3 col-md-6">
+  <div class="col-12 col-md-6 col-lg-3">
     <div class="card kpi-card kpi-profit">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">営業利益（今期）</span>
-          <div class="kpi-icon">
-            <i class="ti ti-currency-yen"></i>
-          </div>
-        </div>
-        <h2 class="kpi-value" data-target="{{ monthly_summaries_total.sum_operating_profit|default:0 }}"
-          data-suffix=" 千円">
+      <div class="card-body">
+        <span class="kpi-label">営業利益（今期）</span>
+        <h2 class="kpi-value" data-target="{{ monthly_summaries_total.sum_operating_profit|default:0 }}" data-suffix=" 千円">
           0 千円
         </h2>
-        {% if monthly_summaries.0.actual_months_count %}
-        <div class="text-muted small mb-2">{{ monthly_summaries.0.actual_months_count }}ヶ月累計</div>
-        {% endif %}
-        <div class="kpi-trend">
+        <div class="kpi-change {% if monthly_summaries_total_last_year.sum_operating_profit|default:0 > 0 %}{% with current=monthly_summaries_total.sum_operating_profit|default:0 previous=monthly_summaries_total_last_year.sum_operating_profit|default:1 %}{% with change=current|divide:previous|multiply:100|subtract:100 %}{% if change > 0 %}positive{% elif change < 0 %}negative{% else %}neutral{% endif %}{% endwith %}{% endwith %}{% else %}neutral{% endif %}">
           {% if monthly_summaries_total_last_year.year and monthly_summaries_total_last_year.sum_operating_profit|default:0 > 0 %}
           {% with current=monthly_summaries_total.sum_operating_profit|default:0 previous=monthly_summaries_total_last_year.sum_operating_profit|default:1 %}
           {% if previous > 0 %}
           {% with change=current|divide:previous|multiply:100|subtract:100 %}
-          <div class="d-flex align-items-center">
-            <span
-              class="me-1 rounded-circle {% if change > 0 %}bg-light-success{% elif change < 0 %}bg-light-danger{% else %}bg-light-warning{% endif %} round-20 d-flex align-items-center justify-content-center">
-              {% if change > 0 %}
-              <i
-                class="ti ti-arrow-up-left {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}"></i>
-              {% elif change < 0 %} <i
-                class="ti ti-arrow-down-left {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}">
-                </i>
-                {% else %}
-                <i
-                  class="ti ti-minus {% if change > 0 %}text-success{% elif change < 0 %}text-danger{% else %}text-warning{% endif %}"></i>
-                {% endif %}
-            </span>
-            <p class="text-dark me-1 fs-3 mb-0">{% if change > 0 %}+{% endif %}{{ change|floatformat:1 }}%</p>
-            <p class="fs-3 mb-0">前年比</p>
-          </div>
+          <i class="ti {% if change > 0 %}ti-trending-up{% elif change < 0 %}ti-trending-down{% else %}ti-minus{% endif %}"></i>
+          <span>{% if change > 0 %}+{% endif %}{{ change|floatformat:1 }}% 前年比</span>
           {% endwith %}
           {% else %}
-          <span class="text-muted small">前年データなし</span>
+          <i class="ti ti-minus"></i>
+          <span>前年データなし</span>
           {% endif %}
           {% endwith %}
           {% else %}
-          <span class="text-muted small">前年データなし</span>
+          <i class="ti ti-minus"></i>
+          <span>前年データなし</span>
           {% endif %}
         </div>
-        {% if monthly_summaries_total.sum_operating_profit|default:0 > 0 %}
-        <div class="kpi-status good mt-2">💰 黒字</div>
-        {% else %}
-        <div class="kpi-status danger mt-2">⚠️ 赤字</div>
-        {% endif %}
       </div>
     </div>
   </div>
 
   <!-- 借入残高 -->
-  <div class="col-lg-3 col-md-6">
+  <div class="col-12 col-md-6 col-lg-3">
     <div class="card kpi-card kpi-debt">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">借入残高</span>
-          <div class="kpi-icon">
-            <i class="ti ti-building-bank"></i>
-          </div>
-        </div>
-        <h2 class="kpi-value" data-target="{{ debt_list_totals.total_balances_monthly.0|to_thousands|default:0 }}"
-          data-suffix=" 千円">
+      <div class="card-body">
+        <span class="kpi-label">借入残高</span>
+        <h2 class="kpi-value" data-target="{{ debt_list_totals.total_balances_monthly.0|to_thousands|default:0 }}" data-suffix=" 千円">
           0 千円
         </h2>
-        <div class="text-muted small mb-2">
-          {% if debt_list %}
-          {{ debt_list|length }}件
-          {% else %}
-          0件
-          {% endif %}
-        </div>
-        <div class="kpi-trend">
+        <div class="kpi-change neutral">
+          <i class="ti ti-trending-down"></i>
           {% if debt_list_totals.total_balances_monthly.0|default:0 > 0 %}
-          <span class="text-muted small">金融機関数: {{ debt_list_byBank|length }}社</span>
+          <span>{{ debt_list|length|default:0 }}件 / {{ debt_list_byBank|length }}社</span>
           {% else %}
-          <span class="text-muted small">借入なし</span>
+          <span>借入なし</span>
           {% endif %}
         </div>
-        {% if debt_list_totals.total_balances_monthly.0|default:0 > 0 %}
-        <div class="kpi-status warning mt-2">🏦 管理要</div>
-        {% else %}
-        <div class="kpi-status good mt-2">✅ 借入なし</div>
-        {% endif %}
       </div>
     </div>
   </div>
 
   <!-- 加重平均金利 -->
-  <div class="col-lg-3 col-md-6">
+  <div class="col-12 col-md-6 col-lg-3">
     <div class="card kpi-card kpi-interest">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">加重平均金利</span>
-          <div class="kpi-icon">
-            <i class="ti ti-percentage"></i>
-          </div>
-        </div>
-        <h2 class="kpi-value" data-target="{{ weighted_average_interest.0|default:0 }}" data-type="percentage"
-          data-suffix="%">
+      <div class="card-body">
+        <span class="kpi-label">加重平均金利</span>
+        <h2 class="kpi-value" data-target="{{ weighted_average_interest.0|default:0 }}" data-type="percentage" data-suffix="%">
           0.00%
         </h2>
-        <div class="text-muted small mb-2">全借入の平均</div>
-        <div class="kpi-trend">
-          {% if weighted_average_interest.0|default:0 > 0 %}
-          {% if weighted_average_interest.0|default:0 < 2.0 %} <span class="kpi-status good">📉 低金利</span>
-            {% elif weighted_average_interest.0|default:0 < 4.0 %} <span class="kpi-status warning">📊 標準</span>
-              {% else %}
-              <span class="kpi-status danger">📈 高金利</span>
-              {% endif %}
-              {% else %}
-              <span class="text-muted small">データなし</span>
-              {% endif %}
+        <div class="kpi-change neutral">
+          <i class="ti ti-minus"></i>
+          <span>全借入の平均</span>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<!-- 予算達成状況セクション（ゲージチャート） -->
-{% if budget_achievement.elapsed_months > 0 and budget_achievement.sales is not None and budget_achievement.operating_profit is not None %}
-<div class="row g-3 mb-4 dashboard-section">
-  <!-- 売上高予算達成率 -->
-  <div class="col-lg-6 col-md-6">
-    <div class="card kpi-card kpi-sales">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">売上高予算達成状況</span>
-          <i class="ti ti-target kpi-icon"></i>
-        </div>
-        <div class="gauge-chart-container">
-          <div id="salesBudgetGauge" style="min-height: 200px;"></div>
-          <div class="gauge-chart-info">
-            <div class="gauge-chart-value">
-              <span class="gauge-value-main" data-target="{{ budget_achievement.sales|default:0 }}"
-                data-type="percentage">0.00</span>
-              <span class="gauge-value-unit">%</span>
-            </div>
-            <div class="gauge-chart-label">予算達成率（{{ budget_achievement.elapsed_months }}ヶ月経過）</div>
-            {% if budget_achievement.sales_forecast %}
-            <div class="gauge-chart-forecast">
-              <div class="forecast-label">着地見込み</div>
-              <div class="forecast-value" data-target="{{ budget_achievement.sales_forecast|default:0 }}">0</div>
-              <div class="forecast-unit">千円</div>
-              {% if budget_year.sales %}
-              {% with forecast_ratio=budget_achievement.sales_forecast|divide:budget_year.sales|multiply:100 %}
-              <div
-                class="forecast-ratio {% if forecast_ratio >= 100 %}text-success{% elif forecast_ratio >= 90 %}text-warning{% else %}text-danger{% endif %}">
-                {% if forecast_ratio >= 100 %}
-                +{{ forecast_ratio|subtract:100|floatformat:1 }}%
-                {% else %}
-                {{ forecast_ratio|subtract:100|floatformat:1 }}%
-                {% endif %}
-                予算比
-              </div>
-              {% endwith %}
-              {% endif %}
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 営業利益予算達成率 -->
-  <div class="col-lg-6 col-md-6">
-    <div class="card kpi-card kpi-profit">
-      <div class="card-body">
-        <div class="d-flex align-items-center justify-content-between mb-3">
-          <span class="kpi-label">営業利益予算達成状況</span>
-          <i class="ti ti-target kpi-icon"></i>
-        </div>
-        <div class="gauge-chart-container">
-          <div id="profitBudgetGauge" style="min-height: 200px;"></div>
-          <div class="gauge-chart-info">
-            <div class="gauge-chart-value">
-              <span class="gauge-value-main" data-target="{{ budget_achievement.operating_profit|default:0 }}"
-                data-type="percentage">0.00</span>
-              <span class="gauge-value-unit">%</span>
-            </div>
-            <div class="gauge-chart-label">予算達成率（{{ budget_achievement.elapsed_months }}ヶ月経過）</div>
-            {% if budget_achievement.operating_profit_forecast %}
-            <div class="gauge-chart-forecast">
-              <div class="forecast-label">着地見込み</div>
-              <div class="forecast-value" data-target="{{ budget_achievement.operating_profit_forecast|default:0 }}">0
-              </div>
-              <div class="forecast-unit">千円</div>
-              {% if budget_year.operating_profit %}
-              {% with forecast_ratio=budget_achievement.operating_profit_forecast|divide:budget_year.operating_profit|multiply:100 %}
-              <div
-                class="forecast-ratio {% if forecast_ratio >= 100 %}text-success{% elif forecast_ratio >= 90 %}text-warning{% else %}text-danger{% endif %}">
-                {% if forecast_ratio >= 100 %}
-                +{{ forecast_ratio|subtract:100|floatformat:1 }}%
-                {% else %}
-                {{ forecast_ratio|subtract:100|floatformat:1 }}%
-                {% endif %}
-                予算比
-              </div>
-              {% endwith %}
-              {% endif %}
-            </div>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  (function () {
-    // チャートインスタンスを保存（リフレッシュ時の重複作成を防ぐ）
-    if (window.budgetGaugeChartsInitialized) {
-      return; // 既に初期化済みの場合はスキップ
-    }
-    window.budgetGaugeChartsInitialized = true;
-
-    function initBudgetGauges() {
-      // ApexChartsが利用可能か確認
-      if (typeof ApexCharts === 'undefined') {
-        console.warn('ApexCharts is not loaded');
-        return;
-      }
-
-      // 売上高予算達成率ゲージ
-      const salesElement = document.getElementById('salesBudgetGauge');
-      if (salesElement && !salesElement._apexChart) {
-        const salesAchievement = {{ budget_achievement.sales|default:0 }};
-    const salesColor = salesAchievement >= 100 ? '#13DEB9' : salesAchievement >= 90 ? '#FFAE1F' : '#FA896B';
-
-    const salesOptions = {
-      series: [salesAchievement],
-      chart: {
-        type: 'radialBar',
-        height: 200,
-        offsetY: 0,
-        sparkline: {
-          enabled: false
-        }
-      },
-      plotOptions: {
-        radialBar: {
-          startAngle: -90,
-          endAngle: 90,
-          hollow: {
-            size: '75%',
-            background: 'transparent'
-          },
-          track: {
-            show: true,
-            background: '#E8E8E8',
-            strokeWidth: '97%',
-            opacity: 1,
-            margin: 5
-          },
-          dataLabels: {
-            show: false
-          }
-        }
-      },
-      fill: {
-        type: 'solid',
-        colors: [salesColor]
-      },
-      stroke: {
-        lineCap: 'round'
-      },
-      labels: ['達成率'],
-      colors: [salesColor],
-      animations: {
-        enabled: false
-      }
-    };
-
-    const salesChart = new ApexCharts(salesElement, salesOptions);
-    salesElement._apexChart = salesChart;
-    salesChart.render();
-  }
-
-      // 営業利益予算達成率ゲージ
-      const profitElement = document.getElementById('profitBudgetGauge');
-  if (profitElement && !profitElement._apexChart) {
-    const profitAchievement = {{ budget_achievement.operating_profit|default:0 }};
-  const profitColor = profitAchievement >= 100 ? '#13DEB9' : profitAchievement >= 90 ? '#FFAE1F' : '#FA896B';
-
-  const profitOptions = {
-    series: [profitAchievement],
-    chart: {
-      type: 'radialBar',
-      height: 200,
-      offsetY: 0,
-      sparkline: {
-        enabled: false
-      }
-    },
-    plotOptions: {
-      radialBar: {
-        startAngle: -90,
-        endAngle: 90,
-        hollow: {
-          size: '75%',
-          background: 'transparent'
-        },
-        track: {
-          show: true,
-          background: '#E8E8E8',
-          strokeWidth: '97%',
-          opacity: 1,
-          margin: 5
-        },
-        dataLabels: {
-          show: false
-        }
-      }
-    },
-    fill: {
-      type: 'solid',
-      colors: [profitColor]
-    },
-    stroke: {
-      lineCap: 'round'
-    },
-    labels: ['達成率'],
-    colors: [profitColor],
-    animations: {
-      enabled: false
-    }
-  };
-
-  const profitChart = new ApexCharts(profitElement, profitOptions);
-  profitElement._apexChart = profitChart;
-  profitChart.render();
-      }
-  }
-
-  // ゲージ内の数値を設定（アニメーションなし）
-  function initGaugeAnimations() {
-    // ゲージ内の数値
-    const gaugeValues = document.querySelectorAll('.gauge-value-main[data-target]');
-    gaugeValues.forEach((element) => {
-      const targetValue = parseFloat(element.getAttribute('data-target')) || 0;
-      const isPercentage = element.getAttribute('data-type') === 'percentage';
-
-      // 値を直接設定
-      if (isPercentage) {
-        element.textContent = targetValue.toFixed(2);
-      } else {
-        element.textContent = targetValue.toLocaleString('ja-JP');
-      }
-    });
-
-    // 着地見込みの数値
-    const forecastValues = document.querySelectorAll('.forecast-value[data-target]');
-    forecastValues.forEach((element) => {
-      const targetValue = parseFloat(element.getAttribute('data-target')) || 0;
-      // 値を直接設定
-      element.textContent = targetValue.toLocaleString('ja-JP');
-    });
-  }
-
-  // DOMContentLoadedとwindow.loadの両方で初期化を試みる
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function () {
-      setTimeout(function () {
-        initBudgetGauges();
-        setTimeout(initGaugeAnimations, 200);
-      }, 100);
-    });
-  } else {
-    setTimeout(function () {
-      initBudgetGauges();
-      setTimeout(initGaugeAnimations, 200);
-    }, 100);
-  }
-
-  // ウィンドウのリサイズ時の処理
-  let resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () {
-      const salesElement = document.getElementById('salesBudgetGauge');
-      const profitElement = document.getElementById('profitBudgetGauge');
-      if (salesElement && salesElement._apexChart) {
-        salesElement._apexChart.updateOptions({}, false, false, false);
-      }
-      if (profitElement && profitElement._apexChart) {
-        profitElement._apexChart.updateOptions({}, false, false, false);
-      }
-    }, 250);
-  });
-}) ();
-</script>
-{% endif %}

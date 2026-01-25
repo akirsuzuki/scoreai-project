@@ -1,0 +1,243 @@
+/* ============================================
+   Chart.js ScoreAI Design System
+   ============================================
+
+   このファイルはpencil-score.penを参照して作成しました。
+   Chart.jsのスタイルはPencilデザインファイルの
+   カラーパレットとデザイントークンに基づいています。
+
+   Created: 2024
+   Reference: static/scoreai/pencil-score.pen
+   ============================================ */
+
+/* Chart.js Container */
+.pencil-chart-container,
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-height: 350px;
+  height: 350px;
+  margin-top: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  padding: var(--space-lg);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+}
+
+.pencil-chart-container canvas,
+.chart-container canvas {
+  max-width: 100%;
+  max-height: 100%;
+  font-family: var(--font-primary);
+}
+
+/* Chart.js Default Styles Override */
+.chartjs-render-monitor {
+  font-family: var(--font-primary);
+}
+
+/* Chart.js Legend */
+.chartjs-legend {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+  padding: var(--space-md) 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  justify-content: center;
+}
+
+.chartjs-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+}
+
+.chartjs-legend-item:hover {
+  background-color: var(--muted);
+}
+
+.chartjs-legend-item-text {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+.chartjs-legend-marker {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+/* Chart.js Tooltip */
+.chartjs-tooltip {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--space-sm) var(--space-md);
+  box-shadow: var(--shadow-md);
+}
+
+.chartjs-tooltip-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: var(--space-xs);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--border);
+}
+
+.chartjs-tooltip-body {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--foreground);
+}
+
+.chartjs-tooltip-body-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin: var(--space-xs) 0;
+}
+
+.chartjs-tooltip-color {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+.chartjs-tooltip-label {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+.chartjs-tooltip-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin-left: auto;
+}
+
+/* Chart.js Grid Lines */
+.chartjs-grid-line {
+  stroke: var(--border);
+  stroke-width: 1px;
+}
+
+.chartjs-grid-line-minor {
+  stroke: var(--border);
+  stroke-width: 0.5px;
+}
+
+/* Chart.js Axis Labels */
+.chartjs-axis-label {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  fill: var(--muted-foreground);
+}
+
+.chartjs-axis-tick {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  fill: var(--muted-foreground);
+}
+
+/* Chart.js Data Points */
+.chartjs-point {
+  stroke-width: 2px;
+  stroke: var(--card);
+}
+
+.chartjs-point-hover {
+  stroke-width: 3px;
+  stroke: var(--primary);
+}
+
+/* Chart.js Bar Chart */
+.chartjs-bar {
+  border-radius: var(--radius-sm);
+}
+
+.chartjs-bar-hover {
+  opacity: 0.8;
+}
+
+/* Chart.js Line Chart */
+.chartjs-line {
+  stroke-width: 2px;
+  fill: none;
+}
+
+.chartjs-line-hover {
+  stroke-width: 3px;
+}
+
+/* Chart.js Area Chart */
+.chartjs-area {
+  opacity: 0.3;
+}
+
+/* Chart.js Doughnut/Pie Chart */
+.chartjs-arc {
+  stroke: var(--card);
+  stroke-width: 2px;
+}
+
+.chartjs-arc-hover {
+  stroke-width: 4px;
+  opacity: 0.9;
+}
+
+/* Chart.js Animation */
+.chartjs-animation {
+  animation-duration: 0.6s;
+  animation-timing-function: ease-out;
+}
+
+/* Chart.js Responsive */
+@media (max-width: 767px) {
+  .pencil-chart-container,
+  .chart-container {
+    max-height: 250px;
+    height: 250px;
+    padding: var(--space-md);
+  }
+
+  .chartjs-legend {
+    font-size: 10px;
+    gap: var(--space-sm);
+  }
+
+  .chartjs-tooltip {
+    font-size: 11px;
+    padding: var(--space-xs) var(--space-sm);
+  }
+}
+
+/* Chart.js Color Palette (from pencil-score.pen) */
+:root {
+  --chart-color-1: var(--chart-1); /* #2563EB */
+  --chart-color-2: var(--chart-2); /* #10B981 */
+  --chart-color-3: var(--chart-3); /* #F59E0B */
+  --chart-color-4: var(--chart-4); /* #EF4444 */
+  --chart-color-5: var(--chart-5); /* #8B5CF6 */
+}

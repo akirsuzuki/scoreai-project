@@ -3,8 +3,8 @@
     <h5 class="card-title fw-semibold"> 保証別残高 </h5>
   </div>
   <div class="card-body">
-    <div class="d-flex justify-content-center">
-      <canvas id="chart_bySecured" style="width: 100%; height: auto;"></canvas>
+    <div class="d-flex justify-content-center pencil-chart-container">
+      <canvas id="chart_bySecured" class="pencil-chart"></canvas>
     </div>
   </div>
 </div>
@@ -41,13 +41,93 @@
     data: data,
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: false,
         },
+        tooltip: {
+          backgroundColor: '#FFFFFF',
+          titleColor: '#0F0F0F',
+          bodyColor: '#0F0F0F',
+          borderColor: '#E0E0E0',
+          borderWidth: 1,
+          padding: 12,
+          titleFont: {
+            family: "'Noto Serif JP', 'Cormorant Garamond', serif",
+            size: 13,
+            weight: '600'
+          },
+          bodyFont: {
+            family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+            size: 12,
+            weight: '500'
+          },
+          displayColors: true,
+          boxPadding: 4,
+          cornerRadius: 0,
+          callbacks: {
+            label: function(context) {
+              let label = context.label || '';
+              if (label) {
+                label += ': ';
+              }
+              if (context.parsed.y !== null) {
+                label += context.parsed.y.toLocaleString('ja-JP') + ' 千円';
+              }
+              return label;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: {
+            color: '#E0E0E0',
+            lineWidth: 1,
+            drawBorder: false
+          },
+          ticks: {
+            font: {
+              family: "'Noto Sans Mono CJK JP', 'JetBrains Mono', monospace",
+              size: 11,
+              weight: '500'
+            },
+            color: '#666666',
+            padding: 8,
+            callback: function(value) {
+              return value.toLocaleString('ja-JP');
+            }
+          }
+        },
+        x: {
+          grid: {
+            display: false,
+            drawBorder: false
+          },
+          ticks: {
+            font: {
+              family: "'Noto Sans JP', 'Inter', sans-serif",
+              size: 11,
+              weight: '500'
+            },
+            color: '#666666',
+            padding: 8
+          }
+        }
+      },
+      elements: {
+        bar: {
+          borderRadius: 0,
+          borderSkipped: false
+        }
+      },
+      animation: {
+        duration: 600,
+        easing: 'easeOutQuart'
       }
     },
-
   };
   new Chart(ctx, config);
   });

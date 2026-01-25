@@ -147,7 +147,7 @@ function handleDeleteSubmit(form, event, username) {
                 <td class="border-bottom-0">
                   <div class="d-flex gap-2">
                     <!-- 削除 -->
-                    <form method="post" action="{% url 'company_member_delete' company_id=company.id member_id=member.id %}" style="display: inline;"
+                    <form method="post" action="{% url 'company_member_delete' company_id=company.id member_id=member.id %}" class="d-inline"
                           class="no-auto-loading"
                           onsubmit="return handleDeleteSubmit(this, event, '{{ member.user.username }}');">
                       {% csrf_token %}
@@ -180,7 +180,7 @@ function handleDeleteSubmit(form, event, username) {
           <i class="ti ti-user-plus me-2"></i>
           <span>メンバーを招待</span>
         </a>
-        <a href="{% url 'company_detail' company.id %}" class="btn btn-outline-secondary ms-2">戻る</a>
+        <a href="{% url 'company_detail' company.id %}" class="btn btn-outline-secondary">戻る</a>
       </div>
     </div>
   </div>
@@ -240,7 +240,7 @@ function handleDeleteSubmit(form, event, username) {
                   <p class="mb-0 fw-normal">{{ invitation.invited_by.username }}</p>
                 </td>
                 <td class="border-bottom-0">
-                  <form method="post" action="{% url 'company_invitation_cancel' company_id=company.id invitation_id=invitation.id %}" style="display: inline;"
+                  <form method="post" action="{% url 'company_invitation_cancel' company_id=company.id invitation_id=invitation.id %}" class="d-inline"
                         onsubmit="return confirm('{{ invitation.email }} への招待をキャンセルしてもよろしいですか？');">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -256,7 +256,7 @@ function handleDeleteSubmit(form, event, username) {
         </div>
         {% else %}
         <div class="text-center py-4">
-          <i class="ti ti-mail-off" style="font-size: 48px; color: #ccc;"></i>
+          <i class="ti ti-mail-off" class="pencil-empty-icon"></i>
           <p class="text-muted mt-3 mb-0">招待中のメンバーはいません</p>
         </div>
         {% endif %}

@@ -27,10 +27,10 @@
         <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
             <h4 class="fw-semibold mb-0">{{ title }}</h4>
             <div>
-                <a href="{% url 'izakaya_plan_update' pk=plan.id %}" class="btn btn-outline-primary me-2">
+                <a href="{% url 'izakaya_plan_update' pk=plan.id %}" class="btn btn-outline-primary">
                     <i class="ti ti-edit me-1"></i>編集
                 </a>
-                <a href="{% url 'izakaya_plan_delete' pk=plan.id %}" class="btn btn-outline-danger me-2">
+                <a href="{% url 'izakaya_plan_delete' pk=plan.id %}" class="btn btn-outline-danger">
                     <i class="ti ti-trash me-1"></i>削除
                 </a>
                 <a href="{% url 'izakaya_plan_list' %}" class="btn btn-outline-secondary">

@@ -5,8 +5,8 @@
 <div class="page-break"></div>
 
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="card-title fw-semibold mb-0">現在アクティブな借入</h5>
         <div class="form-check form-switch">
@@ -17,8 +17,8 @@
         </div>
       </div>
       <div class="card-body">
-        <div style="overflow-x: auto;">
-        <table id="active_debt_list" class="display nowrap" style="width: 100%; min-width: 1200px;">
+        <div class="pencil-table-overflow">
+        <table id="active_debt_list" class="display nowrap pencil-table-full">
           <thead>
             <tr>
               <th>金融機関</th>
@@ -91,7 +91,7 @@
           </tbody>
           <tfoot>
             <tr>
-              <th colspan="3" style="text-align:right">合計：</th>
+              <th colspan="3" class="text-end">合計：</th>
               <th></th>
               <th></th>
               <th></th>
@@ -111,7 +111,7 @@
         </table>
         </div>
       </div>
-      <div class="card-footer text-end">
+      <div class="card-footer">
         <a href="{% url 'debt_create' %}" class="btn btn-primary">新規借入登録</a>
       </div>
     </div>
@@ -123,13 +123,15 @@
 
 <!-- グラフ -->
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title mb-0">返済中残高12ヶ月推移</h5>
       </div>
       <div class="card-body">
-        <canvas id="chart_debtAll"></canvas>
+        <div class="pencil-chart-wrapper">
+          <canvas id="chart_debtAll"></canvas>
+        </div>
       </div>
     </div>
   </div>
@@ -295,16 +297,16 @@
       let balanceShare = totalBalance > 0 ? (subtotal.balance / totalBalance * 100) : 0;
       
       // サブトータル行を作成（クリック不可）
-      let subtotalRow = $('<tr class="subtotal-row" style="background-color: #f8f9fa; font-weight: bold; cursor: default;">')
-        .append($('<td colspan="3" style="text-align: right;">').html('<strong>' + bankName + ' 小計</strong>'))
-        .append($('<td style="text-align: right;">').html(subtotal.principal.toLocaleString('ja-JP')))
+      let subtotalRow = $('<tr class="subtotal-row pencil-subtotal-row">')
+        .append($('<td colspan="3" class="pencil-subtotal-cell text-end">').html('<strong>' + bankName + ' 小計</strong>'))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.principal.toLocaleString('ja-JP')))
         .append($('<td colspan="4">'))
-        .append($('<td style="text-align: right;">').html(subtotal.monthlyRepayment.toLocaleString('ja-JP')))
-        .append($('<td style="text-align: right;">').html(balanceShare.toFixed(2) + '%'))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.monthlyRepayment.toLocaleString('ja-JP')))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(balanceShare.toFixed(2) + '%'))
         .append($('<td colspan="2">'))
-        .append($('<td style="text-align: right;">').html(subtotal.balance.toLocaleString('ja-JP')))
-        .append($('<td style="text-align: right;">').html(subtotal.interest.toLocaleString('ja-JP')))
-        .append($('<td style="text-align: right;">').html(subtotal.balanceFy1.toLocaleString('ja-JP')))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.balance.toLocaleString('ja-JP')))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.interest.toLocaleString('ja-JP')))
+        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.balanceFy1.toLocaleString('ja-JP')))
         .append($('<td colspan="2">'));
       
       // グループの最後の行の後に挿入

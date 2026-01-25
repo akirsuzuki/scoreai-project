@@ -84,27 +84,79 @@
 
 <!-- 円グラフセクション -->
 <div class="row mb-4">
-  <div class="col-12 col-md-6 mb-4 mb-md-0">
+  <div class="col-12 col-md-4 mb-4 mb-md-0">
     <div class="card h-100">
       <div class="card-header">
         <h5 class="card-title fw-semibold mb-0">保証協会別残高シェア</h5>
       </div>
       <div class="card-body">
-        <div style="position: relative; height: 400px;">
+        <div class="pencil-chart-wrapper">
           <canvas id="bySecuredTypeChart"></canvas>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-12 col-md-6">
+  <div class="col-12 col-md-4 mb-4 mb-md-0">
     <div class="card h-100">
       <div class="card-header">
         <h5 class="card-title fw-semibold mb-0">金融機関別・保証別残高シェア</h5>
       </div>
       <div class="card-body">
-        <div style="position: relative; height: 400px;">
+        <div class="pencil-chart-wrapper">
           <canvas id="byBankAndSecuredTypeChart"></canvas>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-md-4">
+    <div class="card h-100">
+      <div class="card-header">
+        <h5 class="card-title fw-semibold mb-0">直近で実行された借入</h5>
+      </div>
+      <div class="card-body">
+        {% if most_recent_debt %}
+        <div class="d-flex flex-column gap-3">
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">金融機関</span>
+            <span class="fw-semibold">{{ most_recent_debt.financial_institution.short_name|default:most_recent_debt.financial_institution.name }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">実行日</span>
+            <span class="fw-semibold">{{ most_recent_debt.issue_date|date:"Y年n月j日" }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">元本金額</span>
+            <span class="fw-semibold">{{ most_recent_debt.principal|to_thousands|intcomma }} 千円</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">金利</span>
+            <span class="fw-semibold">{{ most_recent_debt.interest_rate }}%</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">月返済額</span>
+            <span class="fw-semibold">{{ most_recent_debt.monthly_repayment|to_thousands|intcomma }} 千円</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center border-bottom pb-2">
+            <span class="text-muted">保証区分</span>
+            <span class="fw-semibold">{{ most_recent_debt.secured_type|default:"なし" }}</span>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="text-muted">代表者保証</span>
+            <span>
+              {% if most_recent_debt.is_securedby_management %}
+                <span class="badge bg-info">あり</span>
+              {% else %}
+                <span class="badge bg-secondary">なし</span>
+              {% endif %}
+            </span>
+          </div>
+        </div>
+        {% else %}
+        <div class="text-center text-muted py-4">
+          <i class="ti ti-database-off fs-1 mb-2 d-block"></i>
+          借入データがありません
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -112,8 +164,8 @@
 
 <!-- テーブルセクション -->
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb mb-0">
@@ -160,7 +212,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th colspan="1" style="text-align:right">合計：</th>
+                <th colspan="1" class="text-end">合計：</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -177,8 +229,8 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100">
+  <div class="col-12">
+    <div class="card">
       <div class="card-header">
         <h5 class="card-title fw-semibold">金融機関別・保証別</h5>
       </div>
@@ -212,7 +264,7 @@
             </tbody>
             <tfoot>
               <tr>
-                <th colspan="2" style="text-align:right">合計：</th>
+                <th colspan="2" class="text-end">合計：</th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -226,6 +278,9 @@
     </div>
   </div>
 </div>
+
+  </div>  <!-- Close .tab-pane -->
+</div>  <!-- Close .tab-content -->
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

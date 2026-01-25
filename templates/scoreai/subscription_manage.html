@@ -137,10 +137,10 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <h6>AI相談回数</h6>
-                        <div class="progress" style="height: 30px;">
-                            <div class="progress-bar no-animation {% if usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                        <div class="progress pencil-progress-bar">
+                            <div class="progress-bar no-animation pencil-progress-bar-fill {% if usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ai_consultation_usage_percentage is not None and usage_tracking.ai_consultation_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
                                  role="progressbar" 
-                                 style="width: {% if usage_tracking.ai_consultation_usage_percentage is not None %}{{ usage_tracking.ai_consultation_usage_percentage }}%{% else %}0%{% endif %}; animation: none !important; background-image: none !important;"
+                                 style="width: {% if usage_tracking.ai_consultation_usage_percentage is not None %}{{ usage_tracking.ai_consultation_usage_percentage }}%{% else %}0%{% endif %};"
                                  aria-valuenow="{{ usage_tracking.ai_consultation_count }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="{{ subscription.total_ai_consultations_allowed }}">
@@ -159,10 +159,10 @@
                     
                     <div class="mb-3">
                         <h6>OCR読み込み回数</h6>
-                        <div class="progress" style="height: 30px;">
-                            <div class="progress-bar no-animation {% if usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
+                        <div class="progress pencil-progress-bar">
+                            <div class="progress-bar no-animation pencil-progress-bar-fill {% if usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 80 %}bg-danger{% elif usage_tracking.ocr_usage_percentage is not None and usage_tracking.ocr_usage_percentage >= 60 %}bg-warning{% else %}bg-success{% endif %}" 
                                  role="progressbar" 
-                                 style="width: {% if usage_tracking.ocr_usage_percentage is not None %}{{ usage_tracking.ocr_usage_percentage }}%{% else %}0%{% endif %}; animation: none !important; background-image: none !important;"
+                                 style="width: {% if usage_tracking.ocr_usage_percentage is not None %}{{ usage_tracking.ocr_usage_percentage }}%{% else %}0%{% endif %};"
                                  aria-valuenow="{{ usage_tracking.ocr_count }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="{{ subscription.total_ocr_allowed }}">
@@ -259,7 +259,7 @@
                     </div>
                     {% else %}
                     <div class="text-center py-4">
-                        <i class="ti ti-history-off" style="font-size: 48px; color: #ccc;"></i>
+                        <i class="ti ti-history-off" class="pencil-empty-icon"></i>
                         <p class="text-muted mt-3 mb-0">プラン変更履歴がありません</p>
                     </div>
                     {% endif %}
