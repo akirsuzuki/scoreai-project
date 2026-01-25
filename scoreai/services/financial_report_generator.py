@@ -384,12 +384,12 @@ class FinancialReportGenerator:
         return row
     
     def _build_pl_bumon(self, wb: Workbook) -> None:
-        """部門別PLシートを作成"""
+        """部門別PLシートを作成（前期比較付き）"""
         if self.pl_bumon_df is None:
             logger.warning("部門別PLデータがありません")
             return
         
-        ws = wb.create_sheet(title="部門別PL")
+        ws = wb.create_sheet(title=f"部門別PL（{self.config.target_month}月）")
         
         # ページ設定（A3横）
         ws.page_setup.paperSize = ws.PAPERSIZE_A3
@@ -397,24 +397,198 @@ class FinancialReportGenerator:
         ws.page_setup.fitToPage = True
         ws.page_setup.fitToWidth = 1
         ws.page_setup.fitToHeight = 1
-        ws.print_title_cols = 'A:B'  # A列とB列を繰り返し印刷
+        ws.print_title_cols = 'A:A'  # A列を繰り返し印刷
         ws.page_margins = PageMargins(left=0.3, right=0.3, top=0.3, bottom=0.3)
         
         # タイトル
         row = 1
-        ws.merge_cells(f'A{row}:D{row}')
+        ws.merge_cells(f'A{row}:E{row}')
         cell = ws.cell(row=row, column=1)
-        cell.value = f"部門別損益計算書 - {self.config.target_year}年{self.config.target_month}月"
+        cell.value = f"{self.config.company_name} 部門別損益計算書"
         cell.font = Font(bold=True, size=14)
         cell.alignment = Alignment(horizontal='left', vertical='center')
         ws.row_dimensions[row].height = 25
+        row += 1
+        
+        # サブタイトル
+        ws.merge_cells(f'A{row}:E{row}')
+        cell = ws.cell(row=row, column=1)
+        cell.value = f"対象期間: {self.config.target_year}年{self.config.target_month}月"
+        cell.font = Font(size=10)
         row += 2
         
-        # DataFrameをシートに書き込み
-        self._write_dataframe_to_sheet(ws, self.pl_bumon_df, start_row=row)
+        # データの準備
+        df = self.pl_bumon_df.copy()
+        df_zenki = self.pl_bumon_zenki_df.copy() if self.pl_bumon_zenki_df is not None else None
+        
+        # 勘定科目列を特定
+        account_col = df.columns[0] if len(df.columns) > 0 else None
+        if account_col is None:
+            return
+        
+        # 部門列を取得（最初の列以外）
+        department_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
+        
+        # 売上高合計行を探す（比率計算用）
+        sales_row = None
+        for idx, row_data in df.iterrows():
+            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            if '売上高合計' in account_name or account_name == '売上高':
+                sales_row = row_data
+                break
+        
+        # ヘッダー行1: 部門名
+        col = 1
+        ws.cell(row=row, column=col).value = "勘定科目"
+        ws.cell(row=row, column=col).font = self.header_font
+        ws.cell(row=row, column=col).fill = self.header_fill
+        ws.cell(row=row, column=col).border = self.thin_border
+        ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+        col += 1
+        
+        for dept in department_cols:
+            # 部門名を4列にマージ
+            ws.merge_cells(start_row=row, start_column=col, end_row=row, end_column=col+3)
+            ws.cell(row=row, column=col).value = str(dept)
+            ws.cell(row=row, column=col).font = self.header_font
+            ws.cell(row=row, column=col).fill = self.header_fill
+            ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+            for c in range(col, col+4):
+                ws.cell(row=row, column=c).border = self.thin_border
+            col += 4
+        row += 1
+        
+        # ヘッダー行2: 金額/比率/前期/前期比
+        col = 1
+        ws.cell(row=row, column=col).value = ""
+        ws.cell(row=row, column=col).border = self.thin_border
+        col += 1
+        
+        sub_headers = ["金額", "比率", "前期", "前期比"]
+        for dept in department_cols:
+            for sh in sub_headers:
+                ws.cell(row=row, column=col).value = sh
+                ws.cell(row=row, column=col).font = Font(bold=True, size=9)
+                ws.cell(row=row, column=col).fill = self.header_fill
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+                col += 1
+        row += 1
+        
+        # データ行
+        for idx, row_data in df.iterrows():
+            col = 1
+            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            
+            # 勘定科目名
+            ws.cell(row=row, column=col).value = account_name
+            ws.cell(row=row, column=col).border = self.thin_border
+            
+            # セクション行のスタイル
+            is_section = account_name in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失']
+            is_total = '合計' in account_name or '利益' in account_name
+            
+            if is_section:
+                ws.cell(row=row, column=col).font = Font(bold=True)
+                ws.cell(row=row, column=col).fill = self.section_fill
+            elif is_total:
+                ws.cell(row=row, column=col).font = Font(bold=True)
+                ws.cell(row=row, column=col).fill = self.total_fill
+            
+            col += 1
+            
+            # 各部門のデータ
+            for dept in department_cols:
+                # 当期金額
+                current_value = row_data[dept] if pd.notna(row_data[dept]) else 0
+                try:
+                    current_value = float(current_value)
+                except (ValueError, TypeError):
+                    current_value = 0
+                
+                # 前期金額
+                prev_value = 0
+                if df_zenki is not None and dept in df_zenki.columns:
+                    zenki_row = df_zenki[df_zenki[account_col] == row_data[account_col]]
+                    if not zenki_row.empty:
+                        prev_val = zenki_row.iloc[0][dept]
+                        try:
+                            prev_value = float(prev_val) if pd.notna(prev_val) else 0
+                        except (ValueError, TypeError):
+                            prev_value = 0
+                
+                # 比率（売上高に対する比率）
+                ratio = 0
+                if sales_row is not None and dept in sales_row.index:
+                    sales_value = sales_row[dept]
+                    try:
+                        sales_value = float(sales_value) if pd.notna(sales_value) else 0
+                        if sales_value != 0:
+                            ratio = current_value / sales_value
+                    except (ValueError, TypeError):
+                        pass
+                
+                # 前期比
+                yoy = None
+                if prev_value != 0:
+                    yoy = (current_value - prev_value) / abs(prev_value)
+                
+                # 金額
+                ws.cell(row=row, column=col).value = current_value
+                ws.cell(row=row, column=col).number_format = '#,##0'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 比率
+                ws.cell(row=row, column=col).value = ratio
+                ws.cell(row=row, column=col).number_format = '0.0%'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 前期
+                ws.cell(row=row, column=col).value = prev_value
+                ws.cell(row=row, column=col).number_format = '#,##0'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 前期比
+                if yoy is not None:
+                    ws.cell(row=row, column=col).value = yoy
+                    ws.cell(row=row, column=col).number_format = '0.0%'
+                else:
+                    ws.cell(row=row, column=col).value = "-"
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+            
+            row += 1
+        
+        # 列幅調整
+        ws.column_dimensions['A'].width = 20
+        for i in range(2, col):
+            ws.column_dimensions[get_column_letter(i)].width = 12
     
     def _build_pl_suii(self, wb: Workbook) -> None:
-        """PL月次推移シートを作成"""
+        """PL月次推移シートを作成（前期比較付き）"""
         if self.pl_suii_df is None:
             logger.warning("PL月次推移データがありません")
             return
@@ -432,16 +606,188 @@ class FinancialReportGenerator:
         
         # タイトル
         row = 1
-        ws.merge_cells(f'A{row}:D{row}')
+        ws.merge_cells(f'A{row}:E{row}')
         cell = ws.cell(row=row, column=1)
-        cell.value = f"月次推移損益計算書 - {self.config.target_year}年度"
+        cell.value = f"{self.config.company_name} 月次損益計算書推移"
         cell.font = Font(bold=True, size=14)
         cell.alignment = Alignment(horizontal='left', vertical='center')
         ws.row_dimensions[row].height = 25
+        row += 1
+        
+        # サブタイトル
+        ws.merge_cells(f'A{row}:E{row}')
+        cell = ws.cell(row=row, column=1)
+        cell.value = f"{self.config.target_year}年度"
+        cell.font = Font(size=10)
         row += 2
         
-        # DataFrameをシートに書き込み
-        self._write_dataframe_to_sheet(ws, self.pl_suii_df, start_row=row)
+        # データの準備
+        df = self.pl_suii_df.copy()
+        df_zenki = self.pl_suii_zenki_df.copy() if self.pl_suii_zenki_df is not None else None
+        
+        # 勘定科目列を特定
+        account_col = df.columns[0] if len(df.columns) > 0 else None
+        if account_col is None:
+            return
+        
+        # 月列を取得（最初の列以外）
+        month_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
+        
+        # 売上高合計行を探す（比率計算用）
+        sales_data = {}
+        for idx, row_data in df.iterrows():
+            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            if '売上高合計' in account_name or account_name == '売上高':
+                for month in month_cols:
+                    try:
+                        sales_data[month] = float(row_data[month]) if pd.notna(row_data[month]) else 0
+                    except (ValueError, TypeError):
+                        sales_data[month] = 0
+                break
+        
+        # ヘッダー行1: 月名
+        col = 1
+        ws.cell(row=row, column=col).value = "勘定科目"
+        ws.cell(row=row, column=col).font = self.header_font
+        ws.cell(row=row, column=col).fill = self.header_fill
+        ws.cell(row=row, column=col).border = self.thin_border
+        ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+        col += 1
+        
+        for month in month_cols:
+            # 月名を4列にマージ
+            ws.merge_cells(start_row=row, start_column=col, end_row=row, end_column=col+3)
+            ws.cell(row=row, column=col).value = str(month)
+            ws.cell(row=row, column=col).font = self.header_font
+            ws.cell(row=row, column=col).fill = self.header_fill
+            ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+            for c in range(col, col+4):
+                ws.cell(row=row, column=c).border = self.thin_border
+            col += 4
+        row += 1
+        
+        # ヘッダー行2: 金額/比率/前期/前期比
+        col = 1
+        ws.cell(row=row, column=col).value = ""
+        ws.cell(row=row, column=col).border = self.thin_border
+        col += 1
+        
+        sub_headers = ["金額", "比率", "前期", "前期比"]
+        for month in month_cols:
+            for sh in sub_headers:
+                ws.cell(row=row, column=col).value = sh
+                ws.cell(row=row, column=col).font = Font(bold=True, size=9)
+                ws.cell(row=row, column=col).fill = self.header_fill
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='center', vertical='center')
+                col += 1
+        row += 1
+        
+        # データ行
+        for idx, row_data in df.iterrows():
+            col = 1
+            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            
+            # 勘定科目名
+            ws.cell(row=row, column=col).value = account_name
+            ws.cell(row=row, column=col).border = self.thin_border
+            
+            # セクション行のスタイル
+            is_section = account_name in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失']
+            is_total = '合計' in account_name or '利益' in account_name
+            
+            if is_section:
+                ws.cell(row=row, column=col).font = Font(bold=True)
+                ws.cell(row=row, column=col).fill = self.section_fill
+            elif is_total:
+                ws.cell(row=row, column=col).font = Font(bold=True)
+                ws.cell(row=row, column=col).fill = self.total_fill
+            
+            col += 1
+            
+            # 各月のデータ
+            for month in month_cols:
+                # 当期金額
+                current_value = row_data[month] if pd.notna(row_data[month]) else 0
+                try:
+                    current_value = float(current_value)
+                except (ValueError, TypeError):
+                    current_value = 0
+                
+                # 前期金額
+                prev_value = 0
+                if df_zenki is not None and month in df_zenki.columns:
+                    zenki_row = df_zenki[df_zenki[account_col] == row_data[account_col]]
+                    if not zenki_row.empty:
+                        prev_val = zenki_row.iloc[0][month]
+                        try:
+                            prev_value = float(prev_val) if pd.notna(prev_val) else 0
+                        except (ValueError, TypeError):
+                            prev_value = 0
+                
+                # 比率（売上高に対する比率）
+                ratio = 0
+                if month in sales_data and sales_data[month] != 0:
+                    ratio = current_value / sales_data[month]
+                
+                # 前期比
+                yoy = None
+                if prev_value != 0:
+                    yoy = (current_value - prev_value) / abs(prev_value)
+                
+                # 金額
+                ws.cell(row=row, column=col).value = current_value
+                ws.cell(row=row, column=col).number_format = '#,##0'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 比率
+                ws.cell(row=row, column=col).value = ratio
+                ws.cell(row=row, column=col).number_format = '0.0%'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 前期
+                ws.cell(row=row, column=col).value = prev_value
+                ws.cell(row=row, column=col).number_format = '#,##0'
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+                
+                # 前期比
+                if yoy is not None:
+                    ws.cell(row=row, column=col).value = yoy
+                    ws.cell(row=row, column=col).number_format = '0.0%'
+                else:
+                    ws.cell(row=row, column=col).value = "-"
+                ws.cell(row=row, column=col).border = self.thin_border
+                ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
+                if is_section:
+                    ws.cell(row=row, column=col).fill = self.section_fill
+                elif is_total:
+                    ws.cell(row=row, column=col).fill = self.total_fill
+                col += 1
+            
+            row += 1
+        
+        # 列幅調整
+        ws.column_dimensions['A'].width = 20
+        for i in range(2, col):
+            ws.column_dimensions[get_column_letter(i)].width = 12
     
     def _build_bs(self, wb: Workbook) -> None:
         """貸借対照表シートを作成"""
