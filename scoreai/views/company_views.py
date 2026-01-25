@@ -150,24 +150,35 @@ class CompanyDetailView(LoginRequiredMixin, DetailView):  # SelectedCompanyMixin
         return context
 
 
-class CompanyUpdateView(SelectedCompanyMixin, UpdateView):
+class CompanyUpdateView(LoginRequiredMixin, UpdateView):
     """会社情報更新ビュー"""
     model = Company
     form_class = CompanyForm
     template_name = 'scoreai/company_form.html'
-    success_url = reverse_lazy('company_detail')
+    slug_field = 'id'
+    slug_url_kwarg = 'id'
 
-    def get_object(self, queryset=None):
-        """更新対象のオブジェクトを取得
+    def dispatch(self, request, *args, **kwargs):
+        """アクセス権限をチェック（is_manager=Trueのユーザーのみ編集可能）"""
+        response = super().dispatch(request, *args, **kwargs)
         
-        Args:
-            queryset: クエリセット（未使用）
-            
-        Returns:
-            選択された会社オブジェクト
-        """
-        # SelectedCompanyMixin から選択された会社を取得
-        return self.this_company
+        # Companyオブジェクトを取得
+        company = self.get_object()
+        
+        # ユーザーがこのCompanyのマネージャーかどうかを確認
+        user_company = UserCompany.objects.filter(
+            user=request.user,
+            company=company,
+            active=True,
+            is_manager=True
+        ).first()
+        
+        if not user_company:
+            messages.error(request, 'この会社を編集する権限がありません。')
+            from django.shortcuts import redirect
+            return redirect('company_detail', id=company.id)
+        
+        return response
 
     def form_valid(self, form):
         """フォームバリデーション成功時の処理
@@ -199,8 +210,9 @@ class CompanyUpdateView(SelectedCompanyMixin, UpdateView):
             コンテキストデータの辞書
         """
         context = super().get_context_data(**kwargs)
-        context['title'] = '会社詳細'
+        context['title'] = '会社情報編集'
         context['show_title_card'] = False
+        context['company'] = self.object
         return context
 
 
