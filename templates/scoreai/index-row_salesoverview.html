@@ -2,33 +2,92 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<div class="row dashboard-section">
-  <div class="col-lg-12 d-flex align-items-stretch">
-    <div class="card w-100 card-hover">
-      <div class="card-body">
-        <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
-          <div class="mb-3 mb-sm-0">
-            <h5 class="card-title fw-semibold mb-0">PL月次推移</h5>
+<!-- Charts Row（Pencil Design System準拠）-->
+<!-- 左9 columns: PL月次推移、右3 columns: 予算達成ゲージチャート -->
+<div class="row g-4 dashboard-section mb-4 dashboard-charts-row">
+  <!-- 左側: PL月次推移チャート (9 columns) -->
+  <div class="col-12 col-lg-9">
+    <div class="card h-100 pencil-chart-card">
+      <div class="card-body pencil-card-body">
+        <!-- Chart Header -->
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <div>
+            <h5 class="card-title mb-1">月次売上推移</h5>
+            <p class="card-subtitle text-muted mb-0">今期の月別売上高</p>
+          </div>
+          <div id="profitSelector" class="d-flex gap-3">
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input" type="checkbox" id="showGrossProfit">
+              <label class="form-check-label small" for="showGrossProfit">粗利益を表示</label>
+            </div>
+            <div class="form-check form-check-inline mb-0">
+              <input class="form-check-input" type="checkbox" id="showOperatingProfit">
+              <label class="form-check-label small" for="showOperatingProfit">営業利益を表示</label>
+            </div>
           </div>
         </div>
-        <div id="profitSelector" class="mb-3">
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="showGrossProfit">
-            <label class="form-check-label" for="showGrossProfit">粗利益を表示</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="showOperatingProfit">
-            <label class="form-check-label" for="showOperatingProfit">営業利益を表示</label>
-          </div>
+        <!-- Chart Content -->
+        <div class="pencil-chart-container pencil-chart-flex">
+          <canvas id="salesChart" class="pencil-chart"></canvas>
         </div>
-        <!-- チャート記述 start -->
-        <canvas id="salesChart" width="400" height="200"></canvas>
       </div>
-      <div class="card-footer bg-transparent border-top-0">
-        <div class="d-flex justify-content-end">
-          <a href="{% url 'fiscal_summary_month_create' %}" class="btn btn-primary">月次データ新規登録</a>
-          <span class="mx-2"></span>
-          <a href="{% url 'import_fiscal_summary_month' %}" class="btn btn-secondary">一括CSVインポート</a>
+    </div>
+  </div>
+
+  <!-- 右側: 予算達成ゲージチャート (3 columns) -->
+  <div class="col-12 col-lg-3">
+    <div class="d-flex flex-column gap-4 h-100">
+      <!-- 売上高予算達成状況 -->
+      <div class="card flex-fill pencil-gauge-card">
+        <div class="card-body">
+          <div class="mb-2">
+            <h6 class="card-title mb-1">売上高予算達成状況</h6>
+            <p class="card-subtitle text-muted mb-0" style="font-size: 12px;">予算vs実績</p>
+          </div>
+          {% if budget_achievement.elapsed_months > 0 and budget_achievement.sales is not None %}
+          <div class="pencil-gauge-container">
+            <div id="salesBudgetGauge" class="pencil-gauge-chart"></div>
+            <div class="gauge-chart-info">
+              <div class="gauge-chart-value">
+                <span class="gauge-value-main" data-target="{{ budget_achievement.sales|default:0 }}" data-type="percentage">0.00</span>
+                <span class="gauge-value-unit">%</span>
+              </div>
+              <div class="gauge-chart-label">{{ budget_achievement.elapsed_months }}ヶ月経過</div>
+            </div>
+          </div>
+          {% else %}
+          <div class="text-muted small text-center py-4">
+            <i class="ti ti-chart-donut-3 fs-1 d-block mb-2 opacity-50"></i>
+            データなし
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- 営業利益予算達成状況 -->
+      <div class="card flex-fill pencil-gauge-card">
+        <div class="card-body">
+          <div class="mb-2">
+            <h6 class="card-title mb-1">営業利益予算達成状況</h6>
+            <p class="card-subtitle text-muted mb-0" style="font-size: 12px;">予算vs実績</p>
+          </div>
+          {% if budget_achievement.elapsed_months > 0 and budget_achievement.operating_profit is not None %}
+          <div class="pencil-gauge-container">
+            <div id="profitBudgetGauge" class="pencil-gauge-chart"></div>
+            <div class="gauge-chart-info">
+              <div class="gauge-chart-value">
+                <span class="gauge-value-main" data-target="{{ budget_achievement.operating_profit|default:0 }}" data-type="percentage">0.00</span>
+                <span class="gauge-value-unit">%</span>
+              </div>
+              <div class="gauge-chart-label">{{ budget_achievement.elapsed_months }}ヶ月経過</div>
+            </div>
+          </div>
+          {% else %}
+          <div class="text-muted small text-center py-4">
+            <i class="ti ti-chart-donut-3 fs-1 d-block mb-2 opacity-50"></i>
+            データなし
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -36,3 +95,129 @@
 </div>
 
 {% include 'scoreai/script/fiscal_summary_month_chart.js' %}
+
+<!-- 予算達成状況セクションのスクリプト（ゲージチャート） -->
+{% if budget_achievement.elapsed_months > 0 %}
+<script>
+(function () {
+  // チャートインスタンスを保存（リフレッシュ時の重複作成を防ぐ）
+  if (window.budgetGaugeChartsInitialized) {
+    return;
+  }
+  window.budgetGaugeChartsInitialized = true;
+
+  function initBudgetGauges() {
+    if (typeof ApexCharts === 'undefined') {
+      console.warn('ApexCharts is not loaded');
+      return;
+    }
+
+    // 売上高予算達成率ゲージ
+    const salesElement = document.getElementById('salesBudgetGauge');
+    if (salesElement && !salesElement._apexChart) {
+      const salesAchievement = {{ budget_achievement.sales|default:0 }};
+      const salesColor = salesAchievement >= 100 ? '#10B981' : salesAchievement >= 90 ? '#F59E0B' : '#EF4444';
+
+      const salesOptions = {
+        series: [Math.min(salesAchievement, 100)],
+        chart: {
+          type: 'radialBar',
+          height: 160,
+          fontFamily: "'Noto Sans JP', sans-serif",
+          sparkline: { enabled: false }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            hollow: { size: '70%', background: 'transparent' },
+            track: { show: true, background: '#E2E8F0', strokeWidth: '97%', opacity: 1, margin: 5 },
+            dataLabels: { show: false }
+          }
+        },
+        fill: { type: 'solid', colors: [salesColor] },
+        stroke: { lineCap: 'round' },
+        labels: ['達成率'],
+        colors: [salesColor]
+      };
+
+      const salesChart = new ApexCharts(salesElement, salesOptions);
+      salesElement._apexChart = salesChart;
+      salesChart.render();
+    }
+
+    // 営業利益予算達成率ゲージ
+    const profitElement = document.getElementById('profitBudgetGauge');
+    if (profitElement && !profitElement._apexChart) {
+      const profitAchievement = {{ budget_achievement.operating_profit|default:0 }};
+      const profitColor = profitAchievement >= 100 ? '#10B981' : profitAchievement >= 90 ? '#F59E0B' : '#EF4444';
+
+      const profitOptions = {
+        series: [Math.min(profitAchievement, 100)],
+        chart: {
+          type: 'radialBar',
+          height: 160,
+          fontFamily: "'Noto Sans JP', sans-serif",
+          sparkline: { enabled: false }
+        },
+        plotOptions: {
+          radialBar: {
+            startAngle: -90,
+            endAngle: 90,
+            hollow: { size: '70%', background: 'transparent' },
+            track: { show: true, background: '#E2E8F0', strokeWidth: '97%', opacity: 1, margin: 5 },
+            dataLabels: { show: false }
+          }
+        },
+        fill: { type: 'solid', colors: [profitColor] },
+        stroke: { lineCap: 'round' },
+        labels: ['達成率'],
+        colors: [profitColor]
+      };
+
+      const profitChart = new ApexCharts(profitElement, profitOptions);
+      profitElement._apexChart = profitChart;
+      profitChart.render();
+    }
+  }
+
+  function initGaugeValues() {
+    const gaugeValues = document.querySelectorAll('.gauge-value-main[data-target]');
+    gaugeValues.forEach((element) => {
+      const targetValue = parseFloat(element.getAttribute('data-target')) || 0;
+      const isPercentage = element.getAttribute('data-type') === 'percentage';
+      element.textContent = isPercentage ? targetValue.toFixed(2) : targetValue.toLocaleString('ja-JP');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setTimeout(function () {
+        initBudgetGauges();
+        setTimeout(initGaugeValues, 200);
+      }, 100);
+    });
+  } else {
+    setTimeout(function () {
+      initBudgetGauges();
+      setTimeout(initGaugeValues, 200);
+    }, 100);
+  }
+
+  let resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      const salesElement = document.getElementById('salesBudgetGauge');
+      const profitElement = document.getElementById('profitBudgetGauge');
+      if (salesElement && salesElement._apexChart) {
+        salesElement._apexChart.updateOptions({}, false, false, false);
+      }
+      if (profitElement && profitElement._apexChart) {
+        profitElement._apexChart.updateOptions({}, false, false, false);
+      }
+    }, 250);
+  });
+})();
+</script>
+{% endif %}

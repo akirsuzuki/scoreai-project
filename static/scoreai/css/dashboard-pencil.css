@@ -1,0 +1,1256 @@
+/* ============================================
+   Dashboard ScoreAI Design System
+   ============================================
+
+   このファイルはpencil-score.penを参照して作成しました。
+   ダッシュボードのスタイルはPencilデザインファイルの
+   コンポーネントとデザイントークンに基づいています。
+
+   Created: 2024
+   Updated: 2026-01-25 (Synced with pencil-score.pen Dashboard)
+   Reference: static/scoreai/pencil-score.pen
+   ============================================ */
+
+/* ============================================
+   Dashboard Main Content (XfO7s)
+   padding: 32, gap: 24, layout: vertical
+   ============================================ */
+
+.dashboard-main-content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  height: 100%;
+}
+
+/* ============================================
+   Page Header (W7t1x)
+   Title: 28px/700, Subtitle: 14px/normal
+   ============================================ */
+
+.dashboard-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dashboard-title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-title {
+  font-family: var(--font-primary);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.dashboard-subtitle {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+/* ============================================
+   KPI Metric Cards (hSrav)
+   4 cards in row, gap: 16
+   ============================================ */
+
+.pencil-metric-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+.pencil-metric-row > * {
+  flex: 1 1 0;
+  min-width: 200px;
+}
+
+@media (max-width: 991px) {
+  .pencil-metric-row > * {
+    flex: 1 1 calc(50% - 8px);
+    min-width: calc(50% - 8px);
+  }
+}
+
+@media (max-width: 767px) {
+  .pencil-metric-row > * {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+}
+
+/* KPI Card (from pencil-score.pen Card component)
+   cornerRadius: 8, fill: #FFFFFF, stroke: 1px #E2E8F0
+   ============================================ */
+.kpi-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: none;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.kpi-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.kpi-card .card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* KPI Label (gq27y) - 14px, normal, #64748B */
+.kpi-label {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  letter-spacing: 0;
+  text-transform: none;
+  margin-bottom: 0;
+}
+
+/* KPI Icon */
+.kpi-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-m);
+  transition: all var(--transition-base);
+  flex-shrink: 0;
+}
+
+.kpi-icon i {
+  font-size: 20px;
+}
+
+.kpi-sales .kpi-icon {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--chart-1);
+}
+
+.kpi-profit .kpi-icon {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--chart-2);
+}
+
+.kpi-debt .kpi-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--chart-3);
+}
+
+.kpi-interest .kpi-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--chart-3);
+}
+
+/* KPI Value (mpe8F) - 24px, 700 weight, #0F172A */
+.kpi-value {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--foreground);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* KPI Trend/Change Indicator - 12px with icon, gap: 4 */
+.kpi-trend,
+.kpi-change {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-primary);
+  font-size: 12px;
+  width: 100%;
+}
+
+.kpi-trend p,
+.kpi-change span {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.kpi-trend i,
+.kpi-change i {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+}
+
+.kpi-trend.positive,
+.kpi-change.positive {
+  color: var(--color-success);
+}
+
+.kpi-trend.negative,
+.kpi-change.negative {
+  color: var(--color-error);
+}
+
+.kpi-trend.neutral,
+.kpi-change.neutral {
+  color: var(--muted-foreground);
+}
+
+.kpi-trend .round-20 {
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+}
+
+.kpi-trend .round-20 i {
+  font-size: 12px;
+}
+
+/* KPI Status Badge */
+.kpi-status {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  margin-top: 0;
+}
+
+.kpi-status.good {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: var(--color-success);
+}
+
+.kpi-status.warning {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning);
+}
+
+.kpi-status.danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: var(--color-error);
+}
+
+/* ============================================
+   Gauge Charts
+   ============================================ */
+
+.pencil-gauge-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.pencil-gauge-card .card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: none;
+  transition: all var(--transition-base);
+}
+
+.pencil-gauge-card:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.pencil-gauge-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 200px;
+  padding-top: var(--space-md);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.pencil-gauge-chart {
+  min-height: 180px;
+  max-height: 180px;
+  width: 100%;
+}
+
+#salesBudgetGauge,
+#profitBudgetGauge {
+  min-height: 180px;
+  max-height: 180px;
+}
+
+#salesBudgetGauge svg,
+#profitBudgetGauge svg {
+  max-height: 180px;
+}
+
+.gauge-chart-info {
+  position: absolute;
+  bottom: var(--space-lg);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+  padding: 0 var(--space-lg);
+}
+
+.gauge-chart-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: var(--space-sm);
+}
+
+.gauge-value-main {
+  font-family: var(--font-primary);
+  font-size: 36px;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.gauge-value-unit {
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.gauge-chart-label {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-bottom: var(--space-md);
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.gauge-chart-forecast {
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border);
+}
+
+.forecast-label {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  color: var(--muted-foreground);
+  margin-bottom: 4px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.forecast-value {
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--foreground);
+  letter-spacing: -1px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.forecast-unit {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--muted-foreground);
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.forecast-ratio {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* ============================================
+   Charts Row 1 (rOkx1) - 今期PLセクション
+   Bootstrap row/col grid を使用 (9:3 比率)
+   ============================================ */
+
+/* lg以上の画面幅で横並びを強制 */
+@media (min-width: 992px) {
+  .dashboard-charts-row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important; /* Bootstrap g-4 と同じ 24px */
+  }
+
+  .dashboard-charts-row > .col-lg-9 {
+    flex: 0 0 calc(75% - 0.75rem) !important;
+    max-width: calc(75% - 0.75rem) !important;
+    width: calc(75% - 0.75rem) !important;
+  }
+
+  .dashboard-charts-row > .col-lg-3 {
+    flex: 0 0 calc(25% - 0.75rem) !important;
+    max-width: calc(25% - 0.75rem) !important;
+    width: calc(25% - 0.75rem) !important;
+  }
+}
+
+/* Charts Row 2 (a8iX1) - 3 equal charts */
+.dashboard-charts-row-2,
+.pencil-charts-row-3 {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+}
+
+.dashboard-charts-row-2 > *,
+.pencil-charts-row-3 > * {
+  flex: 1;
+  height: 100%;
+}
+
+/* ============================================
+   Dashboard Chart Cards
+   ============================================ */
+
+.dashboard-section .card {
+  margin-bottom: 0;
+}
+
+.dashboard-section .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: 0;
+}
+
+.dashboard-section .card-subtitle {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.pencil-chart-container {
+  position: relative;
+  width: 100%;
+  max-height: 350px;
+  height: 350px;
+  margin-top: var(--space-lg);
+}
+
+.pencil-chart {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.chart-container,
+.chart-wrapper {
+  max-height: 350px;
+  height: 350px;
+}
+
+/* Chart Placeholder (from pencil) */
+.chart-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--secondary);
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
+}
+
+.chart-placeholder i {
+  font-size: 48px;
+  color: var(--muted-foreground);
+}
+
+.chart-placeholder span {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--muted-foreground);
+}
+
+/* Doughnut/Pie Chart */
+.donut-chart-container,
+.pie-chart-container,
+.pencil-chart-container canvas[type="doughnut"],
+.pencil-chart-container canvas[type="pie"] {
+  max-height: 280px;
+  height: 280px;
+}
+
+.pencil-chart-container canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.pencil-chart-container:has(canvas[type="doughnut"]),
+.pencil-chart-container:has(canvas[type="pie"]) {
+  max-height: 280px;
+  height: 280px;
+}
+
+.pencil-chart-container:has(canvas[type="bar"]) {
+  max-height: 350px;
+  height: 350px;
+}
+
+.bar-chart-container {
+  max-height: 350px;
+  height: 350px;
+}
+
+/* ============================================
+   Pencil Chart Card (from pencil-score.pen)
+   ============================================ */
+
+.pencil-chart-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: none;
+  height: 100%;
+  min-height: 500px;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pencil-chart-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.pencil-chart-card .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.pencil-chart-card .pencil-chart-container {
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  flex: 1;
+  min-height: 350px;
+  margin: 0;
+  padding: var(--space-lg);
+}
+
+.pencil-chart-card .btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.pencil-chart-card .btn-outline-secondary {
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.pencil-chart-card .btn-outline-secondary:hover {
+  background-color: var(--secondary);
+  color: var(--foreground);
+}
+
+/* ============================================
+   Pencil Table Card (from pencil-score.pen)
+   ============================================ */
+
+.pencil-table-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: none;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pencil-table-card .card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
+}
+
+.pencil-table-card .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.pencil-table-card .table-responsive {
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.pencil-table-card .btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.pencil-table-card .btn-outline-secondary {
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.pencil-table-card .btn-outline-secondary:hover {
+  background-color: var(--secondary);
+  color: var(--foreground);
+}
+
+/* ============================================
+   Pencil Card (from pencil-score.pen)
+   ============================================ */
+
+.pencil-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  box-shadow: none;
+}
+
+.pencil-card .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+  line-height: 1.4;
+}
+
+.pencil-card .card-content {
+  flex: 1;
+}
+
+.pencil-card .btn-outline-secondary {
+  background-color: var(--card);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.pencil-card .btn-outline-secondary:hover {
+  background-color: var(--secondary);
+  color: var(--foreground);
+}
+
+.pencil-card .btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+/* ============================================
+   Tables
+   ============================================ */
+
+.dashboard-section .table {
+  font-family: var(--font-primary);
+  border-collapse: collapse;
+}
+
+.dashboard-section .table thead th {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-section .table tbody td {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.dashboard-section .table tbody tr:hover {
+  background-color: var(--muted);
+}
+
+.dashboard-section .table .text-end {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* ============================================
+   List Group
+   ============================================ */
+
+.list-group {
+  font-family: var(--font-primary);
+}
+
+.list-group-item {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--border);
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  background-color: transparent;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item:hover {
+  background-color: var(--muted);
+}
+
+.list-group-item h6 {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-bottom: var(--space-xs);
+}
+
+.list-group-item .text-muted {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+/* ============================================
+   Card Footer
+   ============================================ */
+
+.card-footer {
+  background-color: transparent;
+  border-top: 1px solid var(--border);
+  padding: var(--space-xl);
+  margin-top: var(--space-2xl);
+}
+
+.card-footer .btn {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  margin: 0;
+  padding: 10px 20px;
+  min-height: 40px;
+}
+
+/* ============================================
+   Form Check
+   ============================================ */
+
+.form-check {
+  font-family: var(--font-primary);
+  font-size: 14px;
+}
+
+.form-check-label {
+  font-family: var(--font-primary);
+  font-size: 14px;
+  color: var(--foreground);
+  margin-left: var(--space-sm);
+}
+
+.form-check-input {
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-base);
+}
+
+.form-check-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--primary);
+}
+
+/* ============================================
+   Debt Analysis Section
+   ============================================ */
+
+.pencil-debt-section {
+  margin-bottom: var(--space-xl);
+}
+
+.pencil-debt-section .col-lg-8 {
+  padding-right: var(--space-lg);
+}
+
+.pencil-debt-section .col-lg-4 {
+  padding-left: var(--space-lg);
+}
+
+.pencil-debt-charts-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-lg);
+}
+
+.pencil-debt-charts-row > div {
+  width: 100%;
+}
+
+.pencil-debt-charts-row .card {
+  height: 100%;
+  margin-bottom: 0;
+}
+
+@media (max-width: 991px) {
+  .pencil-debt-section .col-lg-8,
+  .pencil-debt-section .col-lg-4 {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .pencil-debt-charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+
+@media (max-width: 991px) {
+  .pencil-metric-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pencil-gauge-row .pencil-gauge-card {
+    width: calc(50% - calc(var(--space-lg) / 2));
+  }
+
+  .kpi-value {
+    font-size: 32px;
+  }
+
+  .gauge-value-main {
+    font-size: 36px;
+  }
+
+  .forecast-value {
+    font-size: 24px;
+  }
+
+  .pencil-chart-container {
+    max-height: 300px;
+    height: 300px;
+  }
+}
+
+@media (max-width: 767px) {
+  .pencil-metric-row {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-value {
+    font-size: 28px;
+  }
+
+  .gauge-value-main {
+    font-size: 32px;
+  }
+
+  .forecast-value {
+    font-size: 20px;
+  }
+
+  .pencil-gauge-container {
+    min-height: 200px;
+  }
+
+  .pencil-gauge-chart {
+    min-height: 160px;
+    max-height: 160px;
+  }
+
+  .pencil-chart-container {
+    max-height: 250px;
+    height: 250px;
+  }
+}
+
+/* ============================================
+   News Row (gt13m) - 2 equal cards
+   gap: 16
+   ============================================ */
+
+.pencil-news-row,
+.dashboard-news-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  height: 100%;
+}
+
+.pencil-news-row > *,
+.dashboard-news-row > * {
+  flex: 1;
+  height: 100%;
+}
+
+/* News Card (from pencil oEJ5W Card) */
+.pencil-news-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.pencil-news-card .card-header {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-bottom: none;
+  background-color: transparent;
+}
+
+.pencil-news-card .card-title {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground);
+  margin: 0;
+}
+
+.pencil-news-card .card-subtitle {
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+
+.pencil-news-card .card-body {
+  padding: 0 20px 20px 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* News Item (from pencil newsItem) */
+.pencil-news-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--secondary);
+  width: 100%;
+}
+
+.pencil-news-item:last-child {
+  border-bottom: none;
+}
+
+/* News Icon Background - 32px circle */
+.pencil-news-item .news-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pencil-news-item .news-icon.info {
+  background-color: #EFF6FF;
+  color: #3B82F6;
+}
+
+.pencil-news-item .news-icon.warning {
+  background-color: #FEF3C7;
+  color: #F59E0B;
+}
+
+.pencil-news-item .news-icon.success {
+  background-color: #DCFCE7;
+  color: #22C55E;
+}
+
+.pencil-news-item .news-icon.error {
+  background-color: #FEE2E2;
+  color: #EF4444;
+}
+
+.pencil-news-item .news-icon i {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+}
+
+/* News Text Area */
+.pencil-news-item .news-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pencil-news-item .news-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.pencil-news-item .news-meta,
+.pencil-news-item .news-date {
+  font-family: var(--font-primary);
+  font-size: 11px;
+  font-weight: 400;
+  color: #94A3B8;
+  margin: 0;
+}
+
+/* Article Item (from pencil article) */
+.pencil-article-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--secondary);
+  width: 100%;
+}
+
+.pencil-article-item:last-child {
+  border-bottom: none;
+}
+
+/* Article Thumbnail - 48x48, cornerRadius: 6 */
+.pencil-article-item .article-thumbnail {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.pencil-article-item .article-thumbnail.tax {
+  background-color: #E0F2FE;
+}
+
+.pencil-article-item .article-thumbnail.business,
+.pencil-article-item .article-thumbnail.notice {
+  background-color: #FEF3C7;
+}
+
+.pencil-article-item .article-thumbnail.subsidy,
+.pencil-article-item .article-thumbnail.feature {
+  background-color: #DCFCE7;
+}
+
+/* Article Text Area */
+.pencil-article-item .article-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pencil-article-item .article-title {
+  font-family: var(--font-primary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Article Meta - gap: 8 */
+.pencil-article-item .article-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pencil-article-item .article-tag {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.pencil-article-item .article-tag.tax {
+  color: #3B82F6;
+}
+
+.pencil-article-item .article-tag.business,
+.pencil-article-item .article-tag.notice {
+  color: #F59E0B;
+}
+
+.pencil-article-item .article-tag.subsidy,
+.pencil-article-item .article-tag.feature {
+  color: #22C55E;
+}
+
+.pencil-article-item .article-date {
+  font-family: var(--font-primary);
+  font-size: 10px;
+  font-weight: 400;
+  color: #94A3B8;
+}
+
+/* ============================================
+   Responsive Styles
+   ============================================ */
+
+@media (max-width: 1200px) {
+  /* Charts Row 1: Stack left and right (非Bootstrap用) */
+  .dashboard-charts-row:not(.row),
+  .pencil-charts-row:not(.row) {
+    flex-direction: column;
+  }
+
+  .dashboard-charts-row:not(.row) .chart-left,
+  .pencil-charts-row:not(.row) .chart-left {
+    width: 100%;
+  }
+
+  .dashboard-charts-row:not(.row) .chart-right,
+  .pencil-charts-row:not(.row) .chart-right {
+    width: 100%;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 991px) {
+  /* Charts Row 2: 2 columns then stack */
+  .dashboard-charts-row-2,
+  .pencil-charts-row-3 {
+    flex-wrap: wrap;
+  }
+
+  .dashboard-charts-row-2 > *,
+  .pencil-charts-row-3 > * {
+    flex: 1 1 calc(50% - 8px);
+    min-width: calc(50% - 8px);
+  }
+
+  /* News Row: Stack */
+  .pencil-news-row,
+  .dashboard-news-row {
+    flex-direction: column;
+  }
+
+  /* Right column gauges stack vertically (非Bootstrap用) */
+  .dashboard-charts-row:not(.row) .chart-right,
+  .pencil-charts-row:not(.row) .chart-right {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Dashboard main content padding */
+  .dashboard-main-content {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  /* Page header */
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  /* Charts Row 2: Single column */
+  .dashboard-charts-row-2 > *,
+  .pencil-charts-row-3 > * {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  /* KPI Value smaller */
+  .kpi-value {
+    font-size: 20px;
+  }
+}

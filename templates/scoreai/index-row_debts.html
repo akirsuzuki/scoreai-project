@@ -2,78 +2,93 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<div class="row dashboard-section">
-  <div class="col-12 col-lg-8 d-flex align-items-stretch mb-3 mb-lg-0">
-    <div class="card w-100 card-hover">
-      <div class="card-body">
-        <h5 class="card-title mb-9 fw-semibold">借入分析</h5>
-        <p>借入合計額</p>
-        <div class="table-responsive">
-        <table id="debt_table" class="display table w-100" >
-          <thead>
-            <tr>
-              <th>金融機関 / 元本(千円)<br>ステータス</th>
-              <th>保証<br>利息</th>
-              <th>返済開始日<br>月返済額</th>
-              <th>残高シェア<br>残り月数</th>
-              <th>今月末残高<br>決算時残高</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for debt in debt_list %}
-              {% if debt.remaining_months > 0 %}
-              <tr data-href="{% url 'debt_detail' debt.id %}">
-                <td>{{ debt.financial_institution_short_name }} / {{ debt.principal|to_thousands|intcomma }}
-                  <br>{% if debt.start_date <= today %}
-                    <span class="badge bg-success">返済中</span>
-                  {% else %}
-                    <span class="badge bg-danger">返済前</span>
-                  {% endif %}
-                </td>
-                <td>{{ debt.secured_type }}<br>{{ debt.interest_rate }}%</td>
-                <td>{{ debt.start_date|date:"y年n月" }}<br>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
-                <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}<br>{{ debt.remaining_months }}/{{ debt.payment_terms }}</td>
-                <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}<br>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+<!-- 借入分析セクション（Pencil Design System準拠）-->
+<!-- 左9 columns: 借入分析テーブル、右3 columns: 金融機関別・保証別チャート -->
+<div class="row g-4 dashboard-section mb-4 dashboard-charts-row">
+  <!-- 左側: 借入分析テーブル (9 columns) -->
+  <div class="col-12 col-lg-9">
+    <div class="card h-100 pencil-table-card">
+      <div class="card-body pencil-card-body d-flex flex-column">
+        <!-- Table Header -->
+        <div class="d-flex align-items-center justify-content-between w-100 mb-3">
+          <div>
+            <h5 class="card-title mb-1">借入分析</h5>
+            <p class="card-subtitle text-muted mb-0">借入一覧と残高状況</p>
+          </div>
+        </div>
+        <!-- Table Content -->
+        <div class="table-responsive pencil-scrollable-table flex-grow-1">
+          <table id="debt_table" class="display table w-100">
+            <thead>
+              <tr>
+                <th>金融機関 / 元本(千円)<br>ステータス</th>
+                <th>保証<br>利息</th>
+                <th>返済開始日<br>月返済額</th>
+                <th>残高シェア<br>残り月数</th>
+                <th>今月末残高<br>決算時残高</th>
               </tr>
-              {% endif %}
-            {% endfor %}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {% for debt in debt_list %}
+                {% if debt.remaining_months > 0 %}
+                <tr data-href="{% url 'debt_detail' debt.id %}">
+                  <td>{{ debt.financial_institution_short_name }} / {{ debt.principal|to_thousands|intcomma }}
+                    <br>{% if debt.start_date <= today %}
+                      <span class="badge bg-success">返済中</span>
+                    {% else %}
+                      <span class="badge bg-danger">返済前</span>
+                    {% endif %}
+                  </td>
+                  <td>{{ debt.secured_type }}<br>{{ debt.interest_rate }}%</td>
+                  <td>{{ debt.start_date|date:"y年n月" }}<br>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+                  <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}<br>{{ debt.remaining_months }}/{{ debt.payment_terms }}</td>
+                  <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}<br>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+                </tr>
+                {% endif %}
+              {% endfor %}
+            </tbody>
+          </table>
         </div>
-        <div class="d-flex justify-content-end mt-3">
-          <h5 class="mb-0">合計：{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }} 千円</h5>
-        </div>
-      </div>
-      <div class="card-footer bg-transparent border-top-0">
-        <div class="d-flex flex-column flex-sm-row justify-content-end gap-2">
-          <a href="{% url 'debts_all' %}" class="btn btn-primary">全ての借入を見る</a>
-          <a href="{% url 'debt_create' %}" class="btn btn-primary">新規借入登録</a>
+        <!-- Table Footer -->
+        <div class="d-flex justify-content-between align-items-center pt-3 border-top mt-auto">
+          <span class="text-muted small">合計：{{ debt_list_totals.total_balances_monthly.0|to_thousands|intcomma }} 千円</span>
+          <div class="d-flex gap-3">
+            <a href="{% url 'debts_all' %}" class="btn btn-primary">全ての借入を見る</a>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="col-12 col-lg-4 mt-3 mt-lg-0">
-    <div class="row g-3">
-      <div class="col-12 col-md-6 col-lg-12">
-        {% include "scoreai/part_debt_byBank.html" %}
-      </div>
 
-      <div class="col-12 col-md-6 col-lg-12">
-        {% include "scoreai/part_debt_bySecuredType.html" %}
-      </div>
+  <!-- 右側: 金融機関別・保証別チャート (3 columns) -->
+  <div class="col-12 col-lg-3">
+    <div class="d-flex flex-column gap-4 h-100">
+      <!-- 金融機関別残高 -->
+      {% include "scoreai/part_debt_byBank.html" %}
+      <!-- 保証別残高 -->
+      {% include "scoreai/part_debt_bySecuredType.html" %}
     </div>
   </div>
 </div>
 
-
 <script>
-  new DataTable('#debt_table', {
-    responsive: true,
-    paging: false,
-    scrollY: 600
-  });
-
   document.addEventListener('DOMContentLoaded', function () {
+    // 既に初期化されている場合は破棄してから再初期化
+    if ($.fn.DataTable.isDataTable('#debt_table')) {
+      $('#debt_table').DataTable().destroy();
+    }
+
+    // DataTableを初期化
+    const table = new DataTable('#debt_table', {
+      responsive: true,
+      paging: false,
+      scrollY: false,
+      scrollCollapse: false,
+      orderCellsTop: false,
+      scrollX: false
+    });
+
+    // 行クリックイベントの設定
     const rows = document.querySelectorAll('#debt_table tbody tr');
     rows.forEach(row => {
       row.addEventListener('click', function () {
@@ -82,5 +97,3 @@
     });
   });
 </script>
-
-
