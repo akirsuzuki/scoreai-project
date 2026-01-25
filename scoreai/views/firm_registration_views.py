@@ -109,19 +109,24 @@ class FirmCompanyRegistrationView(LoginRequiredMixin, ErrorHandlingMixin, Create
     template_name = 'scoreai/firm_company_registration.html'
     
     def dispatch(self, request, *args, **kwargs):
-        """Firmに所属しているか確認"""
+        """Firmに所属しているか、かつFirm Ownerか確認"""
         from ..models import UserFirm
-        
+
         user_firm = UserFirm.objects.filter(
             user=request.user,
             active=True,
             is_selected=True
         ).first()
-        
+
         if not user_firm:
             messages.error(request, 'Firmに所属していません。')
             return redirect('index')
-        
+
+        # Firm Ownerのみ顧客企業を登録可能
+        if not user_firm.is_owner:
+            messages.error(request, '顧客企業の登録はFirmのOwnerのみが行えます。')
+            return redirect('index')
+
         self.user_firm = user_firm
         return super().dispatch(request, *args, **kwargs)
     

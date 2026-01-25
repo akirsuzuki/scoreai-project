@@ -15,7 +15,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.views.decorators.http import require_http_methods
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from dateutil.relativedelta import relativedelta
 from django.utils import timezone
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -415,11 +415,17 @@ class DebtsByBankListView(SelectedCompanyMixin, ListView):
             else:
                 bank_debt['weighted_average_interest'] = 0
 
+        # Get the most recently executed debt (by issue_date)
+        most_recent_debt = None
+        if debt_list:
+            most_recent_debt = max(debt_list, key=lambda d: d['issue_date'] if d['issue_date'] else date.min)
+
         context.update({
             'title': '借入管理',
             'debt_list': debt_list,
             'debt_list_totals': debt_list_totals,
             'debt_list_byBank': debt_list_byBank,
+            'most_recent_debt': most_recent_debt,
             'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context
@@ -509,11 +515,17 @@ class DebtsBySecuredTypeListView(SelectedCompanyMixin, ListView):
             else:
                 bank_secured_debt['weighted_average_interest'] = 0
 
+        # Get the most recently executed debt (by issue_date)
+        most_recent_debt = None
+        if debt_list:
+            most_recent_debt = max(debt_list, key=lambda d: d['issue_date'] if d['issue_date'] else date.min)
+
         context.update({
             'title': '借入管理',
             'debt_list_totals': debt_list_totals,
             'debt_list_bySecuredType': debt_list_bySecuredType,
             'debt_list_byBankAndSecuredType': debt_list_byBankAndSecuredType,
+            'most_recent_debt': most_recent_debt,
             'show_title_card': False,  # タイトルカードを非表示（他の借入管理ページと統一）
         })
         return context

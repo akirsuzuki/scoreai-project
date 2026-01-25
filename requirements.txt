@@ -5,7 +5,6 @@ requests
 django-filter
 djangorestframework
 django-ulid
-django-bootstrap5                                   
 gunicorn
 python-dotenv
 whitenoise

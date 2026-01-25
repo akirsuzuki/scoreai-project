@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
      # 以下追加
     'rest_framework',
-    'django_bootstrap5',
     'django.contrib.humanize',
     'crispy_forms',
     'crispy_bootstrap4',
