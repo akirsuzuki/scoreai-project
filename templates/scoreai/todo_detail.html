@@ -1,0 +1,195 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'scoreai/css/dashboard-pencil.css' %}">
+<style>
+    .todo-category-badge {
+        font-size: 0.875rem;
+        padding: 0.375em 0.75em;
+        border-radius: 0.375rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+        display: inline-block;
+    }
+    .detail-label {
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="dashboard-page-header mb-4">
+    <div class="d-flex justify-content-between align-items-start">
+        <div class="dashboard-title-area">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-2">
+                    <li class="breadcrumb-item"><a href="{% url 'todo_list' %}">To Do一覧</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">詳細</li>
+                </ol>
+            </nav>
+            <h1 class="dashboard-title">{{ todo.title }}</h1>
+            <div class="d-flex align-items-center gap-2 mt-2">
+                <span class="badge
+                    {% if todo.status == 'pending' %}bg-secondary
+                    {% elif todo.status == 'in_progress' %}bg-info
+                    {% else %}bg-success{% endif %}">
+                    {{ todo.get_status_display }}
+                </span>
+                <span class="badge
+                    {% if todo.priority == 'high' %}bg-danger
+                    {% elif todo.priority == 'medium' %}bg-warning
+                    {% else %}bg-success{% endif %}">
+                    優先度: {{ todo.get_priority_display }}
+                </span>
+                {% if todo.is_overdue %}
+                <span class="badge bg-danger">期限切れ</span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'todo_update' todo.pk %}" class="btn btn-outline-primary">
+                <i class="ti ti-edit me-1"></i>編集
+            </a>
+            <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-outline-danger">
+                <i class="ti ti-trash me-1"></i>削除
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <!-- Content Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0">内容</h6>
+            </div>
+            <div class="card-body">
+                {% if todo.content %}
+                <p class="mb-0" style="white-space: pre-wrap;">{{ todo.content }}</p>
+                {% else %}
+                <p class="text-muted mb-0">内容が登録されていません。</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Categories Card -->
+        {% if todo.categories.exists %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="card-title mb-0">分類タグ</h6>
+            </div>
+            <div class="card-body">
+                {% for cat in todo.categories.all %}
+                <span class="todo-category-badge" style="background-color: {{ cat.color }}20; color: {{ cat.color }}; border: 1px solid {{ cat.color }};">
+                    {{ cat.name }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Info Card -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">情報</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="detail-label">期限</div>
+                    <div>
+                        {% if todo.due_date %}
+                        {{ todo.due_date|date:"Y年m月d日" }}
+                        {% if todo.is_overdue %}
+                        <span class="text-danger ms-1">(期限切れ)</span>
+                        {% endif %}
+                        {% else %}
+                        <span class="text-muted">未設定</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="detail-label">担当者</div>
+                    <div>
+                        {% if todo.assigned_to %}
+                        <i class="ti ti-user me-1"></i>{{ todo.assigned_to.username }}
+                        {% else %}
+                        <span class="text-muted">未割り当て</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="detail-label">作成者</div>
+                    <div>
+                        {% if todo.created_by %}
+                        <i class="ti ti-user me-1"></i>{{ todo.created_by.username }}
+                        {% else %}
+                        <span class="text-muted">不明</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="detail-label">作成日</div>
+                    <div>{{ todo.created_at|date:"Y年m月d日 H:i" }}</div>
+                </div>
+
+                <div class="mb-3">
+                    <div class="detail-label">更新日</div>
+                    <div>{{ todo.updated_at|date:"Y年m月d日 H:i" }}</div>
+                </div>
+
+                {% if todo.completed_at %}
+                <div class="mb-3">
+                    <div class="detail-label">完了日</div>
+                    <div class="text-success">{{ todo.completed_at|date:"Y年m月d日 H:i" }}</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card mt-3">
+            <div class="card-header">
+                <h6 class="card-title mb-0">クイックアクション</h6>
+            </div>
+            <div class="card-body">
+                <form method="post" action="{% url 'todo_status_update' todo.pk %}" class="d-grid gap-2">
+                    {% csrf_token %}
+                    {% if todo.status != 'completed' %}
+                    <button type="submit" name="status" value="completed" class="btn btn-success">
+                        <i class="ti ti-check me-1"></i>完了にする
+                    </button>
+                    {% endif %}
+                    {% if todo.status == 'pending' %}
+                    <button type="submit" name="status" value="in_progress" class="btn btn-info">
+                        <i class="ti ti-player-play me-1"></i>進行中にする
+                    </button>
+                    {% endif %}
+                    {% if todo.status == 'completed' %}
+                    <button type="submit" name="status" value="pending" class="btn btn-secondary">
+                        <i class="ti ti-refresh me-1"></i>未着手に戻す
+                    </button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4">
+    <a href="{% url 'todo_list' %}" class="btn btn-outline-secondary">
+        <i class="ti ti-arrow-left me-1"></i>一覧に戻る
+    </a>
+</div>
+{% endblock %}

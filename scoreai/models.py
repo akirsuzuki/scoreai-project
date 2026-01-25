@@ -2389,3 +2389,77 @@ class IzakayaPlan(models.Model):
         """プレビューページのURL"""
         from django.urls import reverse
         return reverse('izakaya_plan_preview', kwargs={'pk': self.id})
+
+
+class TodoCategory(models.Model):
+    """To Doの分類タグ"""
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    name = models.CharField('カテゴリ名', max_length=50, unique=True)
+    color = models.CharField('カラーコード', max_length=7, default='#6c757d', help_text='例: #FF5733')
+    display_order = models.IntegerField('表示順', default=0)
+    is_active = models.BooleanField('有効', default=True)
+    created_at = models.DateTimeField('作成日時', auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'To Doカテゴリ'
+        verbose_name_plural = 'To Doカテゴリ'
+        ordering = ['display_order', 'name']
+
+    def __str__(self):
+        return self.name
+
+
+class Todo(models.Model):
+    """To Doモデル"""
+    STATUS_CHOICES = [
+        ('pending', '未着手'),
+        ('in_progress', '進行中'),
+        ('completed', '完了'),
+    ]
+    PRIORITY_CHOICES = [
+        ('low', '低'),
+        ('medium', '中'),
+        ('high', '高'),
+    ]
+
+    id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='todos', verbose_name='会社')
+    title = models.CharField('タイトル', max_length=200)
+    content = models.TextField('内容', blank=True)
+    categories = models.ManyToManyField(TodoCategory, related_name='todos', blank=True, verbose_name='分類タグ')
+    due_date = models.DateField('期限', null=True, blank=True)
+    status = models.CharField('ステータス', max_length=20, choices=STATUS_CHOICES, default='pending')
+    priority = models.CharField('優先度', max_length=10, choices=PRIORITY_CHOICES, default='medium')
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_todos', verbose_name='作成者')
+    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_todos', verbose_name='担当者')
+    created_at = models.DateTimeField('作成日', auto_now_add=True)
+    updated_at = models.DateTimeField('更新日', auto_now=True)
+    completed_at = models.DateTimeField('完了日', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'To Do'
+        verbose_name_plural = 'To Do'
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['company', 'status']),
+            models.Index(fields=['company', 'due_date']),
+            models.Index(fields=['company', 'priority']),
+        ]
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        # ステータスが完了に変更された場合、完了日を設定
+        if self.status == 'completed' and not self.completed_at:
+            self.completed_at = timezone.now()
+        elif self.status != 'completed':
+            self.completed_at = None
+        super().save(*args, **kwargs)
+
+    @property
+    def is_overdue(self):
+        """期限切れかどうか"""
+        if self.due_date and self.status != 'completed':
+            return self.due_date < timezone.now().date()
+        return False

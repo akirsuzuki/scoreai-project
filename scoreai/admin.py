@@ -44,6 +44,8 @@ from .models import (
     CloudStorageSetting,
     DocumentFolder,
     UploadedDocument,
+    Todo,
+    TodoCategory,
 )
 from django import forms
 from django.core.exceptions import ValidationError
@@ -591,6 +593,42 @@ class CompanyUsageTrackingAdmin(admin.ModelAdmin):
         }),
         ('その他', {
             'fields': ('is_reset', 'created_at', 'updated_at')
+        }),
+    )
+
+
+@admin.register(TodoCategory)
+class TodoCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'display_order', 'is_active', 'created_at')
+    list_display_links = ('name',)
+    list_filter = ('is_active',)
+    search_fields = ('name',)
+    ordering = ('display_order', 'name')
+    list_editable = ('display_order', 'is_active')
+
+
+@admin.register(Todo)
+class TodoAdmin(admin.ModelAdmin):
+    list_display = ('title', 'company', 'status', 'priority', 'due_date', 'assigned_to', 'created_by', 'created_at')
+    list_display_links = ('title',)
+    list_filter = ('company', 'status', 'priority', 'categories', 'created_at')
+    search_fields = ('title', 'content', 'company__name', 'created_by__username', 'assigned_to__username')
+    ordering = ('-created_at',)
+    readonly_fields = ('created_at', 'updated_at', 'completed_at')
+    filter_horizontal = ('categories',)
+    fieldsets = (
+        ('基本情報', {
+            'fields': ('company', 'title', 'content', 'categories')
+        }),
+        ('ステータス', {
+            'fields': ('status', 'priority', 'due_date')
+        }),
+        ('担当者', {
+            'fields': ('created_by', 'assigned_to')
+        }),
+        ('タイムスタンプ', {
+            'fields': ('created_at', 'updated_at', 'completed_at'),
+            'classes': ('collapse',)
         }),
     )
 

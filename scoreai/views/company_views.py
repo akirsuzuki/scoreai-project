@@ -159,18 +159,20 @@ class CompanyUpdateView(LoginRequiredMixin, UpdateView):
     slug_url_kwarg = 'id'
 
     def dispatch(self, request, *args, **kwargs):
-        """アクセス権限をチェック（is_manager=Trueのユーザーのみ編集可能）"""
+        """アクセス権限をチェック（is_manager=True または is_owner=True のユーザーのみ編集可能）"""
         response = super().dispatch(request, *args, **kwargs)
         
         # Companyオブジェクトを取得
         company = self.get_object()
         
-        # ユーザーがこのCompanyのマネージャーかどうかを確認
+        # ユーザーがこのCompanyのマネージャーまたはオーナーかどうかを確認
+        from django.db.models import Q
         user_company = UserCompany.objects.filter(
             user=request.user,
             company=company,
-            active=True,
-            is_manager=True
+            active=True
+        ).filter(
+            Q(is_manager=True) | Q(is_owner=True)
         ).first()
         
         if not user_company:

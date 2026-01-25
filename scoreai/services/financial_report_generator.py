@@ -421,10 +421,13 @@ class FinancialReportGenerator:
         df = self.pl_bumon_df.copy()
         df_zenki = self.pl_bumon_zenki_df.copy() if self.pl_bumon_zenki_df is not None else None
         
-        # 勘定科目列を特定
+        # 勘定科目列を特定（当期）
         account_col = df.columns[0] if len(df.columns) > 0 else None
         if account_col is None:
             return
+        
+        # 勘定科目列を特定（前期）- 前期CSVの最初の列を使用
+        account_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
         
         # 部門列を取得（最初の列以外）
         department_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
@@ -508,8 +511,9 @@ class FinancialReportGenerator:
                 
                 # 前期金額
                 prev_value = 0
-                if df_zenki is not None and dept in df_zenki.columns:
-                    zenki_row = df_zenki[df_zenki[account_col] == row_data[account_col]]
+                if df_zenki is not None and account_col_zenki is not None and dept in df_zenki.columns:
+                    # 勘定科目名で前期データを検索
+                    zenki_row = df_zenki[df_zenki[account_col_zenki].astype(str) == account_name]
                     if not zenki_row.empty:
                         prev_val = zenki_row.iloc[0][dept]
                         try:
@@ -625,10 +629,13 @@ class FinancialReportGenerator:
         df = self.pl_suii_df.copy()
         df_zenki = self.pl_suii_zenki_df.copy() if self.pl_suii_zenki_df is not None else None
         
-        # 勘定科目列を特定
+        # 勘定科目列を特定（当期）
         account_col = df.columns[0] if len(df.columns) > 0 else None
         if account_col is None:
             return
+        
+        # 勘定科目列を特定（前期）- 前期CSVの最初の列を使用
+        account_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
         
         # 月列を取得（最初の列以外）
         month_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
@@ -716,8 +723,9 @@ class FinancialReportGenerator:
                 
                 # 前期金額
                 prev_value = 0
-                if df_zenki is not None and month in df_zenki.columns:
-                    zenki_row = df_zenki[df_zenki[account_col] == row_data[account_col]]
+                if df_zenki is not None and account_col_zenki is not None and month in df_zenki.columns:
+                    # 勘定科目名で前期データを検索
+                    zenki_row = df_zenki[df_zenki[account_col_zenki].astype(str) == account_name]
                     if not zenki_row.empty:
                         prev_val = zenki_row.iloc[0][month]
                         try:

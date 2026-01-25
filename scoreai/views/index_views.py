@@ -10,7 +10,7 @@ import logging
 import json
 
 from ..mixins import SelectedCompanyMixin
-from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month, Company, MeetingMinutes, Blog, FirmNotification, UserFirm
+from ..models import Debt, FiscalSummary_Year, FiscalSummary_Month, Company, MeetingMinutes, Blog, FirmNotification, UserFirm, Todo
 from .utils import (
     get_monthly_summaries,
     calculate_total_monthly_summaries,
@@ -270,6 +270,39 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
                     firm=user_firm.firm
                 ).order_by('-created_at')[:5]
         context['recent_notifications'] = recent_notifications
-        
+
+        # To Do（期限が近いもの、期限切れのもの優先で5件）
+        from django.db.models import Case, When, Value, IntegerField
+        from datetime import timedelta
+
+        today = timezone.now().date()
+        upcoming_todos = Todo.objects.filter(
+            company=self.this_company,
+            status__in=['pending', 'in_progress']
+        ).select_related('created_by', 'assigned_to').prefetch_related('categories').annotate(
+            # 期限切れを優先、次に期限が近いもの
+            priority_order=Case(
+                When(due_date__lt=today, then=Value(0)),  # 期限切れ
+                When(due_date__lte=today + timedelta(days=7), then=Value(1)),  # 1週間以内
+                When(due_date__isnull=False, then=Value(2)),  # 期限あり
+                default=Value(3),  # 期限なし
+                output_field=IntegerField()
+            )
+        ).order_by('priority_order', 'due_date', '-priority', '-created_at')[:5]
+        context['upcoming_todos'] = upcoming_todos
+
+        # To Do統計
+        all_todos = Todo.objects.filter(company=self.this_company)
+        context['todo_stats'] = {
+            'total': all_todos.count(),
+            'pending': all_todos.filter(status='pending').count(),
+            'in_progress': all_todos.filter(status='in_progress').count(),
+            'completed': all_todos.filter(status='completed').count(),
+            'overdue': all_todos.filter(
+                due_date__lt=today,
+                status__in=['pending', 'in_progress']
+            ).count(),
+        }
+
         return context
 
