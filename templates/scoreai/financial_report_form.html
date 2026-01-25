@@ -195,19 +195,7 @@
         </div>
         <div class="card-body">
           <div class="row">
-            <div class="col-md-4 mb-3">
-              <label for="{{ form.fiscal_year.id_for_label }}" class="form-label">
-                {{ form.fiscal_year.label }} <span class="text-danger">*</span>
-              </label>
-              {{ form.fiscal_year }}
-              {% if form.fiscal_year.help_text %}
-              <div class="form-text">{{ form.fiscal_year.help_text }}</div>
-              {% endif %}
-              {% if form.fiscal_year.errors %}
-              <div class="text-danger">{{ form.fiscal_year.errors }}</div>
-              {% endif %}
-            </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
               <label for="{{ form.target_year.id_for_label }}" class="form-label">
                 {{ form.target_year.label }} <span class="text-danger">*</span>
               </label>
@@ -216,7 +204,7 @@
               <div class="text-danger">{{ form.target_year.errors }}</div>
               {% endif %}
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-6 mb-3">
               <label for="{{ form.target_month.id_for_label }}" class="form-label">
                 {{ form.target_month.label }} <span class="text-danger">*</span>
               </label>

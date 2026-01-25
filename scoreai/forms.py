@@ -1239,16 +1239,6 @@ class FinancialReportForm(forms.Form):
     )
     
     # 対象期間
-    fiscal_year = forms.IntegerField(
-        label='会計年度（期）',
-        min_value=1,
-        max_value=999,
-        widget=forms.NumberInput(attrs={
-            'class': 'form-control',
-            'placeholder': '例: 10'
-        }),
-        help_text='第○期'
-    )
     target_year = forms.IntegerField(
         label='対象年',
         min_value=2000,

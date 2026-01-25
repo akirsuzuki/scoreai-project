@@ -56,7 +56,6 @@ class FinancialReportView(SelectedCompanyMixin, FormView):
         now = timezone.now()
         initial['target_year'] = now.year
         initial['target_month'] = now.month
-        initial['fiscal_year'] = 1  # デフォルト値
         return initial
     
     def form_valid(self, form):
@@ -65,7 +64,6 @@ class FinancialReportView(SelectedCompanyMixin, FormView):
             # ReportConfigを作成
             config = ReportConfig(
                 company_name=self.this_company.name,
-                fiscal_year=form.cleaned_data['fiscal_year'],
                 target_month=form.cleaned_data['target_month'],
                 target_year=form.cleaned_data['target_year'],
                 target_f_rate=float(form.cleaned_data.get('target_f_rate') or 30) / 100,

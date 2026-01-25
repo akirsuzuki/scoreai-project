@@ -29,7 +29,6 @@ logger = logging.getLogger(__name__)
 class ReportConfig:
     """レポート設定"""
     company_name: str
-    fiscal_year: int
     target_month: int
     target_year: int
     target_f_rate: float = 0.30      # 原価率目標
@@ -237,7 +236,7 @@ class FinancialReportGenerator:
         # サブタイトル
         ws.merge_cells(f'A{row}:F{row}')
         cell = ws.cell(row=row, column=1)
-        cell.value = f"{self.config.target_year}年{self.config.target_month}月度 / 第{self.config.fiscal_year}期"
+        cell.value = f"{self.config.target_year}年{self.config.target_month}月度"
         cell.font = Font(size=12)
         cell.alignment = Alignment(horizontal='center', vertical='center')
         ws.row_dimensions[row].height = 25
@@ -435,7 +434,7 @@ class FinancialReportGenerator:
         row = 1
         ws.merge_cells(f'A{row}:D{row}')
         cell = ws.cell(row=row, column=1)
-        cell.value = f"月次推移損益計算書 - 第{self.config.fiscal_year}期"
+        cell.value = f"月次推移損益計算書 - {self.config.target_year}年度"
         cell.font = Font(bold=True, size=14)
         cell.alignment = Alignment(horizontal='left', vertical='center')
         ws.row_dimensions[row].height = 25
