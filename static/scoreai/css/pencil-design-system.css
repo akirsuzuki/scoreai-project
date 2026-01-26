@@ -1624,18 +1624,56 @@ html {
    Responsive
    ============================================ */
 
-@media (max-width: 991px) {
+@media (max-width: 1199.98px) {
   .body-wrapper {
     margin-left: 0;
   }
 
   .left-sidebar {
     transform: translateX(-100%);
-    transition: transform var(--transition-base);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1050;
   }
 
-  .left-sidebar.show {
+  /* show-sidebarクラスがpage-wrapperにある場合にサイドバーを表示 */
+  .page-wrapper.show-sidebar .left-sidebar {
     transform: translateX(0);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+  }
+
+  /* サイドバー表示時のオーバーレイ */
+  .page-wrapper.show-sidebar::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  /* サイドバー閉じるボタン */
+  .left-sidebar .close-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .left-sidebar .close-btn:hover {
+    background-color: var(--sidebar-accent);
+  }
+
+  .left-sidebar .close-btn i {
+    color: var(--sidebar-foreground);
+    font-size: 20px;
   }
 }
 

@@ -26,6 +26,9 @@
   <script src="https://cdn.jsdelivr.net/npm/simplebar@6.2.5/dist/simplebar.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@6.2.5/dist/simplebar.min.css">
   
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  
   <!-- その他のスクリプト -->
   <script src="https://kit.fontawesome.com/c0e97851db.js" crossorigin="anonymous"></script>
 </head>
@@ -95,6 +98,41 @@
 
   <!-- Pencil Design System -->
   <script>
+    // サイドバーのトグル機能
+    document.addEventListener('DOMContentLoaded', function() {
+      const pageWrapper = document.getElementById('main-wrapper');
+      const sidebar = document.querySelector('.left-sidebar');
+      
+      // サイドバーを開くトグルボタン（ヘッダーのハンバーガーメニュー）
+      document.querySelectorAll('.sidebartoggler').forEach(function(toggler) {
+        toggler.addEventListener('click', function(e) {
+          e.preventDefault();
+          if (pageWrapper) {
+            pageWrapper.classList.toggle('show-sidebar');
+          }
+        });
+      });
+      
+      // サイドバー外クリックで閉じる（モバイル時）
+      document.addEventListener('click', function(e) {
+        if (window.innerWidth < 1200) {
+          const isClickInsideSidebar = sidebar && sidebar.contains(e.target);
+          const isClickOnToggler = e.target.closest('.sidebartoggler');
+          
+          if (!isClickInsideSidebar && !isClickOnToggler && pageWrapper && pageWrapper.classList.contains('show-sidebar')) {
+            pageWrapper.classList.remove('show-sidebar');
+          }
+        }
+      });
+      
+      // ウィンドウリサイズ時にサイドバー状態をリセット
+      window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1200 && pageWrapper) {
+          pageWrapper.classList.remove('show-sidebar');
+        }
+      });
+    });
+    
     // ページ読み込み後にアクティブなメニュー項目までスクロール
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(function() {

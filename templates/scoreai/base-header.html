@@ -1,28 +1,45 @@
 {% load static %}
 
+<style>
+/* 会社切り替えアコーディオンのアイコン回転 */
+[data-bs-toggle="collapse"] .collapse-icon {
+  transition: transform 0.2s ease;
+}
+[data-bs-toggle="collapse"][aria-expanded="true"] .collapse-icon {
+  transform: rotate(180deg);
+}
+/* 会社リストのホバー効果 */
+.hover-bg-light:hover {
+  background-color: rgba(0,0,0,0.05);
+}
+</style>
+
 <!--  Header Start -->
 <header class="app-header">
   {% if user.is_authenticated %}
   <nav class="navbar navbar-expand-lg navbar-light">
     <ul class="navbar-nav">
       <li class="nav-item d-block d-xl-none">
-        <a class="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
-          <i class="ti ti-menu-2"></i>
+        <a class="nav-link sidebartoggler nav-icon-hover d-flex align-items-center justify-content-center" 
+           id="headerCollapse" href="javascript:void(0)"
+           style="width: 40px; height: 40px;">
+          <i class="ti ti-menu-2 fs-4" style="color: #1e293b;"></i>
         </a>
       </li>
     </ul>
     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
       <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-        {% if user.is_financial_consultant %}
         {% load custom_tags notification_tags %}
         {% get_user_firm_owner user as user_firm_owner %}
-        {% if user_firm_owner %}
+        
+        <!-- 通知ベル（Firmユーザーのみ） -->
+        {% if user.is_financial_consultant and user_firm_owner %}
         {% get_unread_notification_count user_firm_owner.firm as unread_count %}
         <li class="nav-item me-2">
           <a class="nav-link nav-icon-hover position-relative d-flex align-items-center justify-content-center pencil-notification-link" 
              href="{% url 'notification_list' firm_id=user_firm_owner.firm.id %}" 
              id="notificationLink">
-            <i class="ti ti-bell"></i>
+            <i class="ti ti-bell fs-5"></i>
             {% if unread_count > 0 %}
             <span class="position-absolute top-0 start-100 translate-middle badge bg-danger pencil-notification-badge">
               {{ unread_count }}
@@ -31,35 +48,76 @@
           </a>
         </li>
         {% endif %}
-        {% endif %}
+        
+        <!-- ユーザー情報ドロップダウン -->
         <li class="nav-item dropdown">
-          <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <i class="ti ti-user-circle"></i>
+          <a class="nav-link d-flex align-items-center gap-2 py-2 px-3 rounded-3 header-user-info" 
+             href="javascript:void(0)" id="headerUserDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+             style="background-color: rgba(0,0,0,0.03); min-height: 48px;">
+            {% if user_firm_owner %}
+            <span class="badge bg-info text-white"><i class="ti ti-briefcase me-1"></i>{{ user_firm_owner.firm.name|truncatechars:15 }}</span>
+            {% endif %}
+            {% if this_company %}
+            <span class="badge bg-primary"><i class="ti ti-building me-1"></i>{{ this_company.name|truncatechars:20 }}</span>
+            {% endif %}
+            <span class="text-dark fw-medium"><i class="ti ti-user me-1"></i>{{ user.username }}</span>
+            <i class="ti ti-chevron-down text-muted"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
-            <div class="message-body">
-              <div class="card-body p-4">
-                <p class="mb-0 fw-semibold">{{ user.username }}</p>
-                <p class="text-muted mb-0 small">{{ user.email|default:"" }}</p>
-              </div>
-              <div class="dropdown-divider"></div>
-              <div class="px-4 py-2">
-                <div class="d-flex align-items-center gap-2 flex-wrap">
-                  <span class="badge bg-primary">{{ this_company }}</span>
-                  <span class="text-muted small">に</span>
-                  <span class="badge bg-light text-dark border">{{ user.username }}</span>
-                  <span class="text-muted small">でログイン中</span>
+          <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up shadow-lg" aria-labelledby="headerUserDropdown" style="min-width: 280px;">
+            <!-- ユーザー情報ヘッダー -->
+            <div class="px-4 py-3 border-bottom bg-light">
+              <p class="mb-0 fw-semibold">{{ user.username }}</p>
+              <p class="text-muted mb-0 small">{{ user.email|default:"メール未設定" }}</p>
+            </div>
+            
+            <!-- 会社切り替え（アコーディオン式） -->
+            {% if header_user_companies|length > 1 %}
+            <div class="border-bottom">
+              <a class="dropdown-item d-flex align-items-center justify-content-between py-2" 
+                 data-bs-toggle="collapse" href="#companySwitchCollapse" role="button" 
+                 aria-expanded="false" aria-controls="companySwitchCollapse"
+                 onclick="event.stopPropagation();">
+                <span><i class="ti ti-switch-horizontal text-muted me-2"></i>会社を切り替え</span>
+                <i class="ti ti-chevron-down text-muted collapse-icon"></i>
+              </a>
+              <div class="collapse" id="companySwitchCollapse">
+                <div class="px-3 pb-2">
+                  {% for uc in header_user_companies %}
+                  <a href="{% url 'select_company' uc.company.id %}" 
+                     class="d-flex align-items-center gap-2 py-2 px-2 rounded text-decoration-none {% if uc.is_selected %}bg-primary bg-opacity-10{% else %}hover-bg-light{% endif %}">
+                    {% if uc.is_selected %}
+                    <i class="ti ti-check text-primary"></i>
+                    {% else %}
+                    <i class="ti ti-building text-muted"></i>
+                    {% endif %}
+                    <span class="{% if uc.is_selected %}text-primary fw-medium{% else %}text-dark{% endif %}">{{ uc.company.name }}</span>
+                  </a>
+                  {% endfor %}
                 </div>
               </div>
-              <div class="dropdown-divider"></div>
-              <a href="{% url 'user_profile' %}" class="d-flex align-items-center gap-2 dropdown-item">
-                <i class="ti ti-user"></i>
-                <p class="mb-0">プロフィール</p>
+            </div>
+            {% endif %}
+            
+            <!-- メニュー項目 -->
+            <div class="py-2">
+              <a href="{% url 'user_profile' %}" class="dropdown-item d-flex align-items-center gap-2 py-2">
+                <i class="ti ti-user text-muted"></i>
+                <span>プロフィール設定</span>
               </a>
-              <a href="{% url 'logout' %}" class="d-flex align-items-center gap-2 dropdown-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+              {% if this_company %}
+              <a href="{% url 'company_detail' this_company.id %}" class="dropdown-item d-flex align-items-center gap-2 py-2">
+                <i class="ti ti-building text-muted"></i>
+                <span>会社情報</span>
+              </a>
+              {% endif %}
+            </div>
+            
+            <!-- ログアウト -->
+            <div class="border-top py-2">
+              <a href="{% url 'logout' %}" class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" 
+                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="ti ti-logout"></i>
-                <p class="mb-0">ログアウト</p>
+                <span>ログアウト</span>
               </a>
               <form id="logout-form" method="post" action="{% url 'logout' %}" class="d-none">
                 {% csrf_token %}

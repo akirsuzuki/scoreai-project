@@ -3,8 +3,25 @@ from django.forms.widgets import Select
 from django.utils.safestring import mark_safe
 from urllib.parse import urlencode
 import markdown
+import math
 
 register = template.Library()
+
+
+@register.filter
+def truncate2(value):
+    """
+    小数点以下2桁で切り捨て
+    Usage: {{ value|truncate2 }}
+    """
+    try:
+        if value is None:
+            return ''
+        val = float(value)
+        # 小数点以下第3位で切り捨て
+        return math.floor(val * 100) / 100
+    except (ValueError, TypeError):
+        return value
 
 @register.filter
 def to_thousands(value):

@@ -8,31 +8,37 @@
 {% endblock %}
 
 {% block head %}
- <!-- DataTables CSS -->
+<!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/responsive/3.0.2/css/responsive.dataTables.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.3.0/css/fixedColumns.dataTables.css">
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
-<script src="https://cdn.datatables.net/responsive/3.0.2/js/dataTables.responsive.js"></script>
-<script src="https://cdn.datatables.net/fixedcolumns/4.3.0/js/dataTables.fixedColumns.js"></script>
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="{% static 'scoreai/js/chart_colors.js' %}"></script>
-
 <style>
-  @media print {
-    .page-break {
-      page-break-before: always;
-      margin-top: 2em;
-    }
-    .app-header {
-      display: none;
-    }
+  /* DataTablesのオーバーフロー防止 */
+  div.dt-container {
+    width: 100% !important;
+    overflow-x: auto;
+  }
+  table.dataTable {
+    width: 100% !important;
+  }
+  /* 小計行のスタイル */
+  .subtotal-row {
+    background-color: #f8f9fa !important;
+    font-weight: bold;
+  }
+  .subtotal-row:hover {
+    background-color: #e9ecef !important;
+  }
+  .subtotal-row td {
+    border-top: 2px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
   }
 </style>
-
 {% endblock %}
 
 {% block breadcrumb %}
@@ -118,36 +124,17 @@
         </div>
       </div>
     </div>
-<p id="alldebts"></p>
-{% include 'scoreai/debt_list_active.html' %}
-{% include 'scoreai/debt_list_chart.html' %}
+    <p id="alldebts"></p>
+    {% include 'scoreai/debt_list_active.html' %}
+    {% include 'scoreai/debt_list_chart.html' %}
 
-<p id="finished"></p>
-{% include 'scoreai/debt_list_finished.html' %}
+    <p id="finished"></p>
+    {% include 'scoreai/debt_list_finished.html' %}
 
-<p id="rescheduled"></p>
-{% include 'scoreai/debt_list_rescheduled.html' %}
+    <p id="rescheduled"></p>
+    {% include 'scoreai/debt_list_rescheduled.html' %}
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    // Update the selector to include all three tables
-    const tables = ['active_debt_list', 'rescheduled_debt_list', 'completed_debt_list'];
-    
-    tables.forEach(tableId => {
-      const rows = document.querySelectorAll(`#${tableId} tbody tr`);
-      rows.forEach(row => {
-        row.addEventListener('click', function () {
-          const href = this.getAttribute('data-href');
-          if (href) {
-            window.location.href = href;
-          }
-        });
-      });
-    });
-  });
-</script>
-
-
-
+  </div><!-- /.tab-pane -->
+</div><!-- /.tab-content -->
 
 {% endblock %}

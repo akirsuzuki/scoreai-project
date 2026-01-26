@@ -1,86 +1,92 @@
 {% load humanize %}
 {% load custom_filters %}
-<div class="page-break"></div>
+
+<!-- リスケ処理済み -->
 <div class="row mt-4">
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title fw-semibold">リスケ処理済み</h5>
+        <h5 class="card-title fw-semibold mb-0">リスケ処理済み</h5>
       </div>
       <div class="card-body">
-        <p>リスケ</p>
-        <table id="rescheduled_debt_list" class="display nowrap w-100">
-          <thead>
-            <tr>
-              <th>金融機関</th>
-              <th>ステータス</th>
-              <th>元本(千円)</th>
-              <th>保証</th>
-              <th>利息</th>
-              <th>実行日</th>
-              <th>返済開始日</th>
-              <th>月返済額</th>
-              <th>残高シェア</th>
-              <th>残り月数</th>
-              <th>支払回数</th>
-              <th>今月末残高</th>
-              <th>今月概算利息</th>
-              <th>決算時残高</th>
-              <th>代表者保証</th>
-              <th>担保</th>
-              <th>リスケ日</th>
-              <th>リスケ金額</th>
-              <th>メモ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for debt in debt_list_rescheduled %}
-            <tr data-href="{% url 'debt_detail' debt.id %}">
-              <td>{{ debt.financial_institution.short_name }}</td>
-              <td>{% if debt.start_date < today %}返済中{% else %}<span class="text-danger">【 返済前 】</span>{% endif %}</td>
-              <td>{{ debt.principal|to_thousands|intcomma}}</td>
-              <td>{{ debt.secured_type }}</td>
-              <td>{{ debt.interest_rate }}%</td>
-              <td>{{ debt.issue_date|date:"y年n月" }}</td>
-              <td>{{ debt.start_date|date:"y年n月" }}</td>
-              <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
-              <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
-              <td>{{ debt.remaining_months }}</td>
-              <td>{{ debt.payment_terms }}</td>
-              <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
-              <td>{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
-              <td>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
-              <td>{% if debt.is_securedby_management %}あり{% else %}なし{% endif %}</td>
-              <td>{% if debt.is_collateraled %}あり{% else %}なし{% endif %}</td>
-              <td>{{ debt.reschedule_date }}</td>
-              <td>{{ debt.reschedule_balance|to_thousands|intcomma }}</td>
-              <td>{{ debt.memo_short }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th colspan="2" class="text-end">合計：</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-responsive">
+          <table id="rescheduled_debt_list" class="table table-striped table-hover table-bordered w-100">
+            <thead class="table-light">
+              <tr>
+                <th>金融機関</th>
+                <th>ステータス</th>
+                <th class="text-end">元本(千円)</th>
+                <th>保証</th>
+                <th class="text-end">利息</th>
+                <th>実行日</th>
+                <th>返済開始日</th>
+                <th class="text-end">月返済額</th>
+                <th class="text-end">残高シェア</th>
+                <th class="text-end">残り月数</th>
+                <th class="text-end">支払回数</th>
+                <th class="text-end">今月末残高</th>
+                <th class="text-end">今月概算利息</th>
+                <th class="text-end">決算時残高</th>
+                <th>代表者保証</th>
+                <th>担保</th>
+                <th>リスケ日</th>
+                <th class="text-end">リスケ金額</th>
+                <th>メモ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for debt in debt_list_rescheduled %}
+              <tr data-href="{% url 'debt_detail' debt.id %}" style="cursor: pointer;">
+                <td>{{ debt.financial_institution.short_name }}</td>
+                <td>{% if debt.start_date < today %}<span class="badge bg-success">返済中</span>{% else %}<span class="badge bg-danger">返済前</span>{% endif %}</td>
+                <td class="text-end">{{ debt.principal|to_thousands|intcomma}}</td>
+                <td>{{ debt.secured_type }}</td>
+                <td class="text-end">{{ debt.interest_rate|truncate2 }}%</td>
+                <td>{{ debt.issue_date|date:"y年n月" }}</td>
+                <td>{{ debt.start_date|date:"y年n月" }}</td>
+                <td class="text-end">{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
+                <td class="text-end">{{ debt.remaining_months }}</td>
+                <td class="text-end">{{ debt.payment_terms }}</td>
+                <td class="text-end">{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+                <td>{% if debt.is_securedby_management %}<span class="badge bg-info">あり</span>{% else %}<span class="badge bg-light text-muted">なし</span>{% endif %}</td>
+                <td>{% if debt.is_collateraled %}<span class="badge bg-info">あり</span>{% else %}<span class="badge bg-light text-muted">なし</span>{% endif %}</td>
+                <td>{{ debt.reschedule_date }}</td>
+                <td class="text-end">{{ debt.reschedule_balance|to_thousands|intcomma }}</td>
+                <td>{{ debt.memo_short }}</td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="19" class="text-center text-muted py-4">リスケ処理済みの借入はありません</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <th colspan="2" class="text-end">合計：</th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-end"></th>
+                <th class="text-end"></th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-end"></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -89,13 +95,17 @@
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const table = new DataTable('#rescheduled_debt_list', {
-      responsive: true,
+      responsive: false,
       scrollX: true,
+      autoWidth: false,
       pageLength: 25,
       pagingType: 'full_numbers',
+      order: [[0, 'asc']],
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
+      },
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
-        // Remove the formatting to get integer data for summation
         let intVal = function (i) {
           return typeof i === 'string'
             ? i.replace(/[\$,]/g, '') * 1
@@ -103,14 +113,10 @@
               ? i
               : 0;
         };
-        // Total over all pages
+        
+        // 元本の合計
         let principalTotal = api
           .column(2)
-          .data()
-          .reduce((a, b) => intVal(a) + intVal(b), 0);
-        // Total over this page
-        let principalPageTotal = api
-          .column(2, { page: 'current' })
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
@@ -119,22 +125,39 @@
           .column(7)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
-        let monthlyRepaymentPageTotal = api
-          .column(7, { page: 'current' })
+        
+        // 今月末残高の合計
+        let balanceTotal = api
+          .column(11)
           .data()
           .reduce((a, b) => intVal(a) + intVal(b), 0);
         
-        // Update footer
-        $(api.column(2).footer()).html('表示合計: ' + principalPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + principalTotal.toLocaleString('ja-JP') + '千円)');
-        $(api.column(7).footer()).html('表示合計: ' + monthlyRepaymentPageTotal.toLocaleString('ja-JP') + '千円 (総合計: ' + monthlyRepaymentTotal.toLocaleString('ja-JP') + '千円)');
+        // 決算時残高の合計
+        let balanceFy1Total = api
+          .column(13)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // リスケ金額の合計
+        let rescheduleTotal = api
+          .column(17)
+          .data()
+          .reduce((a, b) => intVal(a) + intVal(b), 0);
+        
+        // フッターに表示
+        $(api.column(2).footer()).html(principalTotal.toLocaleString('ja-JP'));
+        $(api.column(7).footer()).html(monthlyRepaymentTotal.toLocaleString('ja-JP'));
+        $(api.column(11).footer()).html(balanceTotal.toLocaleString('ja-JP'));
+        $(api.column(13).footer()).html(balanceFy1Total.toLocaleString('ja-JP'));
+        $(api.column(17).footer()).html(rescheduleTotal.toLocaleString('ja-JP'));
       }
     });
 
     // 行クリックで詳細ページに遷移
     table.on('draw', function () {
-      const rows = document.querySelectorAll('#rescheduled_debt_list tbody tr');
+      const rows = document.querySelectorAll('#rescheduled_debt_list tbody tr[data-href]');
       rows.forEach(row => {
-        row.addEventListener('click', function () {
+        $(row).off('click').on('click', function () {
           const href = this.getAttribute('data-href');
           if (href) {
             window.location.href = href;

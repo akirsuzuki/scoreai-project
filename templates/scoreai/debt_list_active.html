@@ -1,9 +1,7 @@
 {% load humanize %}
 {% load custom_filters %}
 
-<!-- 改ページ -->
-<div class="page-break"></div>
-
+<!-- 現在アクティブな借入 -->
 <div class="row">
   <div class="col-12">
     <div class="card">
@@ -17,98 +15,98 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="pencil-table-overflow">
-        <table id="active_debt_list" class="display nowrap pencil-table-full">
-          <thead>
-            <tr>
-              <th>金融機関</th>
-              <th>区分</th>
-              <th>ステータス</th>
-              <th>元本(千円)</th>
-              <th>保証</th>
-              <th>利息</th>
-              <th>実行日</th>
-              <th>返済開始日</th>
-              <th>月返済額</th>
-              <th>残高シェア</th>
-              <th>残り月数</th>
-              <th>支払回数</th>
-              <th>今月末残高</th>
-              <th>今月概算利息</th>
-              <th>決算時残高</th>
-              <th>代表者保証</th>
-              <th>担保</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for debt in debt_list %}
-            <tr data-href="{% url 'debt_detail' debt.id %}">
-              <td>{{ debt.financial_institution.short_name }}</td>
-              <td>
-                {% if debt.debt_type == 'corporate_bond' %}
-                  <span class="badge bg-warning text-dark">社債</span>
-                {% elif debt.debt_type == 'promissory_note' %}
-                  <span class="badge bg-success">手形貸付</span>
-                {% else %}
-                  <span class="badge bg-primary">証書貸付</span>
-                {% endif %}
-              </td>
-              <td>
-                {% if debt.start_date <= today %}
-                  <span class="badge bg-success">返済中</span>
-                {% else %}
-                  <span class="badge bg-danger">返済前</span>
-                {% endif %}
-              </td>
-              <td>{{ debt.principal|to_thousands|intcomma}}</td>
-              <td>{{ debt.secured_type }}</td>
-              <td>{{ debt.interest_rate }}%</td>
-              <td>{{ debt.issue_date|date:"y年n月" }}</td>
-              <td>{{ debt.start_date|date:"y年n月" }}</td>
-              <td>{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
-              <td>{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
-              <td>{{ debt.remaining_months }}</td>
-              <td>{{ debt.payment_terms }}</td>
-              <td>{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
-              <td>{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
-              <td>{{ debt.balance_fy1|to_thousands|intcomma }}</td>
-              <td>
-                {% if debt.is_securedby_management %}
-                  <span class="badge bg-info">あり</span>
-                {% else %}
-                  <span class="badge bg-light text-muted">なし</span>
-                {% endif %}
-              </td>
-              <td>
-                {% if debt.is_collateraled %}
-                  <span class="badge bg-info">あり</span>
-                {% else %}
-                  <span class="badge bg-light text-muted">なし</span>
-                {% endif %}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th colspan="3" class="text-end">合計：</th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-            </tr>
-          </tfoot>
-        </table>
+        <div class="table-responsive">
+          <table id="active_debt_list" class="table table-striped table-hover table-bordered w-100">
+            <thead class="table-light">
+              <tr>
+                <th>金融機関</th>
+                <th>区分</th>
+                <th>ステータス</th>
+                <th class="text-end">元本(千円)</th>
+                <th>保証</th>
+                <th class="text-end">利息</th>
+                <th>実行日</th>
+                <th>返済開始日</th>
+                <th class="text-end">月返済額</th>
+                <th class="text-end">残高シェア</th>
+                <th class="text-end">残り月数</th>
+                <th class="text-end">支払回数</th>
+                <th class="text-end">今月末残高</th>
+                <th class="text-end">今月概算利息</th>
+                <th class="text-end">決算時残高</th>
+                <th>代表者保証</th>
+                <th>担保</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for debt in debt_list %}
+              <tr data-href="{% url 'debt_detail' debt.id %}" style="cursor: pointer;">
+                <td>{{ debt.financial_institution.short_name }}</td>
+                <td>
+                  {% if debt.debt_type == 'corporate_bond' %}
+                    <span class="badge bg-warning text-dark">社債</span>
+                  {% elif debt.debt_type == 'promissory_note' %}
+                    <span class="badge bg-success">手形貸付</span>
+                  {% else %}
+                    <span class="badge bg-primary">証書貸付</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if debt.start_date <= today %}
+                    <span class="badge bg-success">返済中</span>
+                  {% else %}
+                    <span class="badge bg-danger">返済前</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">{{ debt.principal|to_thousands|intcomma}}</td>
+                <td>{{ debt.secured_type }}</td>
+                <td class="text-end">{{ debt.interest_rate|truncate2 }}%</td>
+                <td>{{ debt.issue_date|date:"y年n月" }}</td>
+                <td>{{ debt.start_date|date:"y年n月" }}</td>
+                <td class="text-end">{{ debt.monthly_repayment|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.balances_monthly.0|percentage:debt_list_totals.total_balances_monthly.0 }}</td>
+                <td class="text-end">{{ debt.remaining_months }}</td>
+                <td class="text-end">{{ debt.payment_terms }}</td>
+                <td class="text-end">{{ debt.balances_monthly.0|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.interest_amount_monthly.0|to_thousands|intcomma }}</td>
+                <td class="text-end">{{ debt.balance_fy1|to_thousands|intcomma }}</td>
+                <td>
+                  {% if debt.is_securedby_management %}
+                    <span class="badge bg-info">あり</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted">なし</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if debt.is_collateraled %}
+                    <span class="badge bg-info">あり</span>
+                  {% else %}
+                    <span class="badge bg-light text-muted">なし</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot class="table-light">
+              <tr>
+                <th colspan="3" class="text-end">合計：</th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-end"></th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+                <th class="text-end"></th>
+                <th class="text-end"></th>
+                <th class="text-end"></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
       <div class="card-footer">
@@ -118,65 +116,32 @@
   </div>
 </div>
 
-<!-- 改ページ -->
-<div class="page-break"></div>
-
-<!-- グラフ -->
-<div class="row">
+<!-- 返済中残高12ヶ月推移グラフ -->
+<div class="row mt-4">
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h5 class="card-title mb-0">返済中残高12ヶ月推移</h5>
+        <h5 class="card-title fw-semibold mb-0">返済中残高12ヶ月推移</h5>
       </div>
       <div class="card-body">
-        <div class="pencil-chart-wrapper">
-          <canvas id="chart_debtAll"></canvas>
-        </div>
+        <canvas id="chart_debtAll"></canvas>
       </div>
     </div>
   </div>
 </div>
-
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const table = new DataTable('#active_debt_list', {
       responsive: false,
       scrollX: true,
-      scrollCollapse: true,
       autoWidth: false,
       pageLength: 25,
       pagingType: 'full_numbers',
       order: [[0, 'asc']], // 金融機関でソート
-      rowGroup: {
-        dataSrc: 0, // 金融機関列（0列目）でグループ化
-        startClassName: 'group-start',
-        endClassName: 'group-end',
-        emptyDataGroup: null,
-        enable: true
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
       },
-      fixedColumns: {
-        left: 1  // 左側に1列（金融機関）を固定
-      },
-      columnDefs: [
-        { targets: 0, width: '120px', visible: true },  // 金融機関
-        { targets: 1, width: '90px' },   // 区分
-        { targets: 2, width: '100px' },  // ステータス
-        { targets: 3, width: '100px' },  // 元本(千円)
-        { targets: 4, width: '100px' },  // 保証
-        { targets: 5, width: '70px' },   // 利息
-        { targets: 6, width: '80px' },   // 実行日
-        { targets: 7, width: '100px' },   // 返済開始日
-        { targets: 8, width: '100px' },   // 月返済額
-        { targets: 9, width: '80px' },   // 残高シェア
-        { targets: 10, width: '70px' },    // 残り月数
-        { targets: 11, width: '80px' },   // 支払回数
-        { targets: 12, width: '110px' },  // 今月末残高
-        { targets: 13, width: '110px' },  // 今月概算利息
-        { targets: 14, width: '110px' },  // 決算時残高
-        { targets: 15, width: '90px' },   // 代表者保証
-        { targets: 16, width: '70px' },  // 担保
-      ],
       drawCallback: function (settings) {
         // サブトータル表示が有効な場合のみ処理
         if (!$('#toggleSubtotals').is(':checked')) {
@@ -297,16 +262,16 @@
       let balanceShare = totalBalance > 0 ? (subtotal.balance / totalBalance * 100) : 0;
       
       // サブトータル行を作成（クリック不可）
-      let subtotalRow = $('<tr class="subtotal-row pencil-subtotal-row">')
-        .append($('<td colspan="3" class="pencil-subtotal-cell text-end">').html('<strong>' + bankName + ' 小計</strong>'))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.principal.toLocaleString('ja-JP')))
+      let subtotalRow = $('<tr class="subtotal-row">')
+        .append($('<td colspan="3" class="text-end">').html('<strong>' + bankName + ' 小計</strong>'))
+        .append($('<td class="text-end">').html(subtotal.principal.toLocaleString('ja-JP')))
         .append($('<td colspan="4">'))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.monthlyRepayment.toLocaleString('ja-JP')))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(balanceShare.toFixed(2) + '%'))
+        .append($('<td class="text-end">').html(subtotal.monthlyRepayment.toLocaleString('ja-JP')))
+        .append($('<td class="text-end">').html(balanceShare.toFixed(2) + '%'))
         .append($('<td colspan="2">'))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.balance.toLocaleString('ja-JP')))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.interest.toLocaleString('ja-JP')))
-        .append($('<td class="pencil-subtotal-cell text-end">').html(subtotal.balanceFy1.toLocaleString('ja-JP')))
+        .append($('<td class="text-end">').html(subtotal.balance.toLocaleString('ja-JP')))
+        .append($('<td class="text-end">').html(subtotal.interest.toLocaleString('ja-JP')))
+        .append($('<td class="text-end">').html(subtotal.balanceFy1.toLocaleString('ja-JP')))
         .append($('<td colspan="2">'));
       
       // グループの最後の行の後に挿入
@@ -338,23 +303,3 @@
     });
   });
 </script>
-
-<style>
-  .subtotal-row {
-    background-color: #f8f9fa !important;
-    font-weight: bold;
-  }
-  .subtotal-row:hover {
-    background-color: #e9ecef !important;
-  }
-  .subtotal-row td {
-    border-top: 2px solid #dee2e6;
-    border-bottom: 2px solid #dee2e6;
-  }
-  .group-start {
-    border-top: 2px solid #dee2e6;
-  }
-  .group-end {
-    border-bottom: 2px solid #dee2e6;
-  }
-</style>

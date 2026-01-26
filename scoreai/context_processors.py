@@ -5,9 +5,18 @@ from django.conf import settings
 # どのページからでもthis_companyを使えるようにするため
 def selected_company(request):
     if request.user.is_authenticated:
-        selected_company = UserCompany.objects.filter(user=request.user, is_selected=True).first()
-        return {'this_company': selected_company.company if selected_company else None}
-    return {'this_company': None}
+        # 選択中の会社
+        selected_uc = UserCompany.objects.filter(user=request.user, is_selected=True).select_related('company').first()
+        # ユーザーが所属する全会社（会社切り替え用）
+        user_companies = UserCompany.objects.filter(
+            user=request.user, 
+            active=True
+        ).select_related('company').order_by('company__name')
+        return {
+            'this_company': selected_uc.company if selected_uc else None,
+            'header_user_companies': user_companies
+        }
+    return {'this_company': None, 'header_user_companies': []}
 
 
 # reCAPTCHA設定をテンプレートで使用できるようにする
