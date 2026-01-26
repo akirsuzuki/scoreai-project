@@ -2421,9 +2421,14 @@ class Todo(models.Model):
         ('medium', '中'),
         ('high', '高'),
     ]
+    OWNER_TYPE_CHOICES = [
+        ('company', '会社'),
+        ('firm', 'Firm'),
+    ]
 
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='todos', verbose_name='会社')
+    owner_type = models.CharField('タスク所有区分', max_length=10, choices=OWNER_TYPE_CHOICES, default='company', help_text='会社側のタスクかFirm側のタスクかを区別')
     title = models.CharField('タイトル', max_length=200)
     content = models.TextField('内容', blank=True)
     categories = models.ManyToManyField(TodoCategory, related_name='todos', blank=True, verbose_name='分類タグ')
@@ -2431,7 +2436,6 @@ class Todo(models.Model):
     status = models.CharField('ステータス', max_length=20, choices=STATUS_CHOICES, default='pending')
     priority = models.CharField('優先度', max_length=10, choices=PRIORITY_CHOICES, default='medium')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_todos', verbose_name='作成者')
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_todos', verbose_name='担当者')
     created_at = models.DateTimeField('作成日', auto_now_add=True)
     updated_at = models.DateTimeField('更新日', auto_now=True)
     completed_at = models.DateTimeField('完了日', null=True, blank=True)

@@ -1157,7 +1157,7 @@ class TodoForm(forms.ModelForm):
 
     class Meta:
         model = Todo
-        fields = ['title', 'content', 'categories', 'due_date', 'status', 'priority', 'assigned_to']
+        fields = ['title', 'content', 'categories', 'due_date', 'status', 'priority', 'owner_type']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'タイトルを入力'}),
             'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': '内容を入力'}),
@@ -1165,27 +1165,13 @@ class TodoForm(forms.ModelForm):
             'due_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'priority': forms.Select(attrs={'class': 'form-select'}),
-            'assigned_to': forms.Select(attrs={'class': 'form-select'}),
+            'owner_type': forms.Select(attrs={'class': 'form-select'}),
         }
 
     def __init__(self, *args, company=None, **kwargs):
         super().__init__(*args, **kwargs)
         # アクティブなカテゴリのみ表示
         self.fields['categories'].queryset = TodoCategory.objects.filter(is_active=True)
-
-        # 担当者は会社に所属するユーザーのみ表示
-        if company:
-            from .models import UserCompany
-            user_ids = UserCompany.objects.filter(
-                company=company,
-                active=True
-            ).values_list('user_id', flat=True)
-            self.fields['assigned_to'].queryset = User.objects.filter(id__in=user_ids)
-        else:
-            self.fields['assigned_to'].queryset = User.objects.none()
-
-        self.fields['assigned_to'].required = False
-        self.fields['assigned_to'].empty_label = '未割り当て'
 
 
 class FinancialReportForm(forms.Form):

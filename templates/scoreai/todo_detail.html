@@ -118,12 +118,12 @@
                 </div>
 
                 <div class="mb-3">
-                    <div class="detail-label">担当者</div>
+                    <div class="detail-label">タスク区分</div>
                     <div>
-                        {% if todo.assigned_to %}
-                        <i class="ti ti-user me-1"></i>{{ todo.assigned_to.username }}
+                        {% if todo.owner_type == 'company' %}
+                        <span class="badge bg-primary"><i class="ti ti-building me-1"></i>会社</span>
                         {% else %}
-                        <span class="text-muted">未割り当て</span>
+                        <span class="badge bg-info"><i class="ti ti-briefcase me-1"></i>Firm</span>
                         {% endif %}
                     </div>
                 </div>

@@ -29,7 +29,7 @@ class TodoListView(SelectedCompanyMixin, generic.ListView):
         """選択中の会社のTo Doのみ取得"""
         queryset = Todo.objects.filter(
             company=self.this_company
-        ).select_related('created_by', 'assigned_to').prefetch_related('categories')
+        ).select_related('created_by').prefetch_related('categories')
 
         # フィルタリング
         status = self.request.GET.get('status')
@@ -172,7 +172,7 @@ class TodoDetailView(SelectedCompanyMixin, generic.DetailView):
         """選択中の会社のTo Doのみ表示"""
         return Todo.objects.filter(
             company=self.this_company
-        ).select_related('created_by', 'assigned_to').prefetch_related('categories')
+        ).select_related('created_by').prefetch_related('categories')
 
     def get_context_data(self, **kwargs) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)

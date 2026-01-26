@@ -279,7 +279,7 @@ class IndexView(SelectedCompanyMixin, generic.TemplateView):
         upcoming_todos = Todo.objects.filter(
             company=self.this_company,
             status__in=['pending', 'in_progress']
-        ).select_related('created_by', 'assigned_to').prefetch_related('categories').annotate(
+        ).select_related('created_by').prefetch_related('categories').annotate(
             # 期限切れを優先、次に期限が近いもの
             priority_order=Case(
                 When(due_date__lt=today, then=Value(0)),  # 期限切れ

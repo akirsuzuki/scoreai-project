@@ -132,15 +132,16 @@
                             {% endif %}
                         </div>
 
-                        <!-- Assigned To -->
+                        <!-- Owner Type -->
                         <div class="col-md-6 mb-3">
-                            <label for="id_assigned_to" class="form-label">担当者</label>
-                            {{ form.assigned_to }}
-                            {% if form.assigned_to.errors %}
+                            <label for="id_owner_type" class="form-label">タスク区分</label>
+                            {{ form.owner_type }}
+                            {% if form.owner_type.errors %}
                             <div class="invalid-feedback d-block">
-                                {% for error in form.assigned_to.errors %}{{ error }}{% endfor %}
+                                {% for error in form.owner_type.errors %}{{ error }}{% endfor %}
                             </div>
                             {% endif %}
+                            <small class="text-muted">会社側のタスクかFirm側のタスクかを選択</small>
                         </div>
                     </div>
 

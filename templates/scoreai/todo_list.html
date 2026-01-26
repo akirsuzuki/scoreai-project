@@ -223,11 +223,9 @@
                             </span>
                             {% endif %}
 
-                            {% if todo.assigned_to %}
-                            <span class="text-muted small">
-                                <i class="ti ti-user"></i> {{ todo.assigned_to.username }}
+                            <span class="badge {% if todo.owner_type == 'company' %}bg-primary{% else %}bg-info{% endif %} small">
+                                {% if todo.owner_type == 'company' %}<i class="ti ti-building"></i> 会社{% else %}<i class="ti ti-briefcase"></i> Firm{% endif %}
                             </span>
-                            {% endif %}
                         </div>
                     </div>
 

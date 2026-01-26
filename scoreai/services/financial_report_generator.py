@@ -172,6 +172,10 @@ class FinancialReportGenerator:
                 decoded = content.decode(enc)
                 df = pd.read_csv(StringIO(decoded), header=0)
                 logger.debug(f"CSV読み込み成功: encoding={enc}")
+                logger.debug(f"CSV列名: {list(df.columns)}")
+                logger.debug(f"CSVデータ行数: {len(df)}")
+                if len(df) > 0:
+                    logger.debug(f"最初の5行の勘定科目: {df.iloc[:5, 0].tolist()}")
                 return df
             except (UnicodeDecodeError, UnicodeError):
                 continue
@@ -421,21 +425,38 @@ class FinancialReportGenerator:
         df = self.pl_bumon_df.copy()
         df_zenki = self.pl_bumon_zenki_df.copy() if self.pl_bumon_zenki_df is not None else None
         
-        # 勘定科目列を特定（当期）
-        account_col = df.columns[0] if len(df.columns) > 0 else None
-        if account_col is None:
+        # CSVの構造: 列0=セクション名、列1=勘定科目名、列2以降=データ
+        # 勘定科目名は列0が空なら列1を使用、そうでなければ列0を使用
+        section_col = df.columns[0] if len(df.columns) > 0 else None
+        detail_col = df.columns[1] if len(df.columns) > 1 else None
+        if section_col is None:
             return
         
-        # 勘定科目列を特定（前期）- 前期CSVの最初の列を使用
-        account_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
+        # 前期も同様
+        section_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
+        detail_col_zenki = df_zenki.columns[1] if df_zenki is not None and len(df_zenki.columns) > 1 else None
         
-        # 部門列を取得（最初の列以外）
-        department_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
+        # 部門列を取得（列0,1以外、かつ除外キーワードを含まない列）
+        exclude_keywords = ['勘定科目', '科目', '科目名', '勘定', 'account', 'unnamed']
+        department_cols = [
+            col for col in df.columns[2:]  # 列2以降からデータ列
+            if not pd.isna(col) and str(col).strip() 
+            and not any(kw in str(col).lower() for kw in exclude_keywords)
+        ]
+        
+        logger.debug(f"部門別PL 部門列: {department_cols}")
+        
+        # 勘定科目名を取得するヘルパー関数
+        def get_account_name(row_data, sec_col, det_col):
+            sec_val = str(row_data[sec_col]).strip() if pd.notna(row_data[sec_col]) else ""
+            det_val = str(row_data[det_col]).strip() if det_col and pd.notna(row_data[det_col]) else ""
+            # セクション列に値があればそれを使用、なければ詳細列を使用
+            return sec_val if sec_val else det_val
         
         # 売上高合計行を探す（比率計算用）
         sales_row = None
         for idx, row_data in df.iterrows():
-            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            account_name = get_account_name(row_data, section_col, detail_col)
             if '売上高合計' in account_name or account_name == '売上高':
                 sales_row = row_data
                 break
@@ -481,15 +502,25 @@ class FinancialReportGenerator:
         # データ行
         for idx, row_data in df.iterrows():
             col = 1
-            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            account_name = get_account_name(row_data, section_col, detail_col)
+            
+            # 空の行はスキップ
+            if not account_name:
+                continue
+            
+            # セクション行のスタイル（列0に値がある行）
+            sec_val = str(row_data[section_col]).strip() if pd.notna(row_data[section_col]) else ""
+            det_val = str(row_data[detail_col]).strip() if detail_col and pd.notna(row_data[detail_col]) else ""
+            is_detail = not sec_val and det_val  # 列0が空で列1に値がある場合は詳細行
+            is_section = sec_val in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失', '営業外収益合計', '営業外費用合計', '特別利益合計', '特別損失合計', '当期純利益合計']
+            is_total = '合計' in account_name or '利益' in account_name
+            
+            # 詳細行はインデントを追加
+            display_name = f"  {account_name}" if is_detail else account_name
             
             # 勘定科目名
-            ws.cell(row=row, column=col).value = account_name
+            ws.cell(row=row, column=col).value = display_name
             ws.cell(row=row, column=col).border = self.thin_border
-            
-            # セクション行のスタイル
-            is_section = account_name in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失']
-            is_total = '合計' in account_name or '利益' in account_name
             
             if is_section:
                 ws.cell(row=row, column=col).font = Font(bold=True)
@@ -510,16 +541,23 @@ class FinancialReportGenerator:
                     current_value = 0
                 
                 # 前期金額
-                prev_value = 0
-                if df_zenki is not None and account_col_zenki is not None and dept in df_zenki.columns:
-                    # 勘定科目名で前期データを検索
-                    zenki_row = df_zenki[df_zenki[account_col_zenki].astype(str) == account_name]
-                    if not zenki_row.empty:
-                        prev_val = zenki_row.iloc[0][dept]
-                        try:
-                            prev_value = float(prev_val) if pd.notna(prev_val) else 0
-                        except (ValueError, TypeError):
-                            prev_value = 0
+                prev_value = None  # Noneは前期データなし、0は前期が0円
+                if df_zenki is not None and section_col_zenki is not None and dept in df_zenki.columns:
+                    # 勘定科目名で前期データを検索（行タイプも一致させる）
+                    for zenki_idx, zenki_data in df_zenki.iterrows():
+                        zenki_sec = str(zenki_data[section_col_zenki]).strip() if pd.notna(zenki_data[section_col_zenki]) else ""
+                        zenki_det = str(zenki_data[detail_col_zenki]).strip() if detail_col_zenki and pd.notna(zenki_data[detail_col_zenki]) else ""
+                        zenki_is_detail = not zenki_sec and zenki_det  # 前期の行が詳細行かどうか
+                        zenki_account = zenki_det if zenki_is_detail else zenki_sec
+                        
+                        # 当期と前期で同じ行タイプ（詳細行 or セクション/合計行）のみマッチ
+                        if zenki_account == account_name and zenki_is_detail == is_detail:
+                            prev_val = zenki_data[dept]
+                            try:
+                                prev_value = float(prev_val) if pd.notna(prev_val) else 0
+                            except (ValueError, TypeError):
+                                prev_value = 0
+                            break
                 
                 # 比率（売上高に対する比率）
                 ratio = 0
@@ -532,9 +570,9 @@ class FinancialReportGenerator:
                     except (ValueError, TypeError):
                         pass
                 
-                # 前期比
+                # 前期比（前期データがある場合のみ計算）
                 yoy = None
-                if prev_value != 0:
+                if prev_value is not None and prev_value != 0:
                     yoy = (current_value - prev_value) / abs(prev_value)
                 
                 # 金額
@@ -559,9 +597,12 @@ class FinancialReportGenerator:
                     ws.cell(row=row, column=col).fill = self.total_fill
                 col += 1
                 
-                # 前期
-                ws.cell(row=row, column=col).value = prev_value
-                ws.cell(row=row, column=col).number_format = '#,##0'
+                # 前期（データがない場合は空白）
+                if prev_value is not None:
+                    ws.cell(row=row, column=col).value = prev_value
+                    ws.cell(row=row, column=col).number_format = '#,##0'
+                else:
+                    ws.cell(row=row, column=col).value = ""
                 ws.cell(row=row, column=col).border = self.thin_border
                 ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
                 if is_section:
@@ -575,7 +616,7 @@ class FinancialReportGenerator:
                     ws.cell(row=row, column=col).value = yoy
                     ws.cell(row=row, column=col).number_format = '0.0%'
                 else:
-                    ws.cell(row=row, column=col).value = "-"
+                    ws.cell(row=row, column=col).value = ""
                 ws.cell(row=row, column=col).border = self.thin_border
                 ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
                 if is_section:
@@ -629,21 +670,36 @@ class FinancialReportGenerator:
         df = self.pl_suii_df.copy()
         df_zenki = self.pl_suii_zenki_df.copy() if self.pl_suii_zenki_df is not None else None
         
-        # 勘定科目列を特定（当期）
-        account_col = df.columns[0] if len(df.columns) > 0 else None
-        if account_col is None:
+        # CSVの構造: 列0=セクション名、列1=勘定科目名、列2以降=データ
+        section_col = df.columns[0] if len(df.columns) > 0 else None
+        detail_col = df.columns[1] if len(df.columns) > 1 else None
+        if section_col is None:
             return
         
-        # 勘定科目列を特定（前期）- 前期CSVの最初の列を使用
-        account_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
+        # 前期も同様
+        section_col_zenki = df_zenki.columns[0] if df_zenki is not None and len(df_zenki.columns) > 0 else None
+        detail_col_zenki = df_zenki.columns[1] if df_zenki is not None and len(df_zenki.columns) > 1 else None
         
-        # 月列を取得（最初の列以外）
-        month_cols = [col for col in df.columns[1:] if not pd.isna(col) and str(col).strip()]
+        # 月列を取得（列0,1以外、かつ除外キーワードを含まない列）
+        exclude_keywords = ['勘定科目', '科目', '科目名', '勘定', 'account', 'unnamed']
+        month_cols = [
+            col for col in df.columns[2:]  # 列2以降からデータ列
+            if not pd.isna(col) and str(col).strip()
+            and not any(kw in str(col).lower() for kw in exclude_keywords)
+        ]
+        
+        logger.debug(f"月次推移PL 月列: {month_cols}")
+        
+        # 勘定科目名を取得するヘルパー関数
+        def get_account_name(row_data, sec_col, det_col):
+            sec_val = str(row_data[sec_col]).strip() if pd.notna(row_data[sec_col]) else ""
+            det_val = str(row_data[det_col]).strip() if det_col and pd.notna(row_data[det_col]) else ""
+            return sec_val if sec_val else det_val
         
         # 売上高合計行を探す（比率計算用）
         sales_data = {}
         for idx, row_data in df.iterrows():
-            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            account_name = get_account_name(row_data, section_col, detail_col)
             if '売上高合計' in account_name or account_name == '売上高':
                 for month in month_cols:
                     try:
@@ -693,15 +749,25 @@ class FinancialReportGenerator:
         # データ行
         for idx, row_data in df.iterrows():
             col = 1
-            account_name = str(row_data[account_col]) if pd.notna(row_data[account_col]) else ""
+            account_name = get_account_name(row_data, section_col, detail_col)
+            
+            # 空の行はスキップ
+            if not account_name:
+                continue
+            
+            # セクション行のスタイル（列0に値がある行）
+            sec_val = str(row_data[section_col]).strip() if pd.notna(row_data[section_col]) else ""
+            det_val = str(row_data[detail_col]).strip() if detail_col and pd.notna(row_data[detail_col]) else ""
+            is_detail = not sec_val and det_val  # 列0が空で列1に値がある場合は詳細行
+            is_section = sec_val in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失', '営業外収益合計', '営業外費用合計', '特別利益合計', '特別損失合計', '当期純利益合計']
+            is_total = '合計' in account_name or '利益' in account_name
+            
+            # 詳細行はインデントを追加
+            display_name = f"  {account_name}" if is_detail else account_name
             
             # 勘定科目名
-            ws.cell(row=row, column=col).value = account_name
+            ws.cell(row=row, column=col).value = display_name
             ws.cell(row=row, column=col).border = self.thin_border
-            
-            # セクション行のスタイル
-            is_section = account_name in ['売上高', '売上原価', '販売費及び一般管理費', '営業外収益', '営業外費用', '特別利益', '特別損失']
-            is_total = '合計' in account_name or '利益' in account_name
             
             if is_section:
                 ws.cell(row=row, column=col).font = Font(bold=True)
@@ -722,25 +788,32 @@ class FinancialReportGenerator:
                     current_value = 0
                 
                 # 前期金額
-                prev_value = 0
-                if df_zenki is not None and account_col_zenki is not None and month in df_zenki.columns:
-                    # 勘定科目名で前期データを検索
-                    zenki_row = df_zenki[df_zenki[account_col_zenki].astype(str) == account_name]
-                    if not zenki_row.empty:
-                        prev_val = zenki_row.iloc[0][month]
-                        try:
-                            prev_value = float(prev_val) if pd.notna(prev_val) else 0
-                        except (ValueError, TypeError):
-                            prev_value = 0
+                prev_value = None  # Noneは前期データなし、0は前期が0円
+                if df_zenki is not None and section_col_zenki is not None and month in df_zenki.columns:
+                    # 勘定科目名で前期データを検索（行タイプも一致させる）
+                    for zenki_idx, zenki_data in df_zenki.iterrows():
+                        zenki_sec = str(zenki_data[section_col_zenki]).strip() if pd.notna(zenki_data[section_col_zenki]) else ""
+                        zenki_det = str(zenki_data[detail_col_zenki]).strip() if detail_col_zenki and pd.notna(zenki_data[detail_col_zenki]) else ""
+                        zenki_is_detail = not zenki_sec and zenki_det  # 前期の行が詳細行かどうか
+                        zenki_account = zenki_det if zenki_is_detail else zenki_sec
+                        
+                        # 当期と前期で同じ行タイプ（詳細行 or セクション/合計行）のみマッチ
+                        if zenki_account == account_name and zenki_is_detail == is_detail:
+                            prev_val = zenki_data[month]
+                            try:
+                                prev_value = float(prev_val) if pd.notna(prev_val) else 0
+                            except (ValueError, TypeError):
+                                prev_value = 0
+                            break
                 
                 # 比率（売上高に対する比率）
                 ratio = 0
                 if month in sales_data and sales_data[month] != 0:
                     ratio = current_value / sales_data[month]
                 
-                # 前期比
+                # 前期比（前期データがある場合のみ計算）
                 yoy = None
-                if prev_value != 0:
+                if prev_value is not None and prev_value != 0:
                     yoy = (current_value - prev_value) / abs(prev_value)
                 
                 # 金額
@@ -765,9 +838,12 @@ class FinancialReportGenerator:
                     ws.cell(row=row, column=col).fill = self.total_fill
                 col += 1
                 
-                # 前期
-                ws.cell(row=row, column=col).value = prev_value
-                ws.cell(row=row, column=col).number_format = '#,##0'
+                # 前期（データがない場合は空白）
+                if prev_value is not None:
+                    ws.cell(row=row, column=col).value = prev_value
+                    ws.cell(row=row, column=col).number_format = '#,##0'
+                else:
+                    ws.cell(row=row, column=col).value = ""
                 ws.cell(row=row, column=col).border = self.thin_border
                 ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
                 if is_section:
@@ -781,7 +857,7 @@ class FinancialReportGenerator:
                     ws.cell(row=row, column=col).value = yoy
                     ws.cell(row=row, column=col).number_format = '0.0%'
                 else:
-                    ws.cell(row=row, column=col).value = "-"
+                    ws.cell(row=row, column=col).value = ""
                 ws.cell(row=row, column=col).border = self.thin_border
                 ws.cell(row=row, column=col).alignment = Alignment(horizontal='right')
                 if is_section:
@@ -798,7 +874,7 @@ class FinancialReportGenerator:
             ws.column_dimensions[get_column_letter(i)].width = 12
     
     def _build_bs(self, wb: Workbook) -> None:
-        """貸借対照表シートを作成"""
+        """貸借対照表シートを作成（左右分割レイアウト）"""
         if self.bs_df is None:
             logger.warning("貸借対照表データがありません")
             return
@@ -815,7 +891,7 @@ class FinancialReportGenerator:
         
         # タイトル
         row = 1
-        ws.merge_cells(f'A{row}:D{row}')
+        ws.merge_cells(f'A{row}:N{row}')
         cell = ws.cell(row=row, column=1)
         cell.value = f"貸借対照表 - {self.config.target_year}年{self.config.target_month}月末時点"
         cell.font = Font(bold=True, size=14)
@@ -823,8 +899,263 @@ class FinancialReportGenerator:
         ws.row_dimensions[row].height = 25
         row += 2
         
-        # DataFrameをシートに書き込み
-        self._write_dataframe_to_sheet(ws, self.bs_df, start_row=row, is_bs=True)
+        # データを資産の部と負債・純資産の部に分割
+        df = self.bs_df.copy()
+        section_col = df.columns[0] if len(df.columns) > 0 else None
+        detail_col = df.columns[1] if len(df.columns) > 1 else None
+        
+        # データ列を特定（開始月、期間借方、期間貸方、終了月、構成比）
+        data_cols = [col for col in df.columns[2:] if not pd.isna(col)]
+        
+        # 資産の部と負債・純資産の部を分割
+        assets_rows = []
+        liabilities_rows = []
+        current_section = None
+        
+        for idx, row_data in df.iterrows():
+            sec_val = str(row_data[section_col]).strip() if pd.notna(row_data[section_col]) else ""
+            det_val = str(row_data[detail_col]).strip() if detail_col and pd.notna(row_data[detail_col]) else ""
+            
+            # セクション判定
+            if sec_val == '資産の部':
+                current_section = 'assets'
+            elif sec_val == '負債の部':
+                current_section = 'liabilities'
+            elif sec_val == '純資産の部':
+                current_section = 'equity'
+            
+            # 行データを分類
+            account_name = det_val if det_val else sec_val
+            is_detail = not sec_val and det_val
+            
+            row_info = {
+                'account_name': account_name,
+                'is_detail': is_detail,
+                'is_section': sec_val in ['資産の部', '負債の部', '純資産の部', '流動資産', '固定資産', 
+                                          '流動負債', '固定負債', '株主資本', '資本金', '資本剰余金', 
+                                          '利益剰余金', '有形固定資産', '無形固定資産', '投資その他の資産',
+                                          '現金及び預金', '売上債権', '有価証券', '棚卸資産', 'その他流動資産',
+                                          '仕入債務', 'その他流動負債', '繰延資産', '諸口', '評価・換算差額等',
+                                          '新株予約権'],
+                'is_total': '合計' in account_name,
+                'data': {col: row_data[col] for col in data_cols} if data_cols else {}
+            }
+            
+            if current_section == 'assets' or sec_val == '資産の部合計':
+                assets_rows.append(row_info)
+            elif current_section in ['liabilities', 'equity'] or sec_val in ['負債の部合計', '純資産の部合計', '負債・純資産の部合計']:
+                liabilities_rows.append(row_info)
+        
+        # ヘッダー行
+        # 左側（資産の部）
+        left_headers = ['勘定科目', '期首残高', '期末残高']
+        # 右側（負債・純資産の部）
+        right_headers = ['勘定科目', '期首残高', '期末残高']
+        
+        # 使用するデータ列を決定
+        start_col_name = None
+        end_col_name = None
+        for col in data_cols:
+            col_str = str(col).lower()
+            if '開始' in col_str or '期首' in col_str:
+                start_col_name = col
+            elif '終了' in col_str or '期末' in col_str:
+                end_col_name = col
+        
+        # ヘッダー出力
+        header_row = row
+        # 左側ヘッダー
+        for i, h in enumerate(left_headers):
+            cell = ws.cell(row=header_row, column=i+1)
+            cell.value = h
+            cell.font = self.header_font
+            cell.fill = self.header_fill
+            cell.border = self.thin_border
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+        
+        # 中央の空白列
+        ws.cell(row=header_row, column=4).value = ""
+        
+        # 右側ヘッダー
+        right_start_col = 5
+        for i, h in enumerate(right_headers):
+            cell = ws.cell(row=header_row, column=right_start_col+i)
+            cell.value = h
+            cell.font = self.header_font
+            cell.fill = self.header_fill
+            cell.border = self.thin_border
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+        
+        row += 1
+        
+        # データ出力（左右を同時に出力）
+        max_rows = max(len(assets_rows), len(liabilities_rows))
+        
+        for i in range(max_rows):
+            current_row = row + i
+            
+            # 左側（資産の部）
+            if i < len(assets_rows):
+                asset = assets_rows[i]
+                display_name = f"  {asset['account_name']}" if asset['is_detail'] else asset['account_name']
+                
+                # 勘定科目名
+                cell = ws.cell(row=current_row, column=1)
+                cell.value = display_name
+                cell.border = self.thin_border
+                if asset['is_section']:
+                    cell.font = Font(bold=True)
+                    cell.fill = self.section_fill
+                elif asset['is_total']:
+                    cell.font = Font(bold=True)
+                    cell.fill = self.total_fill
+                
+                # 期首残高
+                cell = ws.cell(row=current_row, column=2)
+                if start_col_name and start_col_name in asset['data']:
+                    val = asset['data'][start_col_name]
+                    if pd.notna(val):
+                        try:
+                            cell.value = float(val)
+                            cell.number_format = '#,##0'
+                        except (ValueError, TypeError):
+                            cell.value = val
+                cell.border = self.thin_border
+                cell.alignment = Alignment(horizontal='right')
+                if asset['is_section']:
+                    cell.fill = self.section_fill
+                elif asset['is_total']:
+                    cell.fill = self.total_fill
+                
+                # 期末残高
+                cell = ws.cell(row=current_row, column=3)
+                if end_col_name and end_col_name in asset['data']:
+                    val = asset['data'][end_col_name]
+                    if pd.notna(val):
+                        try:
+                            cell.value = float(val)
+                            cell.number_format = '#,##0'
+                        except (ValueError, TypeError):
+                            cell.value = val
+                cell.border = self.thin_border
+                cell.alignment = Alignment(horizontal='right')
+                if asset['is_section']:
+                    cell.fill = self.section_fill
+                elif asset['is_total']:
+                    cell.fill = self.total_fill
+            
+            # 右側（負債・純資産の部）
+            if i < len(liabilities_rows):
+                liab = liabilities_rows[i]
+                display_name = f"  {liab['account_name']}" if liab['is_detail'] else liab['account_name']
+                
+                # 勘定科目名
+                cell = ws.cell(row=current_row, column=right_start_col)
+                cell.value = display_name
+                cell.border = self.thin_border
+                if liab['is_section']:
+                    cell.font = Font(bold=True)
+                    cell.fill = self.section_fill
+                elif liab['is_total']:
+                    cell.font = Font(bold=True)
+                    cell.fill = self.total_fill
+                
+                # 期首残高
+                cell = ws.cell(row=current_row, column=right_start_col+1)
+                if start_col_name and start_col_name in liab['data']:
+                    val = liab['data'][start_col_name]
+                    if pd.notna(val):
+                        try:
+                            cell.value = float(val)
+                            cell.number_format = '#,##0'
+                        except (ValueError, TypeError):
+                            cell.value = val
+                cell.border = self.thin_border
+                cell.alignment = Alignment(horizontal='right')
+                if liab['is_section']:
+                    cell.fill = self.section_fill
+                elif liab['is_total']:
+                    cell.fill = self.total_fill
+                
+                # 期末残高
+                cell = ws.cell(row=current_row, column=right_start_col+2)
+                if end_col_name and end_col_name in liab['data']:
+                    val = liab['data'][end_col_name]
+                    if pd.notna(val):
+                        try:
+                            cell.value = float(val)
+                            cell.number_format = '#,##0'
+                        except (ValueError, TypeError):
+                            cell.value = val
+                cell.border = self.thin_border
+                cell.alignment = Alignment(horizontal='right')
+                if liab['is_section']:
+                    cell.fill = self.section_fill
+                elif liab['is_total']:
+                    cell.fill = self.total_fill
+        
+        # 資産の部合計と負債・純資産の部合計を同じ行に配置するための調整
+        # 資産の部合計の行を探す
+        assets_total_row = None
+        for i, asset in enumerate(assets_rows):
+            if asset['account_name'] == '資産の部合計':
+                assets_total_row = row + i
+                break
+        
+        # 負債・純資産の部合計の行を探す
+        liab_total_idx = None
+        for i, liab in enumerate(liabilities_rows):
+            if liab['account_name'] == '負債・純資産の部合計':
+                liab_total_idx = i
+                break
+        
+        # 負債・純資産の部合計を資産の部合計と同じ行に出力
+        if assets_total_row and liab_total_idx is not None:
+            liab = liabilities_rows[liab_total_idx]
+            
+            # 勘定科目名
+            cell = ws.cell(row=assets_total_row, column=right_start_col)
+            cell.value = liab['account_name']
+            cell.border = self.thin_border
+            cell.font = Font(bold=True)
+            cell.fill = self.total_fill
+            
+            # 期首残高
+            cell = ws.cell(row=assets_total_row, column=right_start_col+1)
+            if start_col_name and start_col_name in liab['data']:
+                val = liab['data'][start_col_name]
+                if pd.notna(val):
+                    try:
+                        cell.value = float(val)
+                        cell.number_format = '#,##0'
+                    except (ValueError, TypeError):
+                        cell.value = val
+            cell.border = self.thin_border
+            cell.alignment = Alignment(horizontal='right')
+            cell.fill = self.total_fill
+            
+            # 期末残高
+            cell = ws.cell(row=assets_total_row, column=right_start_col+2)
+            if end_col_name and end_col_name in liab['data']:
+                val = liab['data'][end_col_name]
+                if pd.notna(val):
+                    try:
+                        cell.value = float(val)
+                        cell.number_format = '#,##0'
+                    except (ValueError, TypeError):
+                        cell.value = val
+            cell.border = self.thin_border
+            cell.alignment = Alignment(horizontal='right')
+            cell.fill = self.total_fill
+        
+        # 列幅調整
+        ws.column_dimensions['A'].width = 25
+        ws.column_dimensions['B'].width = 15
+        ws.column_dimensions['C'].width = 15
+        ws.column_dimensions['D'].width = 3  # 中央の空白列
+        ws.column_dimensions['E'].width = 25
+        ws.column_dimensions['F'].width = 15
+        ws.column_dimensions['G'].width = 15
     
     def _write_dataframe_to_sheet(
         self,

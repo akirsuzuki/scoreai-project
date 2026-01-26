@@ -609,22 +609,22 @@ class TodoCategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Todo)
 class TodoAdmin(admin.ModelAdmin):
-    list_display = ('title', 'company', 'status', 'priority', 'due_date', 'assigned_to', 'created_by', 'created_at')
+    list_display = ('title', 'company', 'owner_type', 'status', 'priority', 'due_date', 'created_by', 'created_at')
     list_display_links = ('title',)
-    list_filter = ('company', 'status', 'priority', 'categories', 'created_at')
-    search_fields = ('title', 'content', 'company__name', 'created_by__username', 'assigned_to__username')
+    list_filter = ('company', 'owner_type', 'status', 'priority', 'categories', 'created_at')
+    search_fields = ('title', 'content', 'company__name', 'created_by__username')
     ordering = ('-created_at',)
     readonly_fields = ('created_at', 'updated_at', 'completed_at')
     filter_horizontal = ('categories',)
     fieldsets = (
         ('基本情報', {
-            'fields': ('company', 'title', 'content', 'categories')
+            'fields': ('company', 'owner_type', 'title', 'content', 'categories')
         }),
         ('ステータス', {
             'fields': ('status', 'priority', 'due_date')
         }),
-        ('担当者', {
-            'fields': ('created_by', 'assigned_to')
+        ('作成者', {
+            'fields': ('created_by',)
         }),
         ('タイムスタンプ', {
             'fields': ('created_at', 'updated_at', 'completed_at'),
