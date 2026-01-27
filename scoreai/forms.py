@@ -44,9 +44,36 @@ class CustomUserCreationForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2')
 
     def clean_email(self):
+        from django.conf import settings as django_settings
+        
         email = self.cleaned_data['email']
+        
+        # 既存ユーザーチェック
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("このメールアドレスは既に使用されています。")
+        
+        # ドメインを取得
+        domain = email.split('@')[-1].lower()
+        
+        # 許可ドメインリストが設定されている場合（ホワイトリスト方式）
+        allowed_domains = getattr(django_settings, 'ALLOWED_EMAIL_DOMAINS', [])
+        if allowed_domains:
+            if domain not in allowed_domains:
+                raise forms.ValidationError(
+                    "このメールドメインからの登録は許可されていません。"
+                    "企業のメールアドレスをご使用ください。"
+                )
+            return email
+        
+        # フリーメールドメインのブロック
+        if getattr(django_settings, 'BLOCK_FREE_EMAIL_DOMAINS', False):
+            blocked_domains = getattr(django_settings, 'BLOCKED_EMAIL_DOMAINS', [])
+            if domain in blocked_domains:
+                raise forms.ValidationError(
+                    "フリーメールアドレスでの登録は受け付けておりません。"
+                    "企業のメールアドレスをご使用ください。"
+                )
+        
         return email
     
     def clean_username(self):

@@ -1,0 +1,354 @@
+{% extends "scoreai/base.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+<style>
+    .todo-card {
+        border-left: 4px solid #6c757d;
+        transition: all 0.2s ease;
+    }
+    .todo-card:hover {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .todo-card.priority-high {
+        border-left-color: #dc3545;
+    }
+    .todo-card.priority-medium {
+        border-left-color: #ffc107;
+    }
+    .todo-card.priority-low {
+        border-left-color: #28a745;
+    }
+    .todo-card.status-completed {
+        opacity: 0.7;
+        background-color: #f8f9fa;
+    }
+    .todo-card.status-completed .todo-title {
+        text-decoration: line-through;
+        color: #6c757d;
+    }
+    .todo-category-badge {
+        font-size: 0.75rem;
+        padding: 0.25em 0.5em;
+        border-radius: 0.25rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.25rem;
+        display: inline-block;
+    }
+    .overdue-badge {
+        background-color: #dc3545;
+        color: white;
+    }
+    .stats-card {
+        text-align: center;
+        padding: 1rem;
+    }
+    .stats-card .stats-number {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    .stats-card .stats-label {
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+    .filter-section {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-12 mb-4">
+    <h4 class="fw-semibold mb-0">Firm管理</h4>
+    <p class="text-muted mb-0">Firmの設定とメンバー管理を行います。</p>
+  </div>
+</div>
+
+<!-- タブナビゲーション -->
+<div class="row mb-4">
+  <div class="col-12">
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-settings me-1"></i>Firm設定
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-users me-1"></i>スタッフ管理
+        </a>
+      </li>
+      {% get_user_firm_owner user as user_firm_owner %}
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_clientslist' %}" role="tab">
+          <i class="ti ti-building me-1"></i>クライアント一覧
+        </a>
+      </li>
+      {% endif %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" href="{% url 'firm_todo_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-checkbox me-1"></i>To Do一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'usage_report' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-chart-line me-1"></i>利用状況レポート
+        </a>
+      </li>
+      {% if user_firm_owner %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'billing_history' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-file-invoice me-1"></i>請求管理
+        </a>
+      </li>
+      {% endif %}
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'notification_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-bell me-1"></i>通知
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- タブコンテンツ -->
+<div class="tab-content" id="firmManagementTabsContent">
+  <div class="tab-pane fade show active" id="firm-todos" role="tabpanel">
+    <div class="container-fluid">
+      <div class="row mb-3">
+        <div class="col-12">
+          <div class="alert alert-light border">
+            <i class="ti ti-info-circle me-2 text-primary"></i>
+            <strong>Firm To Do一覧</strong>では、Firmに紐づく全クライアントのTo Doを一覧で確認できます。
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-2">
+          <div class="card stats-card">
+            <div class="stats-number text-primary">{{ stats.total }}</div>
+            <div class="stats-label">全件</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="card stats-card">
+            <div class="stats-number text-secondary">{{ stats.pending }}</div>
+            <div class="stats-label">未着手</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="card stats-card">
+            <div class="stats-number text-info">{{ stats.in_progress }}</div>
+            <div class="stats-label">進行中</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="card stats-card">
+            <div class="stats-number text-success">{{ stats.completed }}</div>
+            <div class="stats-label">完了</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="card stats-card">
+            <div class="stats-number text-danger">{{ stats.overdue }}</div>
+            <div class="stats-label">期限切れ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filter Section -->
+      <div class="filter-section">
+        <form method="get" class="row g-2 align-items-end">
+          <div class="col-md-2">
+            <label class="form-label small">クライアント</label>
+            <select name="company" class="form-select form-select-sm">
+              <option value="">すべて</option>
+              {% for company in companies %}
+              <option value="{{ company.id }}" {% if current_filters.company == company.id|stringformat:"s" %}selected{% endif %}>{{ company.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">タスク区分</label>
+            <select name="owner_type" class="form-select form-select-sm">
+              <option value="">すべて</option>
+              {% for value, label in owner_type_choices %}
+              <option value="{{ value }}" {% if current_filters.owner_type == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">ステータス</label>
+            <select name="status" class="form-select form-select-sm">
+              <option value="">すべて</option>
+              {% for value, label in status_choices %}
+              <option value="{{ value }}" {% if current_filters.status == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-1">
+            <label class="form-label small">優先度</label>
+            <select name="priority" class="form-select form-select-sm">
+              <option value="">すべて</option>
+              {% for value, label in priority_choices %}
+              <option value="{{ value }}" {% if current_filters.priority == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">検索</label>
+            <input type="text" name="search" class="form-control form-control-sm" placeholder="タイトル・会社名で検索" value="{{ current_filters.search }}">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label small">並び順</label>
+            <select name="sort" class="form-select form-select-sm">
+              <option value="-created_at" {% if current_filters.sort == '-created_at' %}selected{% endif %}>作成日（新しい順）</option>
+              <option value="created_at" {% if current_filters.sort == 'created_at' %}selected{% endif %}>作成日（古い順）</option>
+              <option value="due_date" {% if current_filters.sort == 'due_date' %}selected{% endif %}>期限（近い順）</option>
+              <option value="-due_date" {% if current_filters.sort == '-due_date' %}selected{% endif %}>期限（遠い順）</option>
+              <option value="company__name" {% if current_filters.sort == 'company__name' %}selected{% endif %}>会社名（昇順）</option>
+              <option value="-company__name" {% if current_filters.sort == '-company__name' %}selected{% endif %}>会社名（降順）</option>
+            </select>
+          </div>
+          <div class="col-md-1">
+            <button type="submit" class="btn btn-sm btn-outline-primary w-100">絞込</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Todo List -->
+      <div class="row">
+        {% if todos %}
+        {% for todo in todos %}
+        <div class="col-12 mb-3">
+          <div class="card todo-card priority-{{ todo.priority }} status-{{ todo.status }}">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center mb-2">
+                    <h5 class="card-title todo-title mb-0">
+                      {{ todo.title }}
+                    </h5>
+                    {% if todo.is_overdue %}
+                    <span class="badge overdue-badge ms-2">期限切れ</span>
+                    {% endif %}
+                  </div>
+
+                  <!-- Company Name -->
+                  <div class="mb-2">
+                    <span class="badge bg-light text-dark">
+                      <i class="ti ti-building me-1"></i>{{ todo.company.name }}
+                    </span>
+                  </div>
+
+                  {% if todo.content %}
+                  <p class="card-text text-muted small mb-2">{{ todo.content|truncatewords:30 }}</p>
+                  {% endif %}
+
+                  <div class="d-flex flex-wrap align-items-center gap-2">
+                    <!-- Categories -->
+                    {% for cat in todo.categories.all %}
+                    <span class="todo-category-badge" style="background-color: {{ cat.color }}20; color: {{ cat.color }}; border: 1px solid {{ cat.color }};">
+                      {{ cat.name }}
+                    </span>
+                    {% endfor %}
+
+                    <!-- Meta Info -->
+                    <span class="badge bg-{{ todo.priority }}-subtle text-{{ todo.priority }}">
+                      {% if todo.priority == 'high' %}
+                      <i class="ti ti-arrow-up"></i> 高
+                      {% elif todo.priority == 'medium' %}
+                      <i class="ti ti-minus"></i> 中
+                      {% else %}
+                      <i class="ti ti-arrow-down"></i> 低
+                      {% endif %}
+                    </span>
+
+                    <span class="badge
+                      {% if todo.status == 'pending' %}bg-secondary
+                      {% elif todo.status == 'in_progress' %}bg-info
+                      {% else %}bg-success{% endif %}">
+                      {{ todo.get_status_display }}
+                    </span>
+
+                    {% if todo.due_date %}
+                    <span class="text-muted small">
+                      <i class="ti ti-calendar"></i> {{ todo.due_date|date:"Y/m/d" }}
+                    </span>
+                    {% endif %}
+
+                    <span class="badge {% if todo.owner_type == 'company' %}bg-primary{% else %}bg-info{% endif %} small">
+                      {% if todo.owner_type == 'company' %}<i class="ti ti-building"></i> 会社{% else %}<i class="ti ti-briefcase"></i> Firm{% endif %}
+                    </span>
+
+                    {% if todo.created_by %}
+                    <span class="text-muted small">
+                      <i class="ti ti-user"></i> {{ todo.created_by.username }}
+                    </span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">前へ</a>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item"><a class="page-link" href="?page={{ num }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ num }}</a></li>
+            {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{ page_obj.next_page_number }}{% for key, value in current_filters.items %}{% if value %}&{{ key }}={{ value }}{% endif %}{% endfor %}">次へ</a>
+            </li>
+            {% endif %}
+          </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body text-center py-5">
+              <i class="ti ti-checkbox text-muted" style="font-size: 4rem;"></i>
+              <h5 class="mt-3">To Doがありません</h5>
+              <p class="text-muted">Firmに紐づくTo Doはまだ登録されていません。</p>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

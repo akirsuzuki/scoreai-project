@@ -11,8 +11,8 @@ from django.http import JsonResponse
 from django.db.models import Q
 import logging
 
-from ..mixins import SelectedCompanyMixin
-from ..models import Todo, TodoCategory, UserCompany
+from ..mixins import SelectedCompanyMixin, FirmOwnerMixin
+from ..models import Todo, TodoCategory, UserCompany, UserFirm, FirmCompany, Company
 from ..forms import TodoForm
 
 logger = logging.getLogger(__name__)
@@ -100,6 +100,32 @@ class TodoCreateView(SelectedCompanyMixin, generic.CreateView):
     def form_valid(self, form):
         form.instance.company = self.this_company
         form.instance.created_by = self.request.user
+        
+        # Firmを設定
+        # Firmユーザーの場合は選択中のFirmを使用
+        # Companyユーザーの場合はCompanyに紐付くFirmを使用
+        user_firm = UserFirm.objects.filter(
+            user=self.request.user,
+            is_selected=True
+        ).select_related('firm').first()
+        
+        if user_firm:
+            form.instance.firm = user_firm.firm
+        else:
+            # Companyに紐付くFirmを取得
+            firm_company = FirmCompany.objects.filter(
+                company=self.this_company,
+                active=True
+            ).select_related('firm').first()
+            
+            if not firm_company:
+                firm_company = FirmCompany.objects.filter(
+                    company=self.this_company
+                ).select_related('firm').first()
+            
+            if firm_company:
+                form.instance.firm = firm_company.firm
+        
         messages.success(self.request, 'To Doを作成しました。')
         return super().form_valid(form)
 
@@ -211,3 +237,92 @@ class TodoStatusUpdateView(SelectedCompanyMixin, generic.View):
         
         messages.error(request, '無効なステータスです。')
         return redirect('todo_detail', pk=pk)
+
+
+class FirmTodoListView(FirmOwnerMixin, generic.ListView):
+    """Firm全体のTo Do一覧ビュー"""
+    model = Todo
+    template_name = 'scoreai/firm_todo_list.html'
+    context_object_name = 'todos'
+    paginate_by = 30
+
+    def get_queryset(self):
+        """Firmに紐づく全てのTo Doを取得"""
+        queryset = Todo.objects.filter(
+            firm=self.firm
+        ).select_related('company', 'created_by').prefetch_related('categories')
+
+        # フィルタリング
+        status = self.request.GET.get('status')
+        if status:
+            queryset = queryset.filter(status=status)
+
+        priority = self.request.GET.get('priority')
+        if priority:
+            queryset = queryset.filter(priority=priority)
+
+        category = self.request.GET.get('category')
+        if category:
+            queryset = queryset.filter(categories__id=category)
+
+        company_id = self.request.GET.get('company')
+        if company_id:
+            queryset = queryset.filter(company_id=company_id)
+
+        owner_type = self.request.GET.get('owner_type')
+        if owner_type:
+            queryset = queryset.filter(owner_type=owner_type)
+
+        # 検索
+        search = self.request.GET.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) | Q(content__icontains=search) | Q(company__name__icontains=search)
+            )
+
+        # ソート
+        sort = self.request.GET.get('sort', '-created_at')
+        if sort in ['due_date', '-due_date', 'created_at', '-created_at', 'priority', '-priority', 'company__name', '-company__name']:
+            queryset = queryset.order_by(sort)
+
+        return queryset
+
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Firm To Do一覧'
+        context['firm'] = self.firm
+        context['categories'] = TodoCategory.objects.filter(is_active=True)
+        context['status_choices'] = Todo.STATUS_CHOICES
+        context['priority_choices'] = Todo.PRIORITY_CHOICES
+        context['owner_type_choices'] = Todo.OWNER_TYPE_CHOICES
+        
+        # Firmに紐づくCompany一覧
+        firm_company_ids = FirmCompany.objects.filter(
+            firm=self.firm,
+            active=True
+        ).values_list('company_id', flat=True)
+        context['companies'] = Company.objects.filter(id__in=firm_company_ids).order_by('name')
+        
+        context['current_filters'] = {
+            'status': self.request.GET.get('status', ''),
+            'priority': self.request.GET.get('priority', ''),
+            'category': self.request.GET.get('category', ''),
+            'company': self.request.GET.get('company', ''),
+            'owner_type': self.request.GET.get('owner_type', ''),
+            'search': self.request.GET.get('search', ''),
+            'sort': self.request.GET.get('sort', '-created_at'),
+        }
+        
+        # 統計情報
+        all_todos = Todo.objects.filter(firm=self.firm)
+        context['stats'] = {
+            'total': all_todos.count(),
+            'pending': all_todos.filter(status='pending').count(),
+            'in_progress': all_todos.filter(status='in_progress').count(),
+            'completed': all_todos.filter(status='completed').count(),
+            'overdue': all_todos.filter(
+                due_date__lt=timezone.now().date(),
+                status__in=['pending', 'in_progress']
+            ).count(),
+        }
+        return context

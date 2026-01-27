@@ -46,11 +46,15 @@ def initialize_gemini() -> None:
 
 def get_available_models() -> list:
     """
-    利用可能なGeminiモデルのリストを取得
+    利用可能なGeminiモデルのリストを取得（テキスト生成用のみ）
     
     Returns:
         利用可能なモデル名のリスト
     """
+    # テキスト生成用のデフォルトモデルリスト
+    # 埋め込みモデル（embedding-*）やAQAモデルは除外
+    default_models = ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+    
     _check_genai_installed()
     try:
         initialize_gemini()
@@ -69,17 +73,28 @@ def get_available_models() -> list:
                 # モデル名から 'models/' プレフィックスを削除
                 if model_name.startswith('models/'):
                     model_name = model_name.replace('models/', '')
-                available.append(model_name)
-            logger.info(f"Available models: {available}")
-            return available if available else ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+                
+                # テキスト生成に対応していないモデルを除外
+                # - embedding-*: 埋め込みモデル（generateContentに対応していない）
+                # - aqa: AQAモデル
+                # - text-embedding-*: 埋め込みモデル
+                if any(skip in model_name.lower() for skip in ['embedding', 'aqa', 'imagen', 'code-gecko']):
+                    continue
+                
+                # gemini系のモデルのみ追加
+                if 'gemini' in model_name.lower():
+                    available.append(model_name)
+            
+            logger.info(f"Available text generation models: {available}")
+            return available if available else default_models
         except Exception as e:
             logger.warning(f"Failed to list models using client: {e}")
             # フォールバック: デフォルトのモデルリストを返す
-            return ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+            return default_models
     except Exception as e:
         logger.warning(f"Failed to list models: {e}")
         # フォールバック: 一般的なモデル名のリスト
-        return ["gemini-2.0-flash-exp", "gemini-1.5-flash", "gemini-1.5-pro", "gemini-pro"]
+        return default_models
 
 
 def get_gemini_response(

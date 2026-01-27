@@ -148,6 +148,7 @@ from .views.todo_views import (
     TodoDeleteView,
     TodoDetailView,
     TodoStatusUpdateView,
+    FirmTodoListView,
 )
 from .views.firm_company_limit_views import (
     FirmCompanyLimitUpdateView,
@@ -371,6 +372,8 @@ urlpatterns = [
     path('todos/<str:pk>/update/', TodoUpdateView.as_view(), name='todo_update'),
     path('todos/<str:pk>/delete/', TodoDeleteView.as_view(), name='todo_delete'),
     path('todos/<str:pk>/status/', TodoStatusUpdateView.as_view(), name='todo_status_update'),
+    # Firm To Do
+    path('firm/<str:firm_id>/todos/', FirmTodoListView.as_view(), name='firm_todo_list'),
     path('about/', AboutView.as_view(), name='about'),
     path('about-links/', AboutLinksView.as_view(), name='about_links'),
     path('news_list/', NewsListView.as_view(), name='news_list'),

@@ -1,184 +1,494 @@
 {% extends 'scoreai/base.html' %}
 {% load humanize %}
 
-{% block content %}
-<div class="row">
-  <div class="col-12 mb-4">
-    <h4 class="fw-semibold mb-0">Firm管理</h4>
-    <p class="text-muted mb-0">Firmの設定とメンバー管理を行います。</p>
-  </div>
-</div>
+{% block head %}
+<style>
+/* 料金プランページ全体 */
+.pricing-page {
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-<!-- タブナビゲーション -->
-<div class="row mb-4">
-  <div class="col-12">
-    <ul class="nav nav-tabs" role="tablist">
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_settings' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-settings me-1"></i>Firm設定
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_member_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-users me-1"></i>スタッフ管理
-        </a>
-      </li>
-      {% load custom_tags %}
-      {% get_user_firm_owner user as user_firm_owner %}
-      {% if user_firm_owner %}
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'firm_clientslist' %}" role="tab">
-          <i class="ti ti-building me-1"></i>クライアント一覧
-        </a>
-      </li>
-      {% endif %}
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
-        </a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'usage_report' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-chart-line me-1"></i>利用状況レポート
-        </a>
-      </li>
-      {% if user_firm_owner %}
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'billing_history' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-file-invoice me-1"></i>請求管理
-        </a>
-      </li>
-      {% endif %}
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" href="{% url 'notification_list' firm_id=firm.id %}" role="tab">
-          <i class="ti ti-bell me-1"></i>通知
-        </a>
-      </li>
-    </ul>
-  </div>
-</div>
+.pricing-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
 
-<!-- タブコンテンツ -->
-<div class="tab-content" id="firmManagementTabsContent">
-  <!-- プラン・サブスクリプション -->
-  <div class="tab-pane fade show active" id="plan-list" role="tabpanel">
-    <div class="container-fluid">
-    {% if current_subscription %}
-    <div class="alert alert-info mb-3">
-        <div class="d-flex justify-content-between align-items-center flex-wrap">
-            <div>
-                <h5 class="mb-1">現在のプラン: {{ current_subscription.plan.name }}</h5>
-                <p class="mb-0">
-                    ステータス: {{ current_subscription.get_status_display }}
-                    {% if current_subscription.current_period_end %}
-                    <br>次回請求日: {{ current_subscription.current_period_end|date:"Y年m月d日" }}
-                    {% endif %}
-                </p>
-            </div>
-            <a href="{% url 'subscription_manage' firm_id=firm.id %}" class="btn btn-primary">サブスクリプション管理</a>
-        </div>
-    </div>
-    {% else %}
-    <div class="alert alert-warning mb-3">
-        <p class="mb-0">現在、プランに登録されていません。プランを選択して登録してください。</p>
-    </div>
-    {% endif %}
-    
-    <div class="row g-3">
-        {% for plan in plans %}
-        <div class="col-md-6 col-lg-3">
-            <div class="card h-100 {% if current_subscription and current_subscription.plan == plan %}border-primary border-2{% endif %}">
-                <div class="card-header {% if plan.plan_type == 'enterprise' %}bg-primary text-white{% elif plan.plan_type == 'professional' %}bg-info text-white{% elif plan.plan_type == 'starter' %}bg-success text-white{% else %}bg-secondary text-white{% endif %} p-3">
-                    <h5 class="card-title mb-0 fw-semibold">{{ plan.name }}</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h3 class="mb-0">
-                            {% if plan.monthly_price == 0 %}
-                                無料
-                            {% else %}
-                                ¥{{ plan.monthly_price|floatformat:0|intcomma }}/月
-                            {% endif %}
-                        </h3>
-                        {% if plan.yearly_price %}
-                        <small class="text-muted">
-                            年払い: ¥{{ plan.yearly_price|floatformat:0|intcomma }}/年（{{ plan.yearly_discount_months }}ヶ月分無料）
-                        </small>
-                        {% endif %}
-                    </div>
-                    
-                    <ul class="list-unstyled">
-                        <li><i class="ti ti-check text-success"></i> Company数: 
-                            {% if plan.is_unlimited_companies %}
-                                無制限
-                            {% else %}
-                                {{ plan.max_companies }}社まで
-                            {% endif %}
-                        </li>
-                        <li><i class="ti ti-check text-success"></i> AI相談: 
-                            {% if plan.is_unlimited_ai_consultations %}
-                                無制限
-                            {% else %}
-                                月{{ plan.max_ai_consultations_per_month }}回まで
-                            {% endif %}
-                        </li>
-                        <li><i class="ti ti-check text-success"></i> OCR読み込み: 
-                            {% if plan.is_unlimited_ocr %}
-                                無制限
-                            {% else %}
-                                月{{ plan.max_ocr_per_month }}回まで
-                            {% endif %}
-                        </li>
-                        {% if plan.cloud_storage_google_drive or plan.cloud_storage_box or plan.cloud_storage_dropbox or plan.cloud_storage_onedrive %}
-                        <li><i class="ti ti-check text-success"></i> クラウドストレージ連携: 
-                            {% if plan.cloud_storage_google_drive %}Google Drive{% endif %}
-                            {% if plan.cloud_storage_box %}Box{% endif %}
-                            {% if plan.cloud_storage_dropbox %}Dropbox{% endif %}
-                            {% if plan.cloud_storage_onedrive %}OneDrive{% endif %}
-                        </li>
-                        {% endif %}
-                        {% if plan.report_advanced %}
-                        <li><i class="ti ti-check text-success"></i> PDF/Excel出力</li>
-                        {% endif %}
-                        {% if plan.marketing_support %}
-                        <li><i class="ti ti-check text-success"></i> マーケティング支援</li>
-                        {% endif %}
-                    </ul>
-                </div>
-                <div class="card-footer">
-                    {% if current_subscription and current_subscription.plan == plan %}
-                    <button class="btn btn-secondary w-100" disabled>現在のプラン</button>
-                    {% else %}
-                    {% if plan.plan_type == 'free' %}
-                    <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary w-100">無料で登録</button>
-                    </form>
-                    {% else %}
-                    <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
-                        {% csrf_token %}
-                        <div class="mb-2">
-                            <label class="form-label small">請求サイクル</label>
-                            <select name="billing_cycle" class="form-select form-select-sm">
-                                <option value="monthly">月払い</option>
-                                {% if plan.yearly_price %}
-                                <option value="yearly">年払い（{{ plan.yearly_discount_months }}ヶ月分無料）</option>
-                                {% endif %}
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">このプランに登録</button>
-                    </form>
-                    {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
-    </div>
-  </div>
-  <!-- End of tab-pane -->
-</div>
-<!-- End of tab-content -->
+.pricing-subtitle {
+  color: #64748b;
+  font-size: 1rem;
+}
+
+/* 月払い/年払いトグル */
+.billing-toggle {
+  display: inline-flex;
+  background: #f1f5f9;
+  border-radius: 50px;
+  padding: 4px;
+}
+
+.billing-toggle .btn {
+  border-radius: 50px;
+  padding: 10px 24px;
+  font-weight: 500;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.billing-toggle .btn-check:checked + .btn {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  color: #1e293b;
+}
+
+.billing-toggle .btn-check:not(:checked) + .btn {
+  background: transparent;
+  color: #64748b;
+}
+
+.yearly-badge {
+  background: #fef3c7;
+  color: #b45309;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-left: 8px;
+}
+
+/* 現在のプランバナー */
+.current-plan-banner {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 16px;
+  padding: 20px 28px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.current-plan-banner .plan-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.current-plan-banner .plan-label {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.current-plan-banner .plan-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-badge .dot {
+  width: 8px;
+  height: 8px;
+  background: #4ade80;
+  border-radius: 50%;
+}
+
+/* プランカード */
+.plan-card {
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.plan-card.recommended {
+  border: 2px solid #3b82f6;
+}
+
+.plan-card.premium {
+  border: 2px solid #ca8a04;
+}
+
+.plan-card.current {
+  border: 2px solid #3b82f6;
+}
+
+/* プランカードバッジ */
+.plan-card-badge {
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.plan-card-badge.current {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.plan-card-badge.recommended {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.plan-card-badge.premium {
+  background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+  color: #fff;
+}
+
+/* プランカードボディ */
+.plan-card-body {
+  padding: 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.plan-type-label {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 4px;
+}
+
+.plan-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 16px;
+}
+
+.plan-price {
+  margin-bottom: 8px;
+}
+
+.plan-price .currency {
+  font-size: 1.25rem;
+  color: #64748b;
+  vertical-align: top;
+}
+
+.plan-price .amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1;
+}
+
+.plan-price .period {
+  font-size: 1rem;
+  color: #64748b;
+}
+
+.yearly-price {
+  font-size: 13px;
+  color: #64748b;
+  margin-bottom: 24px;
+}
+
+/* 機能リスト */
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  flex: 1;
+}
+
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+.feature-list li i {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.feature-list li i.ti-check {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 12px;
+}
+
+.feature-list li i.ti-x {
+  background: #f1f5f9;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+.feature-list li.disabled {
+  color: #94a3b8;
+}
+
+/* ボタン */
+.plan-card .btn-plan {
+  width: 100%;
+  padding: 14px 24px;
+  font-weight: 600;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.btn-plan-free {
+  background: #fff;
+  border: 2px solid #e2e8f0;
+  color: #475569;
+}
+
+.btn-plan-free:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.btn-plan-current {
+  background: #f1f5f9;
+  border: none;
+  color: #64748b;
+  cursor: default;
+}
+
+.btn-plan-upgrade {
+  background: #3b82f6;
+  border: none;
+  color: #fff;
+}
+
+.btn-plan-upgrade:hover {
+  background: #2563eb;
+}
+
+.btn-plan-contact {
+  background: linear-gradient(135deg, #ca8a04 0%, #eab308 100%);
+  border: none;
+  color: #fff;
+}
+
+.btn-plan-contact:hover {
+  background: linear-gradient(135deg, #a16207 0%, #ca8a04 100%);
+}
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="pricing-page">
+  <!-- ヘッダー -->
+  <div class="text-center mb-5">
+    <h1 class="pricing-title">料金プラン</h1>
+    <p class="pricing-subtitle">ビジネスの規模に合わせて最適なプランをお選びください</p>
+  </div>
+
+  <!-- 月払い/年払いトグル -->
+  <div class="text-center mb-5">
+    <div class="billing-toggle" role="group">
+      <input type="radio" class="btn-check" name="billingCycle" id="monthly" autocomplete="off" checked>
+      <label class="btn" for="monthly">月払い</label>
+      
+      <input type="radio" class="btn-check" name="billingCycle" id="yearly" autocomplete="off">
+      <label class="btn" for="yearly">年払い<span class="yearly-badge">2ヶ月分お得</span></label>
+    </div>
+  </div>
+
+  <!-- 現在のプランバナー -->
+  {% if current_subscription %}
+  <div class="current-plan-banner mb-5">
+    <div class="d-flex align-items-center">
+      <div class="plan-icon">
+        <i class="ti ti-check fs-4"></i>
+      </div>
+      <div>
+        <div class="plan-label">現在のプラン</div>
+        <div class="plan-name">{{ current_subscription.plan.name }}</div>
+      </div>
+    </div>
+    <div class="status-badge">
+      <span class="dot"></span>
+      {{ current_subscription.get_status_display }}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- プランカード -->
+  <div class="row g-4">
+    {% for plan in plans %}
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="plan-card {% if current_subscription and current_subscription.plan == plan %}current{% elif plan.plan_type == 'professional' %}recommended{% elif plan.plan_type == 'enterprise' %}premium{% endif %}">
+        
+        <!-- バッジ -->
+        {% if current_subscription and current_subscription.plan == plan %}
+        <div class="plan-card-badge current">ご利用中</div>
+        {% elif plan.plan_type == 'professional' %}
+        <div class="plan-card-badge recommended">おすすめ</div>
+        {% elif plan.plan_type == 'enterprise' %}
+        <div class="plan-card-badge premium">Premium</div>
+        {% endif %}
+        
+        <div class="plan-card-body">
+          <!-- プラン名 -->
+          <div class="plan-type-label">
+            {% if plan.plan_type == 'free' %}無料・試用
+            {% elif plan.plan_type == 'starter' %}スタータープラン
+            {% elif plan.plan_type == 'professional' %}プロフェッショナル
+            {% elif plan.plan_type == 'enterprise' %}エンタープライズ
+            {% endif %}
+          </div>
+          <div class="plan-name">
+            {% if plan.plan_type == 'free' %}Free
+            {% elif plan.plan_type == 'starter' %}Starter
+            {% elif plan.plan_type == 'professional' %}Professional
+            {% elif plan.plan_type == 'enterprise' %}Enterprise
+            {% endif %}
+          </div>
+          
+          <!-- 価格 -->
+          <div class="plan-price">
+            {% if plan.monthly_price == 0 %}
+            <span class="currency">¥</span><span class="amount">0</span><span class="period">/月</span>
+            {% else %}
+            <span class="currency">¥</span><span class="amount">{{ plan.monthly_price|floatformat:0|intcomma }}</span><span class="period">/月</span>
+            {% endif %}
+          </div>
+          {% if plan.yearly_price %}
+          <div class="yearly-price">年払い: ¥{{ plan.yearly_price|floatformat:0|intcomma }}/年</div>
+          {% else %}
+          <div class="yearly-price">&nbsp;</div>
+          {% endif %}
+          
+          <!-- 機能リスト -->
+          <ul class="feature-list">
+            <li>
+              <i class="ti ti-check"></i>
+              <span>Company数: {% if plan.is_unlimited_companies %}{{ plan.max_companies }}社まで{% else %}{{ plan.max_companies }}社まで{% endif %}</span>
+            </li>
+            <li>
+              <i class="ti ti-check"></i>
+              <span>AI相談: {% if plan.is_unlimited_ai_consultations %}無制限{% else %}月{{ plan.max_ai_consultations_per_month }}回まで{% endif %}</span>
+            </li>
+            <li>
+              <i class="ti ti-check"></i>
+              <span>OCR読み込み: {% if plan.is_unlimited_ocr %}無制限{% else %}月{{ plan.max_ocr_per_month }}回まで{% endif %}</span>
+            </li>
+            {% if plan.cloud_storage_google_drive or plan.cloud_storage_box %}
+            <li>
+              <i class="ti ti-check"></i>
+              <span>{% if plan.cloud_storage_google_drive and plan.cloud_storage_box %}全クラウドストレージ連携{% elif plan.cloud_storage_google_drive %}Google Drive連携{% endif %}</span>
+            </li>
+            {% else %}
+            <li class="disabled">
+              <i class="ti ti-x"></i>
+              <span>クラウドストレージ連携</span>
+            </li>
+            {% endif %}
+            {% if plan.report_advanced %}
+            <li>
+              <i class="ti ti-check"></i>
+              <span>PDF/Excel出力</span>
+            </li>
+            {% else %}
+            <li class="disabled">
+              <i class="ti ti-x"></i>
+              <span>PDF/Excel出力</span>
+            </li>
+            {% endif %}
+            {% if plan.marketing_support %}
+            <li>
+              <i class="ti ti-check"></i>
+              <span>マーケティング支援</span>
+            </li>
+            {% else %}
+            <li class="disabled">
+              <i class="ti ti-x"></i>
+              <span>マーケティング支援</span>
+            </li>
+            {% endif %}
+          </ul>
+          
+          <!-- ボタン -->
+          {% if current_subscription and current_subscription.plan == plan %}
+          <button class="btn btn-plan btn-plan-current" disabled>現在のプラン</button>
+          {% elif plan.plan_type == 'free' %}
+          <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}">
+            {% csrf_token %}
+            <input type="hidden" name="billing_cycle" value="monthly">
+            <button type="submit" class="btn btn-plan btn-plan-free">無料で登録</button>
+          </form>
+          {% elif plan.plan_type == 'enterprise' %}
+          <a href="mailto:support@score-ai.jp?subject=Enterpriseプランについてのお問い合わせ" class="btn btn-plan btn-plan-contact">お問い合わせ</a>
+          {% else %}
+          <form method="post" action="{% url 'subscription_create' firm_id=firm.id plan_id=plan.id %}" class="upgrade-form">
+            {% csrf_token %}
+            <input type="hidden" name="billing_cycle" value="monthly" class="billing-cycle-input">
+            <button type="submit" class="btn btn-plan btn-plan-upgrade">アップグレード</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const monthlyRadio = document.getElementById('monthly');
+  const yearlyRadio = document.getElementById('yearly');
+  const billingInputs = document.querySelectorAll('.billing-cycle-input');
+  const amounts = document.querySelectorAll('.plan-price .amount');
+  const yearlyPrices = document.querySelectorAll('.yearly-price');
+  
+  // プランデータを保存
+  const planData = [
+    {% for plan in plans %}
+    {
+      monthly: {{ plan.monthly_price|default:0 }},
+      yearly: {{ plan.yearly_price|default:0 }},
+      yearlyPerMonth: {% if plan.yearly_price %}{{ plan.yearly_price|divisibleby:12 }}{% else %}0{% endif %}
+    },
+    {% endfor %}
+  ];
+  
+  function updatePrices(isYearly) {
+    billingInputs.forEach(input => {
+      input.value = isYearly ? 'yearly' : 'monthly';
+    });
+  }
+  
+  monthlyRadio.addEventListener('change', () => updatePrices(false));
+  yearlyRadio.addEventListener('change', () => updatePrices(true));
+});
+</script>
+{% endblock %}

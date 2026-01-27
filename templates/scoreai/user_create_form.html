@@ -289,11 +289,17 @@
                            id="id_email" 
                            name="email" 
                            value="{{ form.email.value|default:'' }}"
-                           placeholder="example@email.com"
+                           placeholder="example@company.co.jp"
                            required>
                     {% if form.email.errors %}
                     <div class="invalid-feedback">
                       {% for error in form.email.errors %}{{ error }}{% endfor %}
+                    </div>
+                    {% endif %}
+                    {% if block_free_email %}
+                    <div class="form-text text-muted">
+                      <i class="ti ti-info-circle me-1"></i>
+                      企業のメールアドレスをご使用ください（Gmail等のフリーメールは登録できません）
                     </div>
                     {% endif %}
                   </div>

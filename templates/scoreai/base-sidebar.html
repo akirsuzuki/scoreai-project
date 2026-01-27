@@ -200,6 +200,12 @@
             <span class="hide-menu">顧客企業登録</span>
           </a>
         </li>
+        <li class="sidebar-item">
+          <a class="sidebar-link" href="{% url 'firm_todo_list' firm_id=user_firm_owner.firm.id %}" aria-expanded="false" title="Firm To Do一覧">
+            <i class="ti ti-checklist"></i>
+            <span class="hide-menu">Firm To Do一覧</span>
+          </a>
+        </li>
         {% endif %}
 
         <!-- ========================================

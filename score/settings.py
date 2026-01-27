@@ -329,3 +329,76 @@ if not DEBUG and os.environ.get('REDIS_URL'):
             'TIMEOUT': 300,  # 5分
         }
     }
+
+# ========================================
+# ユーザー登録制限設定
+# ========================================
+
+# 招待制のみモード（Trueにすると招待されたユーザーのみ登録可能）
+REGISTRATION_INVITATION_ONLY = os.environ.get('REGISTRATION_INVITATION_ONLY', 'False').lower() == 'true'
+
+# フリーメールドメインのブロック（Trueにするとフリーメールからの登録を拒否）
+# デフォルトはFalse（フリーメール許可）。本番でブロックしたい場合は環境変数で BLOCK_FREE_EMAIL_DOMAINS=True を設定
+BLOCK_FREE_EMAIL_DOMAINS = os.environ.get('BLOCK_FREE_EMAIL_DOMAINS', 'False').lower() == 'true'
+
+# ブロックするフリーメールドメインのリスト
+BLOCKED_EMAIL_DOMAINS = [
+    # Gmail
+    'gmail.com',
+    'googlemail.com',
+    # Yahoo
+    'yahoo.com',
+    'yahoo.co.jp',
+    'ymail.com',
+    # Microsoft
+    'hotmail.com',
+    'hotmail.co.jp',
+    'outlook.com',
+    'outlook.jp',
+    'live.com',
+    'live.jp',
+    'msn.com',
+    # iCloud
+    'icloud.com',
+    'me.com',
+    'mac.com',
+    # 日本のフリーメール
+    'docomo.ne.jp',
+    'ezweb.ne.jp',
+    'au.com',
+    'softbank.ne.jp',
+    'i.softbank.jp',
+    'ymobile.ne.jp',
+    'rakuten.jp',
+    'mineo.jp',
+    # その他の一般的なフリーメール
+    'aol.com',
+    'protonmail.com',
+    'proton.me',
+    'zoho.com',
+    'mail.com',
+    'gmx.com',
+    'gmx.net',
+    'yandex.com',
+    'tutanota.com',
+    'fastmail.com',
+    # 一時メール（使い捨てメール）
+    'tempmail.com',
+    'guerrillamail.com',
+    'mailinator.com',
+    '10minutemail.com',
+    'throwaway.email',
+    'temp-mail.org',
+    'fakeinbox.com',
+    'sharklasers.com',
+    'guerrillamail.info',
+    'grr.la',
+    'spam4.me',
+    'discard.email',
+    'maildrop.cc',
+    'getnada.com',
+]
+
+# 許可するドメインのリスト（空の場合は制限なし、設定するとこれ以外をブロック）
+# 例: ['example.co.jp', 'example.com']
+ALLOWED_EMAIL_DOMAINS = []

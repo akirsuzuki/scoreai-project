@@ -58,6 +58,14 @@ class UserCreateView(CreateView):
 
     def dispatch(self, request, *args, **kwargs):
         """リクエスト処理前のレート制限チェック"""
+        # 招待制モードのチェック
+        if getattr(settings, 'REGISTRATION_INVITATION_ONLY', False):
+            # 招待トークンがない場合は登録ページへのアクセスを制限
+            invitation_token = request.GET.get('token') or request.session.get('invitation_token')
+            if not invitation_token:
+                messages.warning(request, '現在、招待されたユーザーのみ登録可能です。')
+                return redirect('login')
+        
         if request.method == 'GET':
             return super().dispatch(request, *args, **kwargs)
         
@@ -81,6 +89,13 @@ class UserCreateView(CreateView):
             return self.form_invalid(form)
         
         return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs) -> Dict[str, Any]:
+        """コンテキストデータの取得"""
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'ユーザー登録'
+        context['block_free_email'] = getattr(settings, 'BLOCK_FREE_EMAIL_DOMAINS', False)
+        return context
 
     def form_valid(self, form):
         """フォームバリデーション成功時の処理"""
@@ -196,12 +211,6 @@ SCore_Ai
         """フォームバリデーション失敗時の処理"""
         messages.error(self.request, 'アカウントの作成に失敗しました。入力内容を確認してください。')
         return super().form_invalid(form)
-
-    def get_context_data(self, **kwargs) -> Dict[str, Any]:
-        """コンテキストデータの取得"""
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'ユーザー登録'
-        return context
 
 
 class EmailVerificationSentView(TemplateView):

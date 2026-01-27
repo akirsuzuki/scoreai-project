@@ -87,7 +87,7 @@ class SelectedCompanyMixin(LoginRequiredMixin, ErrorHandlingMixin):
         """Get the currently selected firm for the user"""
         from .models import UserFirm, FirmCompany, UserCompany
         
-        # まず、ユーザーの選択されたCompanyとFirmを取得
+        # まず、ユーザーの選択されたCompanyを取得
         user_company = UserCompany.objects.filter(
             user=self.request.user,
             is_selected=True
@@ -96,13 +96,30 @@ class SelectedCompanyMixin(LoginRequiredMixin, ErrorHandlingMixin):
         if not user_company:
             raise ValueError("選択された会社がありません。")
         
+        # ユーザーのUserFirmを確認
         user_firm = UserFirm.objects.filter(
             user=self.request.user,
             is_selected=True
         ).select_related('firm', 'user').first()
         
+        # UserFirmがない場合（Companyユーザーの場合）、Companyに紐付くFirmを取得
         if not user_firm:
-            raise ValueError("選択されたFirmがありません。")
+            # Companyに紐付くFirmCompanyを検索（activeなもの優先）
+            firm_company = FirmCompany.objects.filter(
+                company=user_company.company,
+                active=True
+            ).select_related('firm').first()
+            
+            # activeなものがなければ、非activeも含めて検索
+            if not firm_company:
+                firm_company = FirmCompany.objects.filter(
+                    company=user_company.company
+                ).select_related('firm').first()
+            
+            if firm_company:
+                return firm_company.firm
+            else:
+                raise ValueError("選択されたFirmがありません。Companyに紐付くFirmが見つかりません。")
         
         # CompanyがこのFirmに属しているか確認（まずactive=Trueで検索、見つからない場合はactive条件なしで検索）
         firm_company = FirmCompany.objects.filter(

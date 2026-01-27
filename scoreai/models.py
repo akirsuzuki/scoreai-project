@@ -2428,6 +2428,7 @@ class Todo(models.Model):
 
     id = models.CharField(primary_key=True, default=ulid.new, editable=False, max_length=26)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='todos', verbose_name='会社')
+    firm = models.ForeignKey('Firm', on_delete=models.CASCADE, related_name='todos', verbose_name='Firm', null=True, blank=True)
     owner_type = models.CharField('タスク所有区分', max_length=10, choices=OWNER_TYPE_CHOICES, default='company', help_text='会社側のタスクかFirm側のタスクかを区別')
     title = models.CharField('タイトル', max_length=200)
     content = models.TextField('内容', blank=True)
@@ -2448,6 +2449,7 @@ class Todo(models.Model):
             models.Index(fields=['company', 'status']),
             models.Index(fields=['company', 'due_date']),
             models.Index(fields=['company', 'priority']),
+            models.Index(fields=['firm', 'status']),
         ]
 
     def __str__(self):
@@ -2459,7 +2461,27 @@ class Todo(models.Model):
             self.completed_at = timezone.now()
         elif self.status != 'completed':
             self.completed_at = None
+        
+        # Firmが未設定の場合、自動で設定
+        if not self.firm and self.company:
+            self.firm = self._get_firm_for_company()
+        
         super().save(*args, **kwargs)
+    
+    def _get_firm_for_company(self):
+        """CompanyからFirmを取得"""
+        firm_company = FirmCompany.objects.filter(
+            company=self.company,
+            active=True
+        ).select_related('firm').first()
+        
+        if not firm_company:
+            # activeでないものも含めて検索
+            firm_company = FirmCompany.objects.filter(
+                company=self.company
+            ).select_related('firm').first()
+        
+        return firm_company.firm if firm_company else None
 
     @property
     def is_overdue(self):

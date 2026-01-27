@@ -39,10 +39,6 @@
                 <td>{% if debt.is_collateraled %}<span class="badge bg-info">あり</span>{% else %}<span class="badge bg-light text-muted">なし</span>{% endif %}</td>
                 <td>{{ debt.memo_short }}</td>
               </tr>
-              {% empty %}
-              <tr>
-                <td colspan="10" class="text-center text-muted py-4">返済完了した借入はありません</td>
-              </tr>
               {% endfor %}
             </tbody>
             <tfoot class="table-light">
@@ -68,6 +64,9 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const tableElement = document.getElementById('finished_debt_list');
+    if (!tableElement) return;
+    
     const table = new DataTable('#finished_debt_list', {
       responsive: false,
       scrollX: true,
@@ -76,7 +75,8 @@
       pagingType: 'full_numbers',
       order: [[0, 'asc']],
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
+        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json',
+        emptyTable: '返済完了した借入はありません'
       },
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();

@@ -37,6 +37,11 @@
       </li>
       {% endif %}
       <li class="nav-item" role="presentation">
+        <a class="nav-link" href="{% url 'firm_todo_list' firm_id=firm.id %}" role="tab">
+          <i class="ti ti-checkbox me-1"></i>To Do一覧
+        </a>
+      </li>
+      <li class="nav-item" role="presentation">
         <a class="nav-link" href="{% url 'subscription_manage' firm_id=firm.id %}" role="tab">
           <i class="ti ti-credit-card me-1"></i>サブスクリプション管理
         </a>

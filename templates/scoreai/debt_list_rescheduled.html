@@ -57,10 +57,6 @@
                 <td class="text-end">{{ debt.reschedule_balance|to_thousands|intcomma }}</td>
                 <td>{{ debt.memo_short }}</td>
               </tr>
-              {% empty %}
-              <tr>
-                <td colspan="19" class="text-center text-muted py-4">リスケ処理済みの借入はありません</td>
-              </tr>
               {% endfor %}
             </tbody>
             <tfoot class="table-light">
@@ -94,6 +90,9 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
+    const tableElement = document.getElementById('rescheduled_debt_list');
+    if (!tableElement) return;
+    
     const table = new DataTable('#rescheduled_debt_list', {
       responsive: false,
       scrollX: true,
@@ -102,7 +101,8 @@
       pagingType: 'full_numbers',
       order: [[0, 'asc']],
       language: {
-        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json'
+        url: 'https://cdn.datatables.net/plug-ins/2.0.8/i18n/ja.json',
+        emptyTable: 'リスケ処理済みの借入はありません'
       },
       footerCallback: function (row, data, start, end, display) {
         let api = this.api();
